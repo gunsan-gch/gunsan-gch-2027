@@ -171,7 +171,7 @@ GitHub Pages 주소가 생기면 학교 홈페이지(school.jbedu.kr)에서 다�
 
 - 글꼴 파일은 모두 저장소 안(`assets/fonts/`)에 있어 외부 서버 없이 불러옵니다. 불러오지 못하면 기기 기본 한글 글꼴로 표시됩니다.
 - **공식 배포 OTF 원본을 형식 변환·수정·서브셋 없이 그대로** 씁니다 (쿠키런 라이선스의 '배포되는 형태 그대로 사용' 조건 준수). 각 파일의 버전·저작권 표기·SHA-256 값은 라이선스 파일 맨 위에 적어 두었습니다.
-  - 쿠키런: `CookieRun-Black.otf` (Version 1.010, © 2019 Devsisters Corp.)
+  - 쿠키런: `CookieRun-Black.otf` (Version 1.010, © 2019 Devsisters Corp. — 공식 배포처에서 받은 파일과 SHA-256 일치 확인)
   - 엘리스 DX널리체: `EliceDXNeolli-Medium.otf`, `EliceDXNeolli-Bold.otf` (Version 1.000, © 2023 Elice Inc.)
 - 파일은 [fonts-archive](https://github.com/fonts-archive) 미러의 OTF를 받았으며, 파일 안의 제작사·버전·저작권 표기가 그대로 남아 있는 것을 확인했습니다. 공식 배포처(쿠키런: cookierunfont.com, 엘리스: elice.io 브랜드 페이지)에서 받은 파일과 완전히 같은지 확인하려면 공식 파일의 SHA-256 값을 라이선스 파일에 적힌 값과 비교하거나, 공식 파일을 같은 이름으로 덮어쓰면 됩니다.
 - 원본 OTF는 가운뎃점(·)도 들어 있어 별도 보조 글꼴이 필요 없습니다.

@@ -2,6 +2,7 @@
 적용 파일: CookieRun-Black.otf (공식 배포 OTF 원본 그대로 사용 — 형식 변환·수정·서브셋 하지 않음)
           파일 정보: CookieRunOTF Black, Version 1.010, Copyright © 2019 Devsisters Corp.
           SHA-256: 81daedeaea218e861bedef7b1ef2be7185c63523e32b111438e0260f54788462
+          공식 배포처(cookierunfont.com)에서 받은 CookieRun_Black.otf와 SHA-256 일치 확인 (2026-09-29)
 출처: 데브시스터즈(주) https://www.cookierunfont.com/
 파일 입수 경로: https://github.com/fonts-archive/CookieRun (배포 파일 미러)
 
