@@ -1399,9 +1399,3 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
  .senior-card h4 { font-size:.92rem; }
  .senior-logo { height:69px; }
 }
-
-/* Official Army masthead: isolate the emblem and stack the name below it. */
-.senior-logo-stacked { flex-direction:column; gap:4px; }
-.army-emblem { display:block; height:calc(100% - 20px); aspect-ratio:46 / 55; flex:none; overflow:hidden; }
-.senior-logo .army-emblem img { width:auto; height:100%; max-width:none; max-height:none; object-fit:initial; }
-.army-wordmark { color:#252525; font-size:12px; line-height:16px; font-weight:800; letter-spacing:.03em; white-space:nowrap; }

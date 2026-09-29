@@ -527,9 +527,6 @@
   }
   function seniorLogo(item) {
     if (!item.logo || !item.logo.src) return '';
-    if (item.logo.layout === "army-stacked") {
-      return '<div class="senior-logo senior-logo-stacked"><span class="army-emblem">' + logoImg(item.logo, "", "hide") + '</span><span class="army-wordmark">' + esc(item.logo.label) + '</span></div>';
-    }
     return '<div class="senior-logo">' + logoImg(item.logo, "", "hide") + '</div>';
   }
   if (senior && $("senior-status")) {

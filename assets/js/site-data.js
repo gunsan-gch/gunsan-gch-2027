@@ -1167,13 +1167,11 @@ window.SITE_DATA = {
         name: "육군 부사관",
         count: 4,
         logo: {
-          src: "assets/img/employers/army-official.png",
-          layout: "army-stacked",
-          label: "대한민국육군",
-          width: 242,
-          height: 55,
+          src: "assets/img/employers/army-supplied.jpeg",
+          width: 1536,
+          height: 1521,
           alt: "대한민국 육군",
-          sourcePage: "https://www.army.mil.kr/sites/army/index.do"
+          sourceNote: "사용자 제공 대한민국육군 로고 원본"
         }
       },
       {
