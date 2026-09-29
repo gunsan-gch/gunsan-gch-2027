@@ -1,8 +1,8 @@
 엘리스 DX널리체 (Elice DX Neolli) — 라이선스
-적용 파일: EliceDXNeolli-Medium.woff2, EliceDXNeolli-Bold.woff2
-파생 파일: GCHMiddot.woff2 — 엘리스 DX널리체 Medium의 가운뎃점 글리프(U+318D) 하나를 가운뎃점(U+00B7) 자리에
-           좁은 폭으로 옮긴 수정본입니다. OFL 조건에 따라 원래 글꼴 이름을 쓰지 않고 'GCH Middot'로 이름을 바꾸었으며,
-           본 라이선스(SIL OFL 1.1)를 그대로 따릅니다. (배포 형태 그대로 사용, 수정·서브셋 하지 않음)
+적용 파일: EliceDXNeolli-Medium.otf, EliceDXNeolli-Bold.otf (공식 배포 OTF 원본 그대로 사용 — 형식 변환·수정·서브셋 하지 않음)
+          파일 정보: Elice DX Neolli OTF Medium·Bold, Version 1.000, Copyright (c) 2023 Elice Inc.
+          SHA-256: Medium 71be6e198aede35fd7c12ed2b4a20bad0485bdb92d98ec79e540b7d773f1a566
+                   Bold   f8eacb94344db5291b9b88431692c06e1e2c0f428984a977c3eaabc8bd79a7fc
 출처: (주)엘리스 https://elice.io/ko/elice/brand#elice_dx_neolli
 파일 입수 경로: https://github.com/fonts-archive/EliceDXNeolli (배포 파일 미러)
 

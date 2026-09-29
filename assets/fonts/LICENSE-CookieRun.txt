@@ -1,5 +1,7 @@
 쿠키런 글꼴 (CookieRun) — 저작권 안내 및 라이선스 전문
-적용 파일: CookieRun-Black.woff2 (배포 형태 그대로 사용, 수정·서브셋 하지 않음)
+적용 파일: CookieRun-Black.otf (공식 배포 OTF 원본 그대로 사용 — 형식 변환·수정·서브셋 하지 않음)
+          파일 정보: CookieRunOTF Black, Version 1.010, Copyright © 2019 Devsisters Corp.
+          SHA-256: 81daedeaea218e861bedef7b1ef2be7185c63523e32b111438e0260f54788462
 출처: 데브시스터즈(주) https://www.cookierunfont.com/
 파일 입수 경로: https://github.com/fonts-archive/CookieRun (배포 파일 미러)
 
