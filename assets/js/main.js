@@ -674,7 +674,7 @@
     var cta;
     if (regOpen) {
       cta = '<h3>입학설명회 사전등록</h3>' +
-        '<p>참석할 학생·학부모는 미리 신청해 주세요.' + (regCloses ? " 사전등록 마감: " + esc(fmtKDateTime(regCloses)) : "") + '</p>' +
+        '<p>참석할 학생·학부모님은 미리 신청해 주세요.' + (regCloses ? " 사전등록 마감: " + esc(fmtKDateTime(regCloses)) : "") + '</p>' +
         extLink(B.registrationUrl, "입학설명회 사전등록", "btn btn-yellow btn-lg btn-block", "calendar") +
         '<div class="qr-box" id="qr-box" hidden><div id="qr-target"></div><p>휴대전화로 QR을 찍어 신청할 수 있어요.</p></div>' + sepWarn;
     } else if (regClosed) {
