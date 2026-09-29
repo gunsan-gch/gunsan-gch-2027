@@ -592,8 +592,10 @@
   if (D.showSchoolLifePhotos && D.schoolLife && D.schoolLife.length) {
     $("school-life").hidden = false;
     $("photo-grid").innerHTML = D.schoolLife.filter(function (x) { return x.show !== false; }).map(function (x) {
-      return '<li><figure><div class="photo-frame">' + img(x, "", true) + '</div>' +
-        '<figcaption><span class="past-tag">기존 활동</span>' + esc(x.caption) + '</figcaption></figure></li>';
+      return '<li><figure><div class="photo-frame"><button type="button" class="zoom-btn" data-zoom="' + esc(x.src) + '" data-caption="' + esc(x.caption + (x.year ? " · " + x.year + "년 활동" : "")) + '" aria-label="' + esc(x.caption) + ' 사진 크게 보기">' + img(x, "", true) + '<span class="zoom-hint" aria-hidden="true">크게 보기</span></button></div>' +
+        '<figcaption><span class="past-tag">' + esc(x.year ? x.year + "년 활동" : "기존 활동") + '</span><strong class="photo-title">' + esc(x.caption) + '</strong>' +
+        (x.description ? '<span class="photo-description">' + esc(x.description) + '</span>' : '') +
+        (x.sourceUrl ? extLink(x.sourceUrl, "학교 앨범 보기", "photo-source", "external") : '') + '</figcaption></figure></li>';
     }).join("");
   }
 

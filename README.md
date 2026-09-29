@@ -18,7 +18,7 @@ assets/
   img/facilities/           실습실 조성 예시 이미지 3장 (AI비즈니스실·조리제빵실·카페실습실)
   img/employers/            주요 취업처 로고 (학교 '주요 취업현황' 자료에서 잘라낸 이미지) + 정부 상징
   img/colleges/             진학 대학 로고 (전달받은 이미지 4개: 전북대·군산대·경남대·대전대)
-  img/school-life/          기존 학교 활동 사진 4장 (학생 얼굴 흐림 처리, 웹용 WebP)
+  img/school-life/          기존 학교 활동 사진 8장 (보이는 학생 얼굴 흐림 처리, 웹용 WebP)
   fonts/                    제목용 글꼴 + 라이선스 전문
 ```
 

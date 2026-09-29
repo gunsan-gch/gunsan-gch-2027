@@ -359,6 +359,12 @@ main:focus { outline: none; }
 .photo-frame { border-radius: var(--radius-sm); overflow: hidden; background: #dde3ec; }
 .photo-frame img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
 .photo-grid figcaption { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 8px; font-size: .9rem; color: var(--ink-2); font-weight: 600; }
+.photo-grid .photo-title { flex-basis: 100%; color: var(--ink); line-height: 1.5; word-break: keep-all; }
+.photo-description { flex-basis: 100%; font-size: .82rem; font-weight: 400; line-height: 1.6; word-break: keep-all; }
+.photo-source { display: inline-flex; align-items: center; gap: 4px; font-size: .78rem; color: var(--navy); text-underline-offset: 3px; }
+.photo-source .icon { width: 13px; height: 13px; }
+.photo-grid .zoom-btn { border-radius: inherit; }
+.photo-grid .zoom-btn:focus-visible { outline: 3px solid var(--blue); outline-offset: -3px; }
 .past-tag { font-size: .75rem; font-weight: 700; padding: 1px 7px; border-radius: 6px; background: #e8ebf1; color: var(--muted); }
 @media (max-width: 959px) { .photo-grid { grid-template-columns: 1fr 1fr; } }
 

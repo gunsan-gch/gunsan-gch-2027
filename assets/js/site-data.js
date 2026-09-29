@@ -564,6 +564,46 @@ window.SITE_DATA = {
       height: 1083,
       alt: "제과제빵 동아리에서 쿠키를 만드는 학생들",
       caption: "제과제빵 동아리 활동"
+    },
+    {
+      src: "assets/img/school-life/alumni-civil-service.webp",
+      width: 1000,
+      height: 750,
+      alt: "공무원 선배의 진로 경험과 준비 과정을 듣는 학생들",
+      caption: "공무원 선배와 함께 그리는 진로",
+      description: "공무원 선배의 경험을 듣고 나의 진로를 준비해요.",
+      year: "2026",
+      sourceUrl: "https://school.jbedu.kr/gunsan-gch/M010301/view/6753200.do"
+    },
+    {
+      src: "assets/img/school-life/alumni-career-talk.webp",
+      width: 1000,
+      height: 746,
+      alt: "온누리홀에서 취업설명회와 선배와의 대화에 참여하는 학생들",
+      caption: "선배에게 듣는 취업 이야기",
+      description: "취업설명회와 선배와의 만남으로 진로의 시야를 넓혀요.",
+      year: "2026",
+      sourceUrl: "https://school.jbedu.kr/gunsan-gch/M010301/view/6751951.do"
+    },
+    {
+      src: "assets/img/school-life/harang-plogging.webp",
+      width: 1000,
+      height: 750,
+      alt: "은파호수공원 산책로에서 환경정화 활동을 하는 하랑 봉사동아리 학생들",
+      caption: "하랑과 함께하는 은파 플로깅",
+      description: "선후배가 함께 걸으며 우리 지역의 환경을 가꿔요.",
+      year: "2026",
+      sourceUrl: "https://school.jbedu.kr/gunsan-gch/M010301/view/6752365.do"
+    },
+    {
+      src: "assets/img/school-life/kitty-cookie-workshop.webp",
+      width: 1000,
+      height: 750,
+      alt: "직접 꾸민 캐릭터 쿠키와 포장 상자를 들어 보여주는 학생들",
+      caption: "나만의 키티쿠키 만들기",
+      description: "직접 꾸민 쿠키에 나만의 개성과 아이디어를 담아요.",
+      year: "2025",
+      sourceUrl: "https://school.jbedu.kr/gunsan-gch/M010301/view/6571757.do"
     }
   ],
 
