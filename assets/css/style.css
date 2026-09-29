@@ -1295,7 +1295,7 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
  .senior-status { padding:18px 14px; }
  .senior-status-head h3 { font-size:1.15rem; }
  .senior-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
- .senior-card.is-civil { grid-column:1 / -1; }
+ .senior-card.is-exam { grid-column:1 / -1; }
  .senior-card { padding:15px 13px; }
  .senior-flow { gap:20px; }
  .senior-metric strong { font-size:1.85rem; }
@@ -1371,7 +1371,7 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 
 
 /* 고3 현황: 로고·제목·인원 가운데 정렬 */
-.senior-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.senior-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .senior-card { display:flex; flex-direction:column; align-items:center; text-align:center; padding:22px 16px; }
 .senior-card h4 { justify-content:center; width:100%; margin:0; min-height:2.9em; text-wrap:balance; }
 .senior-logo { display:flex; align-items:center; justify-content:center; width:100%; max-width:174px; height:88px; margin:0 auto 13px; padding:5px; }
@@ -1379,16 +1379,17 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 .senior-logo.logo-unavailable { visibility:hidden; }
 .senior-flow { width:100%; justify-content:center; gap:14px; }
 .senior-metric { align-items:center; text-align:center; }
-.senior-card.is-civil { border-top:3px solid #2864a2; }
+.senior-card.is-exam { border-top:3px solid #2864a2; }
+.senior-card.exam-2 { border-top-color:#1b6fb5; }
 .senior-card.is-army { border-top:3px solid #34806a; }
 .senior-card.is-airforce { border-top:3px solid #629bd1; }
 .gift-detail .gift-part { display:inline-block; white-space:nowrap; }
 @media (max-width:760px) {
  .senior-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
- .senior-card.is-civil { grid-column:1 / -1; }
+ .senior-card.is-exam { grid-column:1 / -1; }
  .senior-card { padding:18px 10px; }
  .senior-card h4 { min-height:0; }
- .senior-card.is-civil .senior-flow { gap:23px; }
+ .senior-card.is-exam .senior-flow { gap:23px; }
  .senior-logo { height:78px; max-width:155px; margin-bottom:10px; }
 }
 @media (max-width:359px) {

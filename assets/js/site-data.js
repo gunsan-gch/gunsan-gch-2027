@@ -1108,18 +1108,32 @@ window.SITE_DATA = {
     title: "현 고3 취업·진로 현황",
     cohort: "2026년 고3 · 2027년 졸업예정",
     updatedAt: "2026-09-29",
-    civilService: {
-      name: "지역인재 9급 공무원",
-      applied: 4,
-      firstStagePassed: 3,
-      logo: {
-        src: "assets/img/employers/gov-emblem.webp",
-        width: 80,
-        height: 84,
-        alt: "대한민국 정부 상징",
-        sourceNote: "기존 학교 제공 취업자료의 정부 상징 부분"
+    // 지원 → 1차 합격 카드 (위에서부터 순서대로 표시)
+    exams: [
+      {
+        name: "지역인재 9급 공무원",
+        applied: 4,
+        firstStagePassed: 3,
+        logo: {
+          src: "assets/img/employers/gov-emblem.webp",
+          width: 80,
+          height: 84,
+          alt: "대한민국 정부 상징",
+          sourceNote: "기존 학교 제공 취업자료의 정부 상징 부분"
+        }
+      },
+      {
+        name: "코레일(한국철도공사)",
+        applied: 3,
+        firstStagePassed: 2,
+        logo: {
+          src: "assets/img/employers/korail.webp",
+          width: 265,
+          height: 117,
+          alt: "코레일 로고"
+        }
       }
-    },
+    ],
     military: [
       {
         name: "육군 부사관",
@@ -1142,6 +1156,6 @@ window.SITE_DATA = {
         }
       }
     ],
-    note: "공무원은 1차 합격 현황으로, 최종 합격 인원이 아닙니다."
+    note: "지역인재 9급 공무원·코레일은 1차 합격 현황으로, 최종 합격 인원이 아닙니다."
   }
 };

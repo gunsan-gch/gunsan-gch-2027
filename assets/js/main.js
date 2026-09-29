@@ -530,15 +530,17 @@
     return '<div class="senior-logo">' + logoImg(item.logo, "", "hide") + '</div>';
   }
   if (senior && $("senior-status")) {
-    var civil = senior.civilService;
+    var exams = senior.exams || (senior.civilService ? [senior.civilService] : []);
     $("senior-status").hidden = false;
     $("senior-status").innerHTML =
       '<div class="senior-status-head"><div><h3 id="senior-status-title">' + esc(senior.title) + '</h3><p class="senior-cohort">' + esc(senior.cohort) + '</p></div>' +
       '<span class="senior-updated">' + esc(fmtIsoDate(senior.updatedAt)) + ' 기준</span></div>' +
-      '<div class="senior-grid"><article class="senior-card is-civil">' + seniorLogo(civil) + '<h4>' + esc(civil.name) + '</h4>' +
-        '<div class="senior-flow"><div class="senior-metric"><strong>' + civil.applied + '<span class="unit">명</span></strong><span>지원</span></div><span class="senior-arrow" aria-hidden="true">→</span>' +
-        '<div class="senior-metric is-pass"><strong>' + civil.firstStagePassed + '<span class="unit">명</span></strong><span>1차 합격</span></div></div></article>' +
-        senior.military.map(function(item, index) {
+      '<div class="senior-grid">' + exams.map(function (ex, index) {
+          return '<article class="senior-card is-exam exam-' + (index + 1) + '">' + seniorLogo(ex) + '<h4>' + esc(ex.name) + '</h4>' +
+            '<div class="senior-flow"><div class="senior-metric"><strong>' + ex.applied + '<span class="unit">명</span></strong><span>지원</span></div><span class="senior-arrow" aria-hidden="true">→</span>' +
+            '<div class="senior-metric is-pass"><strong>' + ex.firstStagePassed + '<span class="unit">명</span></strong><span>1차 합격</span></div></div></article>';
+        }).join('') +
+        (senior.military || []).map(function(item, index) {
           return '<article class="senior-card ' + (index === 0 ? 'is-army' : 'is-airforce') + '">' + seniorLogo(item) + '<h4>' + esc(item.name) + '</h4><div class="senior-metric"><strong>' + item.count + '<span class="unit">명</span></strong></div></article>';
         }).join('') + '</div>' +
       '<p class="note">' + esc(senior.note) + '</p>';
