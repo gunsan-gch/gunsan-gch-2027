@@ -1151,7 +1151,7 @@ window.SITE_DATA = {
         }
       },
       {
-        name: "코레일(한국철도공사)",
+        name: "한국철도공사",
         applied: 3,
         firstStagePassed: 2,
         logo: {
@@ -1167,7 +1167,11 @@ window.SITE_DATA = {
         name: "육군 부사관",
         count: 4,
         logo: {
-          src: "https://www.army.mil.kr/sites/army/images/common/logo.png",
+          src: "assets/img/employers/army-official.png",
+          layout: "army-stacked",
+          label: "대한민국육군",
+          width: 242,
+          height: 55,
           alt: "대한민국 육군",
           sourcePage: "https://www.army.mil.kr/sites/army/index.do"
         }
@@ -1184,6 +1188,6 @@ window.SITE_DATA = {
         }
       }
     ],
-    note: "지역인재 9급 공무원·코레일은 1차 합격 현황으로, 최종 합격 인원이 아닙니다."
+    note: "지역인재 9급 공무원·한국철도공사는 1차 합격 현황으로, 최종 합격 인원이 아닙니다."
   }
 };
