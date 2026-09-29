@@ -555,8 +555,8 @@ window.SITE_DATA = {
       src: "assets/img/school-life/flea-market.webp",
       width: 1000,
       height: 562,
-      alt: "플리마켓에서 상품과 홍보물을 소개하는 학생들",
-      caption: "플리마켓 상품 소개"
+      alt: "플리마켓을 운영하는 학생들",
+      caption: "플리마켓 운영"
     },
     {
       src: "assets/img/school-life/baking-club.webp",
@@ -570,40 +570,28 @@ window.SITE_DATA = {
       width: 1000,
       height: 750,
       alt: "공무원 선배의 진로 경험과 준비 과정을 듣는 학생들",
-      caption: "공무원 선배와 함께 그리는 진로",
-      description: "공무원 선배의 경험을 듣고 나의 진로를 준비해요.",
-      year: "2026",
-      sourceUrl: "https://school.jbedu.kr/gunsan-gch/M010301/view/6753200.do"
+      caption: "공무원 선배와 함께 그리는 진로"
     },
     {
-      src: "assets/img/school-life/alumni-career-talk.webp",
+      src: "assets/img/school-life/alumni-career-talk.webp?v=2",
       width: 1000,
-      height: 746,
-      alt: "온누리홀에서 취업설명회와 선배와의 대화에 참여하는 학생들",
-      caption: "선배에게 듣는 취업 이야기",
-      description: "취업설명회와 선배와의 만남으로 진로의 시야를 넓혀요.",
-      year: "2026",
-      sourceUrl: "https://school.jbedu.kr/gunsan-gch/M010301/view/6751951.do"
+      height: 547,
+      alt: "학생들의 질문지를 바탕으로 선배들과 질의응답을 진행하는 모습",
+      caption: "선배에게 듣는 취업 이야기"
     },
     {
-      src: "assets/img/school-life/harang-plogging.webp",
+      src: "assets/img/school-life/harang-plogging.webp?v=2",
       width: 1000,
       height: 750,
-      alt: "은파호수공원 산책로에서 환경정화 활동을 하는 하랑 봉사동아리 학생들",
-      caption: "하랑과 함께하는 은파 플로깅",
-      description: "선후배가 함께 걸으며 우리 지역의 환경을 가꿔요.",
-      year: "2026",
-      sourceUrl: "https://school.jbedu.kr/gunsan-gch/M010301/view/6752365.do"
+      alt: "집게와 장갑을 이용해 풀숲의 쓰레기를 줍는 하랑 봉사동아리 학생들",
+      caption: "하랑과 함께하는 은파 플로깅"
     },
     {
-      src: "assets/img/school-life/kitty-cookie-workshop.webp",
+      src: "assets/img/school-life/kitty-cookie-workshop.webp?v=2",
       width: 1000,
-      height: 750,
-      alt: "직접 꾸민 캐릭터 쿠키와 포장 상자를 들어 보여주는 학생들",
-      caption: "나만의 키티쿠키 만들기",
-      description: "직접 꾸민 쿠키에 나만의 개성과 아이디어를 담아요.",
-      year: "2025",
-      sourceUrl: "https://school.jbedu.kr/gunsan-gch/M010301/view/6571757.do"
+      height: 799,
+      alt: "실습대에서 도구와 재료를 이용해 직접 쿠키를 만들고 꾸미는 학생들",
+      caption: "나만의 키티쿠키 만들기"
     }
   ],
 
