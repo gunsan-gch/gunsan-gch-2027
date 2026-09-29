@@ -1168,6 +1168,7 @@ window.SITE_DATA = {
         count: 4,
         logo: {
           src: "assets/img/employers/army-supplied.jpeg",
+          layout: "army-aligned",
           width: 1536,
           height: 1521,
           alt: "대한민국 육군",

@@ -527,6 +527,9 @@
   }
   function seniorLogo(item) {
     if (!item.logo || !item.logo.src) return '';
+    if (item.logo.layout === "army-aligned") {
+      return '<div class="senior-logo army-aligned" role="img" aria-label="대한민국 육군"><span class="army-symbol">' + logoImg(item.logo, "", "hide") + '</span><span class="army-korean">' + logoImg(item.logo, "", "hide") + '</span><span class="army-english">' + logoImg(item.logo, "", "hide") + '</span></div>';
+    }
     return '<div class="senior-logo">' + logoImg(item.logo, "", "hide") + '</div>';
   }
   if (senior && $("senior-status")) {

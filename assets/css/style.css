@@ -1399,3 +1399,14 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
  .senior-card h4 { font-size:.92rem; }
  .senior-logo { height:69px; }
 }
+
+/* Match visible symbol and wordmark heights to the Air Force lockup. */
+.senior-logo.army-aligned { flex-direction:column; justify-content:space-between; }
+.army-aligned > span { position:relative; display:block; flex:none; overflow:hidden; }
+.army-aligned .army-symbol { height:66.7%; aspect-ratio:896 / 980; }
+.army-aligned .army-korean { height:16.6%; aspect-ratio:891 / 150; }
+.army-aligned .army-english { height:5%; aspect-ratio:876 / 78; }
+.senior-logo.army-aligned img { position:absolute; height:auto; max-width:none; max-height:none; }
+.army-aligned .army-symbol img { width:171.4286%; left:-35.7143%; top:-13.2653%; }
+.army-aligned .army-korean img { width:172.3906%; left:-36.5881%; top:-762.6667%; }
+.army-aligned .army-english img { width:175.3425%; left:-37.6712%; top:-1687.1795%; }
