@@ -108,6 +108,38 @@
 
   document.documentElement.setAttribute("data-briefing", phase);
 
+  /* ---------- 검색엔진용 구조화 데이터 (구글이 학교·설명회 정보를 이해하도록) ----------
+   * 화면에는 보이지 않습니다. 설명회는 시작 전·당일에만 넣고, 지난 뒤·취소 시에는 뺍니다. */
+  (function structuredData() {
+    var canon = document.querySelector('link[rel="canonical"]');
+    var siteUrl = canon ? canon.href : location.href.split(/[?#]/)[0];
+    var school = {
+      "@type": "HighSchool", "name": D.schoolName, "alternateName": D.schoolShortName,
+      "url": D.schoolWebsite, "telephone": D.admissionsPhone,
+      "address": { "@type": "PostalAddress", "streetAddress": D.address, "postalCode": D.postalCode, "addressCountry": "KR" }
+    };
+    var graph = [school];
+    if ((phase === "before" || phase === "ongoing") && start) {
+      var ev = {
+        "@type": "Event", "name": B.title, "startDate": B.startAt,
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "location": { "@type": "Place", "name": B.venue, "address": school.address },
+        "description": String(B.intro || "").replace(/\n/g, " "),
+        "organizer": { "@type": "HighSchool", "name": D.schoolName, "url": D.schoolWebsite },
+        "image": [new URL("assets/img/share/share-briefing.jpg", siteUrl).href],
+        "url": siteUrl, "isAccessibleForFree": true
+      };
+      if (B.endAt) ev.endDate = B.endAt;
+      if (hasReg) ev.offers = { "@type": "Offer", "url": B.registrationUrl, "price": 0, "priceCurrency": "KRW", "availability": "https://schema.org/InStock" };
+      graph.push(ev);
+    }
+    var sd = document.createElement("script");
+    sd.type = "application/ld+json";
+    sd.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": graph });
+    document.head.appendChild(sd);
+  })();
+
   /* ---------- 데이터 점검 (개발자 도구 콘솔에 경고) ---------- */
   (function validate() {
     var depts = D.departments || [];

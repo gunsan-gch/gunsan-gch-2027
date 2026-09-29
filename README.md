@@ -7,6 +7,7 @@
 
 ```
 index.html                  페이지 뼈대 (메뉴·섹션 순서)
+sitemap.xml                 검색엔진 사이트맵
 .nojekyll                   GitHub Pages가 파일을 그대로 제공하도록 하는 설정 파일
 assets/
   js/site-data.js           ★ 콘텐츠 데이터 (학과·인원·설명회·연락처·링크) — 보통 이 파일만 수정
@@ -143,6 +144,14 @@ GitHub 웹사이트에서 파일을 열고 연필(✏️) 아이콘을 눌러 �
 ### 링크 복사·공유 버튼
 
 입학설명회 안내 카드와 페이지 하단에 **링크 복사** 버튼이 있습니다. 휴대폰에서는 **공유하기** 버튼도 함께 보이며, 누르면 카카오톡·문자 등 휴대폰의 공유 화면이 열립니다. 복사되는 주소에는 `?now=` 미리보기 값이나 `#위치`가 붙지 않습니다.
+
+## 검색 등록 (구글·네이버)
+
+- `sitemap.xml`(사이트맵)과 검색엔진용 구조화 데이터(학교 정보, 설명회 일시·장소)가 들어 있습니다. 구조화 데이터는 `site-data.js`의 설명회 정보로 자동 생성되며, 설명회가 지나면 자동으로 빠집니다.
+- **구글:** [Search Console](https://search.google.com/search-console) → 속성 추가 → **URL 접두어** `https://gunsan-gch.github.io/gunsan-gch-2027/` → 소유권 확인 방법 **HTML 태그**의 `<meta name="google-site-verification" ...>` 를 `index.html`의 `<head>` 안(다른 meta 아래)에 붙여 넣고 저장 → 확인 → 왼쪽 **Sitemaps**에 `sitemap.xml` 제출 → 상단 URL 검사에서 주소 입력 후 **색인 생성 요청**
+- **네이버:** [서치어드바이저](https://searchadvisor.naver.com) → 웹마스터 도구 → 사이트 등록에 공개 주소 입력 → **HTML 태그**의 `<meta name="naver-site-verification" ...>` 를 같은 방식으로 붙여 넣기 → 확인 → **요청 → 사이트맵 제출**(`https://gunsan-gch.github.io/gunsan-gch-2027/sitemap.xml`) → **요청 → 웹 페이지 수집**에 공개 주소 입력
+- 검색 결과에 나오기까지 보통 며칠~몇 주 걸리며, 순위는 보장되지 않습니다. 학교 홈페이지·블로그 등에서 이 주소로 연결되는 링크가 많을수록 빨리 잡힙니다.
+- 내용을 크게 고치면 `sitemap.xml`의 `lastmod` 날짜를 바꿔 주세요.
 
 ## 학교 홈페이지와 연결하기
 
