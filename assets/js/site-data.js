@@ -584,9 +584,9 @@ window.SITE_DATA = {
             name: "9급 공무원",
             count: 15,
             logo: {
-              src: "assets/img/employers/gov9.webp",
-              width: 113,
-              height: 120
+              src: "assets/img/employers/gov-emblem.webp",
+              width: 80,
+              height: 84
             }
           },
           {
