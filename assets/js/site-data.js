@@ -542,7 +542,7 @@ window.SITE_DATA = {
       width: 1000,
       height: 538,
       alt: "본교에서 진행한 ITQ 자격시험",
-      caption: "ITQ자격시험(본교)"
+      caption: "ITQ자격시험"
     },
     {
       src: "assets/img/school-life/ai-interview-workshop.webp",
