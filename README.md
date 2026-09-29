@@ -115,14 +115,12 @@ GitHub 웹사이트에서 파일을 열고 연필(✏️) 아이콘을 눌러 �
 
 ## GitHub Pages로 게시하기
 
-1. **저장소 공개 여부 확인** — 현재 저장소는 비공개(private)입니다. GitHub 무료 요금제에서는 **공개(public) 저장소만** Pages를 쓸 수 있습니다.
-   - 공개로 바꾸려면: 저장소 **Settings → General → Danger Zone → Change visibility → Public**
-   - 공개 전, 저장소에 공개하면 안 되는 파일(원본 자료·개인정보·내부 문서)이 없는지 파일 목록을 다시 확인하세요.
-2. (권장) 저장소 이름 바꾸기 — 지금 이름이 `-`이라 주소가 `https://oddgod-rgb.github.io/-/` 처럼 됩니다. **Settings → General → Repository name**에서 `gunsan-gch-2027` 같은 이름으로 바꾸면 `https://oddgod-rgb.github.io/gunsan-gch-2027/` 가 됩니다.
-3. **Settings → Pages → Build and deployment**
-   - Source: **Deploy from a branch**
-   - Branch: 이 사이트 파일이 있는 브랜치(예: `main`) / 폴더 **`/ (root)`** → **Save**
-4. 1~3분 뒤 같은 화면 위쪽에 공개 주소가 표시됩니다. 휴대전화로 접속해 확인하세요.
+**공개 주소: https://gunsan-gch.github.io/gunsan-gch-2027/**
+
+- 저장소: `gunsan-gch/gunsan-gch-2027` (공개 저장소, `main` 브랜치 `/ (root)`에서 게시)
+- 설정 위치: 저장소 **Settings → Pages → Build and deployment** (Source: Deploy from a branch / Branch: `main` / `/ (root)`)
+- 공개 저장소이므로 원본 자료·개인정보·내부 문서는 절대 올리지 마세요.
+- **주소를 바꾸지 마세요.** 계정·저장소 이름을 바꾸면 주소가 달라져 인쇄된 QR과 학교 홈페이지 링크가 모두 끊깁니다. 바꿔야 한다면 `index.html`의 `canonical`·`og:url`·`og:image`도 함께 고치고 QR을 새로 만드세요.
 
 모든 경로가 상대 경로라 `https://계정.github.io/저장소명/` 같은 하위 주소에서도 이미지·글꼴·스크립트가 정상 동작합니다. 수정 사항을 커밋하면 1~3분 뒤 자동으로 반영됩니다.
 
@@ -135,10 +133,10 @@ GitHub 웹사이트에서 파일을 열고 연필(✏️) 아이콘을 눌러 �
 | `share-briefing.jpg` | 설명회 전 (설명회 일시·장소 표시) — 현재 적용 |
 | `share-general.jpg` | 설명회가 끝난 뒤 (입학 상담 번호 표시) |
 
-카카오톡 등은 **https://로 시작하는 전체 주소**의 이미지만 확실하게 불러오므로, 공개 주소가 정해지면 `index.html`의 `<head>`에서 아래처럼 바꿔 주세요.
+`index.html`의 `<head>`에 공개 주소 기준 전체 주소로 들어가 있습니다 (카카오톡 등은 https:// 전체 주소의 이미지만 확실하게 불러옵니다).
 ```html
-<meta property="og:url" content="https://공개주소/">
-<meta property="og:image" content="https://공개주소/assets/img/share/share-briefing.jpg">
+<meta property="og:url" content="https://gunsan-gch.github.io/gunsan-gch-2027/">
+<meta property="og:image" content="https://gunsan-gch.github.io/gunsan-gch-2027/assets/img/share/share-briefing.jpg">
 ```
 설명회가 끝나면 `share-briefing.jpg`를 `share-general.jpg`로 바꾸면 됩니다. 카카오톡은 미리보기를 한동안 저장해 두므로, 바로 바뀌지 않으면 [카카오 공유 디버거](https://developers.kakao.com/tool/debugger/sharing)에서 주소를 넣고 "캐시 초기화"를 누르세요.
 
@@ -173,19 +171,19 @@ GitHub Pages 주소가 생기면 학교 홈페이지(school.jbedu.kr)에서 다�
 - [x] 설명회 사전등록 주소 (`briefing.registrationUrl`) — 구글 설문지 연결, QR 적용 완료
 - [ ] 사전등록 마감 시각이 정해지면 `briefing.registrationClosesAt` 입력 (없으면 행사 당일 10. 15. 자정까지 사전등록 버튼이 유지됩니다)
 - [ ] 학과개편을 반영한 최종 모집요강 파일 주소 (`admissionsPdfUrl`)
-- [ ] 원서접수 기간(특별 11. 6.~11. 10., 일반 11. 23.~11. 25.)과 ERP·AI마케팅 특별/일반 20명·20명이 최종 모집요강과 같은지 확인
-- [ ] 입학 상담 번호 순서 (현재 063-460-0321이 첫 번째 = 전화 버튼 연결 번호)
-- [ ] 경품(참석자 전원 핸드크림 세트, 추첨 경품 품목) 확정 여부 — 바뀌면 문구 수정
-- [ ] 현 고3 현황(9급 지원 4·1차 합격 3, 육군 부사관 4, 공군 부사관 1) 공개 동의·최신 결과 반영
+- [x] 원서접수 기간(특별 11. 6.~11. 10., 일반 11. 23.~11. 25.), ERP·AI마케팅 특별/일반 20명·20명 — 확인 완료
+- [x] 입학 상담 번호 (063-460-0321 · 063-460-0366) — 확인 완료
+- [x] 경품(참석자 전원 핸드크림 세트, 추첨 경품) — 확인 완료. 바뀌면 문구 수정
+- [x] 현 고3 현황(9급 지원 4·1차 합격 3, 육군 부사관 4, 공군 부사관 1) — 확인 완료. 최종 결과가 나오면 갱신
 - [ ] 외부 누리집에서 불러오는 로고가 공개 주소에서 잘 보이는지 확인 (가능하면 파일로 교체)
-- [ ] 공개 주소 확정 후 공유 미리보기 주소(og:url, og:image)를 전체 주소로 변경
+- [x] 공개 주소 확정 (https://gunsan-gch.github.io/gunsan-gch-2027/) 및 공유 미리보기 주소 반영
 - [ ] 설명회 종료 후 공유 이미지를 `share-general.jpg`로 교체
 - [ ] 설명회를 실제로 마친 뒤 `briefing.manualStatus: "held"` 로 변경
 - [ ] 장학금·지원 제도: 2027학년도 대상·금액·조건 확정 후 `benefits`에 입력 (가상 합계 금액은 사용하지 않음)
-- [ ] 주요 진학 대학 12곳 목록이 학교 자료와 맞는지 확인
+- [x] 주요 진학 대학 12곳 목록 — 확인 완료
 - [ ] 주요 취업처 분류(공공기관·공무원 / 금융권 / 주요 기업 / 우수기업·전문직무)가 학교 의견과 맞는지 확인
 - [ ] 3년 로드맵 프로그램 명칭·내용과 '예정' 표시 확인 (AI 중점학년·구독·자격증 지원 확정 시 표시 변경)
-- [ ] 실습실 '2027년 2학기 전 완공 목표' 표기가 최신 승인 계획과 맞는지 확인
+- [x] 실습실 '2027년 2학기 전 완공 목표' 표기 — 확인 완료
 
 ## 이 페이지에 넣지 않은 것
 
