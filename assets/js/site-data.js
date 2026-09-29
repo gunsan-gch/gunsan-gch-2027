@@ -1085,7 +1085,7 @@ window.SITE_DATA = {
       group: "설명회와 입학",
       q: "입학설명회는 언제, 어디서 하나요?",
       briefingDependent: true,
-      a: "{date}\n{venue}에서 중3 학생과 학부모를 대상으로 안내·상담을 진행합니다.",
+      a: "{date}\n{venue}에서 중3 학생과 학부모님을 대상으로 안내·상담을 진행합니다.",
       aAfter: "{year}학년도 설명회 일정({date})은 지났습니다.\n입학과 학과에 관한 문의는 전화 상담을 이용해 주세요."
     },
     {
