@@ -431,7 +431,12 @@
       var lanes = TK.lanes, cells = [], sr = [];
       var gName = function (k) { return RM.grades[k] ? RM.grades[k].grade : (k + 1) + "학년"; };
       var put = function (c) { cells.push(c); };
-      var stepHtml = function (when, text) { return '<small class="tk-when">' + esc(when) + '</small><span>' + esc(text) + '</span>'; };
+      // 칸 글자: \n 은 줄바꿈, 괄호로 시작하는 줄은 작은 글씨로 (예: "플래닝코칭반\n(공채·공무원 기초)")
+      var stepHtml = function (when, text) {
+        return '<small class="tk-when">' + esc(when) + '</small><span>' + String(text).split("\n").map(function (l) {
+          return /^\(/.test(l) ? '<small class="tk-sub">' + esc(l) + '</small>' : '<span class="tk-line">' + esc(l) + '</span>';
+        }).join("") + '</span>';
+      };
       // 1학년 칸이 같은 앞쪽 진로들은 한 칸(공통 기초)에서 갈라지는 모양으로 그림
       var m = 1;
       while (m < lanes.length && lanes[m].steps[0] === lanes[0].steps[0]) m++;
@@ -443,7 +448,7 @@
       lanes.forEach(function (ln, i) {
         var dr = (i + 2) + "", inGroup = i < m;
         var mc = inGroup ? (i + 1) + "" : "1 / -1";
-        sr.push(ln.label + ": " + ln.steps.map(function (st, k) { return st === ln.steps[k - 1] ? "" : gName(k) + " " + st; })
+        sr.push(ln.label + ": " + ln.steps.map(function (st, k) { return st === ln.steps[k - 1] ? "" : gName(k) + " " + st.replace(/\n/g, " "); })
           .filter(Boolean).join(" → ") + " → 졸업 후 " + ln.goal);
         put({ cls: "tk-label lane-" + (i + 1) + (inGroup ? " is-group" : ""), dc: "1", dr: dr, mc: "1 / -1", mr: inGroup ? "" : (mRow++) + "", html: icon(ln.icon) + '<span>' + esc(ln.label) + '</span>' });
         var k = 0, first = true, row = inGroup ? 1 : 0;

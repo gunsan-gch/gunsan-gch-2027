@@ -1507,3 +1507,5 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
   .tk-step, .tk-goal { font-size: .84rem; }
 }
 .rm-detail-title { margin: 0 0 14px; font-size: 1.2rem; color: var(--navy); text-align: center; }
+.tk-step .tk-line { display: block; }
+.tk-sub { display: block; margin-top: 2px; font-size: .78rem; font-weight: 700; color: var(--muted); }
