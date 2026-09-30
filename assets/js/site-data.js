@@ -1005,10 +1005,10 @@ window.SITE_DATA = {
       icon: "ai",
       name: "AI비즈니스실",
       image: {
-        src: "assets/img/facilities/ai-business.webp",
+        src: "assets/img/facilities/ai-business.webp?v=2",
         width: 1200,
         height: 900,
-        alt: "AI비즈니스실 조성 예시 이미지 - 컴퓨터 실습석과 사무 공간"
+        alt: "AI비즈니스실 조성 예시 이미지 - 다양한 업무 화면의 실습석과 환율 전광판이 있는 창구"
       },
       imageLabel: "조성 예시 이미지",
       target: "AI핀테크과·전체 학과",
@@ -1033,10 +1033,10 @@ window.SITE_DATA = {
       icon: "cafe",
       name: "카페실습실",
       image: {
-        src: "assets/img/facilities/cafe-lab.webp",
+        src: "assets/img/facilities/cafe-lab.webp?v=2",
         width: 1200,
         height: 900,
-        alt: "카페실습실 조성 예시 이미지 - 에스프레소 머신이 있는 바와 매장 좌석"
+        alt: "카페실습실 조성 예시 이미지 - 에스프레소 머신과 드립 장비 등 다양한 기자재를 갖춘 바와 매장 좌석"
       },
       imageLabel: "조성 예시 이미지",
       target: "카페비즈과",
