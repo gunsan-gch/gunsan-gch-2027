@@ -289,7 +289,7 @@ window.SITE_DATA = {
     // 사전등록 마감 시각이 정해지면 입력
     registrationClosesAt: null,
     timeZone: "Asia/Seoul",
-    venue: "군산여자상업고등학교 온누리홀",
+    venue: "군산여상 2층 온누리홀",
     audience: "중학교 3학년 학생 및 학부모님",
     program: ["학교·학과·교육과정 소개", "취업·진학 안내", "방과후·학교생활 안내", "실습환경 소개", "질의응답·개별 상담"],
     intro: "학과와 학교생활을 살펴보고,\n취업·진학의 궁금한 점을 직접 물어보세요.",
