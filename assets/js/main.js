@@ -411,9 +411,69 @@
     gradeIds = RM.grades.map(function (g) { return g.id; });
     $("roadmap-lead").innerHTML = copyLines(RM.lead || "");
     $("roadmap-note").innerHTML = copyLines(RM.note || "");
-    $("rm-steps").innerHTML = RM.grades.map(function (g) {
-      return '<li><b>' + esc(g.grade) + '</b><span>' + esc(g.stepKo) + '</span></li>';
+    // 한눈에 보기: 학년별 핵심 프로그램 카드 (누르면 아래 학년 탭이 열림)
+    $("rm-ov").innerHTML = RM.grades.map(function (g, i) {
+      return '<li class="rm-ov-card g-' + (i + 1) + (g.programs.some(function (p) { return p.featured; }) ? ' has-featured' : '') + '">' +
+        '<div class="rm-ov-top"><span class="rm-ov-num" aria-hidden="true">' + esc(g.num) + '</span>' +
+          '<div><p class="rm-ov-grade">' + esc(g.grade) + ' · ' + esc(g.label) + '</p><h3>' + esc(g.headline) + '</h3></div></div>' +
+        '<ul class="rm-ov-list">' + g.programs.map(function (p) {
+          return '<li' + (p.featured ? ' class="is-featured"' : '') + '>' + icon(p.icon) + '<span>' + esc(p.title) +
+            (p.badge ? ' <em class="rm-ov-badge">' + esc(p.badge.replace(/^운영\s*/, "")) + '</em>' : '') + '</span></li>';
+        }).join("") + '</ul>' +
+        (g.outcome && g.outcome.length ? '<p class="rm-ov-out"><span>이렇게 성장해요</span>' + g.outcome.map(esc).join(" · ") + '</p>' : '') +
+        '<a class="rm-ov-more" href="#' + esc(g.id) + '">' + esc(g.grade) + ' 자세히 보기 ' + icon("arrow") + '</a>' +
+      '</li>';
     }).join("");
+
+    // 진로별 준비 흐름 도식: PC는 가로(학년 → 오른쪽), 휴대폰은 세로(위 → 아래)
+    var TK = RM.tracks;
+    if (TK && TK.lanes && TK.lanes.length) {
+      var lanes = TK.lanes, cells = [], sr = [];
+      var gName = function (k) { return RM.grades[k] ? RM.grades[k].grade : (k + 1) + "학년"; };
+      var put = function (c) { cells.push(c); };
+      var stepHtml = function (when, text) { return '<small class="tk-when">' + esc(when) + '</small><span>' + esc(text) + '</span>'; };
+      // 1학년 칸이 같은 앞쪽 진로들은 한 칸(공통 기초)에서 갈라지는 모양으로 그림
+      var m = 1;
+      while (m < lanes.length && lanes[m].steps[0] === lanes[0].steps[0]) m++;
+      if (m < 2) m = 0;
+      // 머리글 (PC)
+      [0, 1, 2].forEach(function (k) { put({ cls: "tk-head", dc: (2 + 2 * k) + "", dr: "1", html: esc(gName(k)) }); });
+      put({ cls: "tk-head is-goal", dc: "8", dr: "1", html: "졸업 후" });
+      var mRow = m ? 8 : 1;
+      lanes.forEach(function (ln, i) {
+        var dr = (i + 2) + "", inGroup = i < m;
+        var mc = inGroup ? (i + 1) + "" : "1 / -1";
+        sr.push(ln.label + ": " + ln.steps.map(function (st, k) { return st === ln.steps[k - 1] ? "" : gName(k) + " " + st; })
+          .filter(Boolean).join(" → ") + " → 졸업 후 " + ln.goal);
+        put({ cls: "tk-label lane-" + (i + 1) + (inGroup ? " is-group" : ""), dc: "1", dr: dr, mc: "1 / -1", mr: inGroup ? "" : (mRow++) + "", html: icon(ln.icon) + '<span>' + esc(ln.label) + '</span>' });
+        var k = 0, first = true, row = inGroup ? 1 : 0;
+        var nextRow = function () { return inGroup ? (row++) + "" : (mRow++) + ""; };
+        if (inGroup) {
+          if (i === 0) {
+            put({ cls: "tk-step tk-shared", dc: "2", dr: "2 / " + (2 + m), mc: "1 / -1", mr: "1", html: stepHtml(gName(0), ln.steps[0]) });
+            put({ cls: "tk-fork tk-fork-" + m, dc: "3", dr: "2 / " + (2 + m), mc: "1 / -1", mr: "2", html: "" });
+          }
+          row = 3; k = 1; first = false;
+        }
+        while (k < ln.steps.length) {
+          var e = k;
+          while (e + 1 < ln.steps.length && ln.steps[e + 1] === ln.steps[k]) e++;
+          var when = k === e ? gName(k) : gName(k).replace("학년", "") + "·" + gName(e);
+          put({ cls: "tk-step lane-" + (i + 1) + (first ? "" : " in"), dc: (2 + 2 * k) + " / " + (3 + 2 * e), dr: dr, mc: mc, mr: nextRow(), html: stepHtml(when, ln.steps[k]) });
+          put({ cls: "tk-conn", dc: (3 + 2 * e) + "", dr: dr, mc: mc, mr: nextRow(), html: "" });
+          first = false; k = e + 1;
+        }
+        put({ cls: "tk-goal lane-" + (i + 1) + " in", dc: "8", dr: dr, mc: mc, mr: nextRow(), html: '<small class="tk-when">졸업 후</small>' + icon(ln.icon) + '<span>' + esc(ln.goal) + '</span>' });
+      });
+      $("rm-tracks").innerHTML =
+        '<div class="rm-tracks-head"><h3>' + esc(TK.title || "") + '</h3>' + (TK.lead ? '<p>' + copyLines(TK.lead) + '</p>' : '') + '</div>' +
+        '<div class="tk-grid tk-m' + m + '" aria-hidden="true">' + cells.map(function (c) {
+          return '<div class="' + c.cls + '" style="--dc:' + c.dc + ';--dr:' + c.dr + ';--mc:' + (c.mc || c.dc) + ';--mr:' + (c.mr || "auto") + '">' + c.html + '</div>';
+        }).join("") + '</div>' +
+        '<ul class="sr-only">' + sr.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join("") + '</ul>' +
+        (TK.note ? '<p class="note">' + esc(TK.note) + '</p>' : '');
+      $("rm-tracks").hidden = false;
+    }
     $("rm-tabs").innerHTML = RM.grades.map(function (g, i) {
       return '<button type="button" role="tab" class="rm-tab" id="tab-' + esc(g.id) + '" data-grade="' + esc(g.id) + '" aria-controls="' + esc(g.id) + '"' +
         ' aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? 0 : -1) + '">' +
@@ -464,7 +524,7 @@
     if (opt.focus) $("tab-" + id).focus();
     if (opt.history === "push" && location.hash !== "#" + id) history.pushState(null, "", "#" + id);
     if (opt.history === "replace" && location.hash !== "#" + id) history.replaceState(null, "", "#" + id);
-    if (opt.scroll) $("roadmap").scrollIntoView({ behavior: opt.instant || reduceMotion ? "auto" : "smooth", block: "start" });
+    if (opt.scroll) ($("rm-detail-title") || $("roadmap")).scrollIntoView({ behavior: opt.instant || reduceMotion ? "auto" : "smooth", block: "start" });
   }
   if (gradeIds.length) {
     $("rm-tabs").addEventListener("click", function (e) {
@@ -922,7 +982,7 @@
   if (!reduceMotion && "IntersectionObserver" in window) {
     document.documentElement.classList.add("anim");
     var revealSel = [
-      ".section-head", ".about-body", ".vision", ".ai-link", ".points li", ".dept-card", ".dept-tabs", ".rm-steps", ".rm-tabs",
+      ".section-head", ".about-body", ".vision", ".ai-link", ".points li", ".dept-card", ".dept-tabs", ".rm-ov-card", ".rm-tracks", ".rm-tabs",
       ".emp-cat", ".emp-item", ".college", ".support-card", ".benefit-card", ".photo-grid li", ".facility-card",
       ".table-card", ".info-card", ".btn-stack", ".brief-card", ".brief-cta", ".faq-group", ".faq-item", ".contact-card"
     ].join(",");
@@ -977,6 +1037,15 @@
   onProgress();
 
   // 처음 열 때: #erp 같은 학과 주소면 그 학과를 열고 이동, 다른 #위치면 그 위치로 이동
+  // 페이지와 글꼴을 모두 불러온 뒤 위치를 맞춤 (글꼴이 바뀌며 위쪽 높이가 달라져도 정확하게)
+  function afterLayout(fn) {
+    var run = function () {
+      setTimeout(fn, 0);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { setTimeout(fn, 0); });
+    };
+    if (document.readyState === "complete") run();
+    else window.addEventListener("load", run);
+  }
   (function initialHash() {
     var id = decodeURIComponent(location.hash.slice(1));
     if (!id) return;
@@ -984,15 +1053,13 @@
       selectDept(id, {});
       // 브라우저의 기본 위치 이동이 끝난 뒤, 학과 선택 버튼이 보이도록 영역 맨 위로 맞춤
       var go = function () { selectDept(id, { scroll: true, instant: true }); };
-      if (document.readyState === "complete") setTimeout(go, 0);
-      else window.addEventListener("load", function () { setTimeout(go, 0); });
+      afterLayout(go);
       return;
     }
     if (gradeIds.indexOf(id) >= 0) {
       selectGrade(id, {});
       var goG = function () { selectGrade(id, { scroll: true, instant: true }); };
-      if (document.readyState === "complete") setTimeout(goG, 0);
-      else window.addEventListener("load", function () { setTimeout(goG, 0); });
+      afterLayout(goG);
       return;
     }
     var target = document.getElementById(id);
