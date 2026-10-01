@@ -1443,9 +1443,10 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 .tk-grid {
   --l1: var(--blue); --l1-soft: var(--blue-soft);
   --l2: var(--teal); --l2-soft: var(--teal-soft);
-  --l3: #6d4bb3;     --l3-soft: #f0ebfa;
+  --l3: var(--cafe); --l3-soft: var(--cafe-soft);
+  --l4: #6d4bb3;     --l4-soft: #f0ebfa;
   --ln: #b8c6d8;
-  display: grid; grid-template-columns: 78px minmax(0, 1fr) 34px minmax(0, 1fr) 34px minmax(0, 1fr) 34px minmax(0, 1.05fr);
+  display: grid; grid-template-columns: 100px minmax(0, 1fr) 34px minmax(0, 1fr) 34px minmax(0, 1fr) 34px minmax(0, 1.05fr);
   row-gap: 12px; align-items: stretch;
 }
 .tk-grid > div { grid-column: var(--dc); grid-row: var(--dr); position: relative; min-width: 0; }
@@ -1453,7 +1454,7 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 .tk-head.is-goal { color: var(--navy); }
 .tk-label { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: .95rem; }
 .tk-label .icon { width: 18px; height: 18px; flex: none; }
-.tk-label.lane-1 { color: var(--l1); } .tk-label.lane-2 { color: var(--l2); } .tk-label.lane-3 { color: var(--l3); }
+.tk-label.lane-1 { color: var(--l1); } .tk-label.lane-2 { color: var(--l2); } .tk-label.lane-3 { color: var(--l3); } .tk-label.lane-4 { color: var(--l4); }
 .tk-step, .tk-goal {
   --c: var(--ln); --c-soft: #f4f7fb;
   display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2px;
@@ -1463,6 +1464,7 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 .tk-step.lane-1, .tk-goal.lane-1 { --c: var(--l1); --c-soft: var(--l1-soft); }
 .tk-step.lane-2, .tk-goal.lane-2 { --c: var(--l2); --c-soft: var(--l2-soft); }
 .tk-step.lane-3, .tk-goal.lane-3 { --c: var(--l3); --c-soft: var(--l3-soft); }
+.tk-step.lane-4, .tk-goal.lane-4 { --c: var(--l4); --c-soft: var(--l4-soft); }
 .tk-shared { --c: var(--navy); --c-soft: #eef2f9; background: linear-gradient(135deg, #eef2f9, #e6f4f2); }
 .tk-goal { background: var(--c); color: #fff; font-weight: 800; box-shadow: 0 4px 12px rgba(20, 40, 90, .12); }
 .tk-goal .icon { width: 20px; height: 20px; }
