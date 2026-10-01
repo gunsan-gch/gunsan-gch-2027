@@ -484,6 +484,45 @@
         (TK.note ? '<p class="note">' + esc(TK.note) + '</p>' : '');
       $("rm-tracks").hidden = false;
     }
+
+    // 카페비즈과 진로 경로: 1~3학년 공통 과정 → 졸업 후 두 방향 (PC 가로, 휴대폰 세로)
+    var CP = RM.cafePath;
+    if (CP && CP.steps && CP.goals && $("rm-tracks")) {
+      var total = (CP.ratio || []).reduce(function (a, r) { return a + r.value; }, 0) || 100;
+      var cafeHtml =
+        '<section class="cafe-path" data-dept="cafe" aria-labelledby="cafe-path-title">' +
+          '<div class="cp-head">' +
+            '<p class="cp-label">' + icon("cafe") + esc(CP.label) + ' 진로 경로</p>' +
+            '<h4 class="cp-tagline" id="cafe-path-title">' + esc(CP.tagline) + '</h4>' +
+            (CP.intro ? '<p class="cp-intro">' + copyLines(CP.intro) + '</p>' : '') +
+            (CP.ratio && CP.ratio.length ? '<div class="cp-ratio">' +
+              '<div class="cp-bar" aria-hidden="true">' + CP.ratio.map(function (r, k) {
+                return '<span class="cp-bar-' + (k + 1) + '" style="width:' + (r.value / total * 100) + '%"></span>';
+              }).join("") + '</div>' +
+              '<p class="cp-ratio-text">전공교육 구성: ' + CP.ratio.map(function (r) { return '<span class="nowrap">' + esc(r.label) + ' 약 ' + r.value + '%</span>'; }).join(' · ') +
+                (CP.ratioBasis ? '<small>' + esc(CP.ratioBasis) + '</small>' : '') + '</p>' +
+            '</div>' : '') +
+          '</div>' +
+          '<div class="cp-flow">' +
+            '<div class="cp-common"><p class="cp-common-label">' + esc(CP.commonLabel || "공통 과정") + '</p>' +
+              '<ol class="cp-steps">' + CP.steps.map(function (st) {
+                return '<li><small>' + esc(st.grade) + '</small><strong>' + esc(st.title) + '</strong>' + (st.sub ? '<span>' + esc(st.sub) + '</span>' : '') + '</li>';
+              }).join("") + '</ol></div>' +
+            '<div class="cp-fork" aria-hidden="true"></div>' +
+            '<div class="cp-goals"><p class="cp-goals-label">' + esc(CP.goalsLabel || "졸업 후") + '</p>' +
+              '<ul class="cp-goal-list">' + CP.goals.map(function (g, k) {
+                return (k ? '<li class="cp-or" aria-hidden="true">또는</li>' : '') +
+                  '<li class="cp-goal"><p class="cp-goal-title">' + icon(g.icon || "cafe") + '<span>' + esc(g.title) + '</span></p>' +
+                  '<ul class="cp-goal-items">' + g.items.map(function (it) { return '<li>' + esc(it) + '</li>'; }).join("") + '</ul></li>';
+              }).join("") + '</ul></div>' +
+          '</div>' +
+          (CP.subjects && CP.subjects.length ? '<div class="cp-foot"><p class="cp-subj-label">' + esc(CP.subjectsLabel || "") + '</p>' +
+            '<ul class="cp-subjects">' + CP.subjects.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join("") + '</ul>' +
+            (CP.extra ? '<p class="cp-extra">' + icon("info") + '<span>' + esc(CP.extra) + '</span></p>' : '') + '</div>' : '') +
+        '</section>';
+      $("rm-tracks").insertAdjacentHTML("beforeend", cafeHtml);
+      $("rm-tracks").hidden = false;
+    }
     $("rm-tabs").innerHTML = RM.grades.map(function (g, i) {
       return '<button type="button" role="tab" class="rm-tab" id="tab-' + esc(g.id) + '" data-grade="' + esc(g.id) + '" aria-controls="' + esc(g.id) + '"' +
         ' aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? 0 : -1) + '">' +
