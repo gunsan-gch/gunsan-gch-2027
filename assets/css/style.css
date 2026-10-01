@@ -1530,12 +1530,6 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 .cp-label .icon { width: 16px; height: 16px; }
 .cp-tagline { margin: 2px 0 8px; font-family: var(--font-title); font-size: 1.32rem; color: var(--cp-ink); line-height: 1.4; }
 .cp-intro { margin: 0; color: var(--ink-2); font-size: .96rem; line-height: 1.7; }
-.cp-ratio { margin-top: 12px; max-width: 560px; }
-.cp-bar { display: flex; height: 6px; border-radius: 99px; overflow: hidden; background: #eadccf; }
-.cp-bar-1 { background: #c69a72; }
-.cp-bar-2 { background: var(--cp); }
-.cp-ratio-text { margin: 6px 0 0; font-size: .8rem; font-weight: 700; color: var(--cp-ink); line-height: 1.6; }
-.cp-ratio-text small { display: block; font-weight: 600; color: var(--muted); font-size: .74rem; }
 .cp-flow { display: grid; grid-template-columns: minmax(0, 3fr) 36px minmax(0, 1.55fr); align-items: stretch; margin-top: 18px; }
 .cp-common { display: flex; flex-direction: column; min-width: 0; padding: 12px 12px 14px; border: 1.5px dashed var(--cp-line); border-radius: 14px; background: rgba(255, 255, 255, .55); }
 .cp-common-label, .cp-goals-label { margin: 0 0 10px; font-size: .8rem; font-weight: 800; color: var(--cp-ink); text-align: center; }

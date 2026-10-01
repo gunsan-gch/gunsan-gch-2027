@@ -488,20 +488,12 @@
     // 카페비즈과 진로 경로: 1~3학년 공통 과정 → 졸업 후 두 방향 (PC 가로, 휴대폰 세로)
     var CP = RM.cafePath;
     if (CP && CP.steps && CP.goals && $("rm-tracks")) {
-      var total = (CP.ratio || []).reduce(function (a, r) { return a + r.value; }, 0) || 100;
       var cafeHtml =
         '<section class="cafe-path" data-dept="cafe" aria-labelledby="cafe-path-title">' +
           '<div class="cp-head">' +
             '<p class="cp-label">' + icon("cafe") + esc(CP.label) + ' 진로 경로</p>' +
             '<h4 class="cp-tagline" id="cafe-path-title">' + esc(CP.tagline) + '</h4>' +
             (CP.intro ? '<p class="cp-intro">' + copyLines(CP.intro) + '</p>' : '') +
-            (CP.ratio && CP.ratio.length ? '<div class="cp-ratio">' +
-              '<div class="cp-bar" aria-hidden="true">' + CP.ratio.map(function (r, k) {
-                return '<span class="cp-bar-' + (k + 1) + '" style="width:' + (r.value / total * 100) + '%"></span>';
-              }).join("") + '</div>' +
-              '<p class="cp-ratio-text">전공교육 구성: ' + CP.ratio.map(function (r) { return '<span class="nowrap">' + esc(r.label) + ' 약 ' + r.value + '%</span>'; }).join(' · ') +
-                (CP.ratioBasis ? '<small>' + esc(CP.ratioBasis) + '</small>' : '') + '</p>' +
-            '</div>' : '') +
           '</div>' +
           '<div class="cp-flow">' +
             '<div class="cp-common"><p class="cp-common-label">' + esc(CP.commonLabel || "공통 과정") + '</p>' +
