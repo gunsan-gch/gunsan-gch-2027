@@ -1511,3 +1511,13 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 .rm-detail-title { margin: 0 0 14px; font-size: 1.2rem; color: var(--navy); text-align: center; }
 .tk-step .tk-line { display: block; }
 .tk-sub { display: block; margin-top: 2px; font-size: .78rem; font-weight: 700; color: var(--muted); }
+/* 졸업 후 진로가 두 갈래인 칸 (예: 카페비즈과 제빵·카페 / F&B 기업) */
+.tk-goal.is-split { padding: 7px; }
+.tk-goal-items { display: flex; flex-direction: column; align-items: stretch; gap: 3px; width: 100%; }
+.tk-goal-item { display: block; padding: 6px 6px; border-radius: 8px; background: rgba(255, 255, 255, .16); }
+.tk-goal-item .tk-sub { color: rgba(255, 255, 255, .82); font-size: .74rem; }
+.tk-or { font-style: normal; font-size: .72rem; font-weight: 700; color: rgba(255, 255, 255, .8); }
+@media (max-width: 760px) {
+  .tk-goal-items { flex-direction: row; align-items: center; }
+  .tk-goal-item { flex: 1; min-width: 0; }
+}

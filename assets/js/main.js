@@ -449,7 +449,7 @@
         var dr = (i + 2) + "", inGroup = i < m;
         var mc = inGroup ? (i + 1) + "" : "1 / -1";
         sr.push(ln.label + ": " + ln.steps.map(function (st, k) { return st === ln.steps[k - 1] ? "" : gName(k) + " " + st.replace(/\n/g, " "); })
-          .filter(Boolean).join(" → ") + " → 졸업 후 " + ln.goal);
+          .filter(Boolean).join(" → ") + " → 졸업 후 " + [].concat(ln.goal).join(" 또는 ").replace(/\n/g, " "));
         put({ cls: "tk-label lane-" + (i + 1) + (inGroup ? " is-group" : ""), dc: "1", dr: dr, mc: "1 / -1", mr: inGroup ? "" : (mRow++) + "", html: icon(ln.icon) + '<span>' + esc(ln.label) + '</span>' });
         var k = 0, first = true, row = inGroup ? 1 : 0;
         var nextRow = function () { return inGroup ? (row++) + "" : (mRow++) + ""; };
@@ -468,7 +468,12 @@
           put({ cls: "tk-conn", dc: (3 + 2 * e) + "", dr: dr, mc: mc, mr: nextRow(), html: "" });
           first = false; k = e + 1;
         }
-        put({ cls: "tk-goal lane-" + (i + 1) + " in", dc: "8", dr: dr, mc: mc, mr: nextRow(), html: '<small class="tk-when">졸업 후</small>' + icon(ln.icon) + '<span>' + esc(ln.goal) + '</span>' });
+        // 졸업 후 진로가 여러 갈래면 goal 을 ["…", "…"] 목록으로 (칸 안에 나란히 표시)
+        var goals = [].concat(ln.goal);
+        put({ cls: "tk-goal lane-" + (i + 1) + " in" + (goals.length > 1 ? " is-split" : ""), dc: "8", dr: dr, mc: mc, mr: nextRow(),
+          html: '<small class="tk-when">졸업 후</small>' + (goals.length > 1
+            ? '<span class="tk-goal-items">' + goals.map(function (g) { return '<span class="tk-goal-item">' + stepHtml("", g).replace('<small class="tk-when"></small>', '') + '</span>'; }).join('<em class="tk-or">또는</em>') + '</span>'
+            : icon(ln.icon) + '<span>' + esc(goals[0]) + '</span>') });
       });
       $("rm-tracks").innerHTML =
         '<div class="rm-tracks-head"><h3>' + esc(TK.title || "") + '</h3>' + (TK.lead ? '<p>' + copyLines(TK.lead) + '</p>' : '') + '</div>' +
