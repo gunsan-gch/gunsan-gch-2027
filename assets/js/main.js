@@ -476,7 +476,9 @@
             : icon(ln.icon) + '<span>' + esc(goals[0]) + '</span>') });
       });
       $("rm-tracks").innerHTML =
-        '<div class="rm-tracks-head"><h3>' + esc(TK.title || "") + '</h3>' + (TK.lead ? '<p>' + copyLines(TK.lead) + '</p>' : '') + '</div>' +
+        '<div class="rm-tracks-head"><p class="tk-kicker">' + icon("users") + '모든 학과</p><h3>' + esc(TK.title || "") + '</h3>' +
+          (TK.notice ? '<p class="tk-notice">' + icon("check") + '<span>' + esc(TK.notice) + '</span></p>' : '') +
+          (TK.lead ? '<p class="tk-lead">' + copyLines(TK.lead) + '</p>' : '') + '</div>' +
         '<div class="tk-grid tk-m' + m + '" aria-hidden="true">' + cells.map(function (c) {
           return '<div class="' + c.cls + '" style="--dc:' + c.dc + ';--dr:' + c.dr + ';--mc:' + (c.mc || c.dc) + ';--mr:' + (c.mr || "auto") + '">' + c.html + '</div>';
         }).join("") + '</div>' +
@@ -489,10 +491,13 @@
     var CP = RM.cafePath;
     if (CP && CP.steps && CP.goals && $("rm-tracks")) {
       var cafeHtml =
+        '<div class="tk-plus" aria-hidden="true"><span>＋ 학과 전공교육</span></div>' +
         '<section class="cafe-path" data-dept="cafe" aria-labelledby="cafe-path-title">' +
           '<div class="cp-head">' +
-            '<p class="cp-label">' + icon("cafe") + esc(CP.label) + ' 진로 경로</p>' +
-            '<h4 class="cp-tagline" id="cafe-path-title">' + esc(CP.tagline) + '</h4>' +
+            '<p class="cp-label">' + icon("cafe") + esc(CP.label) + '</p>' +
+            '<h4 class="cp-title" id="cafe-path-title">' + esc(CP.title || CP.label) + '</h4>' +
+            (CP.desc ? '<p class="cp-desc">' + icon("check") + '<span>' + esc(CP.desc) + '</span></p>' : '') +
+            (CP.tagline ? '<p class="cp-tagline">' + esc(CP.tagline) + '</p>' : '') +
             (CP.intro ? '<p class="cp-intro">' + copyLines(CP.intro) + '</p>' : '') +
           '</div>' +
           '<div class="cp-flow">' +
