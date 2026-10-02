@@ -898,6 +898,44 @@
   }
   $("mobile-bar").innerHTML = mb;
 
+  /* ---------- 사전등록 버튼 클릭만 측정 (신청 완료·폼 입력값은 수집하지 않음) ---------- */
+  (function trackRegistrationClicks() {
+    // 검수 화면·로컬 미리보기는 운영 통계에 포함하지 않습니다.
+    if (!regOpen || reviewMode ||
+        location.hostname !== "gunsan-gch.github.io" ||
+        !/^\/gunsan-gch-2027\/(?:index\.html)?$/.test(location.pathname)) return;
+
+    var placements = [
+      ["#header-cta", "header"],
+      ["#hero-briefing a", "hero"],
+      ["#briefing-body .brief-cta a", "briefing"],
+      ["#mobile-bar a", "mobile"]
+    ];
+    placements.forEach(function (placement) {
+      Array.prototype.forEach.call(document.querySelectorAll(placement[0]), function (link) {
+        // 사전등록 목적지와 정확히 일치하는 버튼에만 연결합니다.
+        if (link.getAttribute("href") !== B.registrationUrl) return;
+        function trackClick(event) {
+          if (event.defaultPrevented ||
+              (event.type === "click" && event.button !== 0) ||
+              (event.type === "auxclick" && event.button !== 1) ||
+              typeof window.gtag !== "function") return;
+          try {
+            window.gtag("event", "preregistration_click", {
+              send_to: "G-0RCC2LMBNY",
+              cta_location: placement[1],
+              // 주소의 임의 쿼리·해시와 이전 페이지 주소를 이벤트에 보내지 않습니다.
+              page_location: "https://gunsan-gch.github.io/gunsan-gch-2027/",
+              page_referrer: ""
+            });
+          } catch (e) { /* 분석 오류가 사전등록 링크 이동을 막지 않도록 합니다. */ }
+        }
+        link.addEventListener("click", trackClick);
+        link.addEventListener("auxclick", trackClick);
+      });
+    });
+  })();
+
   /* ---------- 자주 묻는 질문 ---------- */
   var faqVars = {
     date: start ? fmtKDateTime(start) : "", venue: B.venue || "", year: D.admissionYear
