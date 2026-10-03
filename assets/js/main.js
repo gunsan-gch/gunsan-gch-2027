@@ -906,10 +906,10 @@
         !/^\/gunsan-gch-2027\/(?:index\.html)?$/.test(location.pathname)) return;
 
     var placements = [
-      ["#header-cta", "header"],
-      ["#hero-briefing a", "hero"],
-      ["#briefing-body .brief-cta a", "briefing"],
-      ["#mobile-bar a", "mobile"]
+      ["#header-cta", "header", "HeaderClick"],
+      ["#hero-briefing a", "hero", "HeroClick"],
+      ["#briefing-body .brief-cta a", "briefing", "BriefingClick"],
+      ["#mobile-bar a", "mobile", "MobileClick"]
     ];
     placements.forEach(function (placement) {
       Array.prototype.forEach.call(document.querySelectorAll(placement[0]), function (link) {
@@ -918,17 +918,25 @@
         function trackClick(event) {
           if (event.defaultPrevented ||
               (event.type === "click" && event.button !== 0) ||
-              (event.type === "auxclick" && event.button !== 1) ||
-              typeof window.gtag !== "function") return;
+              (event.type === "auxclick" && event.button !== 1)) return;
+          // 두 분석 도구를 독립 호출하여 하나가 차단되어도 다른 도구와 링크 이동은 유지합니다.
           try {
-            window.gtag("event", "preregistration_click", {
-              send_to: "G-0RCC2LMBNY",
-              cta_location: placement[1],
-              // 주소의 임의 쿼리·해시와 이전 페이지 주소를 이벤트에 보내지 않습니다.
-              page_location: "https://gunsan-gch.github.io/gunsan-gch-2027/",
-              page_referrer: ""
-            });
+            if (typeof window.gtag === "function") {
+              window.gtag("event", "preregistration_click", {
+                send_to: "G-0RCC2LMBNY",
+                cta_location: placement[1],
+                // 주소의 임의 쿼리·해시와 이전 페이지 주소를 이벤트에 보내지 않습니다.
+                page_location: "https://gunsan-gch.github.io/gunsan-gch-2027/",
+                page_referrer: ""
+              });
+            }
           } catch (e) { /* 분석 오류가 사전등록 링크 이동을 막지 않도록 합니다. */ }
+          try {
+            if (window.wcs && typeof window.wcs.event === "function") {
+              // 네이버 이벤트 이름은 영문·숫자만 사용하며, 폼 입력값·신청 완료는 수집하지 않습니다.
+              window.wcs.event("Preregistration", placement[2]);
+            }
+          } catch (e) { /* 네이버 분석 오류도 링크 이동에 영향을 주지 않습니다. */ }
         }
         link.addEventListener("click", trackClick);
         link.addEventListener("auxclick", trackClick);
