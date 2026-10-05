@@ -357,6 +357,11 @@
     <figure><img id="lightbox-img" alt=""><figcaption id="lightbox-cap"></figcaption></figure>
     <button type="button" class="lightbox-close" id="lightbox-close" aria-label="닫기"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
   </dialog>
+  <dialog class="video-dialog" id="video-dialog" aria-label="영상">
+    <div class="vd-frame"><video id="video-dialog-el" controls playsinline preload="none" aria-describedby="video-dialog-desc"></video></div>
+    <p class="sr-only" id="video-dialog-desc"></p>
+    <button type="button" class="lightbox-close" id="video-dialog-close" aria-label="영상 닫기"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+  </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="assets/js/site-data.js"></script>
