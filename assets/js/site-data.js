@@ -290,6 +290,16 @@ window.SITE_DATA = {
     registrationClosesAt: null,
     timeZone: "Asia/Seoul",
     venue: "군산여상 2층 온누리홀",
+    // 입학설명회 초대 영상 (설명회 전·당일에만 표시, 지난 뒤·취소 시 자동으로 숨김). 내리려면 null
+    video: {
+      src: "assets/video/opening-reel.mp4",
+      poster: "assets/video/opening-reel-poster.webp",
+      width: 720,
+      height: 1280,
+      title: "군산여상 입학설명회 초대 영상",
+      duration: "52초",
+      description: "새벽 바다에서 시작해 네 학과의 진로, 선배들이 걸어간 길, 하늘을 나는 종이비행기와 교표를 지나 2027학년도 입학설명회 일시 안내로 끝나는 영상입니다. 배경음악이 있습니다."
+    },
     audience: "중학교 3학년 학생 및 학부모님",
     program: ["학교·학과·교육과정 소개", "취업·진학 안내", "방과후·학교생활 안내", "실습환경 소개", "질의응답·개별 상담"],
     intro: "학과와 학교생활을 살펴보고,\n취업·진학의 궁금한 점을 직접 물어보세요.",

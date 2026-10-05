@@ -815,7 +815,25 @@
           : "지난 설명회 일정입니다. 입학과 관련해 궁금한 점은 입학 상담으로 문의해 주세요.")
       : (B.manualNotice || "입학설명회 일정이 변경되었습니다. 자세한 내용은 입학 상담으로 문의해 주세요.");
 
+    // 초대 영상: 설명회 전·당일에만. 누르기 전에는 영상 파일을 받지 않음(preload="none")
+    var V = B.video;
+    var showVideo = (phase === "before" || phase === "ongoing") && V && has(V.src);
+    var videoHtml = showVideo
+      ? '<figure class="brief-video">' +
+          '<div class="bv-frame" style="aspect-ratio:' + (V.width || 9) + ' / ' + (V.height || 16) + '">' +
+            '<video id="brief-video-el" preload="none" playsinline' + (V.poster ? ' poster="' + esc(V.poster) + '"' : '') +
+              (V.width ? ' width="' + V.width + '" height="' + V.height + '"' : '') + ' aria-describedby="brief-video-desc">' +
+              '<source src="' + esc(V.src) + '" type="video/mp4"></video>' +
+            '<button type="button" class="bv-play" id="brief-video-play" aria-label="' + esc((V.title || "영상") + " 재생" + (V.duration ? " (" + V.duration + ", 소리 있음)" : "")) + '">' +
+              '<span class="bv-play-circle">' + icon("play") + '</span><span class="bv-play-text">초대 영상 보기' + (V.duration ? ' · ' + esc(V.duration) : '') + '</span></button>' +
+          '</div>' +
+          '<figcaption><span class="bv-cap">' + icon("info") + '소리가 나오니 음량을 확인해 주세요</span>' +
+            (V.description ? '<span class="sr-only" id="brief-video-desc">' + esc(V.description) + '</span>' : '') + '</figcaption>' +
+        '</figure>'
+      : '';
+
     $("briefing-body").innerHTML =
+      '<div class="brief-wrap' + (showVideo ? ' has-video' : '') + '">' +
       '<div class="section-head light">' +
         '<p class="eyebrow">' + D.admissionYear + '학년도' + badge + '</p>' +
         '<h2 class="section-title" id="briefing-title">' + esc(phase === 'before' || phase === 'ongoing' ? '입학설명회에 초대합니다' : '입학설명회 안내') + '</h2>' +
@@ -825,8 +843,18 @@
         '<div class="brief-card' + (phase === "past" || phase === "cancelled" ? " is-past" : "") + '">' + info +
           (phase === "before" || phase === "ongoing" ? program : "") + '</div>' +
         cta +
-      '</div>';
+      '</div>' + videoHtml + '</div>';
 
+    if (showVideo) {
+      var ve = $("brief-video-el"), vp = $("brief-video-play");
+      vp.addEventListener("click", function () {
+        ve.setAttribute("controls", "");
+        vp.hidden = true;
+        var pr = ve.play();
+        if (pr && pr.catch) pr.catch(function () { /* 재생은 기본 조작 버튼으로 */ });
+        ve.focus();
+      });
+    }
     if (regOpen) renderQr();
   }
 
