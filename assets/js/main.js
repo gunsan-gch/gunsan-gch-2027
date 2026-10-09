@@ -919,11 +919,8 @@
     if (phase === "before" || phase === "ongoing") {
       hooks.push({ href: "#briefing", big: phase === "ongoing" ? "오늘" : (dLabel || shortDay(start)), label: "입학설명회", small: shortDay(start) + " " + seoulParts(start).hh + ":" + seoulParts(start).mm });
     }
-    var ex = (D.currentSeniors && D.currentSeniors.exams) || [];
-    var passed = ex.reduce(function (a, e) { return a + (e.firstStagePassed || 0); }, 0);
-    if (passed) {
-      hooks.push({ href: "#careers", big: passed + "명", label: "현 고3 1차 합격",
-        small: ex.filter(function (e) { return e.firstStagePassed; }).map(function (e) { return (e.short || e.name) + " " + e.firstStagePassed; }).join(" · ") });
+    if (D.employment) {
+      hooks.push({ href: "#careers", big: "취업현황", label: "선배들의 취업처", small: "공공기관·금융·기업" });
     }
     hooks.push({ href: "#departments", big: (D.departments || []).length + "개 학과", label: D.totalSeats + "명 모집", small: "학급당 " + D.seatsPerClass + "명" });
     var g2 = RM && RM.grades && RM.grades[1];
