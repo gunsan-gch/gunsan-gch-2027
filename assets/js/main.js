@@ -319,7 +319,7 @@
             : '<ul>' + d.careers.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("") + '</ul>') +
         '</div>' +
         '<div class="cert-section"><h4 class="block-title">관련 자격·검정</h4>' + certificates(d) +
-          '<p class="note">자격·검정 예시입니다. 운영 종목·등급·응시 지원은 학교 계획에 따릅니다.</p></div>' +
+          '<p class="note">예시이며, 운영 종목은 학교 계획에 따릅니다.</p></div>' +
       '</div>' +
 
       '<details class="more-box"><summary>' + icon("chevron", "more-chevron") + '<span>교과목·학년별 수업 보기</span></summary>' +
@@ -648,7 +648,7 @@
         (senior.military || []).map(function(item, index) {
           return '<article class="senior-card ' + (index === 0 ? 'is-army' : 'is-airforce') + '">' + seniorLogo(item) + '<h4>' + esc(item.name) + '</h4><div class="senior-metric"><strong>' + item.count + '<span class="unit">명</span></strong></div></article>';
         }).join('') + '</div>' +
-      '<p class="note">' + esc(senior.note) + '</p>';
+      (senior.note ? '<p class="note">' + esc(senior.note) + '</p>' : '');
   }
 
   /* ---------- 주요 취업 성과 ---------- */
