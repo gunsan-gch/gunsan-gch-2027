@@ -152,9 +152,22 @@ main:focus { outline: none; }
   border-radius: 12px; cursor: pointer; align-items: center; justify-content: center; margin-right: -8px;
 }
 .menu-toggle .icon { width: 26px; height: 26px; }
+/* 공유 버튼 (PC 상단). 휴대폰은 하단 고정바의 '공유' 버튼을 씁니다. */
+.site-nav { margin-left: auto; }
+.header-share {
+  display: inline-flex; flex: none; align-items: center; justify-content: center; width: 40px; height: 40px; margin-left: -6px;
+  border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--navy); cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.header-share:hover { background: var(--bg-tint); color: var(--blue); border-color: var(--blue); }
+.header-share .icon { width: 20px; height: 20px; }
+@media (min-width: 1100px) and (max-width: 1279px) {
+  .site-nav a:not(.btn) { padding: 8px 8px; font-size: .95rem; }
+}
 
 @media (max-width: 1099px) {
   .menu-toggle { display: inline-flex; }
+  .header-share { width: 44px; height: 44px; margin-left: auto; margin-right: -4px; }
   /* 흐림 효과(backdrop-filter)가 있으면 고정 메뉴가 헤더 높이에 갇히므로 모바일에서는 끔 */
   .site-header { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(255, 255, 255, .98); }
   .site-nav {
@@ -537,7 +550,7 @@ main:focus { outline: none; }
 @media (max-width: 959px) {
   body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
   .mobile-bar {
-    display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 90;
+    display: grid; grid-template-columns: 56px 1fr 1.4fr; gap: 8px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 90;
     padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); background: rgba(255, 255, 255, .97);
     border-top: 1px solid var(--line); box-shadow: 0 -6px 20px rgba(20, 40, 90, .08);
   }
@@ -545,9 +558,19 @@ main:focus { outline: none; }
     display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 52px; border-radius: 14px;
     font-weight: 800; font-size: 1rem; text-decoration: none;
   }
+  .header-share { display: none; }
+  .mb-share {
+    flex-direction: column; gap: 2px; font: inherit; font-size: .74rem; font-weight: 800; line-height: 1.1;
+    border: 1px solid var(--line); background: var(--bg-tint); color: var(--navy); cursor: pointer;
+  }
+  .mb-share .icon { width: 20px; height: 20px; }
   .mb-call { background: var(--teal); color: #fff; }
   .mb-main { background: var(--blue); color: #fff; }
   .menu-open ~ .mobile-bar, body.no-scroll .mobile-bar { display: none; }
+}
+@media (max-width: 374px) {
+  .mobile-bar { grid-template-columns: 50px 1fr 1.45fr; gap: 6px; padding-left: 10px; padding-right: 10px; }
+  .mb-btn:not(.mb-share) { gap: 4px; font-size: .92rem; }
 }
 
 /* ---------- 움직임 줄이기 ---------- */

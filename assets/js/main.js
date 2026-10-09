@@ -933,7 +933,8 @@
 
   /* ---------- 상단 버튼·모바일 고정바 ---------- */
   var headerCta = $("header-cta");
-  var mb = '<a class="mb-btn mb-call" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>입학 상담</span></a>';
+  var mb = '<button type="button" class="mb-btn mb-share js-quick-share" data-where="mobile" aria-label="이 페이지 공유하기">' + icon("share") + '<span aria-hidden="true">공유</span></button>' +
+    '<a class="mb-btn mb-call" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>입학 상담</span></a>';
   if (regOpen) {
     headerCta.innerHTML = '설명회 사전등록<span class="sr-only">(새 창)</span>';
     headerCta.setAttribute("href", B.registrationUrl);
@@ -967,11 +968,11 @@
   });
 
   /* ---------- 사전등록 버튼 클릭만 측정 (신청 완료·폼 입력값은 수집하지 않음) ---------- */
+  // 검수 화면·로컬 미리보기는 운영 통계에 포함하지 않습니다.
+  var liveSite = !reviewMode && location.hostname === "gunsan-gch.github.io" &&
+    /^\/gunsan-gch-2027\/(?:index\.html)?$/.test(location.pathname);
   (function trackRegistrationClicks() {
-    // 검수 화면·로컬 미리보기는 운영 통계에 포함하지 않습니다.
-    if (!regOpen || reviewMode ||
-        location.hostname !== "gunsan-gch.github.io" ||
-        !/^\/gunsan-gch-2027\/(?:index\.html)?$/.test(location.pathname)) return;
+    if (!regOpen || !liveSite) return;
 
     var placements = [
       ["#header-cta", "header", "HeaderClick"],
@@ -1098,18 +1099,45 @@
   if (navigator.share) {
     Array.prototype.forEach.call(document.querySelectorAll(".js-share-link"), function (b) { b.hidden = false; });
   }
+  Array.prototype.forEach.call(document.querySelectorAll(".js-quick-share"), function (b) { b.hidden = false; });
+  // 휴대폰·태블릿은 공유 창(카카오톡·문자 등), PC는 링크 복사
+  var touchShare = !!navigator.share && !!window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+  function copyLink(where) {
+    var url = pageUrl();
+    copyText(url).then(function () {
+      toast("링크를 복사했어요. 카카오톡·문자에 붙여 넣어 보내세요.");
+      trackShare("copy_link", where);
+    }, function () {
+      window.prompt("아래 주소를 길게 눌러 복사하세요.", url);
+    });
+  }
+  function shareSheet(where) {
+    navigator.share({ title: document.title, text: shareText, url: pageUrl() })
+      .then(function () { trackShare("share_sheet", where); }, function () { /* 취소 */ });
+  }
+  // 공유 버튼 사용 횟수만 측정 (받는 사람·공유 앱은 알 수 없음)
+  function trackShare(method, where) {
+    if (!liveSite) return;
+    try {
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "share", {
+          send_to: "G-0RCC2LMBNY", method: method, content_type: "page", item_id: where,
+          page_location: "https://gunsan-gch.github.io/gunsan-gch-2027/", page_referrer: ""
+        });
+      }
+    } catch (e) { /* 분석 오류가 공유를 막지 않도록 합니다. */ }
+    try {
+      if (window.wcs && typeof window.wcs.event === "function") window.wcs.event("Share", where.charAt(0).toUpperCase() + where.slice(1));
+    } catch (e) { /* 네이버 분석 오류도 공유에 영향을 주지 않습니다. */ }
+  }
   document.addEventListener("click", function (e) {
-    var copyBtn = e.target.closest(".js-copy-link"), shareBtn = e.target.closest(".js-share-link");
-    if (copyBtn) {
-      var url = pageUrl();
-      copyText(url).then(function () {
-        toast("링크를 복사했어요. 카카오톡·문자에 붙여 넣어 보내세요.");
-      }, function () {
-        window.prompt("아래 주소를 길게 눌러 복사하세요.", url);
-      });
-    } else if (shareBtn) {
-      navigator.share({ title: document.title, text: shareText, url: pageUrl() }).catch(function () { /* 취소 */ });
-    }
+    var btn = e.target.closest(".js-copy-link, .js-share-link, .js-quick-share");
+    if (!btn) return;
+    var where = btn.getAttribute("data-where") || (btn.closest("#footer-share") ? "footer" : "briefing");
+    if (btn.classList.contains("js-copy-link")) copyLink(where);
+    else if (btn.classList.contains("js-share-link")) shareSheet(where);
+    else if (touchShare) shareSheet(where);
+    else copyLink(where);
   });
 
   /* ---------- 모바일 메뉴 ---------- */
