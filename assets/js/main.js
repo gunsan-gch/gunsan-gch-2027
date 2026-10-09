@@ -897,7 +897,7 @@
         '<p class="hb-where">' + icon("pin") + '<span>' + esc(venueShort) + '</span></p>' +
       '</div>' +
       '<div class="hb-actions">' +
-        (regOpen ? extLink(B.registrationUrl, shortDay(start) + " 입학설명회 사전등록하기", "btn btn-yellow hb-reg", "calendar")
+        (regOpen ? extLink(B.registrationUrl, "입학설명회 사전등록하기", "btn btn-yellow hb-reg", "calendar")
           : '<a class="btn btn-yellow hb-reg" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>설명회 참여 문의</span></a>') +
         '<div class="hb-sub">' + videoBtn("hb-video") + '<a class="btn btn-ghost hb-more" href="#briefing">자세히</a></div>' +
       '</div>';
