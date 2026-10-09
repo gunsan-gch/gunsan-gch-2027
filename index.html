@@ -122,13 +122,31 @@
           <p class="hero-eyebrow"><span data-bind="admissionYear">2027</span>학년도 신입생 모집</p>
           <h1 class="hero-title" id="hero-title"><span class="hero-line">AI로 배우고,</span><span class="hero-line">실무로 성장합니다</span></h1>
           <p class="hero-school" data-bind="schoolName">군산여자상업고등학교</p>
+          <!-- 첫 화면 설명회 카드: 스크립트가 꺼진 환경·검색 수집기에서도 사전등록 링크가 보이도록 기본 내용을 넣어 둡니다.
+               (스크립트가 켜지면 site-data.js 의 설명회 정보로 다시 그립니다. 일시·주소를 바꾸면 여기도 함께 고치세요.) -->
+          <div class="hero-briefing" id="hero-briefing">
+            <div class="hb-info">
+              <p class="hb-tag">입학설명회</p>
+              <p class="hb-when"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span>2026. 10. 15.(목) 오후 5시 30분</span></p>
+              <p class="hb-where"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span>군산여상 2층 온누리홀</span></p>
+            </div>
+            <div class="hb-actions">
+              <a class="btn btn-yellow hb-reg" href="https://docs.google.com/forms/d/e/1FAIpQLSeAAQJV7yEFIdnb39he4JdEJUzPK96t9ceMVe_t-ltkEqUxHg/viewform" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span>10/15(목) 입학설명회 사전등록하기</span><span class="sr-only">(새 창)</span></a>
+            </div>
+          </div>
+          <!-- 첫 화면 숫자 카드 (스크립트가 site-data.js 기준으로 다시 그림) -->
+          <ul class="hero-hooks" id="hero-hooks" aria-label="한눈에 보는 군산여상">
+            <li><a href="#briefing"><b>10/15(목)</b><span>입학설명회</span><small>오후 5시 30분</small></a></li>
+            <li><a href="#careers"><b>5명</b><span>현 고3 1차 합격</span><small>9급 3 · 코레일 2</small></a></li>
+            <li><a href="#departments"><b>4개 학과</b><span>120명 모집</span><small>학급당 20명</small></a></li>
+            <li><a href="#roadmap"><b>2학년</b><span>AI 중점학년</span><small>운영 예정</small></a></li>
+          </ul>
           <p class="hero-desc"><span class="copy-line">경영·마케팅·금융·카페에 AI를 더해</span><span class="copy-line">취업과 진학을 준비합니다.</span></p>
           <ul class="hero-badges" id="hero-badges">
             <li>전북글로컬특성화고 선정</li>
             <li>AI비즈니스 특화</li>
           </ul>
           <div class="glocal-slot" id="glocal-hero" hidden></div>
-          <div class="hero-briefing" id="hero-briefing" hidden></div>
           <div class="hero-actions">
             <a class="btn btn-outline btn-lg" id="hero-dept-btn" href="#departments">학과 살펴보기 <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           </div>
@@ -136,14 +154,6 @@
         <div class="hero-visual">
           <ul class="hero-depts" id="hero-depts" aria-label="2027학년도 모집 학과"></ul>
         </div>
-      </div>
-      <div class="container">
-        <dl class="hero-stats" aria-label="모집 규모">
-          <div><dt>학과</dt><dd><span data-bind="deptCount">4</span>개 학과</dd></div>
-          <div><dt>학급</dt><dd><span data-bind="totalClasses">6</span>학급</dd></div>
-          <div><dt>모집인원</dt><dd><span data-bind="totalSeats">120</span>명 모집</dd></div>
-          <div><dt>학급 정원</dt><dd>학급당 <span data-bind="seatsPerClass">20</span>명</dd></div>
-        </dl>
       </div>
     </section>
 

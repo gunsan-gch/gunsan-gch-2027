@@ -1608,3 +1608,30 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 .vd-frame video { display: block; width: 100%; height: 100%; object-fit: contain; background: #0b1630; }
 .video-dialog .lightbox-close { position: absolute; top: -14px; right: -14px; }
 @media (max-width: 480px) { .video-dialog .lightbox-close { top: -48px; right: 0; } }
+
+/* ---------- 첫 화면: 사전등록 버튼 강조 + 숫자 카드 ---------- */
+.hero-briefing { flex-direction: column; align-items: stretch; }
+.hero-briefing .hb-actions { flex-direction: column; gap: 8px; width: 100%; }
+.hero-briefing .hb-reg { width: 100%; justify-content: center; min-height: 54px; font-size: 1.06rem; font-weight: 800; box-shadow: 0 6px 16px rgba(245, 197, 24, .35); }
+.hero-briefing .hb-sub { display: flex; gap: 8px; }
+.hero-briefing .hb-sub > * { min-width: 0; justify-content: center; }
+.hero-briefing .hb-video { flex: 1 1 auto; white-space: nowrap; }
+.hero-briefing .hb-more { flex: 0 0 auto; padding-inline: 18px; }
+.hero-hooks { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 8px; }
+.hero-hooks a { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; height: 100%; padding: 11px 12px; border-radius: 14px; background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); text-decoration: none; color: var(--ink); transition: transform .2s, border-color .2s; }
+.hero-hooks a:hover, .hero-hooks a:focus-visible { border-color: var(--blue); transform: translateY(-2px); }
+.hero-hooks b { font-family: var(--font-cookie); font-weight: 900; font-size: 1.32rem; line-height: 1.25; color: var(--navy); white-space: nowrap; }
+.hero-hooks li:first-child b { color: var(--blue); }
+.hero-hooks span { font-size: .86rem; font-weight: 800; color: var(--ink-2); line-height: 1.4; }
+.hero-hooks small { font-size: .74rem; color: var(--muted); line-height: 1.4; }
+@media (max-width: 600px) {
+  .hero-hooks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-hooks b { font-size: 1.2rem; }
+}
+@media (prefers-reduced-motion: reduce) { .hero-hooks a { transition: none; } .hero-hooks a:hover { transform: none; } }
+.hero-copy, .hero-briefing { min-width: 0; }
+@media (max-width: 400px) {
+  .hero-briefing .hb-video small { display: none; }
+  .hero-briefing .hb-more { padding-inline: 12px; }
+  .hero-briefing .hb-video { padding-right: 12px; }
+}

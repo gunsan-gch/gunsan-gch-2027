@@ -1180,6 +1180,7 @@ window.SITE_DATA = {
     exams: [
       {
         name: "지역인재 9급 공무원",
+        short: "9급", // 첫 화면 숫자 카드에 쓰는 짧은 이름
         applied: 4,
         firstStagePassed: 3,
         logo: {
@@ -1192,6 +1193,7 @@ window.SITE_DATA = {
       },
       {
         name: "한국철도공사",
+        short: "코레일", // 첫 화면 숫자 카드에 쓰는 짧은 이름
         applied: 3,
         firstStagePassed: 2,
         logo: {

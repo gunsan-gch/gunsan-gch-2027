@@ -57,6 +57,7 @@
   }
   function fmtDate(date) { var p = seoulParts(date); return p.y + ". " + p.m + ". " + p.d + ".(" + p.wd + ")"; }
   function fmtDateTime(date) { var p = seoulParts(date); return fmtDate(date) + " " + p.hh + ":" + p.mm; }
+  function shortDay(date) { var p = seoulParts(date); return p.m + "/" + p.d + "(" + p.wd + ")"; }
   function fmtShort(date) { var p = seoulParts(date); return p.m + ". " + p.d + ".(" + p.wd + ") " + p.hh + ":" + p.mm; }
   function fmtIsoDate(s) {
     var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s || "");
@@ -896,10 +897,10 @@
         '<p class="hb-where">' + icon("pin") + '<span>' + esc(venueShort) + '</span></p>' +
       '</div>' +
       '<div class="hb-actions">' +
-        (regOpen ? extLink(B.registrationUrl, "사전등록", "btn btn-yellow", "calendar")
-          : '<a class="btn btn-yellow" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>' + "참여 문의" + '</span></a>') +
-        '<a class="btn btn-ghost" href="#briefing">자세히</a>' +
-      '</div>' + videoBtn("hb-video");
+        (regOpen ? extLink(B.registrationUrl, shortDay(start) + " 입학설명회 사전등록하기", "btn btn-yellow hb-reg", "calendar")
+          : '<a class="btn btn-yellow hb-reg" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>설명회 참여 문의</span></a>') +
+        '<div class="hb-sub">' + videoBtn("hb-video") + '<a class="btn btn-ghost hb-more" href="#briefing">자세히</a></div>' +
+      '</div>';
   } else {
     hb.classList.add("is-consult");
     hb.innerHTML =
@@ -909,6 +910,29 @@
         '<a class="btn btn-ghost" href="#admissions">입학 안내</a></div>';
   }
   hb.hidden = false;
+
+  /* ---------- 첫 화면 숫자 카드: 설명회 D-day · 현 고3 1차 합격 · 모집 · AI 중점학년 ---------- */
+  (function heroHooks() {
+    var box = $("hero-hooks");
+    if (!box) return;
+    var hooks = [];
+    if (phase === "before" || phase === "ongoing") {
+      hooks.push({ href: "#briefing", big: phase === "ongoing" ? "오늘" : (dLabel || shortDay(start)), label: "입학설명회", small: shortDay(start) + " " + seoulParts(start).hh + ":" + seoulParts(start).mm });
+    }
+    var ex = (D.currentSeniors && D.currentSeniors.exams) || [];
+    var passed = ex.reduce(function (a, e) { return a + (e.firstStagePassed || 0); }, 0);
+    if (passed) {
+      hooks.push({ href: "#careers", big: passed + "명", label: "현 고3 1차 합격",
+        small: ex.filter(function (e) { return e.firstStagePassed; }).map(function (e) { return (e.short || e.name) + " " + e.firstStagePassed; }).join(" · ") });
+    }
+    hooks.push({ href: "#departments", big: (D.departments || []).length + "개 학과", label: D.totalSeats + "명 모집", small: "학급당 " + D.seatsPerClass + "명" });
+    var g2 = RM && RM.grades && RM.grades[1];
+    if (g2) hooks.push({ href: "#" + g2.id, big: g2.grade, label: "AI 중점학년", small: "운영 예정" });
+    box.style.setProperty("--n", Math.min(hooks.length, 4));
+    box.innerHTML = hooks.slice(0, 4).map(function (h) {
+      return '<li><a href="' + esc(h.href) + '"><b>' + esc(h.big) + '</b><span>' + esc(h.label) + '</span>' + (h.small ? '<small>' + esc(h.small) + '</small>' : '') + '</a></li>';
+    }).join("");
+  })();
 
   /* ---------- 상단 버튼·모바일 고정바 ---------- */
   var headerCta = $("header-cta");
