@@ -954,6 +954,21 @@
   }
   $("mobile-bar").innerHTML = mb;
 
+  /* ---------- 사전등록 버튼: 누를 때 물결 효과 (움직임 줄이기 설정이면 생략) ---------- */
+  document.addEventListener("pointerdown", function (e) {
+    if (reduceMotion) return;
+    var btn = e.target.closest('.hb-reg, .brief-cta a.btn-yellow[href^="https"], .mb-main[href^="https"]');
+    if (!btn) return;
+    var r = btn.getBoundingClientRect(), size = Math.max(r.width, r.height);
+    var dot = document.createElement("span");
+    dot.className = "fx-ripple";
+    dot.style.width = dot.style.height = size + "px";
+    dot.style.left = (e.clientX - r.left - size / 2) + "px";
+    dot.style.top = (e.clientY - r.top - size / 2) + "px";
+    btn.appendChild(dot);
+    setTimeout(function () { if (dot.parentNode) dot.parentNode.removeChild(dot); }, 650);
+  });
+
   /* ---------- 사전등록 버튼 클릭만 측정 (신청 완료·폼 입력값은 수집하지 않음) ---------- */
   (function trackRegistrationClicks() {
     // 검수 화면·로컬 미리보기는 운영 통계에 포함하지 않습니다.
