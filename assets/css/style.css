@@ -301,7 +301,7 @@ main:focus { outline: none; }
 .dept-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
 .dept-card {
   position: relative; display: flex; flex-direction: column; background: #fff; border-radius: var(--radius);
-  overflow: hidden; box-shadow: var(--shadow); border-top: 6px solid var(--dc); transition: transform .2s, box-shadow .2s;
+  overflow: hidden; box-shadow: var(--shadow); border-top: 6px solid var(--dc); transition: transform .2s, box-shadow .2s; cursor: pointer;
 }
 .dept-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
 .dept-card-img { background: var(--dc-soft); }
@@ -310,7 +310,8 @@ main:focus { outline: none; }
 .dept-seats { align-self: flex-start; padding: 2px 10px; border-radius: 999px; background: var(--dc-soft); color: var(--dc-ink); font-weight: 800; font-size: .88rem; }
 .dept-card-title { font-size: 1.3rem; font-weight: 800; }
 .dept-card-title a { color: var(--navy); text-decoration: none; }
-.dept-card-title a::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius); }
+/* 카드 전체를 누를 수 있게 덮는 영역 — 오래된 휴대폰 브라우저도 알아듣도록 inset 대신 네 방향을 각각 지정 */
+.dept-card-title a::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; border-radius: var(--radius); }
 .dept-card-title a:focus-visible { outline: none; }
 .dept-card-title a:focus-visible::after { outline: 3px solid var(--blue); outline-offset: -3px; }
 .dept-card-one { color: var(--ink-2); font-size: .95rem; }

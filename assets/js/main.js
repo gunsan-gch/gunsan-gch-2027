@@ -374,6 +374,12 @@
     e.preventDefault();
     selectDept(id, { history: "push", scroll: true });
   });
+  // 학과 카드 빈 곳(그림·'자세히 보기' 글자)을 눌러도 열리도록: 카드를 덮는 링크 영역이 안 먹는 브라우저 대비
+  $("dept-cards").addEventListener("click", function (e) {
+    if (e.target.closest("a")) return;
+    var card = e.target.closest(".dept-card");
+    if (card) selectDept(card.getAttribute("data-dept"), { history: "push", scroll: true });
+  });
   window.addEventListener("popstate", function () {
     var id = location.hash.slice(1);
     if (deptIds.indexOf(id) >= 0) selectDept(id, { scroll: true });
