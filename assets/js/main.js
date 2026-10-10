@@ -939,7 +939,7 @@
 
   /* ---------- 상단 버튼·모바일 고정바 ---------- */
   var headerCta = $("header-cta");
-  var mb = '<button type="button" class="mb-btn mb-share js-quick-share" data-where="mobile" aria-label="이 페이지 공유하기">' + icon("share") + '<span aria-hidden="true">공유</span></button>' +
+  var mb = '<button type="button" class="mb-btn mb-send js-quick-send" data-where="mobile" aria-label="이 페이지 공유하기">' + icon("share") + '<span aria-hidden="true">공유</span></button>' +
     '<a class="mb-btn mb-call" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>입학 상담</span></a>';
   if (regOpen) {
     headerCta.innerHTML = '설명회 사전등록<span class="sr-only">(새 창)</span>';
@@ -1058,7 +1058,7 @@
       extLink(D.schoolWebsite, "학교 홈페이지", "btn btn-primary btn-block", "home") +
     '</div>';
 
-  $("footer-share").innerHTML = shareButtons("주소 복사", "공유하기", "btn-ghost btn-sm");
+  $("footer-send").innerHTML = shareButtons("주소 복사", "공유하기", "btn-ghost btn-sm");
 
   /* ---------- 하단 ---------- */
   $("footer-info").innerHTML =
@@ -1070,9 +1070,9 @@
   /* ---------- 링크 복사·공유 ---------- */
   function shareButtons(copyLabel, shareLabel, cls) {
     cls = cls || "btn-outline";
-    return '<div class="share-row">' +
+    return '<div class="sendlink-row">' +
       '<button type="button" class="btn ' + cls + ' js-copy-link">' + icon("copy") + '<span>' + esc(copyLabel) + '</span></button>' +
-      '<button type="button" class="btn ' + cls + ' js-share-link" hidden>' + icon("share") + '<span>' + esc(shareLabel) + '</span></button>' +
+      '<button type="button" class="btn ' + cls + ' js-send-sheet" hidden>' + icon("share") + '<span>' + esc(shareLabel) + '</span></button>' +
       '</div>';
   }
   function pageUrl() {
@@ -1103,9 +1103,9 @@
     ? D.admissionYear + "학년도 " + D.schoolShortName + " 입학설명회 " + fmtShort(start) + " · 학과·입학 안내"
     : D.schoolName + " " + D.admissionYear + "학년도 학과·입학 안내";
   if (navigator.share) {
-    Array.prototype.forEach.call(document.querySelectorAll(".js-share-link"), function (b) { b.hidden = false; });
+    Array.prototype.forEach.call(document.querySelectorAll(".js-send-sheet"), function (b) { b.hidden = false; });
   }
-  Array.prototype.forEach.call(document.querySelectorAll(".js-quick-share"), function (b) { b.hidden = false; });
+  Array.prototype.forEach.call(document.querySelectorAll(".js-quick-send"), function (b) { b.hidden = false; });
   // 휴대폰·태블릿은 공유 창(카카오톡·문자 등), PC는 링크 복사
   var touchShare = !!navigator.share && !!window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
   function copyLink(where) {
@@ -1137,11 +1137,11 @@
     } catch (e) { /* 네이버 분석 오류도 공유에 영향을 주지 않습니다. */ }
   }
   document.addEventListener("click", function (e) {
-    var btn = e.target.closest(".js-copy-link, .js-share-link, .js-quick-share");
+    var btn = e.target.closest(".js-copy-link, .js-send-sheet, .js-quick-send");
     if (!btn) return;
-    var where = btn.getAttribute("data-where") || (btn.closest("#footer-share") ? "footer" : "briefing");
+    var where = btn.getAttribute("data-where") || (btn.closest("#footer-send") ? "footer" : "briefing");
     if (btn.classList.contains("js-copy-link")) copyLink(where);
-    else if (btn.classList.contains("js-share-link")) shareSheet(where);
+    else if (btn.classList.contains("js-send-sheet")) shareSheet(where);
     else if (touchShare) shareSheet(where);
     else copyLink(where);
   });
