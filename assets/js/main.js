@@ -604,7 +604,7 @@
   }
 
 
-  /* ---------- 현 고3: 기업 최종 합격(강조) · 공무원·공기업 1차 합격 · 부사관 인원 ---------- */
+  /* ---------- 현 고3: 최종 합격(기업·부사관) 한 줄, 지원 → 1차 합격(공무원·공기업) 한 줄 ---------- */
   var senior = D.currentSeniors;
   /* 외부 누리집에서 불러오는 로고는 주소가 바뀌면 깨질 수 있어, 실패하면 대체 표시로 바꿉니다.
    *  data-fallback="icon"   : 분야 아이콘으로 대신 표시 (취업처)
@@ -642,24 +642,24 @@
   }
   if (senior && $("senior-status")) {
     var exams = senior.exams || (senior.civilService ? [senior.civilService] : []);
+    var finals = senior.finals || [];
     $("senior-status").hidden = false;
     $("senior-status").innerHTML =
       '<div class="senior-status-head"><div><h3 id="senior-status-title">' + esc(senior.title) + '</h3><p class="senior-cohort">' + esc(senior.cohort) + '</p></div>' +
       '<span class="senior-updated">' + esc(fmtIsoDate(senior.updatedAt)) + ' 기준</span></div>' +
       '<div class="senior-grid">' +
-        ((senior.finals || []).length ? '<div class="senior-finals">' + senior.finals.map(function (f) {
-          return '<article class="senior-card is-final">' + seniorLogo(f) +
-            '<div class="sf-text"><span class="sf-badge">최종 합격</span><h4>' + esc(f.name) + '</h4></div>' +
-            '<div class="senior-metric is-final"><strong>' + f.count + '<span class="unit">명</span></strong></div></article>';
+        (finals.length ? '<div class="senior-row" style="--n:' + finals.length + '">' + finals.map(function (f, index) {
+          var tone = f.tone === "army" ? " is-army" : f.tone === "airforce" ? " is-airforce" : " is-company";
+          // 휴대폰 2칸 배치에서 개수가 홀수면 첫 카드를 한 줄 전체로
+          return '<article class="senior-card is-final' + tone + (finals.length % 2 && index === 0 ? " is-wide" : "") + '">' + seniorLogo(f) + '<h4>' + esc(f.name) + '</h4>' +
+            '<div class="senior-metric is-final"><strong>' + f.count + '<span class="unit">명</span></strong><span>최종 합격</span></div></article>';
         }).join('') + '</div>' : '') +
-        exams.map(function (ex, index) {
+        (exams.length ? '<div class="senior-row" style="--n:' + exams.length + '">' + exams.map(function (ex, index) {
           return '<article class="senior-card is-exam exam-' + (index + 1) + '">' + seniorLogo(ex) + '<h4>' + esc(ex.name) + '</h4>' +
             '<div class="senior-flow"><div class="senior-metric"><strong>' + ex.applied + '<span class="unit">명</span></strong><span>지원</span></div><span class="senior-arrow" aria-hidden="true">→</span>' +
             '<div class="senior-metric is-pass"><strong>' + ex.firstStagePassed + '<span class="unit">명</span></strong><span>1차 합격</span></div></div></article>';
-        }).join('') +
-        (senior.military || []).map(function(item, index) {
-          return '<article class="senior-card ' + (index === 0 ? 'is-army' : 'is-airforce') + '">' + seniorLogo(item) + '<h4>' + esc(item.name) + '</h4><div class="senior-metric"><strong>' + item.count + '<span class="unit">명</span></strong></div></article>';
-        }).join('') + '</div>' +
+        }).join('') + '</div>' : '') +
+      '</div>' +
       (senior.note ? '<p class="note">' + esc(senior.note) + '</p>' : '');
   }
 

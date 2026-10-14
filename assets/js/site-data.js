@@ -1176,7 +1176,7 @@ window.SITE_DATA = {
     title: "현 고3 취업·진로 현황",
     cohort: "2026년 고3 · 2027년 졸업예정",
     updatedAt: "2026-10-14",
-    // 최종 합격 카드 (맨 위에 크게 강조 표시). 없으면 [] 로 두세요.
+    // 최종 합격 카드 (맨 앞줄, 위에서부터 순서대로 표시). tone: "army"·"airforce" 는 카드 윗선 색
     finals: [
       {
         name: "하나마이크론",
@@ -1187,9 +1187,34 @@ window.SITE_DATA = {
           height: 120,
           alt: "하나마이크론 로고"
         }
+      },
+      {
+        name: "육군 부사관",
+        tone: "army",
+        count: 4,
+        logo: {
+          src: "assets/img/employers/army-supplied.jpeg",
+          layout: "army-aligned",
+          width: 1536,
+          height: 1521,
+          alt: "대한민국 육군",
+          sourceNote: "사용자 제공 대한민국육군 로고 원본"
+        }
+      },
+      {
+        name: "공군 부사관",
+        tone: "airforce",
+        count: 1,
+        logo: {
+          src: "https://upload.wikimedia.org/wikipedia/commons/f/f7/Emblem_of_the_Republic_of_Korea_Air_Force.svg",
+          width: 512,
+          height: 386,
+          alt: "대한민국 공군 상징",
+          sourcePage: "https://commons.wikimedia.org/wiki/File:Emblem_of_the_Republic_of_Korea_Air_Force.svg"
+        }
       }
     ],
-    // 지원 → 1차 합격 카드 (위에서부터 순서대로 표시)
+    // 지원 → 1차 합격 카드 (최종 합격 다음 줄, 위에서부터 순서대로 표시)
     exams: [
       {
         name: "지역인재 9급 공무원",
@@ -1214,31 +1239,6 @@ window.SITE_DATA = {
           width: 265,
           height: 117,
           alt: "코레일 로고"
-        }
-      }
-    ],
-    military: [
-      {
-        name: "육군 부사관",
-        count: 4,
-        logo: {
-          src: "assets/img/employers/army-supplied.jpeg",
-          layout: "army-aligned",
-          width: 1536,
-          height: 1521,
-          alt: "대한민국 육군",
-          sourceNote: "사용자 제공 대한민국육군 로고 원본"
-        }
-      },
-      {
-        name: "공군 부사관",
-        count: 1,
-        logo: {
-          src: "https://upload.wikimedia.org/wikipedia/commons/f/f7/Emblem_of_the_Republic_of_Korea_Air_Force.svg",
-          width: 512,
-          height: 386,
-          alt: "대한민국 공군 상징",
-          sourcePage: "https://commons.wikimedia.org/wiki/File:Emblem_of_the_Republic_of_Korea_Air_Force.svg"
         }
       }
     ],

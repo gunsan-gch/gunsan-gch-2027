@@ -1414,34 +1414,16 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
  .senior-logo { height:69px; }
 }
 
-/* 고3 현황: 기업 최종 합격 카드 (맨 위 한 줄 전체, 강조) */
-.senior-finals { grid-column:1 / -1; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap:12px; }
-.senior-card.is-final {
-  flex-direction:row; justify-content:center; gap:14px 28px; text-align:left; padding:20px 24px;
-  border:2px solid #f2c94c; border-top-width:5px; background:#fff; /* 로고 이미지 바탕이 흰색이라 카드도 흰색 */
-  box-shadow:0 6px 18px rgba(20, 40, 90, .08);
-}
-.senior-card.is-final .senior-logo { width:150px; max-width:150px; height:76px; margin:0; flex:none; }
-.sf-text { display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-width:0; }
-.sf-badge { display:inline-block; padding:3px 10px; border-radius:99px; background:var(--yellow); color:var(--navy); font-size:.8rem; font-weight:800; }
-.senior-card.is-final h4 { justify-content:flex-start; min-height:0; font-size:1.3rem; }
-.senior-metric.is-final strong { font-size:2.6rem; color:var(--teal-dark); }
+/* 고3 현황: 최종 합격 한 줄 + 1차 합격 한 줄 (줄마다 카드 수만큼 나눔) */
+.senior-grid { display:grid; grid-template-columns:minmax(0, 1fr); gap:12px; }
+.senior-row { display:grid; grid-template-columns:repeat(var(--n, 3), minmax(0, 1fr)); gap:12px; }
+.senior-card.is-company { border-top:3px solid #2b55a8; }
+.senior-metric.is-final strong { color:var(--teal-dark); }
+.senior-metric.is-final > span { margin-top:2px; padding:2px 10px; border-radius:99px; background:var(--yellow); color:var(--navy); font-weight:800; }
 @media (max-width:760px) {
-  .senior-card.is-final { gap:10px 16px; padding:16px 14px; }
-  .senior-card.is-final .senior-logo { width:104px; max-width:104px; height:60px; }
-  .senior-card.is-final h4 { font-size:1.08rem; }
-  .senior-metric.is-final strong { font-size:2.1rem; }
-}
-@media (max-width:480px) {
-  /* 휴대폰: 왼쪽 로고, 오른쪽에 배지·이름·인원 세 줄 */
-  .senior-card.is-final { display:grid; grid-template-columns:auto auto; justify-content:center; align-items:center; gap:2px 16px; }
-  .senior-card.is-final .senior-logo { grid-row:1 / span 2; width:96px; max-width:96px; height:58px; }
-  .senior-metric.is-final { align-items:flex-start; }
-  .senior-metric.is-final strong { font-size:1.9rem; }
-}
-@media (max-width:359px) {
-  .senior-card.is-final { column-gap:12px; }
-  .senior-card.is-final .senior-logo { width:82px; max-width:82px; height:50px; }
+  .senior-grid, .senior-row { gap:10px; }
+  .senior-row { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .senior-card.is-exam, .senior-card.is-wide { grid-column:1 / -1; }
 }
 
 /* Match visible symbol and wordmark heights to the Air Force lockup. */
