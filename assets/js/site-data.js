@@ -1175,7 +1175,20 @@ window.SITE_DATA = {
   currentSeniors: {
     title: "현 고3 취업·진로 현황",
     cohort: "2026년 고3 · 2027년 졸업예정",
-    updatedAt: "2026-09-29",
+    updatedAt: "2026-10-14",
+    // 최종 합격 카드 (맨 위에 크게 강조 표시). 없으면 [] 로 두세요.
+    finals: [
+      {
+        name: "하나마이크론",
+        count: 6,
+        logo: {
+          src: "assets/img/employers/hanamicron.webp",
+          width: 203,
+          height: 120,
+          alt: "하나마이크론 로고"
+        }
+      }
+    ],
     // 지원 → 1차 합격 카드 (위에서부터 순서대로 표시)
     exams: [
       {
