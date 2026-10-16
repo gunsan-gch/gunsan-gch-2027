@@ -35,7 +35,7 @@
   <link rel="icon" type="image/png" href="assets/img/brand/favicon.png">
   <link rel="apple-touch-icon" href="assets/img/brand/apple-touch-icon.png">
   <!-- ?v= 값: 고칠 때마다 바꾸면 휴대폰에 남은 예전 파일 대신 새 파일을 받습니다 (README 참고) -->
-  <link rel="stylesheet" href="assets/css/style.css?v=20261016b">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261016c">
   <link rel="preload" as="font" href="assets/fonts/EliceDXNeolli-Medium.otf" type="font/otf" crossorigin>
   <link rel="preload" as="font" href="assets/fonts/CookieRun-Black.otf" type="font/otf" crossorigin>
   <meta name="google-site-verification" content="fG7xD5bb5MYqujUC6RHyJgT8Rwqy-YeOj12afvQpXY4" />
@@ -106,7 +106,7 @@
           <li><a href="#facilities">실습환경</a></li>
           <li><a href="#admissions">입학 안내</a></li>
           <li><a href="#faq">자주 묻는 질문</a></li>
-          <li class="nav-cta-item"><a class="btn btn-primary btn-sm" id="header-cta" href="tel:0634600321">입학 상담</a></li>
+          <li class="nav-cta-item"><a class="btn btn-primary btn-sm js-talk" id="header-cta" href="https://open.kakao.com/o/sDyxWESi" target="_blank" rel="noopener" data-where="header">카톡 상담<span class="sr-only">(새 창, 카카오톡 오픈채팅)</span></a></li>
         </ul>
       </nav>
       <button class="hd-send js-quick-send" type="button" data-where="header" aria-label="이 페이지 공유하기" title="공유하기" hidden>
@@ -134,7 +134,10 @@
               <span class="phone-pair"><a class="phone-number" href="tel:0634600321">063-460-0321</a><span class="phone-sep" aria-hidden="true">·</span><a class="phone-number" href="tel:0634600366">063-460-0366</a></span>
             </div>
             <div class="hb-actions">
-              <a class="btn btn-yellow hb-main" href="tel:0634600321"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span>전화 상담</span></a>
+              <div class="hb-main-row">
+                <a class="btn btn-yellow hb-main js-talk" href="https://open.kakao.com/o/sDyxWESi" target="_blank" rel="noopener" data-where="hero"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span>카톡 상담</span><span class="sr-only">(새 창, 카카오톡 오픈채팅)</span></a>
+                <a class="btn btn-light hb-main" href="tel:0634600321"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span>전화 상담</span></a>
+              </div>
               <div class="hb-sub"><a class="btn btn-ghost hb-more" href="#admissions">입학 안내</a></div>
             </div>
           </div>
@@ -193,7 +196,7 @@
         <p><strong>자바스크립트가 꺼져 있어 일부 안내가 표시되지 않습니다.</strong></p>
         <p>2027학년도 모집: ERP비즈니스과 40명(특별 20·일반 20), AI마케팅과 40명(특별 20·일반 20), AI핀테크과 20명(특별 16·일반 4), 카페비즈과 20명(특별 16·일반 4) · 총 120명</p>
         <p>원서접수: 특별전형 2026. 11. 6.(금)~11. 10.(화) 17:00 / 일반전형 2026. 11. 23.(월)~11. 25.(수) 17:00</p>
-        <p>입학 상담 <a href="tel:0634600321">063-460-0321</a> · <a href="tel:0634600366">063-460-0366</a> · <a href="https://school.jbedu.kr/gunsan-gch/MABAHAI/index.do">공식 입학 안내</a></p>
+        <p>입학 상담 <a href="tel:0634600321">063-460-0321</a> · <a href="tel:0634600366">063-460-0366</a> · <a href="https://open.kakao.com/o/sDyxWESi">카카오톡 1:1 상담</a> · <a href="https://school.jbedu.kr/gunsan-gch/MABAHAI/index.do">공식 입학 안내</a></p>
       </div>
     </noscript>
 
@@ -389,8 +392,8 @@
   </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="assets/js/site-data.js?v=20261016b"></script>
-  <script src="assets/js/main.js?v=20261016b"></script>
+  <script src="assets/js/site-data.js?v=20261016c"></script>
+  <script src="assets/js/main.js?v=20261016c"></script>
 <script type="text/javascript" src="//wcs.pstatic.net/wcslog.js"></script>
 <script type="text/javascript">
 if(!wcs_add) var wcs_add = {};

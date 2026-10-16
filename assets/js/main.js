@@ -29,6 +29,12 @@
       '<span class="sr-only">(새 창)</span></a>';
   }
 
+  // 카카오톡 오픈채팅 상담 버튼 (광고 차단 앱이 'kakao'가 들어간 이름을 숨기므로 talk 로 이름 붙임)
+  function talkLink(label, cls, where) {
+    return '<a class="' + cls + ' js-talk" href="' + esc(D.chatConsultUrl) + '" target="_blank" rel="noopener" data-where="' + where + '">' +
+      icon("chat") + '<span>' + esc(label) + '</span><span class="sr-only">(새 창, 카카오톡 오픈채팅)</span></a>';
+  }
+
   /* ---------- 시간 (Asia/Seoul 기준) ---------- */
   // 확인용: 주소 끝에 ?now=2026-10-16T00:00:00%2B09:00 을 붙이면 그 시각 기준으로 화면을 미리 볼 수 있습니다.
   function getNow() {
@@ -762,6 +768,7 @@
       '</dl><p class="note">지원 자격·제출서류·세부 일정은 공식 모집요강을 확인해 주세요.</p>';
   }
   var adm = ['<div class="admission-contact"><h3>' + icon('phone') + '입학 상담</h3>' + phoneLinks() + '</div>'];
+  if (has(D.chatConsultUrl)) adm.push(talkLink("카카오톡으로 상담하기", "btn btn-talk btn-block", "admissions"));
   if (has(D.admissionsPageUrl)) adm.push(extLink(D.admissionsPageUrl, '공식 모집요강', 'btn btn-outline btn-block', 'link'));
   if (has(D.admissionsNoticeUrl)) adm.push(extLink(D.admissionsNoticeUrl, '입학 공지사항', 'btn btn-outline btn-block', 'info'));
   if (has(D.admissionsPdfUrl)) adm.push('<a class="btn btn-outline btn-block" href="' + esc(D.admissionsPdfUrl) + '" download target="_blank" rel="noopener">' + icon('download') + '<span>모집요강 내려받기</span></a>');
@@ -956,7 +963,10 @@
     hb.classList.add("is-consult");
     hb.innerHTML =
       '<div class="hb-info"><p class="hb-tag">입학 상담</p>' + phoneLinks() + '</div>' +
-      '<div class="hb-actions"><a class="btn btn-yellow hb-main" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>전화 상담</span></a>' +
+      '<div class="hb-actions">' + (has(D.chatConsultUrl)
+        ? '<div class="hb-main-row">' + talkLink("카톡 상담", "btn btn-yellow hb-main", "hero") +
+          '<a class="btn btn-light hb-main" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>전화 상담</span></a></div>'
+        : '<a class="btn btn-yellow hb-main" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>전화 상담</span></a>') +
         '<div class="hb-sub">' + (videos.length ? '<a class="btn btn-video hb-video" href="#media"><span class="bv-dot">' + icon("play") + '</span><span>홍보 영상 보기</span>' +
           (videos.length > 1 ? '<small>' + videos.length + '편</small>' : '') + '</a>' : "") +
         '<a class="btn btn-ghost hb-more" href="#admissions">입학 안내</a></div></div>';
@@ -1005,8 +1015,12 @@
 
   /* ---------- 상단 버튼·모바일 고정바 ---------- */
   var headerCta = $("header-cta");
+  // index.html 의 기본값(카톡 상담)을 지우고 상태에 맞게 다시 설정
+  headerCta.classList.remove("js-talk");
+  headerCta.removeAttribute("target");
+  headerCta.removeAttribute("data-where");
   var mb = '<button type="button" class="mb-btn mb-send js-quick-send" data-where="mobile" aria-label="이 페이지 공유하기">' + icon("share") + '<span aria-hidden="true">공유</span></button>' +
-    '<a class="mb-btn mb-call" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>입학 상담</span></a>';
+    '<a class="mb-btn mb-call" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>전화 상담</span></a>';
   if (regOpen) {
     headerCta.innerHTML = '설명회 사전등록<span class="sr-only">(새 창)</span>';
     headerCta.setAttribute("href", B.registrationUrl);
@@ -1018,9 +1032,20 @@
     headerCta.setAttribute("href", "#briefing");
     mb += '<a class="mb-btn mb-main" href="#briefing">' + icon("calendar") + '<span>' + (phase === "ongoing" ? "오늘 설명회 안내" : "설명회 안내" + (dLabel ? " " + esc(dLabel) : "")) + '</span></a>';
   } else {
-    headerCta.textContent = "입학 상담";
-    headerCta.setAttribute("href", tel(D.admissionsPhone));
-    mb += '<a class="mb-btn mb-main" href="#admissions">' + icon("info") + '<span>입학 안내</span></a>';
+    if (has(D.chatConsultUrl)) {
+      // PC에서는 전화 연결이 안 되므로 상단 버튼도 카톡 상담으로
+      headerCta.innerHTML = '카톡 상담<span class="sr-only">(새 창, 카카오톡 오픈채팅)</span>';
+      headerCta.setAttribute("href", D.chatConsultUrl);
+      headerCta.setAttribute("target", "_blank");
+      headerCta.setAttribute("rel", "noopener");
+      headerCta.classList.add("js-talk");
+      headerCta.setAttribute("data-where", "header");
+      mb += talkLink("카톡 상담", "mb-btn mb-talk", "mobile");
+    } else {
+      headerCta.textContent = "입학 상담";
+      headerCta.setAttribute("href", tel(D.admissionsPhone));
+      mb += '<a class="mb-btn mb-main" href="#admissions">' + icon("info") + '<span>입학 안내</span></a>';
+    }
   }
   $("mobile-bar").innerHTML = mb;
 
@@ -1121,6 +1146,9 @@
     '</div>' +
     '<div class="contact-card">' +
       '<h3>' + icon("phone") + '입학 상담</h3>' + phoneLinks('contact-phones') +
+      (has(D.chatConsultUrl) ? talkLink("카카오톡으로 상담하기", "btn btn-talk btn-block", "contact") +
+        (has(D.chatConsultQr) ? '<div class="talk-qr"><img src="' + esc(D.chatConsultQr) + '" width="140" height="140" alt="카카오톡 상담방 QR 코드" loading="lazy">' +
+          '<p>휴대폰 카메라로 찍으면<br>카톡 상담방이 열려요.</p></div>' : "") : "") +
       extLink(D.schoolWebsite, "학교 홈페이지", "btn btn-primary btn-block", "home") +
     '</div>';
 
@@ -1202,6 +1230,23 @@
       if (window.wcs && typeof window.wcs.event === "function") window.wcs.event("Share", where.charAt(0).toUpperCase() + where.slice(1));
     } catch (e) { /* 네이버 분석 오류도 공유에 영향을 주지 않습니다. */ }
   }
+  // 카톡 상담 버튼 누른 횟수만 측정 (대화 내용·상대는 알 수 없음)
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest(".js-talk");
+    if (!a || !liveSite) return;
+    var where = a.getAttribute("data-where") || "etc";
+    try {
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "consult_chat_click", {
+          send_to: "G-0RCC2LMBNY", cta_location: where,
+          page_location: "https://gunsan-gch.github.io/gunsan-gch-2027/", page_referrer: ""
+        });
+      }
+    } catch (err) { /* 분석 오류가 링크 이동을 막지 않도록 합니다. */ }
+    try {
+      if (window.wcs && typeof window.wcs.event === "function") window.wcs.event("ConsultChat", where.charAt(0).toUpperCase() + where.slice(1));
+    } catch (err) { /* 네이버 분석 오류도 링크 이동에 영향을 주지 않습니다. */ }
+  });
   document.addEventListener("click", function (e) {
     var btn = e.target.closest(".js-copy-link, .js-send-sheet, .js-quick-send");
     if (!btn) return;

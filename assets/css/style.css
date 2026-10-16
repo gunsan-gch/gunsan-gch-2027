@@ -1733,3 +1733,19 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
   .hb-reg:hover, .brief-cta a.btn-yellow[href^="https"]:hover { transform: none; }
   .fx-ripple { display: none; }
 }
+
+/* ---------- 카톡 상담 (카카오톡 1:1 오픈채팅) ----------
+ * 광고 차단 앱이 'kakao'가 들어간 이름의 요소를 숨기므로 talk 로 이름 붙임 */
+.btn-talk { background: #fee500; color: #191919; }
+.btn-talk:hover { background: #f4da00; }
+.btn-light { background: #fff; color: var(--navy); }
+.btn-light:hover { background: #eaf1ff; }
+.hero-briefing .hb-main-row { display: flex; gap: 8px; }
+.hero-briefing .hb-main-row .hb-main { flex: 1 1 0; width: auto; min-width: 0; padding-inline: 12px; }
+.mb-talk { background: #fee500; color: #191919; }
+.talk-qr { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border: 1px dashed var(--line); border-radius: 14px; background: var(--bg-tint); }
+.talk-qr img { width: 120px; height: 120px; flex: none; border-radius: 8px; background: #fff; }
+.talk-qr p { font-size: .9rem; font-weight: 700; color: var(--ink-2); line-height: 1.55; }
+/* QR은 PC에서만 (휴대폰은 버튼을 누르면 바로 열림) */
+@media (max-width: 959px), (pointer: coarse) { .talk-qr { display: none; } }
+@media print { .talk-qr { display: flex; } }

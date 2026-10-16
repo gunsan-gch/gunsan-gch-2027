@@ -26,6 +26,10 @@ window.SITE_DATA = {
   admissionsPhone: "063-460-0321",
   admissionsPhoneSecondary: "063-460-0366",
   schoolPhone: "063-460-0321",
+  // 카카오톡 1:1 오픈채팅 상담 주소. 넣으면 첫 화면·모바일 고정바·상단·입학 안내·찾아오는 길에 '카톡 상담' 버튼이 생깁니다. 내리려면 null
+  chatConsultUrl: "https://open.kakao.com/o/sDyxWESi",
+  // 위 주소의 QR 그림 (PC 화면에서 휴대폰으로 찍어 들어오도록 '찾아오는 길'에 표시). 주소를 바꾸면 그림도 바꾸거나 null
+  chatConsultQr: "assets/img/consult/talk-qr.png",
   totalClasses: 6,
   totalSeats: 120,
   seatsPerClass: 20,
