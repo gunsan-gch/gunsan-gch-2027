@@ -65,7 +65,10 @@ GitHub 웹사이트에서 파일을 열고 연필(✏️) 아이콘을 눌러 �
 | 현 고3 현황 바꾸기 | `currentSeniors` 의 숫자·`updatedAt` 수정. 최종 합격은 `finals`(이름·인원·로고), 1차 합격은 `exams`(지원·1차 합격)에 넣고, 1차 합격 항목이 최종 합격하면 `exams`에서 `finals`로 옮기세요. 내리려면 `currentSeniors: null` |
 | 3년 로드맵 프로그램 수정 | `roadmap.grades` 의 학년별 `programs` 수정. 계획 단계 항목은 `badge: "운영 예정"` 처럼 표시 |
 | 장학금·지원 제도 카드 | 학교가 대상·금액·기준연도를 **확정·승인한 항목만** `benefits`에 입력 (형식은 파일 안 설명 참고). 비어 있으면 영역이 나타나지 않습니다 |
-| 설명회 실제 진행 완료 표시 | 행사 후 `briefing.manualStatus: "held"` → "진행되었습니다" 문구 |
+| 설명회 영역 내리기·다시 켜기 | `briefing.enabled: false` → 설명회 영역·첫 화면 설명회 카드·설명회 FAQ가 모두 숨겨지고, 첫 화면 카드는 입학 상담 + 홍보 영상 버튼, 첫 숫자 카드는 다음 원서접수 기간으로 바뀝니다 (2026. 10. 15. 설명회 종료 후 현재 `false`). 다음 설명회를 안내할 때 날짜·장소를 고치고 `true` |
+| 영상 추가·교체 | 영상 파일(가로 1280px mp4 권장)과 16:9 미리보기 그림을 `assets/video/`에 넣고 `videos`에 `{ id, title, summary, src, poster, thumb, width, height, duration }` 추가. `heroButton: true`인 영상은 첫 화면 상담 카드에 '홍보 영상 보기' 버튼으로도 나옵니다. 설명회 기간의 '초대 영상 보기' 버튼은 `briefing.videoId`로 고릅니다 |
+| 원서접수 숫자 카드 | `admissionSchedule`의 날짜 문구(`2026. 11. 6.(금) ~ 11. 10.(화) 17:00까지` 형식)를 읽어 다음 접수 기간을 보여 주고, 기간 중엔 "접수 중", 모두 끝나면 카드가 빠집니다. 카드 이름은 `short` |
+| 설명회 실제 진행 완료 표시 | 행사 후 `briefing.manualStatus: "held"` → "진행되었습니다" 문구 (영역을 계속 보여 줄 때만) |
 | 설명회 취소·변경 | `briefing.manualStatus: "cancelled"` + `manualNotice` 문구 → 사전등록 버튼이 모두 내려감 (일정만 바뀌면 `startAt`을 고치세요) |
 | 다음 해 설명회로 교체 | `admissionYear`, `briefing`의 제목·일시(`startAt`, `archiveAt`)·장소를 한꺼번에 수정 |
 
@@ -131,15 +134,15 @@ GitHub 웹사이트에서 파일을 열고 연필(✏️) 아이콘을 눌러 �
 
 | 파일 | 쓰는 시기 |
 |---|---|
-| `share-briefing.jpg` | 설명회 전 (설명회 일시·장소 표시) — 현재 적용 |
-| `share-general.jpg` | 설명회가 끝난 뒤 (입학 상담 번호 표시) |
+| `share-briefing.jpg` | 설명회 전 (설명회 일시·장소 표시) |
+| `share-general.jpg` | 설명회가 끝난 뒤 (입학 상담 번호 표시) — 현재 적용 (2026. 10. 16.~) |
 
 `index.html`의 `<head>`에 공개 주소 기준 전체 주소로 들어가 있습니다 (카카오톡 등은 https:// 전체 주소의 이미지만 확실하게 불러옵니다).
 ```html
 <meta property="og:url" content="https://gunsan-gch.github.io/gunsan-gch-2027/">
-<meta property="og:image" content="https://gunsan-gch.github.io/gunsan-gch-2027/assets/img/share/share-briefing.jpg">
+<meta property="og:image" content="https://gunsan-gch.github.io/gunsan-gch-2027/assets/img/share/share-general.jpg">
 ```
-설명회가 끝나면 `share-briefing.jpg`를 `share-general.jpg`로 바꾸면 됩니다. 카카오톡은 미리보기를 한동안 저장해 두므로, 바로 바뀌지 않으면 [카카오 공유 디버거](https://developers.kakao.com/tool/debugger/sharing)에서 주소를 넣고 "캐시 초기화"를 누르세요.
+다음 설명회를 안내할 때는 일시를 새로 넣은 `share-briefing.jpg`로 바꾸고, 끝나면 `share-general.jpg`로 되돌리면 됩니다. 카카오톡은 미리보기를 한동안 저장해 두므로, 바로 바뀌지 않으면 [카카오 공유 디버거](https://developers.kakao.com/tool/debugger/sharing)에서 주소를 넣고 "캐시 초기화"를 누르세요.
 
 ### 링크 복사·공유 버튼
 
@@ -194,8 +197,8 @@ GitHub Pages 주소가 생기면 학교 홈페이지(school.jbedu.kr)에서 다�
 - [x] 현 고3 현황(최종 합격: 하나마이크론 6·육군 부사관 4·공군 부사관 1 / 1차 합격: 9급 4→3·코레일 3→2, 2026. 10. 14. 기준) — 확인 완료. 9급·코레일 최종 결과가 나오면 갱신
 - [ ] 외부 누리집에서 불러오는 로고가 공개 주소에서 잘 보이는지 확인 (가능하면 파일로 교체)
 - [x] 공개 주소 확정 (https://gunsan-gch.github.io/gunsan-gch-2027/) 및 공유 미리보기 주소 반영
-- [ ] 설명회 종료 후 공유 이미지를 `share-general.jpg`로 교체
-- [ ] 설명회를 실제로 마친 뒤 `briefing.manualStatus: "held"` 로 변경
+- [x] 설명회(2026. 10. 15.) 종료 후 공유 이미지를 `share-general.jpg`로 교체, 설명회 영역 내림(`briefing.enabled: false`)
+- [x] 학교 홍보 영상(1분 58초)·입학설명회 홍보 영상(52초) 게시 — '영상으로 만나는 군산여상' 영역
 - [ ] 장학금·지원 제도: 2027학년도 대상·금액·조건 확정 후 `benefits`에 입력 (가상 합계 금액은 사용하지 않음)
 - [x] 주요 진학 대학 12곳 목록 — 확인 완료
 - [ ] 주요 취업처 분류(공공기관·공무원 / 금융권 / 주요 기업 / 우수기업·전문직무)가 학교 의견과 맞는지 확인

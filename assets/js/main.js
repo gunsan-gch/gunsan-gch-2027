@@ -767,6 +767,63 @@
   if (has(D.admissionsPdfUrl)) adm.push('<a class="btn btn-outline btn-block" href="' + esc(D.admissionsPdfUrl) + '" download target="_blank" rel="noopener">' + icon('download') + '<span>모집요강 내려받기</span></a>');
   $("admissions-actions").innerHTML = adm.join('');
 
+  /* ---------- 영상: 버튼을 누르면 팝업으로 재생 (누르기 전에는 영상 파일을 받지 않음) ---------- */
+  var videos = (D.videos || []).filter(function (v) { return v && has(v.id) && has(v.src); });
+  function videoById(id) {
+    for (var i = 0; i < videos.length; i++) if (videos[i].id === id) return videos[i];
+    return null;
+  }
+  function playBtn(v, label, cls) {
+    return '<button type="button" class="btn btn-video js-open-video ' + (cls || "") + '" data-video="' + esc(v.id) + '">' +
+      '<span class="bv-dot">' + icon("play") + '</span><span>' + esc(label) + '</span>' + (v.duration ? '<small>' + esc(v.duration) + '</small>' : '') + '</button>';
+  }
+  (function setupVideoDialog() {
+    var dlg = $("video-dialog"), ve = $("video-dialog-el");
+    if (!videos.length || !dlg || !ve) return;
+    var frame = dlg.querySelector(".vd-frame");
+    function open(v) {
+      if (ve.getAttribute("src") !== v.src) {
+        ve.pause();
+        if (v.poster) ve.setAttribute("poster", v.poster); else ve.removeAttribute("poster");
+        ve.setAttribute("src", v.src);
+      }
+      if (v.width) { ve.width = v.width; ve.height = v.height; }
+      frame.classList.toggle("is-wide", v.width > v.height); // 가로 영상은 넓은 화면으로
+      $("video-dialog-desc").textContent = v.description || "";
+      dlg.setAttribute("aria-label", v.title || "영상");
+      if (typeof dlg.showModal === "function") {
+        dlg.showModal();
+        var pr = ve.play();
+        if (pr && pr.catch) pr.catch(function () { /* 재생은 조작 버튼으로 */ });
+      } else {
+        window.open(v.src, "_blank", "noopener");
+      }
+    }
+    document.addEventListener("click", function (e) {
+      var b = e.target.closest(".js-open-video");
+      var v = b && videoById(b.getAttribute("data-video"));
+      if (v) open(v);
+    });
+    $("video-dialog-close").addEventListener("click", function () { dlg.close(); });
+    dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener("close", function () { ve.pause(); });
+  })();
+  // '영상으로 만나는 군산여상' 목록
+  if (videos.length && $("media")) {
+    $("media").hidden = false;
+    $("clip-list").innerHTML = videos.map(function (v) {
+      var pic = v.thumb || v.poster;
+      return '<li class="clip-card">' +
+        '<button type="button" class="clip-thumb js-open-video" data-video="' + esc(v.id) + '" aria-label="' + esc(v.title + " 재생" + (v.duration ? " (" + v.duration + ")" : "")) + '">' +
+          (pic ? '<img src="' + esc(pic) + '" width="1280" height="720" alt="" loading="lazy" decoding="async">' : '') +
+          '<span class="clip-play" aria-hidden="true">' + icon("play") + '</span>' +
+          (v.duration ? '<span class="clip-time" aria-hidden="true">' + esc(v.duration) + '</span>' : '') +
+        '</button>' +
+        '<div class="clip-body"><h3>' + esc(v.title) + '</h3>' + (v.summary ? '<p>' + copyLines(v.summary) + '</p>' : '') + '</div>' +
+      '</li>';
+    }).join("");
+  }
+
   /* ---------- 입학설명회 ---------- */
   var telBtn = function (label, cls) {
     return '<div class="phone-cta ' + cls + '"><p>' + icon("phone") + esc(label) + '</p>' + phoneLinks() + '</div>';
@@ -779,6 +836,7 @@
   if (phase === "off") {
     $("briefing").hidden = true;
   } else {
+    $("briefing").hidden = false;
     var whenStr = fmtKDateTime(start) + (endAt ? " ~ " + fmtKTime(endAt) : "");
     var info =
       '<dl class="brief-dl">' +
@@ -828,13 +886,10 @@
           : "지난 설명회 일정입니다. 입학과 관련해 궁금한 점은 입학 상담으로 문의해 주세요.")
       : (B.manualNotice || "입학설명회 일정이 변경되었습니다. 자세한 내용은 입학 상담으로 문의해 주세요.");
 
-    // 초대 영상: 설명회 전·당일에만. 버튼을 누르면 팝업으로 재생(누르기 전에는 영상 파일을 받지 않음)
-    var V = B.video;
-    var showVideo = (phase === "before" || phase === "ongoing") && V && has(V.src);
-    var videoBtn = function (cls) {
-      return showVideo ? '<button type="button" class="btn btn-video js-open-video ' + (cls || "") + '">' +
-        '<span class="bv-dot">' + icon("play") + '</span><span>초대 영상 보기</span>' + (V.duration ? '<small>' + esc(V.duration) + '</small>' : '') + '</button>' : '';
-    };
+    // 초대 영상: 설명회 전·당일에만 (briefing.videoId = videos 목록의 id)
+    var V = videoById(B.videoId);
+    var showVideo = (phase === "before" || phase === "ongoing") && !!V;
+    var videoBtn = function (cls) { return showVideo ? playBtn(V, "초대 영상 보기", cls) : ""; };
 
     $("briefing-body").innerHTML =
       '<div class="section-head light">' +
@@ -848,31 +903,7 @@
         cta +
       '</div>';
 
-    if (showVideo) setupVideoDialog(V);
     if (regOpen) renderQr();
-  }
-
-  function setupVideoDialog(V) {
-    var dlg = $("video-dialog"), ve = $("video-dialog-el");
-    if (!dlg || !ve) return;
-    if (V.poster) ve.setAttribute("poster", V.poster);
-    if (V.width) { ve.width = V.width; ve.height = V.height; }
-    $("video-dialog-desc").textContent = V.description || "";
-    dlg.setAttribute("aria-label", V.title || "영상");
-    var open = function () {
-      if (!ve.getAttribute("src")) ve.setAttribute("src", V.src);
-      if (typeof dlg.showModal === "function") {
-        dlg.showModal();
-        var pr = ve.play();
-        if (pr && pr.catch) pr.catch(function () { /* 재생은 조작 버튼으로 */ });
-      } else {
-        window.open(V.src, "_blank", "noopener");
-      }
-    };
-    document.addEventListener("click", function (e) { if (e.target.closest(".js-open-video")) open(); });
-    $("video-dialog-close").addEventListener("click", function () { dlg.close(); });
-    dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
-    dlg.addEventListener("close", function () { ve.pause(); });
   }
 
   function renderQr() {
@@ -914,20 +945,40 @@
         '<div class="hb-sub">' + videoBtn("hb-video") + '<a class="btn btn-ghost hb-more" href="#briefing">자세히</a></div>' +
       '</div>';
   } else {
+    var heroVideo = videos.filter(function (v) { return v.heroButton; })[0];
     hb.classList.add("is-consult");
     hb.innerHTML =
-      '<div class="hb-info"><p class="hb-tag">입학 상담</p>' + phoneLinks() +
-        (phase === "past" ? '<p class="hb-where">' + icon("calendar") + '<span>지난 설명회 일정: ' + esc(fmtDate(start)) + '</span></p>' : "") + '</div>' +
-      '<div class="hb-actions"><a class="btn btn-yellow" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>전화 상담</span></a>' +
-        '<a class="btn btn-ghost" href="#admissions">입학 안내</a></div>';
+      '<div class="hb-info"><p class="hb-tag">입학 상담</p>' + phoneLinks() + '</div>' +
+      '<div class="hb-actions"><a class="btn btn-yellow hb-main" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>전화 상담</span></a>' +
+        '<div class="hb-sub">' + (heroVideo ? playBtn(heroVideo, "홍보 영상 보기", "hb-video") : "") + '<a class="btn btn-ghost hb-more" href="#admissions">입학 안내</a></div></div>';
   }
   hb.hidden = false;
 
   /* ---------- 첫 화면 숫자 카드: 설명회 D-day · 현 고3 1차 합격 · 모집 · AI 중점학년 ---------- */
+  // 다음 원서접수 기간: "2026. 11. 6.(금) ~ 11. 10.(화) 17:00까지" 형식에서 날짜를 읽어, 끝나면 다음 전형으로 넘어감
+  function nextApplication() {
+    if (!D.publishDetailedAdmissionSchedule) return null;
+    var list = D.admissionSchedule || [];
+    for (var i = 0; i < list.length; i++) {
+      var m = /(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})\.\s*\((.)\)\s*~\s*(\d{1,2})\.\s*(\d{1,2})\.\s*\((.)\)(?:\s*(\d{1,2}):(\d{2}))?/.exec(list[i].value || "");
+      if (!m) continue;
+      var from = new Date(Date.UTC(+m[1], m[2] - 1, +m[3]) - 9 * 3600000);
+      var to = new Date(Date.UTC(+m[1], m[5] - 1, +m[6], m[8] ? +m[8] : 24, m[9] ? +m[9] : 0) - 9 * 3600000);
+      if (now >= to) continue;
+      return {
+        href: "#admissions", big: now >= from ? "접수 중" : m[2] + "/" + m[3] + "(" + m[4] + ")",
+        label: list[i].short || list[i].label,
+        small: "~" + m[5] + "/" + m[6] + "(" + m[7] + ")" + (m[8] ? " " + (+m[8]) + "시" : "")
+      };
+    }
+    return null;
+  }
   (function heroHooks() {
     var box = $("hero-hooks");
     if (!box) return;
     var hooks = [];
+    var apply = phase === "before" || phase === "ongoing" ? null : nextApplication();
+    if (apply) hooks.push(apply);
     if (phase === "before" || phase === "ongoing") {
       hooks.push({ href: "#briefing", big: phase === "ongoing" ? "오늘" : (dLabel || shortDay(start)), label: "입학설명회", small: shortDay(start) + " " + seoulParts(start).hh + ":" + seoulParts(start).mm });
     }
