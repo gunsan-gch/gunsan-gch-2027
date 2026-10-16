@@ -808,7 +808,15 @@
     dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
     dlg.addEventListener("close", function () { ve.pause(); });
   })();
-  // '영상으로 만나는 군산여상' 목록
+  // '영상으로 만나는 군산여상' 목록 (예전 index.html 이 휴대폰에 남아 영역이 없으면 학교 소개 아래에 새로 만듦)
+  if (videos.length && !$("media") && $("about")) {
+    var mediaSec = document.createElement("section");
+    mediaSec.className = "section section-navy"; mediaSec.id = "media"; mediaSec.hidden = true;
+    mediaSec.setAttribute("aria-labelledby", "media-title");
+    mediaSec.innerHTML = '<div class="container"><div class="section-head light"><p class="eyebrow">영상으로 보기</p>' +
+      '<h2 class="section-title" id="media-title">영상으로 만나는 군산여상</h2></div><ul class="clip-list" id="clip-list"></ul></div>';
+    $("about").parentNode.insertBefore(mediaSec, $("about").nextSibling);
+  }
   if (videos.length && $("media")) {
     $("media").hidden = false;
     $("clip-list").innerHTML = videos.map(function (v) {
@@ -945,12 +953,13 @@
         '<div class="hb-sub">' + videoBtn("hb-video") + '<a class="btn btn-ghost hb-more" href="#briefing">자세히</a></div>' +
       '</div>';
   } else {
-    var heroVideo = videos.filter(function (v) { return v.heroButton; })[0];
     hb.classList.add("is-consult");
     hb.innerHTML =
       '<div class="hb-info"><p class="hb-tag">입학 상담</p>' + phoneLinks() + '</div>' +
       '<div class="hb-actions"><a class="btn btn-yellow hb-main" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>전화 상담</span></a>' +
-        '<div class="hb-sub">' + (heroVideo ? playBtn(heroVideo, "홍보 영상 보기", "hb-video") : "") + '<a class="btn btn-ghost hb-more" href="#admissions">입학 안내</a></div></div>';
+        '<div class="hb-sub">' + (videos.length ? '<a class="btn btn-video hb-video" href="#media"><span class="bv-dot">' + icon("play") + '</span><span>홍보 영상 보기</span>' +
+          (videos.length > 1 ? '<small>' + videos.length + '편</small>' : '') + '</a>' : "") +
+        '<a class="btn btn-ghost hb-more" href="#admissions">입학 안내</a></div></div>';
   }
   hb.hidden = false;
 
