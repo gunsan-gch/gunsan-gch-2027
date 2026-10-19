@@ -320,17 +320,17 @@ window.SITE_DATA = {
   /* ---------------- 영상 ('영상으로 만나는 군산여상' 영역, 위에서부터 순서대로 표시) ----------------
    * 누르면 팝업으로 재생하며, 누르기 전에는 영상 파일을 받지 않습니다.
    * thumb: 목록에 보이는 16:9 그림, poster: 재생 전 영상 화면. 첫 화면 '홍보 영상 보기' 버튼은 이 영역으로 이동합니다.
-   * 영상 파일은 assets/video/ 에 넣으세요 (가로 1280px·mp4 권장). 목록에서 내리려면 항목을 지우세요. */
+   * 영상 파일은 assets/video/ 에 넣으세요 (1080p mp4, 원본 그대로 권장. 파일을 바꿀 때는 이름도 바꿔야 휴대폰에 남은 예전 영상 대신 새 영상이 나옵니다). 목록에서 내리려면 항목을 지우세요. */
   videos: [
     {
       id: "school-promo",
       title: "학교 홍보 영상",
       summary: "네 학과와 새 실습실, 선배들의 진로,\n3년 동안 받을 수 있는 지원까지 한 번에 볼 수 있어요.",
-      src: "assets/video/school-promo.mp4",
+      src: "assets/video/school-promo-1080.mp4",
       poster: "assets/video/school-promo-poster.webp",
       thumb: "assets/video/school-promo-poster.webp",
-      width: 1280,
-      height: 720,
+      width: 1920,
+      height: 1080,
       duration: "1분 58초",
       description: "학교 선택을 고민하는 중학생의 메신저 대화로 시작해 네 학과, 카페비즈과 수업, 새 실습실, 공무원·기업 합격 소식, 선배들의 취업처, 방과후·자격증·장학 지원을 소개하고 2027학년도 신입생 모집 안내로 끝나는 영상입니다."
     },
@@ -338,11 +338,11 @@ window.SITE_DATA = {
       id: "briefing-reel",
       title: "입학설명회 홍보 영상",
       summary: "새벽 바다에서 시작해 네 학과의 진로와\n선배들이 걸어간 길을 담은 영상이에요.",
-      src: "assets/video/opening-reel.mp4",
+      src: "assets/video/opening-reel-1080.mp4",
       poster: "assets/video/opening-reel-poster.webp",
       thumb: "assets/video/opening-reel-thumb.webp",
-      width: 720,
-      height: 1280,
+      width: 1080,
+      height: 1920,
       duration: "52초",
       description: "새벽 바다에서 시작해 네 학과의 진로, 선배들이 걸어간 길, 하늘을 나는 종이비행기와 교표를 지나 2027학년도 입학설명회 일시 안내로 끝나는 영상입니다. 배경음악이 있습니다."
     }
