@@ -1749,3 +1749,7 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 /* QR은 PC에서만 (휴대폰은 버튼을 누르면 바로 열림) */
 @media (max-width: 959px), (pointer: coarse) { .talk-qr { display: none; } }
 @media print { .talk-qr { display: flex; } }
+
+/* 현 고3 현황: 1차 합격 카드 아래 '최종 결과 발표 전' */
+.senior-wait { display: inline-flex; align-items: center; gap: 5px; margin-top: 12px; padding: 3px 11px; border-radius: 999px; background: var(--bg-tint); color: var(--muted); font-size: .82rem; font-weight: 700; }
+.senior-wait .icon { width: 14px; height: 14px; }

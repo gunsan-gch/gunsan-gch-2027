@@ -663,7 +663,8 @@
         (exams.length ? '<div class="senior-row" style="--n:' + exams.length + '">' + exams.map(function (ex, index) {
           return '<article class="senior-card is-exam exam-' + (index + 1) + '">' + seniorLogo(ex) + '<h4>' + esc(ex.name) + '</h4>' +
             '<div class="senior-flow"><div class="senior-metric"><strong>' + ex.applied + '<span class="unit">명</span></strong><span>지원</span></div><span class="senior-arrow" aria-hidden="true">→</span>' +
-            '<div class="senior-metric is-pass"><strong>' + ex.firstStagePassed + '<span class="unit">명</span></strong><span>1차 합격</span></div></div></article>';
+            '<div class="senior-metric is-pass"><strong>' + ex.firstStagePassed + '<span class="unit">명</span></strong><span>1차 합격</span></div></div>' +
+            (senior.examNote ? '<p class="senior-wait">' + icon("clock") + '<span>' + esc(senior.examNote) + '</span></p>' : '') + '</article>';
         }).join('') + '</div>' : '') +
       '</div>' +
       (senior.note ? '<p class="note">' + esc(senior.note) + '</p>' : '');

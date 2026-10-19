@@ -1206,7 +1206,7 @@ window.SITE_DATA = {
   currentSeniors: {
     title: "현 고3 취업·진로 현황",
     cohort: "2026년 고3 · 2027년 졸업예정",
-    updatedAt: "2026-10-14",
+    updatedAt: "2026-10-19",
     // 최종 합격 카드 (맨 앞줄, 위에서부터 순서대로 표시). tone: "army"·"airforce" 는 카드 윗선 색
     finals: [
       {
@@ -1217,6 +1217,16 @@ window.SITE_DATA = {
           width: 203,
           height: 120,
           alt: "하나마이크론 로고"
+        }
+      },
+      {
+        name: "SFA반도체",
+        count: 3,
+        logo: {
+          src: "assets/img/employers/sfa.webp",
+          width: 330,
+          height: 77,
+          alt: "SFA반도체 로고"
         }
       },
       {
@@ -1245,7 +1255,8 @@ window.SITE_DATA = {
         }
       }
     ],
-    // 지원 → 1차 합격 카드 (최종 합격 다음 줄, 위에서부터 순서대로 표시)
+    // 지원 → 1차 합격 카드 (최종 합격 다음 줄, 위에서부터 순서대로 표시). 최종 결과가 나오면 finals 로 옮기세요.
+    examNote: "최종 결과 발표 전", // 1차 합격 카드 아래 작은 안내 (필요 없으면 null)
     exams: [
       {
         name: "지역인재 9급 공무원",
