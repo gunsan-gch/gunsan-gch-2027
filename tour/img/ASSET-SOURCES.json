@@ -1,0 +1,65 @@
+{
+  "note": "원본 그림 파일 이름과 지문(sha256). 드라이브에 같은 이름으로 올리면 바뀐 파일만 골라 변환합니다. 기준: GPT 전달본 cc1ed0e0",
+  "sources": {
+    "outdoor-lawn.png": {
+      "output": "outdoor.webp",
+      "kind": "background",
+      "description": "야외 잔디마당 (2026-10-20 v3: 드론 사진을 참고해 건물을 다시 그림 / 드라이브 outdoor-lawn-photo-v3.png, 위쪽 33% 밖은 이전과 같음)",
+      "sha256": "6615589207f9b1764c16213370e5fc5c18f61f29b59c0c668e73458a429090a9"
+    },
+    "floor1-open-lobby-v6.png": {
+      "output": "floor1.webp",
+      "kind": "background",
+      "description": "1층 (2026-10-20 v11: 준비실·창고, 경비실 분리, 가운데 야외 테라스, 오른쪽 바깥 계단 / 드라이브 floor1-outdoor-offices-v11.png)",
+      "sha256": "ce19d4b814d4c455fc963e5f6fc056c5a6e7bca05fb1d13535877958fd45b8f8"
+    },
+    "floor2-wide.png": {
+      "output": "floor2.webp",
+      "kind": "background",
+      "description": "2층 (2026-10-20 배치도 기준으로 다시 그림 / 드라이브 floor2-redrawn-fixed-20261020.png)",
+      "sha256": "9b09cd5ee4f4eb4cd3098eea14947206c47c4619ce9f29b541c478adfbf96720"
+    },
+    "floor3-wide.png": {
+      "output": "floor3.webp",
+      "kind": "background",
+      "description": "3층 (2026-10-20 배치도 기준으로 다시 그림 / 드라이브 floor3-redrawn-fixed-20261020.png)",
+      "sha256": "cbc2950974d46ef53632af363bca54a2f56efd341afcbd4f742ce208d9c13020"
+    },
+    "floor4-wide.png": {
+      "output": "floor4.webp",
+      "kind": "background",
+      "description": "4층 (2026-10-20 배치도 기준으로 다시 그림 / 드라이브 floor4-redrawn-fixed-20261020.png)",
+      "sha256": "5729e068aea4a9c9e020d8898a808bf05fa0a8faf61510a4dbab8cd479cc43ca"
+    },
+    "floor5-wide.png": {
+      "output": "floor5.webp",
+      "kind": "background",
+      "description": "5층",
+      "sha256": "782df14c5a542a2ca2ff7bc075b7ed4f7f1d547def06f537aa5cecd7ef746f0c"
+    },
+    "overworld-atlas.png": {
+      "output": "walker.png",
+      "kind": "sprite",
+      "description": "걷는 캐릭터 (32x40 칸, 3열 x 4행: 아래/오른쪽/위/왼쪽)",
+      "sha256": "1e2a41187881f70f39144b31f49af483aa8cbea061254cb2369080f6cbddca0e"
+    },
+    "character.png": {
+      "output": "guide.webp",
+      "kind": "guide",
+      "description": "소개용 안내 캐릭터",
+      "sha256": "62f3efe21ff538f17172870e499cf1a076f319ab931be2df20d14c2938c944da"
+    },
+    "tour-share-art.png": {
+      "output": "share.jpg",
+      "kind": "share",
+      "description": "링크 공유 미리보기 (1200x630, 왼쪽 45% 남색 여백에 제목 글자를 얹음)",
+      "sha256": "078a5c6745977d3e9eabfd3e0e286e667eec07e8c0f41ec9ab472f7258f3d64c"
+    },
+    "drone-photo.jpg": {
+      "output": "drone.jpg",
+      "kind": "photo",
+      "description": "야외 '학교 전경 보기' 드론 사진 (2026-10-20 대화로 받은 2000×1498 사진, 이미 작고 촬영 정보가 없어 원본 그대로 사용)",
+      "sha256": "f4534f9e7e1321cb68fc66191dc25f6140fbe2e9b1bef722993cf77692843eaa"
+    }
+  }
+}

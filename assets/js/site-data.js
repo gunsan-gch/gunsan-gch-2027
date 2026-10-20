@@ -374,6 +374,9 @@ window.SITE_DATA = {
   // 준공 후 "completed"로 바꾸고 facilities의 status 문구를 수정
   facilitiesStatus: "planned",
 
+  // 픽셀 학교 투어 주소 (tour 폴더). null이면 메뉴·배너·'투어에서 위치 보기' 링크가 모두 숨겨집니다.
+  tourUrl: "tour/index.html",
+
   // 학생 얼굴은 흐리게 처리한 사진입니다. 공개 동의 범위가 확인되지 않으면 false
   showSchoolLifePhotos: true,
 
@@ -1073,6 +1076,7 @@ window.SITE_DATA = {
     {
       icon: "ai",
       name: "AI비즈니스실",
+      tourRoom: "AI비즈니스실",   // 픽셀 학교 투어에서 이 이름의 공간으로 바로 이동
       image: {
         src: "assets/img/facilities/ai-business.webp?v=2",
         width: 1200,
@@ -1087,6 +1091,7 @@ window.SITE_DATA = {
     {
       icon: "bakery",
       name: "조리제빵실",
+      tourRoom: "조리제빵실",   // 픽셀 학교 투어에서 이 이름의 공간으로 바로 이동
       image: {
         src: "assets/img/facilities/bakery-lab.webp",
         width: 1200,
@@ -1101,6 +1106,7 @@ window.SITE_DATA = {
     {
       icon: "cafe",
       name: "카페실습실",
+      tourRoom: "카페실습실",   // 픽셀 학교 투어에서 이 이름의 공간으로 바로 이동
       image: {
         src: "assets/img/facilities/cafe-lab.webp?v=2",
         width: 1200,

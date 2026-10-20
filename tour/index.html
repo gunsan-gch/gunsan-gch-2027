@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>픽셀 학교 투어 | 군산여자상업고등학교</title>
+  <meta name="description" content="캐릭터와 함께 군산여상 1~5층과 잔디마당을 픽셀 그림으로 둘러보세요. 2026학년도 학교배치도를 바탕으로 만든 학교 투어입니다.">
+  <meta name="theme-color" content="#14285a">
+  <meta name="color-scheme" content="light">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="군산여자상업고등학교">
+  <meta property="og:title" content="픽셀 학교 투어 | 군산여자상업고등학교">
+  <meta property="og:description" content="캐릭터와 함께 군산여상 1~5층과 잔디마당을 픽셀 그림으로 둘러보세요.">
+  <meta property="og:url" content="https://gunsan-gch.github.io/gunsan-gch-2027/tour/">
+  <meta property="og:image" content="https://gunsan-gch.github.io/gunsan-gch-2027/tour/img/share.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="픽셀 학교 투어 - 군산여자상업고등학교 건물과 안내 캐릭터">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="../assets/img/brand/favicon.png">
+  <link rel="apple-touch-icon" href="../assets/img/brand/apple-touch-icon.png">
+  <link rel="preload" as="image" href="img/outdoor.webp">
+  <link rel="stylesheet" href="css/tour.css">
+</head>
+<body>
+  <a class="skip-link" href="#tour-map">지도 바로가기</a>
+
+  <header class="tour-header">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html">
+        <img src="../assets/img/brand/school-crest.webp" width="40" height="38" alt="">
+        <span><strong>군산여자상업고등학교</strong><small>픽셀 학교 투어</small></span>
+      </a>
+      <a class="back-link" href="../index.html">
+        <span aria-hidden="true">←</span><span>학과·입학 안내<span class="hide-sm">로 돌아가기</span></span>
+      </a>
+    </div>
+  </header>
+
+  <main class="container" id="main">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">OUR SCHOOL, ONE PIXEL AT A TIME</p>
+        <h1>우리 학교를<br>한 칸씩 걸어 봐요</h1>
+        <p class="lead">잔디마당에서 현관으로 들어가 1층부터 5층까지, <br class="hide-sm">캐릭터와 함께 그림 속 학교를 둘러보세요.</p>
+      </div>
+      <img class="guide" src="img/guide.webp" width="240" height="354" alt="교복을 입고 학교를 안내하는 캐릭터">
+    </section>
+
+    <div class="scene-notice" aria-live="polite">
+      <strong id="scene-notice-title">잔디마당에서 학교 안으로</strong>
+      <p id="scene-notice-text">공식 외관 사진을 참고한 그림입니다. 건물 높이와 나무·길은 게임 화면에 맞게 단순화했어요. 가운데 현관으로 걸어가면 1층으로 들어갑니다.</p>
+    </div>
+
+    <nav class="scene-nav" aria-label="층 선택">
+      <button type="button" data-scene="outdoor" aria-pressed="true">야외</button>
+      <button type="button" data-scene="1" aria-pressed="false">1층</button>
+      <button type="button" data-scene="2" aria-pressed="false">2층</button>
+      <button type="button" data-scene="3" aria-pressed="false">3층</button>
+      <button type="button" data-scene="4" aria-pressed="false">4층</button>
+      <button type="button" data-scene="5" aria-pressed="false">5층</button>
+    </nav>
+
+    <div class="tour-tools">
+      <div class="tour-position">
+        <strong id="current-floor">지금은 야외</strong>
+        <button type="button" id="locate-player">◎ 내 위치</button>
+        <button type="button" id="stop-walking">이동 멈춤</button>
+      </div>
+      <div class="space-search">
+        <label for="space-search">공간 찾기</label>
+        <input id="space-search" type="search" placeholder="예: 도서실, 온누리홀, 2-1" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="search-results">
+        <ul id="search-results" hidden></ul>
+      </div>
+      <details class="tour-help">
+        <summary>조작 방법</summary>
+        <ul>
+          <li><b>걷기</b> — 지도를 한 번 누른 뒤 방향키, 또는 지도 아래 화살표 버튼을 누르고 있기</li>
+          <li><b>빨리 가기</b> — 복도 바닥이나 공간 이름을 누르면 길을 찾아 걸어가요</li>
+          <li><b>층 이동</b> — 계단 옆 ↑·↓ 층 버튼, 계단 앞에서 Enter·스페이스바, 또는 위의 층 버튼</li>
+          <li><b>확대</b> — +/− 버튼, 두 손가락 벌리기, PC는 Ctrl+마우스 휠</li>
+          <li><b>크게 보기</b> — 지도를 화면 가득 펼쳐요. 휴대폰을 가로로 돌리면 층 전체가 보여요</li>
+          <li><b>지도 옮기기</b> — 지도를 끌어서 밀기. 길을 잃으면 ‘내 위치’</li>
+        </ul>
+      </details>
+    </div>
+
+    <section class="map-section" aria-labelledby="map-title">
+      <div class="scene-toolbar">
+        <h2 id="map-title" class="sr-only">학교 지도</h2>
+        <div class="zoom" role="group" aria-label="지도 확대와 축소">
+          <button type="button" id="zoom-out" aria-label="지도 축소">−</button>
+          <output id="zoom-value" aria-live="polite">150%</output>
+          <button type="button" id="zoom-in" aria-label="지도 확대">+</button>
+          <button type="button" id="fit" aria-pressed="false">전체 보기</button>
+        </div>
+        <button type="button" id="expand" class="expand-button" aria-controls="tour-map" aria-expanded="false">⛶ 크게 보기</button>
+      </div>
+
+      <div id="tour-map" class="map-frame">
+        <div class="map-topbar">
+          <div class="map-topbar-floors" role="group" aria-label="층 선택">
+            <button type="button" data-scene="outdoor" aria-pressed="true">야외</button>
+            <button type="button" data-scene="1" aria-pressed="false">1층</button>
+            <button type="button" data-scene="2" aria-pressed="false">2층</button>
+            <button type="button" data-scene="3" aria-pressed="false">3층</button>
+            <button type="button" data-scene="4" aria-pressed="false">4층</button>
+            <button type="button" data-scene="5" aria-pressed="false">5층</button>
+          </div>
+          <button type="button" id="collapse" class="map-close" aria-label="크게 보기 닫기">✕</button>
+        </div>
+        <p class="rotate-hint">휴대폰을 가로로 돌리면 층 전체가 한눈에 보여요.</p>
+        <div id="scene-scroll" tabindex="0" aria-label="야외 픽셀 지도">
+          <div id="scene-stage">
+            <img id="scene-image" src="img/outdoor.webp" width="1774" height="887" alt="잔디마당 픽셀 일러스트" draggable="false">
+            <span id="scene-walker" role="img" aria-label="학교를 둘러보는 안내 캐릭터"></span>
+          </div>
+        </div>
+        <p id="map-load-status" role="status" hidden></p>
+        <div class="direction" role="group" aria-label="캐릭터 걷기">
+          <button type="button" data-dir="left" aria-label="왼쪽으로 걷기">←</button>
+          <button type="button" data-dir="up" aria-label="위로 걷기">↑</button>
+          <button type="button" data-dir="down" aria-label="아래로 걷기">↓</button>
+          <button type="button" data-dir="right" aria-label="오른쪽으로 걷기">→</button>
+        </div>
+      </div>
+
+      <p id="scene-status" aria-live="polite">바닥이나 공간 이름을 누르면 캐릭터가 걸어가요.</p>
+      <p class="caveat">2026학년도 학교배치도를 참고해 그린 일러스트입니다. 실측 도면이나 실제 출입 경로가 아니며, 가구·기자재와 문 위치는 실제 시설과 다를 수 있어요.</p>
+    </section>
+
+    <section class="cards-section" aria-labelledby="cards-title">
+      <h2 id="cards-title">건물 안으로 들어가 보세요</h2>
+      <p id="cards-lead" class="cards-lead">현관으로 걸어 들어가거나 위의 층 버튼을 눌러 보세요.</p>
+      <div id="scene-cards"></div>
+      <div id="scene-facilities" class="facilities" role="group" hidden></div>
+      <p id="scene-omitted" class="omitted" hidden></p>
+    </section>
+
+    <aside class="admissions-cta">
+      <div>
+        <strong>학교가 궁금해졌다면?</strong>
+        <p>4개 학과와 2027학년도 신입생 모집 안내를 확인해 보세요.</p>
+      </div>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="../index.html#departments">학과 소개 보기</a>
+        <a class="btn" href="../index.html#admissions">입학 안내</a>
+        <a class="btn" href="../index.html#contact">입학 상담</a>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="tour-footer">
+    <div class="container">
+      <strong>군산여자상업고등학교 · 픽셀 학교 투어</strong>
+      <p>그림 자료: 2026학년도 학교배치도와 학교 담당자 개편 안내를 참고한 픽셀 일러스트입니다. 개편 예정 공간(조리제빵실·카페실습실·AI비즈니스실)은 조성 계획을 상상한 그림이며, 실제 공간 사진은 준비 중입니다.</p>
+      <p><a href="../index.html">← 2027학년도 학과·입학 안내</a></p>
+    </div>
+  </footer>
+
+  <dialog id="detail" aria-labelledby="detail-title">
+    <div class="dialog-head">
+      <span class="eyebrow" id="detail-floor"></span>
+      <button type="button" id="close" aria-label="설명 닫기">✕</button>
+    </div>
+    <div id="detail-image" class="detail-image"></div>
+    <div class="dialog-body">
+      <span id="detail-status" class="tag"></span>
+      <h2 id="detail-title"></h2>
+      <p id="detail-description"></p>
+    </div>
+  </dialog>
+
+  <script src="js/tour-data.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/camera.js"></script>
+  <script src="js/labels.js"></script>
+  <script src="js/tour.js"></script>
+</body>
+</html>

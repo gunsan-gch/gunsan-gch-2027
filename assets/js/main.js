@@ -735,9 +735,19 @@
       '<span class="status-badge' + (planned ? "" : " done") + '">' + esc(f.status) + '</span>' +
       '<h3>' + esc(f.name) + '</h3>' +
       '<p class="facility-target">' + esc(f.target) + '</p>' +
-      '<p>' + copyLines(f.text) + '</p></li>';
+      '<p>' + copyLines(f.text) + '</p>' +
+      (has(D.tourUrl) && has(f.tourRoom)
+        ? '<a class="facility-tour-link" href="' + esc(D.tourUrl + "?room=" + encodeURIComponent(f.tourRoom)) + '">학교 투어에서 위치 보기<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>'
+        : "") +
+      '</li>';
   }).join("");
   if (!planned) $("facility-note").remove();
+
+  /* ---------- 픽셀 학교 투어 연결 ---------- */
+  document.querySelectorAll("[data-tour-link]").forEach(function (el) {
+    if (has(D.tourUrl)) el.setAttribute("href", D.tourUrl);
+    else (el.closest("[data-tour-slot]") || el).remove();
+  });
 
   /* ---------- 입학 안내: 원서접수 기간과 모집인원을 바로 표시 ---------- */
   var fullTable = !!D.publishFullAdmissionTypeTable;

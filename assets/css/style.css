@@ -429,11 +429,47 @@ main:focus { outline: none; }
 .status-badge.done { background: var(--teal-soft); color: var(--teal-dark); border-color: #9fd8d3; }
 .facility-card h3 { font-size: 1.25rem; color: var(--navy); }
 .facility-target { font-size: .9rem; font-weight: 700; color: var(--teal-dark); }
-.facility-card p:last-child { color: var(--ink-2); font-size: .97rem; }
+.facility-card p:last-of-type { color: var(--ink-2); font-size: .97rem; }
 @media (max-width: 859px) { .facility-cards { grid-template-columns: 1fr; gap: 12px; }
   .facility-card { display: grid; grid-template-columns: 88px 1fr; gap: 4px 16px; align-items: start; padding: 18px; }
   .facility-visual { grid-row: span 4; height: 88px; margin: 0; }
   .facility-visual .icon { width: 40px; height: 40px; }
+}
+
+/* 픽셀 학교 투어 연결 (상단 메뉴 항목은 휴대폰 메뉴에서만 — PC 메뉴는 한 줄 유지) */
+@media (min-width: 1100px) { .nav-mobile-only { display: none; } }
+.facility-tour-link {
+  display: inline-flex; align-items: center; gap: 6px; align-self: flex-start;
+  margin-top: auto; padding: 6px 0; min-height: 40px;
+  font-size: .94rem; font-weight: 700; color: var(--blue); text-decoration: none;
+}
+.facility-tour-link .icon { width: 16px; height: 16px; transition: transform .2s; }
+.facility-tour-link:hover { text-decoration: underline; }
+.facility-tour-link:hover .icon { transform: translateX(3px); }
+.tour-banner {
+  display: flex; align-items: center; gap: 22px; margin-top: 28px; padding: 18px 28px 0;
+  border-radius: var(--radius); background: var(--navy); color: #fff; text-decoration: none;
+  box-shadow: var(--shadow); overflow: hidden;
+  background-image: repeating-linear-gradient(0deg, rgba(255, 255, 255, .04) 0 2px, transparent 2px 16px), repeating-linear-gradient(90deg, rgba(255, 255, 255, .04) 0 2px, transparent 2px 16px);
+}
+.tour-banner img { width: 88px; height: auto; align-self: flex-end; flex-shrink: 0; }
+.tour-banner-text { display: flex; flex-direction: column; gap: 4px; padding-bottom: 18px; flex: 1; min-width: 0; }
+.tour-banner-eyebrow { font-size: .85rem; font-weight: 800; color: var(--yellow); }
+.tour-banner strong { font-family: var(--font-title); font-weight: 700; font-size: 1.35rem; line-height: 1.35; }
+.tour-banner-text > span:last-child { color: #d5def0; font-size: .95rem; }
+.tour-banner-cta {
+  display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; margin-bottom: 18px;
+  padding: 12px 20px; border-radius: 999px; background: var(--yellow); color: var(--navy); font-weight: 800;
+}
+.tour-banner-cta .icon { width: 18px; height: 18px; transition: transform .2s; }
+.tour-banner:hover .tour-banner-cta { background: var(--yellow-dark); }
+.tour-banner:hover .tour-banner-cta .icon { transform: translateX(3px); }
+@media (max-width: 640px) {
+  .tour-banner { flex-wrap: wrap; gap: 4px 14px; padding: 18px 20px 0; }
+  .tour-banner img { width: 64px; order: 2; margin-left: auto; }
+  .tour-banner-text { flex-basis: 100%; padding-bottom: 6px; }
+  .tour-banner strong { font-size: 1.15rem; }
+  .tour-banner-cta { order: 1; align-self: center; margin-bottom: 14px; }
 }
 
 /* ---------- 입학 안내 ---------- */
@@ -1142,7 +1178,7 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 .college .note { font-size: .88rem; }
 .emp-name { text-wrap: balance; }
 .emp-count { white-space: nowrap; }
-.facility-card p:last-child { line-height: 1.75; }
+.facility-card p:last-of-type { line-height: 1.75; }
 .admissions-grid { grid-template-columns: minmax(0, 1.22fr) minmax(0, 1fr); }
 .seats-table { min-width: 0; width: 100%; table-layout: fixed; font-size: .94rem; }
 .seats-table .col-dept { width: 46%; }
