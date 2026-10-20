@@ -468,6 +468,39 @@
   });
   viewport.addEventListener('pointerdown', () => viewport.focus({ preventScroll: true }));
 
+  /* 터치 기기 조이스틱: 누른 채 미는 방향(상하좌우 중 가까운 쪽)으로 계속 걷기 */
+  const joystick = $('.joystick');
+  const knob = joystick.querySelector('.joystick-knob');
+  let stickId = null;
+  function moveStick(e) {
+    const r = joystick.getBoundingClientRect();
+    const radius = r.width / 2;
+    let dx = e.clientX - (r.left + radius), dy = e.clientY - (r.top + radius);
+    const d = Math.hypot(dx, dy), max = radius - 20;
+    if (d > max) { dx = dx / d * max; dy = dy / d * max; }
+    knob.style.transform = `translate(${dx}px, ${dy}px)`;
+    if (d < 12) { if (motion.held) motion.release(); return; }   // 가운데 가까우면 멈춤
+    const dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up');
+    if (motion.held !== dir) { walkRequest++; motion.hold(dir); }
+  }
+  function endStick(e) {
+    if (e.pointerId !== stickId) return;
+    stickId = null;
+    joystick.classList.remove('is-active');
+    knob.style.transform = '';
+    motion.release();
+  }
+  joystick.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    stickId = e.pointerId;
+    joystick.setPointerCapture(e.pointerId);
+    joystick.classList.add('is-active');
+    moveStick(e);
+  });
+  joystick.addEventListener('pointermove', e => { if (e.pointerId === stickId) moveStick(e); });
+  joystick.addEventListener('pointerup', endStick);
+  joystick.addEventListener('pointercancel', endStick);
+
   /* ---------- 상단 도구 ---------- */
 
   $('#zoom-in').addEventListener('click', () => camera.setZoom(camera.zoom * 1.25));

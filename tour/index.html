@@ -76,7 +76,7 @@
       <details class="tour-help">
         <summary>조작 방법</summary>
         <ul>
-          <li><b>걷기</b> — 지도를 한 번 누른 뒤 방향키, 또는 지도 아래 화살표 버튼을 누르고 있기</li>
+          <li><b>걷기</b> — 지도를 한 번 누른 뒤 방향키 / 휴대폰은 지도 왼쪽 아래 동그란 조이스틱을 누른 채 밀기</li>
           <li><b>빨리 가기</b> — 복도 바닥이나 공간 이름을 누르면 길을 찾아 걸어가요</li>
           <li><b>층 이동</b> — 계단 옆 ↑·↓ 층 버튼, 계단 앞에서 Enter·스페이스바, 또는 위의 층 버튼</li>
           <li><b>확대</b> — +/− 버튼, 두 손가락 벌리기, PC는 Ctrl+마우스 휠</li>
@@ -124,6 +124,8 @@
           <button type="button" data-dir="down" aria-label="아래로 걷기">↓</button>
           <button type="button" data-dir="right" aria-label="오른쪽으로 걷기">→</button>
         </div>
+        <!-- 터치 기기용 조이스틱: 원 안을 누르고 미는 방향으로 걷기 -->
+        <div class="joystick" aria-hidden="true"><span class="joystick-knob"></span></div>
       </div>
 
       <p id="scene-status" aria-live="polite">바닥이나 공간 이름을 누르면 캐릭터가 걸어가요.</p>
