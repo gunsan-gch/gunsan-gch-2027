@@ -517,8 +517,17 @@
     document.body.classList.toggle('map-expanded', on);
     expandButton.setAttribute('aria-expanded', String(on));
     camera.reset(motion.x, motion.y);
-    if (on) viewport.focus({ preventScroll: true });
+    if (on) { viewport.focus({ preventScroll: true }); flashRotateHint(); }
     else expandButton.focus({ preventScroll: true });
+  }
+
+  // '가로로 돌리면…' 안내는 크게 보기를 열 때 3.5초만 보여 줌
+  const rotateHint = $('.rotate-hint');
+  let rotateHintTimer = 0;
+  function flashRotateHint() {
+    rotateHint.classList.add('is-showing');
+    clearTimeout(rotateHintTimer);
+    rotateHintTimer = setTimeout(() => rotateHint.classList.remove('is-showing'), 3500);
   }
   expandButton.addEventListener('click', () => setExpanded(true));
   $('#collapse').addEventListener('click', () => setExpanded(false));
@@ -526,8 +535,10 @@
     if (e.key === 'Escape' && !dialog.open && mapFrame.classList.contains('is-expanded')) setExpanded(false);
   });
   // 휴대폰을 돌리면 그 방향에 맞는 배율로 (가로 + 크게 보기 = 층 전체가 한 화면에)
+  // 회전 직후에는 화면 크기가 아직 바뀌기 전일 수 있어, 크기가 자리 잡은 뒤 한 번 더 맞춤
   matchMedia('(orientation: landscape)').addEventListener('change', () => {
     requestAnimationFrame(() => camera.reset(motion.x, motion.y));
+    setTimeout(() => camera.reset(motion.x, motion.y), 400);
   });
   $('#locate-player').addEventListener('click', () => {
     camera.center(motion.x, motion.y);

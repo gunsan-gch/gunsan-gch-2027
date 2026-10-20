@@ -332,7 +332,10 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
   display: block; position: absolute; z-index: 9; left: 50%; top: 58px; transform: translateX(-50%);
   margin: 0; padding: 6px 12px; white-space: nowrap; pointer-events: none;
   background: rgba(20, 40, 90, .88); color: #fff; font-size: 13px;
+  opacity: 0; transition: opacity .6s ease;
 }
+/* 크게 보기를 열 때 잠깐 보였다가 사라짐 (tour.js가 .is-showing을 3.5초 뒤 뗌) */
+.is-expanded .rotate-hint.is-showing { opacity: 1; }
 @media (orientation: landscape), (pointer: fine) { .is-expanded .rotate-hint { display: none; } }
 body.map-expanded { overflow: hidden; }
 
@@ -362,24 +365,24 @@ body.map-expanded { overflow: hidden; }
   .direction { display: none !important; }
   .joystick {
     display: block; position: absolute; z-index: 9;
-    left: calc(12px + env(safe-area-inset-left, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    right: calc(12px + env(safe-area-inset-right, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     width: 112px; height: 112px; border-radius: 50%;
-    background: rgba(255, 255, 255, .28); border: 2px solid rgba(20, 40, 90, .35);
-    box-shadow: inset 0 0 0 10px rgba(20, 40, 90, .08);
-    backdrop-filter: blur(2px);
+    background: rgba(255, 255, 255, .14); border: 2px solid rgba(20, 40, 90, .2);
+    box-shadow: inset 0 0 0 10px rgba(20, 40, 90, .04);
     touch-action: none; -webkit-user-select: none; user-select: none;
   }
   .joystick-knob {
     position: absolute; left: 50%; top: 50%; width: 48px; height: 48px; margin: -24px 0 0 -24px; border-radius: 50%;
-    background: rgba(20, 40, 90, .55); border: 2px solid rgba(255, 255, 255, .8);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+    background: rgba(20, 40, 90, .32); border: 2px solid rgba(255, 255, 255, .6);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .15);
     transition: transform .12s ease-out;
   }
-  .joystick.is-active .joystick-knob { transition: none; background: rgba(20, 40, 90, .75); }
+  .joystick.is-active { background: rgba(255, 255, 255, .24); }
+  .joystick.is-active .joystick-knob { transition: none; background: rgba(20, 40, 90, .55); }
 }
 /* 가로로 눕힌 크게 보기: 오른쪽 빈 여백 가운데에 */
 @media (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
-  .is-expanded .joystick { left: auto; right: calc(19px + env(safe-area-inset-right, 0px)); }
+  .is-expanded .joystick { right: calc(19px + env(safe-area-inset-right, 0px)); }
 }
 .caveat { margin: 12px 0 0; padding-bottom: 14px; border-bottom: 1px dashed #bcc6b0; font-size: 13px; color: var(--muted); }
 

@@ -121,7 +121,11 @@ class TourCamera {
     this.stage.style.width = width + 'px';
     this.stage.style.setProperty('--stage-w', width + 'px');
     // 지도 칸 높이는 그림 높이를 넘지 않게 — 축소했을 때 아래가 빈 칸으로 남지 않도록
-    this.viewport.style.height = Math.min(width / 2, this.maxHeight()) + 'px';
+    // 크게 보기에서는 지도 칸을 화면 높이 그대로 두고, 그림이 더 작으면 세로 가운데에
+    const expanded = Boolean(this.viewport.closest('.is-expanded'));
+    const boxHeight = expanded ? this.maxHeight() : Math.min(width / 2, this.maxHeight());
+    this.viewport.style.height = boxHeight + 'px';
+    this.stage.style.marginTop = expanded ? Math.max(0, (boxHeight - width / 2) / 2) + 'px' : '';
     const fit = this.zoom <= this.minZoom() + 0.001;
     this.viewport.classList.toggle('fit', fit);
     this.viewport.classList.toggle('compact-labels', width < COMPACT_STAGE);
