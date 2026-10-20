@@ -346,7 +346,16 @@
     const preview = $('#detail-image');
     preview.replaceChildren();
     const img = document.createElement('img');
-    dialog.classList.toggle('is-wide', Boolean(room.wide));
+    dialog.classList.toggle('is-wide', Boolean(room.wide || room.photos));
+    if (room.photos) {
+      preview.className = 'detail-image is-photo';
+      preview.append(img);
+      showGallery(room, preview, img);
+      dialog.showModal();
+      $('#close').focus();
+      return;
+    }
+    galleryStep = null;
     if (room.photo) {
       const real = room.photoKind === 'real';
       preview.className = 'detail-image is-photo';
@@ -362,6 +371,56 @@
     dialog.showModal();
     if (!room.photo) fitCrop(img, preview, room.rect);
     $('#close').focus();
+  }
+
+  let galleryStep = null;   // 상세 창에 사진이 여러 장일 때 ←→ 키로 넘기기
+  dialog.addEventListener('keydown', e => {
+    if (!galleryStep || (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')) return;
+    e.preventDefault();
+    galleryStep(e.key === 'ArrowLeft' ? -1 : 1);
+  });
+  dialog.addEventListener('close', () => { galleryStep = null; });
+
+  /** 실제 사진 여러 장: ‹ › 버튼, 좌우로 밀기, ←→ 키로 넘겨 보기 */
+  function showGallery(room, box, img) {
+    const photos = room.photos;
+    let index = 0;
+    const counter = document.createElement('span');
+    counter.className = 'gallery-count';
+    const show = i => {
+      index = (i + photos.length) % photos.length;
+      img.src = photos[index];
+      img.alt = `${room.name} 실제 사진 ${index + 1}`;
+      counter.textContent = `${index + 1} / ${photos.length}`;
+    };
+    img.addEventListener('error', () => { img.alt = '사진을 불러오지 못했어요.'; });
+    if (photos.length > 1) {
+      for (const [step, label, text] of [[-1, '이전 사진', '‹'], [1, '다음 사진', '›']]) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'gallery-nav ' + (step < 0 ? 'is-prev' : 'is-next');
+        button.setAttribute('aria-label', label);
+        button.textContent = text;
+        button.addEventListener('click', () => show(index + step));
+        box.append(button);
+      }
+      box.append(counter);
+      let startX = null;
+      box.onpointerdown = e => { startX = e.clientX; };
+      box.onpointerup = e => {
+        if (startX === null) return;
+        const dx = e.clientX - startX;
+        startX = null;
+        if (Math.abs(dx) > 40) show(index + (dx < 0 ? 1 : -1));
+      };
+      galleryStep = step => show(index + step);
+    } else {
+      box.onpointerdown = box.onpointerup = null;
+      galleryStep = null;
+    }
+    show(0);
+    // 다음 사진 미리 받아 두기
+    photos.slice(1).forEach(src => { new Image().src = src; });
   }
 
   /** 그림에서 rect 부분이 상세 창 그림 칸에 꼭 맞게 들어가도록 확대·위치 조정 */

@@ -19,6 +19,7 @@
    - rect      상세 창에 보여 줄 그림 범위 (없으면 이름표 주변을 자동으로 잘라 씁니다)
    - photo     상세 창에 그림 대신 보여 줄 사진 (photoKind: 'real'이면 실제 사진, 없으면 조성 예시 이미지로 안내)
    - wide      true면 상세 창을 넓게 열어 사진 전체를 보여 줌
+   - photos    실제 공간 사진 목록 (여러 장이면 ‹ › 버튼·밀기로 넘겨 봄, 상세 창은 넓게 열림)
    - quiet     true면 이름만 표시 (눌러도 설명 창 없음, 공간 카드에서 빠짐, 검색하면 그 앞까지 걸어가기만 함)
    - overflow  true면 칸이 좁아도 글씨를 줄이지 않고 한 줄로 (칸 밖으로 나가도 됨)
    - desc      상세 설명 (없으면 기본 문구)
@@ -86,13 +87,17 @@ window.TOUR_SCENES = {
         desc: '교육정보부 선생님들이 근무하는 교무실입니다. 학교 정보화 기기와 교육 정보 업무를 맡고 있어요.' },
       { name: '경비실', quiet: true, at: [77.9, 36.9], w: 5, anchor: [78.5, 24], rect: [74.5, 29, 7, 15] },
       { name: '사무자동화실', at: [89.4, 36.9], w: 13, anchor: [89.2, 24], rect: [81.5, 29, 16.5, 15] },
-      { name: '식생활 교육관', at: [13.5, 47.5], w: 20, anchor: [6, 26], rect: [2, 30, 22, 35] },
+      { name: '식생활 교육관', at: [13.5, 47.5], w: 20, anchor: [6, 26], rect: [2, 30, 22, 35],
+        photos: ['img/rooms/dining-1.jpg', 'img/rooms/dining-2.jpg', 'img/rooms/dining-3.jpg'],
+        desc: '학생들이 함께 점심을 먹는 급식 공간입니다.' },
       { name: '창업동아리 지원센터', at: [6, 84], w: 7, anchor: [6, 72] },
       { name: '교장실', quiet: true, at: [32, 84], w: 9, anchor: [32, 72] },
       { name: '행정실', quiet: true, at: [46, 84], w: 11, anchor: [46, 72] },
       { name: '현관', at: [63, 84], w: 12, anchor: [63, 84],
         desc: '1층 현관입니다. 현관 아래쪽으로 걸어 나가면 야외 잔디마당으로 나갑니다.' },
-      { name: '도서실', at: [86.5, 78], w: 20, anchor: [71, 78], rect: [75, 66, 23, 24] },
+      { name: '도서실', at: [86.5, 78], w: 20, anchor: [71, 78], rect: [75, 66, 23, 24],
+        photos: ['img/rooms/library-1.jpg', 'img/rooms/library-2.jpg', 'img/rooms/library-3.jpg', 'img/rooms/library-4.jpg', 'img/rooms/library-5.jpg'],
+        desc: '책을 읽고 모둠 활동도 할 수 있는 학교 도서실 「녹원책방」입니다.' },
       { name: '동아리실(풍물)', at: [93, 91], w: 9, anchor: [72, 88] },
       { name: '야외 테라스', at: [45, 53], w: 10, anchor: [69.5, 53], rect: [25, 45, 40, 20],
         desc: '카페실습실 아래쪽의 야외 공간입니다.' },
@@ -236,7 +241,9 @@ window.TOUR_SCENES = {
       { name: '금융실습실', at: [48.5, 10], w: 11, anchor: [48.5, 24.5] },
       { name: 'WEE 클래스(상담실)', at: [60, 10], w: 7, anchor: [60, 24.5] },
       { name: '화장실', quiet: true, at: [75, 10], w: 7, anchor: [75, 24.5], facility: true, where: '위쪽 복도' },
-      { name: '교육복지실', at: [87, 10], w: 10, anchor: [87, 24.5] },
+      { name: '교육복지실', at: [87, 10], w: 10, anchor: [87, 24.5],
+        photos: ['img/rooms/welfare-1.jpg', 'img/rooms/welfare-2.jpg'],
+        desc: '교육복지 프로그램과 상담이 이루어지는 공간입니다.' },
       { name: 'AI 면접실', at: [96.5, 10], w: 4, anchor: [96, 24.5] },
       { name: '1-1 교실', at: [23, 38], w: 8, anchor: [23, 24.5] },
       { name: '1-2 교실', at: [33.5, 38], w: 8, anchor: [33.5, 24.5] },

@@ -443,6 +443,20 @@ dialog::backdrop { background: rgba(18, 38, 52, .6); backdrop-filter: blur(3px);
 dialog.is-wide { width: min(1000px, 100% - 28px, 62dvh * 4 / 3); }
 dialog.is-wide .detail-image { width: 100%; height: auto; aspect-ratio: 4 / 3; max-height: 62dvh; background: #0f1d33; }
 dialog.is-wide .detail-image.is-photo img { object-fit: contain; }
+/* 사진 넘겨 보기 */
+.gallery-nav {
+  position: absolute; z-index: 2; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 56px; padding: 0; border: 0;
+  background: rgba(15, 29, 51, .55); color: #fff; font-size: 30px; line-height: 1;
+}
+.gallery-nav:hover, .gallery-nav:focus-visible { background: rgba(15, 29, 51, .8); }
+.gallery-nav.is-prev { left: 0; }
+.gallery-nav.is-next { right: 0; }
+.gallery-count {
+  position: absolute; z-index: 2; right: 8px; bottom: 8px; padding: 2px 8px;
+  background: rgba(15, 29, 51, .65); color: #fff; font-size: 12px; font-variant-numeric: tabular-nums;
+}
+.detail-image.is-photo { touch-action: pan-y; }
 .dialog-body { padding: 18px 22px 22px; }
 .dialog-body h2 { margin: 10px 0 6px; font-size: 26px; color: var(--navy); }
 .dialog-body p { margin: 0 0 12px; font-size: 15px; }
