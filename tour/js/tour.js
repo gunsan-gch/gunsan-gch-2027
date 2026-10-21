@@ -123,7 +123,6 @@
     transitioning = true;
     queueMicrotask(() => {
       switchScene(portal.to, { spawn: portal.spawn, arrival: portal.arrival, quiet: true });
-      if (portal.stair) markNearStair(scene.stairs.find(s => s.key === portal.stair));
       say(portal.message);
     });
   }
@@ -132,20 +131,12 @@
 
   /** 위·아래층에서 같은 key로 이어지는 계단 (없으면 그 방향 버튼을 만들지 않음) */
   function linkedStair(stair, floor) {
-    if (floor === 'outdoor') return stair.outdoor ? { name: '잔디마당', anchor: stair.outdoor } : null;
     return SCENES[floor]?.stairs?.find(s => s.key === stair.key) || null;
   }
 
-  /** 계단에서 갈 수 있는 곳 (위층 먼저, 바깥 계단이면 야외) */
-  function stairTargets(stair) {
-    const floor = Number(scene.id);
-    return [floor + 1, floor - 1, 'outdoor'].filter(to => linkedStair(stair, to));
-  }
-  const goesUp = to => to !== 'outdoor' && to > Number(scene.id);
-  const placeName = to => (to === 'outdoor' ? '야외' : `${to}층`);
-
   function renderStairs() {
     stage.querySelectorAll('.stair-controls').forEach(el => el.remove());
+    const floor = Number(scene.id);
     for (const stair of scene.stairs || []) {
       const box = document.createElement('div');
       box.className = 'stair-controls';
@@ -154,11 +145,12 @@
       box.style.top = stair.at[1] + '%';
       box.setAttribute('role', 'group');
       box.setAttribute('aria-label', `${scene.name} ${stair.name}`);
-      for (const to of stairTargets(stair)) {
+      for (const to of [floor + 1, floor - 1]) {
+        if (!linkedStair(stair, to)) continue;
         const button = document.createElement('button');
         button.type = 'button';
-        button.textContent = `${goesUp(to) ? '↑' : '↓'} ${placeName(to)}`;
-        button.setAttribute('aria-label', `${stair.name}으로 ${placeName(to)} 가기`);
+        button.textContent = `${to > floor ? '↑' : '↓'} ${to}층`;
+        button.setAttribute('aria-label', `${stair.name}으로 ${to}층 가기`);
         button.addEventListener('click', () => takeStairs(stair, to));
         box.append(button);
       }
@@ -173,15 +165,15 @@
     const arrived = await motion.go(...stair.anchor);
     if (!arrived || ticket !== walkRequest || scene !== from) return;
     const target = linkedStair(stair, to);
-    const up = goesUp(to);
-    if (to === 'outdoor') {
-      switchScene('outdoor', { spawn: target.anchor, arrival: 'outdoor-stair', quiet: true });
-      say(`${stair.name}으로 내려와 잔디마당에 도착했어요.`);
-      return;
-    }
     switchScene(to, { spawn: target.anchor, quiet: true });
     markNearStair(target);
-    say(`${target.name}으로 ${to}층에 ${up ? '올라왔어요' : '내려왔어요'}. Enter를 누르면 계속 층을 옮길 수 있어요.`);
+    say(`${target.name}으로 ${to}층에 ${to > Number(from.id) ? '올라왔어요' : '내려왔어요'}. Enter를 누르면 계속 층을 옮길 수 있어요.`);
+  }
+
+  /** 계단에서 갈 수 있는 층 목록 (위층 먼저) */
+  function stairTargets(stair) {
+    const floor = Number(scene.id);
+    return [floor + 1, floor - 1].filter(to => linkedStair(stair, to));
   }
 
   /* 계단 앞에서 Enter·스페이스바: 갈 수 있는 층이 하나면 바로 이동, 둘이면 고르는 창 */
@@ -205,8 +197,7 @@
       const button = document.createElement('button');
       button.type = 'button';
       button.dataset.to = to;
-      button.dataset.up = goesUp(to);
-      button.textContent = `${goesUp(to) ? '↑' : '↓'} ${placeName(to)}으로 ${goesUp(to) ? '올라가기' : '내려가기'}`;
+      button.textContent = `${to > Number(scene.id) ? '↑' : '↓'} ${to}층으로 ${to > Number(scene.id) ? '올라가기' : '내려가기'}`;
       button.addEventListener('click', () => { closeStairMenu(); takeStairs(stair, to); });
       stairMenu.append(button);
     }
@@ -227,11 +218,12 @@
 
   stairMenu.addEventListener('keydown', e => {
     const buttons = [...stairMenu.querySelectorAll('button')];
+    const floor = Number(scene.id);
     if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeStairMenu(); say(`${nearStairs?.name || '계단'} 앞이에요.`); return; }
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       e.preventDefault();
       e.stopPropagation();
-      const wanted = buttons.find(b => (b.dataset.up === 'true') === (e.key === 'ArrowUp'));
+      const wanted = buttons.find(b => (Number(b.dataset.to) > floor) === (e.key === 'ArrowUp'));
       wanted?.click();
     }
   });

@@ -8,7 +8,6 @@
    - [x, y]                    at(이름표 위치), anchor(캐릭터가 걸어가 멈출 복도 위치), start
    stairs: 건물 안 계단 목록 { key, name, at(층 버튼 위치), anchor(계단 앞 복도) }
            위·아래층에 같은 key의 계단이 있으면 그 층으로 이어집니다 (main 주계단 · west 왼쪽 위 · center 가운데)
-           outdoor: [x, y]가 있으면 야외로 바로 내려가는 바깥 계단 (야외의 도착 위치)
    - [왼쪽, 위, 너비, 높이]     walkAreas(걸을 수 있는 영역), walkObstacles(못 지나가는 기둥 등), rect
    공간 항목:
    - name      공간 이름 (2026학년도 학교배치도 기준)
@@ -119,20 +118,20 @@ window.TOUR_SCENES = {
     image: 'img/floor2.webp',
     notice: {
       title: '2층 배치도 기반 픽셀 시안',
-      text: '교무실·취업지원센터·온누리홀이 있는 층입니다. 가운데 회색 마당은 그림으로만 보는 공간이에요. 가구와 내부 소품은 임시 배치입니다.'
+      text: '교무실·취업지원센터·온누리홀이 있는 층입니다. 가운데 회색 마당은 그림으로만 보는 공간이에요. 문서고 왼쪽 바깥 계단으로 끝까지 내려가면 야외 잔디마당으로 나갑니다.'
     },
     start: [45, 19],
     stairs: [
       { key: 'main', name: '주계단', at: [64.8, 7], anchor: [64.8, 19] },
       { key: 'west', name: '왼쪽 위 계단', at: [11, 4.5], anchor: [13.6, 17] },
-      { key: 'center', name: '가운데 계단', at: [55, 64.5], anchor: [55, 71] },
-      { key: 'outside', name: '바깥 계단', at: [17.5, 84], anchor: [17.5, 71], outdoor: [35.3, 33] }
+      { key: 'center', name: '가운데 계단', at: [55, 64.5], anchor: [55, 71] }
     ],
-    walkAreas: [[12.5, 15.5, 85, 7], [12, 15.5, 3.2, 59], [2, 67.5, 68.5, 7], [66.3, 15.5, 4.7, 76]],
+    walkAreas: [[12.5, 15.5, 85, 7], [12, 15.5, 3.2, 59], [2, 67.5, 68.5, 7], [66.3, 15.5, 4.7, 76], [13.4, 74, 8.2, 16]],
     walkObstacles: [],
     hints: [
       { at: [68.6, 35], dir: 'down', text: '온누리홀 · 보건실 방향' },
-      { at: [68.6, 62], dir: 'up', text: '교무실 · 워크룸 방향' }
+      { at: [68.6, 62], dir: 'up', text: '교무실 · 워크룸 방향' },
+      { at: [17.5, 76.5], dir: 'down', text: '바깥 계단 · 야외로' }
     ],
     rooms: [
       { name: '동아리실(밴드)', at: [6, 12], w: 8, anchor: [13.5, 17] },
@@ -317,9 +316,11 @@ window.TOUR_PORTALS = [
     message: '중앙현관으로 들어와 1층에 도착했어요.' },
   { id: 'lobby-exit', from: '1', to: 'outdoor', region: [59, 90, 8, 2], spawn: [54.2, 47], arrival: 'outdoor-entry',
     message: '중앙현관을 나와 잔디마당에 도착했어요.' },
-  // 바깥 계단: 잔디마당에서 2층으로 바로 (2층에서 내려올 때는 계단 버튼·Enter — 2층 stairs의 outdoor)
-  { id: 'outdoor-stair', from: 'outdoor', to: '2', region: [33.6, 28.5, 3.4, 1.5], spawn: [17.5, 71], stair: 'outside',
-    message: '바깥 계단으로 올라와 2층에 도착했어요.' }
+  // 바깥 계단: 잔디마당 ↔ 2층 문서고 왼쪽 계단
+  { id: 'outdoor-stair', from: 'outdoor', to: '2', region: [33.6, 28.5, 3.4, 1.5], spawn: [17.5, 84], arrival: 'stair-exit',
+    message: '바깥 계단으로 올라와 2층에 도착했어요.' },
+  { id: 'stair-exit', from: '2', to: 'outdoor', region: [13.4, 88, 8.2, 2], spawn: [35.3, 33], arrival: 'outdoor-stair',
+    message: '바깥 계단으로 내려와 잔디마당에 도착했어요.' }
 ];
 
 /* 층 선택 버튼과 계단 순서 */

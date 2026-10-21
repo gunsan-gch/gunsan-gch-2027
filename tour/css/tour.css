@@ -246,12 +246,12 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 .room-label.is-spot:hover .room-label-text, .room-label.is-spot:focus-visible .room-label-text { background: var(--navy-2); }
 .compact-labels .room-label.is-spot::before { width: 14px; height: 14px; background: var(--navy); }
 /* 야외의 층 입구 이름표 (1층 중앙현관 · 2층 바깥 계단) — 작은 지도에서도 글씨 그대로 */
-.room-label.is-door { width: auto; }
-.room-label.is-door .room-label-text { background: var(--green); border-color: #fffbed; color: #fff; padding: .3em .7em; white-space: nowrap; box-shadow: 2px 2px 0 rgba(23, 56, 45, .4); }
+.room-label.is-door { width: auto; font-size: clamp(14px, calc(var(--stage-w) * .012), 24px); }
+.room-label.is-door .room-label-text { background: var(--green); border: 2px solid #fffbed; color: #fff; padding: .3em .75em; white-space: nowrap; box-shadow: 3px 3px 0 rgba(23, 56, 45, .4); }
 .room-label.is-door:hover .room-label-text, .room-label.is-door:focus-visible .room-label-text { background: var(--navy); }
 .compact-labels .room-label.is-door { width: auto; height: auto; }
 .compact-labels .room-label.is-door::before { content: none; }
-.compact-labels .room-label.is-door .room-label-text { position: static; width: auto; height: auto; overflow: visible; clip-path: none; font-size: 11px; }
+.compact-labels .room-label.is-door .room-label-text { position: static; width: auto; height: auto; overflow: visible; clip-path: none; font-size: 10px; padding: .2em .5em; border-width: 1px; }
 /* 작은 지도: 이름 대신 누를 수 있는 점 (이름은 점을 누르면 설명 창에서) */
 .compact-labels .room-label { width: 28px; height: 28px; }
 .compact-labels .room-label-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
