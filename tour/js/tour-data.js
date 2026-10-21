@@ -319,9 +319,10 @@ window.TOUR_PORTALS = [
   { id: 'lobby-exit', from: '1', to: 'outdoor', region: [59, 90, 8, 2], spawn: [54.2, 47], arrival: 'outdoor-entry',
     message: '중앙현관을 나와 잔디마당에 도착했어요.' },
   // 바깥 계단: 잔디마당 ↔ 2층 문서고 왼쪽 계단
-  { id: 'outdoor-stair', from: 'outdoor', to: '2', region: [33.6, 28.5, 3.4, 1.5], spawn: [17.5, 84], arrival: 'stair-exit',
+  { id: 'outdoor-stair', from: 'outdoor', to: '2', region: [33.6, 28.5, 3.4, 1.5], spawn: [17.5, 72], arrival: 'stair-exit',
     message: '바깥 계단으로 올라와 2층에 도착했어요.' },
-  { id: 'stair-exit', from: '2', to: 'outdoor', region: [13.4, 88, 8.2, 2], spawn: [35.3, 33], arrival: 'outdoor-stair',
+  // 계단에 들어서면 바로 야외로 (계단 그림 어디를 눌러도 나갈 수 있게)
+  { id: 'stair-exit', from: '2', to: 'outdoor', region: [13.4, 76.5, 8.2, 13.5], spawn: [35.3, 33], arrival: 'outdoor-stair',
     message: '바깥 계단으로 내려와 잔디마당에 도착했어요.' }
 ];
 
