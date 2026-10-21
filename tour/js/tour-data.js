@@ -7,7 +7,8 @@
          실제 건물의 실측 좌표가 아니라 그림 위의 위치입니다.
    - [x, y]                    at(이름표 위치), anchor(캐릭터가 걸어가 멈출 복도 위치), start
    stairs: 건물 안 계단 목록 { key, name, at(층 버튼 위치), anchor(계단 앞 복도) }
-           위·아래층에 같은 key의 계단이 있으면 그 층으로 이어집니다 (main 주계단 · west 왼쪽 위 · center 가운데 · southwest 왼쪽 아래)
+           위·아래층에 같은 key의 계단이 있으면 그 층으로 이어집니다 (main 주계단 · west 왼쪽 위 · center 가운데)
+           outdoor: [x, y]가 있으면 야외로 바로 내려가는 바깥 계단 (야외의 도착 위치)
    - [왼쪽, 위, 너비, 높이]     walkAreas(걸을 수 있는 영역), walkObstacles(못 지나가는 기둥 등), rect
    공간 항목:
    - name      공간 이름 (2026학년도 학교배치도 기준)
@@ -24,6 +25,7 @@
    - overflow  true면 칸이 좁아도 글씨를 줄이지 않고 한 줄로 (칸 밖으로 나가도 됨)
    - desc      상세 설명 (없으면 기본 문구)
    - where     같은 층에 같은 이름이 둘 이상일 때 구분용 위치 (검색 결과·상세 창에 표시)
+   - door      야외의 층 입구 이름표 — 누르면 그 입구로 걸어가 건물 안으로 들어감 (값은 화면 읽기용 설명, 카드·검색에서 빠짐)
    ========================================================================= */
 
 const FACILITY_IMG = '../assets/img/facilities/';
@@ -34,17 +36,20 @@ window.TOUR_SCENES = {
     image: 'img/outdoor.webp',
     notice: {
       title: '잔디마당에서 학교 안으로',
-      text: '드론으로 찍은 학교 사진을 참고한 그림입니다. 나무와 길은 게임 화면에 맞게 단순화했어요. 잔디밭의 「학교 전경」을 누르면 드론으로 찍은 실제 사진을 볼 수 있고, 가운데 현관으로 걸어가면 1층으로 들어갑니다.'
+      text: '드론으로 찍은 학교 사진을 참고한 그림입니다. 나무와 길은 게임 화면에 맞게 단순화했어요. 잔디밭의 「학교 전경」을 누르면 드론으로 찍은 실제 사진을 볼 수 있고, 가운데 중앙현관으로 걸어가면 1층, 왼쪽 줄무늬 차양 아래 바깥 계단으로 올라가면 2층으로 들어갑니다.'
     },
     start: [54.2, 47],
-    walkAreas: [[5, 35, 90, 53], [51.5, 31, 5.2, 15]],
+    walkAreas: [[5, 35, 90, 53], [51.5, 31, 5.2, 15], [33.6, 28.5, 3.4, 8]],
     walkObstacles: [[6.8, 38, 2.8, 6], [49, 38, 2.3, 6], [57.2, 38, 2.4, 6], [90.8, 38, 2.6, 6], [7, 75, 4, 8], [88.8, 75, 4, 8]],
     hints: [
-      { at: [54.2, 33], dir: 'up', text: '현관 · 학교 안으로' }
+      { at: [54.2, 33], dir: 'up', text: '중앙현관' },
+      { at: [35.3, 33], dir: 'up', text: '바깥 계단' }
     ],
     rooms: [
       { name: '학교 전경 보기', at: [38, 58], w: 10, anchor: [42.5, 58], status: '실제 사진', note: '드론 사진', photos: ['img/drone.jpg', 'img/drone-2.jpg', 'img/drone-3.jpg', 'img/drone-4.jpg'], spot: true,
-        desc: '드론으로 하늘에서 찍은 우리 학교 전경입니다.' }
+        desc: '드론으로 하늘에서 찍은 우리 학교 전경입니다.' },
+      { name: '1층', door: '중앙현관으로 1층 들어가기', at: [54.3, 22.5], w: 4, anchor: [54.2, 31.5] },
+      { name: '2층', door: '바깥 계단으로 2층 올라가기', at: [35.3, 23], w: 4, anchor: [35.3, 29] }
     ]
   },
 
@@ -53,7 +58,7 @@ window.TOUR_SCENES = {
     image: 'img/floor1.webp',
     notice: {
       title: '1층 배치도 기반 픽셀 시안',
-      text: '조리제빵실·카페실습실은 개편 예정 공간을 상상한 그림입니다. 가운데 야외 테라스와 오른쪽 바깥 계단은 그림으로 볼 수 있어요. 현관 아래쪽으로 걸어 나가면 야외로 나갑니다.'
+      text: '조리제빵실·카페실습실은 개편 예정 공간을 상상한 그림입니다. 가운데 야외 테라스와 오른쪽 바깥 계단은 그림으로 볼 수 있어요. 중앙현관 아래쪽으로 걸어 나가면 야외로 나갑니다.'
     },
     start: [26.4, 22],
     stairs: [
@@ -64,7 +69,7 @@ window.TOUR_SCENES = {
     walkAreas: [[12.5, 16, 85, 11.5], [2.5, 19, 11, 8.5], [2.5, 69, 70.5, 6.5], [66.2, 16, 7, 61], [54, 75, 19, 17]],
     walkObstacles: [[65.8, 62.5, 1.5, 5], [71.8, 62.5, 1.5, 5], [71.7, 85, 1.5, 6], [53.3, 78, 1.7, 6], [53.3, 86, 1.7, 5]],
     hints: [
-      { at: [69.5, 38], dir: 'down', text: '도서실 · 현관' },
+      { at: [69.5, 38], dir: 'down', text: '도서실 · 중앙현관' },
       { at: [69.5, 72], dir: 'left', text: '아래쪽 복도' },
       { at: [55, 72], dir: 'right' },
       { at: [63, 90], dir: 'down', text: '야외로 나가기' }
@@ -95,8 +100,7 @@ window.TOUR_SCENES = {
       { name: '창업동아리 지원센터', at: [6, 84], w: 7, anchor: [6, 72] },
       { name: '교장실', quiet: true, at: [32, 84], w: 9, anchor: [32, 72] },
       { name: '행정실', quiet: true, at: [46, 84], w: 11, anchor: [46, 72] },
-      { name: '현관', at: [63, 84], w: 12, anchor: [63, 84],
-        desc: '1층 현관입니다. 현관 아래쪽으로 걸어 나가면 야외 잔디마당으로 나갑니다.' },
+      { name: '중앙현관', quiet: true, at: [63, 84], w: 12, anchor: [63, 84] },
       { name: '도서실', at: [86.5, 78], w: 20, anchor: [71, 78], rect: [75, 66, 23, 24],
         photos: ['img/rooms/library-1.jpg', 'img/rooms/library-2.jpg', 'img/rooms/library-3.jpg', 'img/rooms/library-4.jpg', 'img/rooms/library-5.jpg'],
         desc: '책을 읽고 모둠 활동도 할 수 있는 학교 도서실 「녹원책방」입니다.' },
@@ -122,7 +126,7 @@ window.TOUR_SCENES = {
       { key: 'main', name: '주계단', at: [64.8, 7], anchor: [64.8, 19] },
       { key: 'west', name: '왼쪽 위 계단', at: [11, 4.5], anchor: [13.6, 17] },
       { key: 'center', name: '가운데 계단', at: [55, 64.5], anchor: [55, 71] },
-      { key: 'southwest', name: '왼쪽 아래 계단', at: [17.5, 84], anchor: [17.5, 71] }
+      { key: 'outside', name: '바깥 계단', at: [17.5, 84], anchor: [17.5, 71], outdoor: [35.3, 33] }
     ],
     walkAreas: [[12.5, 15.5, 85, 7], [12, 15.5, 3.2, 59], [2, 67.5, 68.5, 7], [66.3, 15.5, 4.7, 76]],
     walkObstacles: [],
@@ -176,8 +180,7 @@ window.TOUR_SCENES = {
     stairs: [
       { key: 'main', name: '주계단', at: [66.3, 10], anchor: [66.3, 25] },
       { key: 'west', name: '왼쪽 위 계단', at: [12.7, 6], anchor: [16.3, 23] },
-      { key: 'center', name: '가운데 계단', at: [61.5, 66.5], anchor: [61.5, 75.5] },
-      { key: 'southwest', name: '왼쪽 아래 계단', at: [26, 87], anchor: [26, 75.5] }
+      { key: 'center', name: '가운데 계단', at: [61.5, 66.5], anchor: [61.5, 75.5] }
     ],
     walkAreas: [[15.5, 20.8, 82.5, 9], [67.8, 20.8, 6.6, 52], [74.4, 47.8, 23.6, 7.8], [2, 72, 96, 7]],
     walkObstacles: [],
@@ -310,8 +313,13 @@ window.TOUR_SCENES = {
 /* 장면 사이를 걸어서 오가는 연결 지점.
    from 장면에서 캐릭터가 region 안에 들어가면 to 장면의 spawn 위치로 이동합니다. */
 window.TOUR_PORTALS = [
-  { id: 'outdoor-entry', from: 'outdoor', to: '1', region: [51.8, 31, 4.6, 2], spawn: [63, 88], arrival: 'lobby-exit' },
-  { id: 'lobby-exit', from: '1', to: 'outdoor', region: [59, 90, 8, 2], spawn: [54.2, 47], arrival: 'outdoor-entry' }
+  { id: 'outdoor-entry', from: 'outdoor', to: '1', region: [51.8, 31, 4.6, 2], spawn: [63, 88], arrival: 'lobby-exit',
+    message: '중앙현관으로 들어와 1층에 도착했어요.' },
+  { id: 'lobby-exit', from: '1', to: 'outdoor', region: [59, 90, 8, 2], spawn: [54.2, 47], arrival: 'outdoor-entry',
+    message: '중앙현관을 나와 잔디마당에 도착했어요.' },
+  // 바깥 계단: 잔디마당에서 2층으로 바로 (2층에서 내려올 때는 계단 버튼·Enter — 2층 stairs의 outdoor)
+  { id: 'outdoor-stair', from: 'outdoor', to: '2', region: [33.6, 28.5, 3.4, 1.5], spawn: [17.5, 71], stair: 'outside',
+    message: '바깥 계단으로 올라와 2층에 도착했어요.' }
 ];
 
 /* 층 선택 버튼과 계단 순서 */

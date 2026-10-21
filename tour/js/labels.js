@@ -17,12 +17,13 @@ function renderRoomLabels(stage, scene, onSelect) {
     if (room.facility) el.classList.add('is-facility');
     if (room.status === '개편 예정') el.classList.add('is-planned');
     if (room.spot) el.classList.add('is-spot');
+    if (room.door) el.classList.add('is-door');
     el.style.left = room.at[0] + '%';
     el.style.top = room.at[1] + '%';
     el.style.setProperty('--label-w', room.w + '%');
     if (!room.quiet) {
       el.title = room.name;
-      el.setAttribute('aria-label', `${room.name}${room.status ? ` (${room.status})` : ''} 정보 보기`);
+      el.setAttribute('aria-label', room.door || `${room.name}${room.status ? ` (${room.status})` : ''} 정보 보기`);
     }
     const text = document.createElement('span');
     text.className = 'room-label-text';
