@@ -39,6 +39,7 @@
   let blockedPortal = null;     // 막 도착한 연결 지점에서 바로 되돌아가지 않도록
   let transitioning = false;
   let nearStairs = null;
+  let nearElevator = null;
   let opener = null;
   let walkRequest = 0;          // 공간으로 걸어가는 중에 다른 명령이 오면 상세 창을 열지 않기 위한 번호
 
@@ -69,6 +70,7 @@
     blockedPortal = arrival;
     transitioning = false;
     nearStairs = null;
+    nearElevator = null;
     closeStairMenu(false);
 
     setImage(scene);
@@ -187,27 +189,38 @@
     const targets = stairTargets(stair);
     if (!targets.length) return;
     if (targets.length === 1) return takeStairs(stair, targets[0]);
+    const floor = Number(scene.id);
+    openFloorMenu('stairs', stair.name, targets.map(to => ({
+      to,
+      text: `${to > floor ? '↑' : '↓'} ${to}층으로 ${to > floor ? '올라가기' : '내려가기'}`,
+      pick: () => takeStairs(stair, to)
+    })), '↑·↓ 키로 바로 고르기 · Esc 닫기');
+  }
+
+  /** 층 고르는 창 (계단: ↑·↓ 키로 바로 이동 / 엘리베이터: ↑·↓로 고르고 Enter, 숫자 키로 바로 이동) */
+  function openFloorMenu(mode, name, choices, helpText) {
     stairMenu.replaceChildren();
-    stairMenu.setAttribute('aria-label', `${stair.name}에서 갈 층 고르기`);
+    stairMenu.dataset.mode = mode;
+    stairMenu.setAttribute('aria-label', `${name}에서 갈 층 고르기`);
     const title = document.createElement('p');
     title.className = 'stair-menu-title';
-    title.textContent = `${stair.name} · 어느 층으로 갈까요?`;
+    title.textContent = `${name} · 어느 층으로 갈까요?`;
     stairMenu.append(title);
-    for (const to of targets) {
+    for (const choice of choices) {
       const button = document.createElement('button');
       button.type = 'button';
-      button.dataset.to = to;
-      button.textContent = `${to > Number(scene.id) ? '↑' : '↓'} ${to}층으로 ${to > Number(scene.id) ? '올라가기' : '내려가기'}`;
-      button.addEventListener('click', () => { closeStairMenu(); takeStairs(stair, to); });
+      button.dataset.to = choice.to;
+      button.textContent = choice.text;
+      button.addEventListener('click', () => { closeStairMenu(); choice.pick(); });
       stairMenu.append(button);
     }
     const help = document.createElement('p');
     help.className = 'stair-menu-help';
-    help.textContent = '↑·↓ 키로 바로 고르기 · Esc 닫기';
+    help.textContent = helpText;
     stairMenu.append(help);
     stairMenu.hidden = false;
     stairMenu.querySelector('button').focus({ preventScroll: true });
-    say(`${stair.name} 앞이에요. 갈 층을 골라 주세요.`);
+    say(`${name} 앞이에요. 갈 층을 골라 주세요.`);
   }
 
   function closeStairMenu(returnFocus = true) {
@@ -219,7 +232,16 @@
   stairMenu.addEventListener('keydown', e => {
     const buttons = [...stairMenu.querySelectorAll('button')];
     const floor = Number(scene.id);
-    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeStairMenu(); say(`${nearStairs?.name || '계단'} 앞이에요.`); return; }
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeStairMenu(); say(`${nearStairs?.name || nearElevator?.name || '계단'} 앞이에요.`); return; }
+    if (stairMenu.dataset.mode === 'elevator') {
+      if (/^[1-9]$/.test(e.key)) { e.preventDefault(); buttons.find(b => b.dataset.to === e.key)?.click(); return; }
+      if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+      e.preventDefault();
+      e.stopPropagation();
+      const step = e.key === 'ArrowUp' ? -1 : 1;
+      buttons[(buttons.indexOf(document.activeElement) + step + buttons.length) % buttons.length].focus({ preventScroll: true });
+      return;
+    }
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       e.preventDefault();
       e.stopPropagation();
@@ -237,11 +259,50 @@
   }
 
   function checkStairs(point) {
+    const elevator = scene.rooms.find(r => r.elevator && motion.metric(point, r.anchor) < 3) || null;
+    if (elevator !== nearElevator) {
+      nearElevator = elevator;
+      if (elevator) say('엘리베이터 앞이에요. Enter·스페이스바나 E/L 이름을 누르면 갈 층을 고를 수 있어요.');
+    }
     const near = (scene.stairs || []).find(s => motion.metric(point, s.anchor) < 3) || null;
     if (near === nearStairs) return;
     markNearStair(near);
     closeStairMenu(false);
     if (near) say(`${near.name} 앞이에요. Enter·스페이스바나 지도 위 층 버튼으로 다른 층에 갈 수 있어요.`);
+  }
+
+  /* ---------- 엘리베이터 ---------- */
+
+  // 엘리베이터가 서는 층 = E/L(elevator)이 있는 층. 그 위층(5층)은 elevatorStair 계단으로 걸어 올라감
+  const elevatorOf = id => SCENES[id].rooms.find(r => r.elevator);
+  const ELEVATOR_FLOORS = ORDER.filter(id => elevatorOf(id) || SCENES[id].elevatorStair);
+
+  function openElevatorMenu(room) {
+    const top = ELEVATOR_FLOORS.filter(id => elevatorOf(id)).at(-1);
+    openFloorMenu('elevator', '엘리베이터', ELEVATOR_FLOORS.filter(id => id !== scene.id).map(to => ({
+      to,
+      text: elevatorOf(to) ? `${to}층` : `${to}층 (${top}층에서 계단으로)`,
+      pick: () => takeElevator(room, to)
+    })), '↑·↓로 고르고 Enter · 숫자 키로 바로 · Esc 닫기');
+  }
+
+  async function takeElevator(room, to) {
+    const from = scene;
+    const ticket = ++walkRequest;
+    const arrived = await motion.go(...room.anchor);
+    if (!arrived || ticket !== walkRequest || scene !== from) return;
+    const target = elevatorOf(to);
+    if (target) {
+      switchScene(to, { spawn: target.anchor, quiet: true });
+      nearElevator = target;
+      say(`엘리베이터를 타고 ${to}층에 도착했어요. Enter를 누르면 다른 층을 고를 수 있어요.`);
+      return;
+    }
+    const stair = SCENES[to].stairs.find(s => s.key === SCENES[to].elevatorStair);
+    switchScene(to, { spawn: stair.anchor, quiet: true });
+    markNearStair(stair);
+    const top = ELEVATOR_FLOORS.filter(id => elevatorOf(id)).at(-1);
+    say(`엘리베이터는 ${top}층까지만 가요. ${top}층에서 ${stair.name}으로 걸어 올라 ${to}층에 도착했어요.`);
   }
 
   /* ---------- 길 안내 화살표 ---------- */
@@ -330,6 +391,7 @@
 
     const arrived = await motion.go(...room.anchor);
     if (ticket !== walkRequest || (!arrived && motion.moving)) return;   // 다른 이동·멈춤으로 취소된 경우
+    if (room.elevator) { if (arrived) openElevatorMenu(room); return; }   // 엘리베이터: 설명 창 대신 층 고르기
     if (room.quiet || room.door) { say(`${room.name} 앞에 도착했어요.`); return; }   // 설명 창 없이 걸어가기만 (입구는 도착하면 건물 안으로)
     say(arrived ? `${room.name} 앞에 도착했어요.` : `${room.name}의 설명을 열었어요.`);
     showDetail(room);
@@ -487,7 +549,8 @@
     if ((e.key !== 'Enter' && e.key !== ' ') || e.target !== viewport || e.repeat || dialog.open) return;
     e.preventDefault();   // 스페이스바로 지도가 스크롤되지 않게
     if (nearStairs) openStairMenu(nearStairs);
-    else say('계단 앞에서 Enter나 스페이스바를 누르면 다른 층으로 갈 수 있어요.');
+    else if (nearElevator) openElevatorMenu(nearElevator);
+    else say('계단이나 엘리베이터 앞에서 Enter나 스페이스바를 누르면 다른 층으로 갈 수 있어요.');
   });
 
   window.addEventListener('keyup', e => {

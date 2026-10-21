@@ -24,6 +24,7 @@
    - overflow  true면 칸이 좁아도 글씨를 줄이지 않고 한 줄로 (칸 밖으로 나가도 됨)
    - desc      상세 설명 (없으면 기본 문구)
    - where     같은 층에 같은 이름이 둘 이상일 때 구분용 위치 (검색 결과·상세 창에 표시)
+   - elevator  true면 엘리베이터 — 누르거나 앞에서 Enter를 누르면 갈 층을 고름 (E/L이 없는 위층은 그 층의 elevatorStair 계단에서 나옴)
    - door      야외의 층 입구 이름표 — 누르면 그 입구로 걸어가 건물 안으로 들어감 (값은 화면 읽기용 설명, 카드·검색에서 빠짐)
    ========================================================================= */
 
@@ -108,7 +109,7 @@ window.TOUR_SCENES = {
         desc: '카페실습실 아래쪽의 야외 공간입니다.' },
       { name: '외부 계단', at: [86, 53], w: 9, anchor: [71.5, 53], rect: [74, 45, 24, 18], note: '학교 밖으로 내려가는 계단',
         desc: '경비실 아래쪽, 학교 밖으로 내려가는 바깥 계단입니다. 왼쪽에서 오른쪽으로 내려가며, 가운데 난간으로 두 줄이 나뉘어 있어요.' },
-      { name: 'E/L', quiet: true, at: [42.5, 65.7], w: 3, anchor: [42.5, 72], facility: true },
+      { name: 'E/L', elevator: true, at: [42.5, 65.7], w: 3, anchor: [42.5, 72], facility: true },
       { name: '화장실', quiet: true, at: [47.6, 65.7], w: 6, anchor: [47.6, 72], facility: true, where: '아래쪽 복도' }
     ]
   },
@@ -155,7 +156,7 @@ window.TOUR_SCENES = {
       { name: '취업지원부실', at: [90, 32], w: 12, anchor: [90, 19], status: '선생님 교무실',
         desc: '취업지원부 선생님들이 근무하는 교무실입니다. 학생들의 취업 준비와 진로 상담을 돕는 업무를 맡고 있어요.' },
       { name: '화장실', quiet: true, at: [61, 45], w: 5, anchor: [68.5, 45], facility: true, where: '가운데' },
-      { name: 'E/L', quiet: true, at: [37, 64], w: 3, anchor: [37, 71], facility: true },
+      { name: 'E/L', elevator: true, at: [37, 64], w: 3, anchor: [37, 71], facility: true },
       { name: '발간실', quiet: true, at: [44, 64], w: 5, anchor: [44, 71] },
       { name: '온누리홀', at: [86, 75], w: 16, anchor: [68.6, 75], rect: [72, 61, 26, 30] },
       { name: '탈의실', quiet: true, at: [3.8, 84], w: 4, anchor: [4, 71], facility: true },
@@ -202,7 +203,7 @@ window.TOUR_SCENES = {
       { name: '3-5 교실', at: [92.5, 39], w: 8, anchor: [92.5, 25] },
       { name: 'AI비즈니스실', at: [86.5, 65], w: 14, anchor: [86.5, 51.5], rect: [75, 56, 23, 17], status: '개편 예정', current: '세무실무실습실', note: '개편 예정', photo: FACILITY_IMG + 'ai-business.webp', wide: true,
         desc: '현재 3층 세무실무실습실이 AI비즈니스실로 개편될 예정입니다. 2027년 여름방학 중 완공을 목표로 합니다.' },
-      { name: 'E/L', quiet: true, at: [38, 66.5], w: 3, anchor: [38, 75.5], facility: true },
+      { name: 'E/L', elevator: true, at: [38, 66.5], w: 3, anchor: [38, 75.5], facility: true },
       { name: '자기주도학습실(1)', at: [47.5, 66], w: 10, anchor: [47.5, 75.5] },
       { name: '화장실', quiet: true, at: [61, 58], w: 5, anchor: [71, 60], facility: true, where: '가운데' },
       { name: '화장실', quiet: true, at: [4.5, 87], w: 4, anchor: [4.5, 75.5], facility: true, where: '왼쪽 끝' },
@@ -256,7 +257,7 @@ window.TOUR_SCENES = {
       { name: '1-5 교실', at: [79, 38], w: 8, anchor: [79, 24.5] },
       { name: '1-6 교실', at: [92, 38], w: 8, anchor: [92, 24.5] },
       { name: '화장실', quiet: true, at: [57.5, 54], w: 5, anchor: [67.5, 54], facility: true, where: '가운데' },
-      { name: 'E/L', quiet: true, at: [35, 66], w: 3, anchor: [35, 77], facility: true },
+      { name: 'E/L', elevator: true, at: [35, 66], w: 3, anchor: [35, 77], facility: true },
       { name: '화장실', quiet: true, at: [40.5, 66], w: 4, anchor: [40.5, 77], facility: true, where: 'E/L 옆' },
       { name: '상담실1', at: [45.5, 66], w: 4.5, anchor: [45.5, 77] },
       { name: '상담실2', at: [51.5, 66], w: 4.5, anchor: [51.5, 77] },
@@ -283,6 +284,7 @@ window.TOUR_SCENES = {
     stairs: [
       { key: 'main', name: '주계단', at: [65, 9], anchor: [65, 23.5] }
     ],
+    elevatorStair: 'main',   // 엘리베이터는 4층까지 — 5층을 고르면 4층에서 주계단으로 올라온 것으로
     // 옥상(아래쪽)과 옥상으로 가는 통로는 출입 불가라 걷는 영역에서 뺐습니다
     walkAreas: [[14.2, 21.1, 83.2, 7.6]],
     walkObstacles: [],
