@@ -43,7 +43,7 @@ window.TOUR_SCENES = {
       { at: [54.2, 33], dir: 'up', text: '현관 · 학교 안으로' }
     ],
     rooms: [
-      { name: '학교 전경 보기', at: [38, 58], w: 10, anchor: [42.5, 58], status: '실제 사진', note: '드론 사진', photo: 'img/drone.jpg', photoKind: 'real', wide: true, spot: true,
+      { name: '학교 전경 보기', at: [38, 58], w: 10, anchor: [42.5, 58], status: '실제 사진', note: '드론 사진', photos: ['img/drone.jpg', 'img/drone-2.jpg', 'img/drone-3.jpg', 'img/drone-4.jpg'], spot: true,
         desc: '드론으로 하늘에서 찍은 우리 학교 전경입니다.' }
     ]
   },
