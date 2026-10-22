@@ -766,6 +766,20 @@
     '<tbody>' + rows + '</tbody><tfoot><tr><th scope="row">합계</th><td><strong>' + D.totalSeats + '명</strong></td>' +
     (fullTable ? '<td>' + (allTypes ? sumSpecial + '명' : '확인 중') + '</td><td>' + (allTypes ? sumGeneral + '명' : '확인 중') + '</td>' : '') + '</tr></tfoot>';
   $("seats-note").textContent = D.departments.length + '개 학과 · ' + D.totalClasses + '학급 · 총 ' + D.totalSeats + '명 모집';
+  // "2026. 11. 6.(금) ~ 11. 10.(화) 17:00까지" → 접수 시작·마감 시각 (서울 기준)
+  function scheduleWindow(x) {
+    var m = /(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})\.\s*\((.)\)\s*~\s*(\d{1,2})\.\s*(\d{1,2})\.\s*\((.)\)(?:\s*(\d{1,2}):(\d{2}))?/.exec((x && x.value) || "");
+    if (!m) return null;
+    return {
+      m: m,
+      from: new Date(Date.UTC(+m[1], m[2] - 1, +m[3]) - 9 * 3600000),
+      to: new Date(Date.UTC(+m[1], m[5] - 1, +m[6], m[8] ? +m[8] : 24, m[9] ? +m[9] : 0) - 9 * 3600000)
+    };
+  }
+  function formBtn(x, cls, where) {
+    return '<a class="' + cls + ' js-form" href="' + esc(x.formUrl) + '" target="_blank" rel="noopener" data-where="' + where + '">' +
+      icon("download") + '<span>' + esc(x.formLabel || x.label + " 원서 다운로드") + '</span><span class="sr-only">(새 창)</span></a>';
+  }
   function scheduleDate(value) {
     var parts = String(value).split(/\s+~\s+/);
     var end = parts.length === 2 && parts[1].match(/^(.*?)(\d{1,2}:\d{2})까지$/);
@@ -775,7 +789,11 @@
   }
   if (D.publishDetailedAdmissionSchedule && D.admissionSchedule && D.admissionSchedule.length) {
     $("schedule-card").innerHTML = '<h3 class="card-title">원서접수 기간</h3><dl class="schedule-dl">' +
-      D.admissionSchedule.map(function (x) { return '<div><dt>' + esc(x.label) + '</dt><dd>' + scheduleDate(x.value) + '</dd></div>'; }).join('') +
+      D.admissionSchedule.map(function (x) {
+        var w = scheduleWindow(x);
+        var form = has(x.formUrl) && (!w || now < w.to) ? formBtn(x, "btn btn-primary btn-block schedule-form", "schedule") : "";
+        return '<div><dt>' + esc(x.label) + '</dt><dd>' + scheduleDate(x.value) + form + '</dd></div>';
+      }).join('') +
       '</dl><p class="note">지원 자격·제출서류·세부 일정은 공식 모집요강을 확인해 주세요.</p>';
   }
   var adm = ['<div class="admission-contact"><h3>' + icon('phone') + '입학 상담</h3>' + phoneLinks() + '</div>'];
@@ -990,19 +1008,29 @@
     if (!D.publishDetailedAdmissionSchedule) return null;
     var list = D.admissionSchedule || [];
     for (var i = 0; i < list.length; i++) {
-      var m = /(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})\.\s*\((.)\)\s*~\s*(\d{1,2})\.\s*(\d{1,2})\.\s*\((.)\)(?:\s*(\d{1,2}):(\d{2}))?/.exec(list[i].value || "");
-      if (!m) continue;
-      var from = new Date(Date.UTC(+m[1], m[2] - 1, +m[3]) - 9 * 3600000);
-      var to = new Date(Date.UTC(+m[1], m[5] - 1, +m[6], m[8] ? +m[8] : 24, m[9] ? +m[9] : 0) - 9 * 3600000);
-      if (now >= to) continue;
+      var w = scheduleWindow(list[i]);
+      if (!w || now >= w.to) continue;
+      var m = w.m;
       return {
-        href: "#admissions", big: now >= from ? "접수 중" : m[2] + "/" + m[3] + "(" + m[4] + ")",
+        href: "#admissions", big: now >= w.from ? "접수 중" : m[2] + "/" + m[3] + "(" + m[4] + ")",
         label: list[i].short || list[i].label,
-        small: "~" + m[5] + "/" + m[6] + "(" + m[7] + ")" + (m[8] ? " " + (+m[8]) + "시" : "")
+        small: "~" + m[5] + "/" + m[6] + "(" + m[7] + ")" + (m[8] ? " " + (+m[8]) + "시" : ""),
+        item: list[i], from: w.from, to: w.to
       };
     }
     return null;
   }
+  // 첫 화면 원서 안내 띠: 다음 원서접수에 원서 주소(formUrl)가 있으면 접수 마감 전까지 표시
+  (function applyNote() {
+    var box = $("apply-note"), ap = nextApplication();
+    if (!box || !ap || !has(ap.item.formUrl)) return;
+    var dd = seoulParts(ap.from).dayIndex - seoulParts(now).dayIndex;
+    var badge = now >= ap.from ? "접수 중" : (dd > 0 ? "D-" + dd : "D-DAY");
+    box.innerHTML = '<p class="an-text"><span class="an-title"><b class="an-badge">' + badge + '</b>' + esc(ap.item.label) + '</span>' +
+      '<span class="an-date">' + esc(String(ap.item.value).replace(/^\d{4}\.\s*/, "")) + '</span></p>' +
+      formBtn(ap.item, "btn an-btn", "hero");
+    box.hidden = false;
+  })();
   (function heroHooks() {
     var box = $("hero-hooks");
     if (!box) return;
@@ -1241,6 +1269,23 @@
       if (window.wcs && typeof window.wcs.event === "function") window.wcs.event("Share", where.charAt(0).toUpperCase() + where.slice(1));
     } catch (e) { /* 네이버 분석 오류도 공유에 영향을 주지 않습니다. */ }
   }
+  // 입학원서 다운로드 버튼 누른 횟수만 측정
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest(".js-form");
+    if (!a || !liveSite) return;
+    var where = a.getAttribute("data-where") || "etc";
+    try {
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "application_form_click", {
+          send_to: "G-0RCC2LMBNY", cta_location: where,
+          page_location: "https://gunsan-gch.github.io/gunsan-gch-2027/", page_referrer: ""
+        });
+      }
+    } catch (err) { /* 분석 오류가 링크 이동을 막지 않도록 합니다. */ }
+    try {
+      if (window.wcs && typeof window.wcs.event === "function") window.wcs.event("ApplyForm", where.charAt(0).toUpperCase() + where.slice(1));
+    } catch (err) { /* 네이버 분석 오류도 링크 이동에 영향을 주지 않습니다. */ }
+  });
   // 카톡 상담 버튼 누른 횟수만 측정 (대화 내용·상대는 알 수 없음)
   document.addEventListener("click", function (e) {
     var a = e.target.closest(".js-talk");

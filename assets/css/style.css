@@ -1789,3 +1789,22 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 /* 현 고3 현황: 1차 합격 카드 아래 '최종 결과 발표 전' */
 .senior-wait { display: inline-flex; align-items: center; gap: 5px; margin-top: 12px; padding: 3px 11px; border-radius: 999px; background: var(--bg-tint); color: var(--muted); font-size: .82rem; font-weight: 700; }
 .senior-wait .icon { width: 14px; height: 14px; }
+
+/* ---------- 첫 화면 원서 안내 띠 · 원서접수 카드 다운로드 버튼 ---------- */
+.apply-note {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px;
+  margin-top: 18px; padding: 14px 14px 14px 18px; border-radius: 18px; background: #fff;
+  border: 2px solid var(--blue); box-shadow: var(--shadow);
+}
+.an-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; line-height: 1.4; }
+.an-title { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; font-weight: 800; font-size: 1.05rem; color: var(--navy); }
+.an-badge { padding: 1px 9px; border-radius: 999px; background: var(--yellow); color: var(--navy); font-size: .82rem; }
+.an-date { font-size: .94rem; font-weight: 700; color: var(--ink-2); }
+.an-btn { min-height: 46px; padding: 10px 18px; background: var(--blue); color: #fff; font-weight: 800; white-space: nowrap; }
+.an-btn:hover { background: var(--blue-dark); }
+.hero .apply-note + .hero-briefing { margin-top: 12px; }
+@media (max-width: 600px) {
+  .apply-note { padding: 14px; gap: 10px; }
+  .an-btn { flex: 1 1 100%; justify-content: center; }
+}
+.schedule-form { margin-top: 12px; min-height: 46px; }
