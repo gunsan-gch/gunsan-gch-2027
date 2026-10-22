@@ -337,8 +337,8 @@
 
     $('#cards-title').textContent = scene.rooms.length ? `${scene.name} 공간 둘러보기` : '건물 안으로 들어가 보세요';
     $('#cards-lead').textContent = scene.rooms.length
-      ? '카드를 누르면 캐릭터가 그 공간 앞까지 걸어가고 설명이 열려요.'
-      : '현관으로 걸어 들어가거나 위의 층 버튼을 눌러 보세요.';
+      ? '카드를 누르면 그 공간 앞으로 걸어가요.'
+      : '현관으로 들어가거나 위에서 층을 골라 보세요.';
 
     for (const room of scene.rooms) {
       if (room.quiet || room.door) continue;   // 설명이 없는 공간·입구 이름표는 카드로 만들지 않음
