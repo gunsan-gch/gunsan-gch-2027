@@ -19,6 +19,7 @@ tour/
   js/camera.js             확대·축소·끌어서 이동
   js/labels.js             지도 위 공간 이름표
   js/tour.js               층 전환, 검색, 상세 창, 계단·현관 연결
+  js/analytics.js          방문 분석 (GA4·네이버) 이벤트 보내기
   img/                     배경(WebP)·캐릭터 그림, ASSET-SOURCES.json(원본 지문)
   tools/update_assets.py   새 원본 그림 중 바뀐 것만 골라 변환하는 도구
 ```
@@ -69,6 +70,22 @@ tour/
 GPT가 그린 배경(`tour-share-art.png`)에 `update_assets.py`가 학교 글꼴로 제목을 얹어 만듭니다.
 카카오톡은 https:// 전체 주소의 이미지만 확실히 불러오므로, 공개 주소가 정해지면 `index.html`의
 `og:image`를 `https://공개주소/tour/img/share.jpg`로 바꾸고 `og:url`도 추가하세요.
+
+## 방문 분석 — `js/analytics.js`
+
+입학안내 페이지와 같은 GA4(`G-0RCC2LMBNY`)·네이버 애널리틱스를 씁니다. 공개 주소에서만 보내고, 로컬 미리보기는 집계하지 않습니다.
+페이지 조회·체류시간은 두 도구가 자동으로 집계하고, 아래 이벤트를 추가로 보냅니다. (검색어·위치·개인정보는 보내지 않음)
+
+| GA4 이벤트 | 매개변수 | 네이버 이벤트 | 언제 |
+|---|---|---|---|
+| `tour_floor_view` | `floor_name`, `move_method`(floor_button·door·stairs·elevator·room_link) | `TourFloor` (Outdoor·F1~F5) | 다른 층으로 이동 |
+| `tour_room_open` | `room_name`, `floor_name` | `TourRoom` (Open) | 공간 설명 창 열림 |
+| `tour_expand` | — | `TourExpand` (Open) | 크게 보기 |
+| `tour_cta_click` | `cta_location`(header·bottom·footer), `link_section` | `TourCTA` | 입학 안내로 돌아가는 링크 |
+| `tour_click` (입학안내 페이지) | `cta_location`(banner·nav·facility) | `TourLink` | 입학안내 → 투어로 넘어감 |
+
+GA4 보고서에서 공간 이름별로 보려면 관리 → 맞춤 정의 → 맞춤 측정기준 만들기에서
+`room_name`, `floor_name`, `move_method`, `cta_location`을 **이벤트 범위**로 등록하세요. (등록한 날부터 집계)
 
 ## 확인 방법
 

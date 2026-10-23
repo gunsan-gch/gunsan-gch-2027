@@ -1286,6 +1286,23 @@
       if (window.wcs && typeof window.wcs.event === "function") window.wcs.event("ApplyForm", where.charAt(0).toUpperCase() + where.slice(1));
     } catch (err) { /* 네이버 분석 오류도 링크 이동에 영향을 주지 않습니다. */ }
   });
+  // 픽셀 학교 투어로 넘어간 횟수만 측정 (배너·모바일 메뉴·실습실 카드의 '위치 보기')
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest("a[data-tour-link], a.facility-tour-link");
+    if (!a || !liveSite) return;
+    var where = a.classList.contains("facility-tour-link") ? "facility" : a.classList.contains("tour-banner") ? "banner" : "nav";
+    try {
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "tour_click", {
+          send_to: "G-0RCC2LMBNY", cta_location: where,
+          page_location: "https://gunsan-gch.github.io/gunsan-gch-2027/", page_referrer: ""
+        });
+      }
+    } catch (err) { /* 분석 오류가 링크 이동을 막지 않도록 합니다. */ }
+    try {
+      if (window.wcs && typeof window.wcs.event === "function") window.wcs.event("TourLink", where.charAt(0).toUpperCase() + where.slice(1));
+    } catch (err) { /* 네이버 분석 오류도 링크 이동에 영향을 주지 않습니다. */ }
+  });
   // 카톡 상담 버튼 누른 횟수만 측정 (대화 내용·상대는 알 수 없음)
   document.addEventListener("click", function (e) {
     var a = e.target.closest(".js-talk");

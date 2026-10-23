@@ -60,9 +60,11 @@
 
   /* ---------- 장면 전환 ---------- */
 
-  function switchScene(id, { spawn, arrival = null, quiet = false } = {}) {
+  /** via: 어떻게 왔는지 (floor_button·door·stairs·elevator·room_link) — 있으면 방문 분석에 층 이동으로 남김 */
+  function switchScene(id, { spawn, arrival = null, quiet = false, via = null } = {}) {
     id = String(id);
     if (!SCENES[id]) return;
+    if (via) tourTrack('tour_floor_view', { floor_name: SCENES[id].name, move_method: via }, ['TourFloor', id === 'outdoor' ? 'Outdoor' : 'F' + id]);
     motion.cancel();
     pressedKeys.clear();
     walkRequest++;
@@ -124,7 +126,7 @@
     if (!portal) return;
     transitioning = true;
     queueMicrotask(() => {
-      switchScene(portal.to, { spawn: portal.spawn, arrival: portal.arrival, quiet: true });
+      switchScene(portal.to, { spawn: portal.spawn, arrival: portal.arrival, quiet: true, via: 'door' });
       say(portal.message);
     });
   }
@@ -167,7 +169,7 @@
     const arrived = await motion.go(...stair.anchor);
     if (!arrived || ticket !== walkRequest || scene !== from) return;
     const target = linkedStair(stair, to);
-    switchScene(to, { spawn: target.anchor, quiet: true });
+    switchScene(to, { spawn: target.anchor, quiet: true, via: 'stairs' });
     markNearStair(target);
     say(`${target.name}으로 ${to}층에 ${to > Number(from.id) ? '올라왔어요' : '내려왔어요'}. Enter를 누르면 계속 층을 옮길 수 있어요.`);
   }
@@ -293,13 +295,13 @@
     if (!arrived || ticket !== walkRequest || scene !== from) return;
     const target = elevatorOf(to);
     if (target) {
-      switchScene(to, { spawn: target.anchor, quiet: true });
+      switchScene(to, { spawn: target.anchor, quiet: true, via: 'elevator' });
       nearElevator = target;
       say(`엘리베이터를 타고 ${to}층에 도착했어요. Enter를 누르면 다른 층을 고를 수 있어요.`);
       return;
     }
     const stair = SCENES[to].stairs.find(s => s.key === SCENES[to].elevatorStair);
-    switchScene(to, { spawn: stair.anchor, quiet: true });
+    switchScene(to, { spawn: stair.anchor, quiet: true, via: 'elevator' });
     markNearStair(stair);
     const top = ELEVATOR_FLOORS.filter(id => elevatorOf(id)).at(-1);
     say(`엘리베이터는 ${top}층까지만 가요. ${top}층에서 ${stair.name}으로 걸어 올라 ${to}층에 도착했어요.`);
@@ -382,7 +384,7 @@
 
   async function openRoom(room, from) {
     opener = from;
-    if (room.scene !== scene.id) switchScene(room.scene, { quiet: true });
+    if (room.scene !== scene.id) switchScene(room.scene, { quiet: true, via: 'room_link' });
     const ticket = ++walkRequest;
     say(`${room.name} 앞으로 걸어가고 있어요.`);
     const rect = viewport.getBoundingClientRect();
@@ -398,6 +400,7 @@
   }
 
   function showDetail(room) {
+    tourTrack('tour_room_open', { room_name: room.name, floor_name: SCENES[room.scene].name }, ['TourRoom', 'Open']);
     $('#detail-floor').textContent = SCENES[room.scene].name + (room.where ? ` · ${room.where}` : '');
     $('#detail-status').textContent = room.status + (room.current ? ` · 현재 ${room.current}` : '');
     $('#detail-status').classList.toggle('is-planned', room.status === '개편 예정');
@@ -651,7 +654,10 @@
     clearTimeout(rotateHintTimer);
     rotateHintTimer = setTimeout(() => rotateHint.classList.remove('is-showing'), 3500);
   }
-  expandButton.addEventListener('click', () => setExpanded(true));
+  expandButton.addEventListener('click', () => {
+    setExpanded(true);
+    tourTrack('tour_expand', {}, ['TourExpand', 'Open']);
+  });
   $('#collapse').addEventListener('click', () => setExpanded(false));
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && !dialog.open && mapFrame.classList.contains('is-expanded')) setExpanded(false);
@@ -679,7 +685,7 @@
   document.querySelectorAll('[data-scene]').forEach(button => {
     button.addEventListener('click', () => {
       if (button.dataset.scene === scene.id) camera.center(motion.x, motion.y);
-      else switchScene(button.dataset.scene);
+      else switchScene(button.dataset.scene, { via: 'floor_button' });
     });
   });
 
@@ -737,6 +743,16 @@
   });
   document.addEventListener('click', e => {
     if (!e.target.closest('.space-search')) closeResults();
+  });
+
+  /* ---------- 입학 안내로 돌아가는 링크 (방문 분석) ---------- */
+
+  document.addEventListener('click', e => {
+    const link = e.target.closest('a[href^="../index.html"]');
+    if (!link) return;
+    const where = link.closest('.tour-header') ? 'header' : link.closest('.admissions-cta') ? 'bottom' : 'footer';
+    tourTrack('tour_cta_click', { cta_location: where, link_section: link.hash.slice(1) || 'home' },
+      ['TourCTA', where[0].toUpperCase() + where.slice(1)]);
   });
 
   /* ---------- 시작 ---------- */

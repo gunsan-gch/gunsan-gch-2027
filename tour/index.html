@@ -1,6 +1,18 @@
 <!doctype html>
 <html lang="ko">
 <head>
+  <!-- Google tag (gtag.js) — 입학안내 페이지와 같은 GA4 속성 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0RCC2LMBNY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0RCC2LMBNY', {
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false,
+      page_location: 'https://gunsan-gch.github.io/gunsan-gch-2027/tour/'
+    });
+  </script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>픽셀 학교 투어 | 군산여자상업고등학교</title>
@@ -157,7 +169,7 @@
     <div class="container">
       <strong>군산여자상업고등학교 · 픽셀 학교 투어</strong>
       <p>지도는 2026학년도 학교배치도를 보고 그렸어요. 조리제빵실·카페실습실·AI비즈니스실 사진은 새로 꾸밀 모습을 미리 그려 본 예시예요.</p>
-      <p><a href="../index.html">← 2027학년도 학과·입학 안내</a></p>
+      <p><a href="../index.html">← 2027학년도 학과·입학 안내</a> · <a href="../privacy.html">개인정보·방문분석 안내</a></p>
     </div>
   </footer>
 
@@ -174,10 +186,19 @@
     </div>
   </dialog>
 
+  <script src="js/analytics.js"></script>
   <script src="js/tour-data.js"></script>
   <script src="js/motion.js"></script>
   <script src="js/camera.js"></script>
   <script src="js/labels.js"></script>
   <script src="js/tour.js"></script>
+<script type="text/javascript" src="//wcs.pstatic.net/wcslog.js"></script>
+<script type="text/javascript">
+if(!wcs_add) var wcs_add = {};
+wcs_add["wa"] = "1ca04f9df854410";
+if(window.wcs) {
+wcs_do();
+}
+</script>
 </body>
 </html>
