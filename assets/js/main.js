@@ -1303,6 +1303,32 @@
       if (window.wcs && typeof window.wcs.event === "function") window.wcs.event("TourLink", where.charAt(0).toUpperCase() + where.slice(1));
     } catch (err) { /* 네이버 분석 오류도 링크 이동에 영향을 주지 않습니다. */ }
   });
+  // 영상: 첫 화면 '홍보 영상 보기' 버튼과 영상별 재생 버튼 누른 횟수만 측정
+  // (GA4 맞춤 측정기준 없이 이벤트 이름만으로 구분되도록 영상마다 이벤트 이름을 따로: video_play_school_promo 등)
+  document.addEventListener("click", function (e) {
+    if (!liveSite) return;
+    var hero = e.target.closest(".hb-video");
+    var play = e.target.closest(".js-open-video");
+    var id = play && play.getAttribute("data-video");
+    var sent = [];
+    if (hero) sent.push(["promo_video_button_click", {}, "VideoButton", "Hero"]);
+    if (id && /^[a-z0-9-]+$/.test(id)) {
+      sent.push(["video_play_" + id.replace(/-/g, "_"), { video_id: id }, "VideoPlay",
+        id.replace(/(^|-)([a-z])/g, function (m, d, c) { return c.toUpperCase(); })]);
+    }
+    sent.forEach(function (x) {
+      try {
+        if (typeof window.gtag === "function") {
+          var params = { send_to: "G-0RCC2LMBNY", page_location: "https://gunsan-gch.github.io/gunsan-gch-2027/", page_referrer: "" };
+          for (var k in x[1]) params[k] = x[1][k];
+          window.gtag("event", x[0], params);
+        }
+      } catch (err) { /* 분석 오류가 영상 재생을 막지 않도록 합니다. */ }
+      try {
+        if (window.wcs && typeof window.wcs.event === "function") window.wcs.event(x[2], x[3]);
+      } catch (err) { /* 네이버 분석 오류도 영상 재생에 영향을 주지 않습니다. */ }
+    });
+  });
   // 카톡 상담 버튼 누른 횟수만 측정 (대화 내용·상대는 알 수 없음)
   document.addEventListener("click", function (e) {
     var a = e.target.closest(".js-talk");
