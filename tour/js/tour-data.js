@@ -48,8 +48,8 @@ window.TOUR_SCENES = {
     rooms: [
       { name: '학교 전경 보기', at: [38, 58], w: 10, anchor: [42.5, 58], status: '실제 사진', note: '드론 사진', photos: ['img/drone.jpg', 'img/drone-2.jpg', 'img/drone-3.jpg', 'img/drone-4.jpg'], spot: true,
         desc: '드론으로 하늘에서 찍은 우리 학교 전경입니다.' },
-      { name: '1층', door: '중앙현관으로 1층 들어가기', at: [54.3, 22.5], w: 4, anchor: [54.2, 31.5] },
-      { name: '2층', door: '바깥 계단으로 2층 올라가기', at: [35.3, 23], w: 4, anchor: [35.3, 29] }
+      { name: '1층', door: '중앙현관으로 1층 들어가기', at: [54.3, 22.5], w: 4, anchor: [54.2, 32.2] },
+      { name: '2층', door: '바깥 계단으로 2층 올라가기', at: [35.3, 23], w: 4, anchor: [35.3, 29.4] }
     ]
   },
 
@@ -66,7 +66,8 @@ window.TOUR_SCENES = {
       { key: 'west', name: '왼쪽 위 계단', at: [11.4, 5], anchor: [13.3, 18] },
       { key: 'center', name: '가운데 계단', at: [56.5, 65.7], anchor: [56, 72] }
     ],
-    walkAreas: [[12.5, 16, 85, 11.5], [2.5, 19, 11, 8.5], [2.5, 69, 70.5, 6.5], [66.2, 16, 7, 61], [54, 75, 19, 17]],
+    walkAreas: [[12.5, 16, 85, 11.5], [2.5, 19, 11, 8.5], [2.5, 69, 70.5, 6.5], [66.2, 16, 7, 61], [54, 75, 19, 17],
+      [25.5, 27, 2.1, 11.5]],   // 마지막: 식생활 교육관과 카페실습실 사이, 카페 유리문 앞 작은 통로 (아래는 벽)
     walkObstacles: [[65.8, 62.5, 1.5, 5], [71.8, 62.5, 1.5, 5], [71.7, 85, 1.5, 6], [53.3, 78, 1.7, 6], [53.3, 86, 1.7, 5]],
     hints: [
       { at: [69.5, 38], dir: 'down', text: '도서실 · 중앙현관' },
@@ -86,7 +87,7 @@ window.TOUR_SCENES = {
       { name: '동아리실', at: [58.5, 8.2], w: 5.5, anchor: [58.5, 22] },
       { name: '화장실', quiet: true, at: [72, 7.8], w: 6, anchor: [72, 22], facility: true, where: '위쪽 복도' },
       { name: '문서작성실', at: [87, 8.2], w: 20, anchor: [87, 22] },
-      { name: '카페실습실', at: [35.6, 36.7], w: 14, anchor: [35.6, 24], rect: [28, 30, 16, 14],
+      { name: '카페실습실', at: [35.6, 36.7], w: 14, anchor: [26.5, 35], rect: [28, 30, 16, 14],
         status: '개편 예정', current: '기업자원관리실', note: '개편 예정', photo: FACILITY_IMG + 'cafe-lab.webp', wide: true,
         desc: '현재 기업자원관리실을 카페실습실로 조성할 예정입니다. 2027년 여름방학 중 완공을 목표로 합니다.' },
       { name: '전산회계1실', at: [51.5, 36], w: 11, anchor: [51.5, 24],
@@ -106,7 +107,7 @@ window.TOUR_SCENES = {
       { name: '도서실', at: [86.5, 78], w: 20, anchor: [71, 78], rect: [75, 66, 23, 24],
         photos: ['img/rooms/library-1.jpg', 'img/rooms/library-2.jpg', 'img/rooms/library-3.jpg', 'img/rooms/library-4.jpg', 'img/rooms/library-5.jpg'],
         desc: '책을 읽고 모둠 활동도 할 수 있는 학교 도서실 「녹원책방」입니다.' },
-      { name: '동아리실(풍물)', at: [93, 91], w: 9, anchor: [72, 88] },
+      { name: '동아리실(풍물)', at: [93, 91], w: 9, anchor: [70.6, 88] },
       { name: '야외 테라스', at: [45, 53], w: 10, anchor: [69.5, 53], rect: [25, 45, 40, 20],
         desc: '카페실습실 아래쪽의 야외 공간입니다.' },
       { name: '외부 계단', at: [86, 53], w: 9, anchor: [71.5, 53], rect: [74, 45, 24, 18], note: '학교 밖으로 내려가는 계단',

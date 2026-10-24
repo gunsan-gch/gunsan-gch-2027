@@ -705,7 +705,12 @@
     if (!q) return closeResults();
     results.hidden = false;
     searchInput.setAttribute('aria-expanded', 'true');
-    const found = allRooms.filter(room => compactText(room.name + (room.current || '')).includes(q));
+    // 띄어 쓴 낱말이 모두 들어 있으면 찾음 — 층 이름도 함께 ('5층 화장실', '화장실 2층')
+    const words = searchInput.value.trim().split(/\s+/).map(compactText).filter(Boolean);
+    const found = allRooms.filter(room => {
+      const text = compactText(SCENES[room.scene].name + room.name + (room.where || '') + (room.current || ''));
+      return words.every(w => text.includes(w));
+    });
     if (!found.length) {
       const li = document.createElement('li');
       li.className = 'search-empty';
@@ -713,7 +718,7 @@
       results.append(li);
       return;
     }
-    for (const room of found.slice(0, 12)) {
+    for (const room of found) {   // 모두 보여 주고 목록은 스크롤
       const li = document.createElement('li');
       const button = document.createElement('button');
       button.type = 'button';
