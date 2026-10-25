@@ -66,12 +66,11 @@ window.TOUR_SCENES = {
       { key: 'west', name: '왼쪽 위 계단', at: [11.4, 5], anchor: [13.3, 18] },
       { key: 'center', name: '가운데 계단', at: [56.5, 65.7], anchor: [56, 72] }
     ],
-    walkAreas: [[12.5, 16, 85, 11.5], [2.5, 19, 11, 8.5], [2.5, 69, 70.5, 6.5], [66.2, 16, 7, 61], [54, 75, 19, 17],
-      [25.5, 27, 2.1, 11.5]],   // 마지막: 식생활 교육관과 카페실습실 사이, 카페 유리문 앞 작은 통로 (아래는 벽)
-    walkObstacles: [[65.8, 62.5, 1.5, 5], [71.8, 62.5, 1.5, 5], [71.7, 85, 1.5, 6], [53.3, 78, 1.7, 6], [53.3, 86, 1.7, 5]],
+    walkAreas: [[12.5, 16, 85, 11.5], [2.5, 19, 11, 8.5], [2.5, 69, 72.5, 6.5], [68.2, 16, 6.8, 61], [54.5, 75, 20.3, 16.5]],
+    walkObstacles: [[67.9, 62.5, 1.4, 5], [73.7, 62.5, 1.5, 5], [73.7, 85.5, 1.5, 5.5], [53.3, 78, 1.7, 6], [53.3, 86, 1.7, 5]],
     hints: [
-      { at: [69.5, 38], dir: 'down', text: '도서실 · 중앙현관' },
-      { at: [69.5, 72], dir: 'left', text: '아래쪽 복도' },
+      { at: [71.5, 38], dir: 'down', text: '도서실 · 중앙현관' },
+      { at: [71.5, 72], dir: 'left', text: '아래쪽 복도' },
       { at: [55, 72], dir: 'right' },
       { at: [63, 90], dir: 'down', text: '야외로 나가기' }
     ],
@@ -87,7 +86,7 @@ window.TOUR_SCENES = {
       { name: '동아리실', at: [58.5, 8.2], w: 5.5, anchor: [58.5, 22] },
       { name: '화장실', quiet: true, at: [72, 7.8], w: 6, anchor: [72, 22], facility: true, where: '위쪽 복도' },
       { name: '문서작성실', at: [87, 8.2], w: 20, anchor: [87, 22] },
-      { name: '카페실습실', at: [35.6, 36.7], w: 14, anchor: [26.5, 35], rect: [28, 30, 16, 14],
+      { name: '카페실습실', at: [35.6, 36.7], w: 14, anchor: [26.5, 24], rect: [28, 30, 16, 14],
         status: '개편 예정', current: '기업자원관리실', note: '개편 예정', photo: FACILITY_IMG + 'cafe-lab.webp', wide: true,
         desc: '현재 기업자원관리실을 카페실습실로 조성할 예정입니다. 2027년 여름방학 중 완공을 목표로 합니다.' },
       { name: '전산회계1실', at: [51.5, 36], w: 11, anchor: [51.5, 24],
@@ -95,7 +94,7 @@ window.TOUR_SCENES = {
         desc: '학생마다 컴퓨터 한 대씩 쓰며 전산회계 프로그램으로 회계 실무를 익히고 자격증을 준비하는 실습실입니다.' },
       { name: '교육정보부실', at: [61.5, 35.5], w: 5.5, anchor: [61.5, 24], status: '선생님 교무실',
         desc: '교육정보부 선생님들이 근무하는 교무실입니다. 학교 정보화 기기와 교육 정보 업무를 맡고 있어요.' },
-      { name: '경비실', quiet: true, at: [77.9, 36.9], w: 5, anchor: [78.5, 24], rect: [74.5, 29, 7, 15] },
+      { name: '경비실', quiet: true, at: [77.9, 36.9], w: 5, anchor: [78.5, 24], rect: [75, 29, 7, 15] },
       { name: '사무자동화실', at: [89.4, 36.9], w: 13, anchor: [89.2, 24], rect: [81.5, 29, 16.5, 15] },
       { name: '식생활 교육관', at: [13.5, 47.5], w: 20, anchor: [6, 26], rect: [2, 30, 22, 35],
         photos: ['img/rooms/dining-1.jpg', 'img/rooms/dining-2.jpg', 'img/rooms/dining-3.jpg'],
@@ -104,13 +103,13 @@ window.TOUR_SCENES = {
       { name: '교장실', quiet: true, at: [32, 84], w: 9, anchor: [32, 72] },
       { name: '행정실', quiet: true, at: [46, 84], w: 11, anchor: [46, 72] },
       { name: '중앙현관', quiet: true, at: [63, 84], w: 12, anchor: [63, 84] },
-      { name: '도서실', at: [86.5, 78], w: 20, anchor: [71, 78], rect: [75, 66, 23, 24],
+      { name: '도서실', at: [86.5, 78], w: 20, anchor: [72.5, 78], rect: [75, 66, 23, 24],
         photos: ['img/rooms/library-1.jpg', 'img/rooms/library-2.jpg', 'img/rooms/library-3.jpg', 'img/rooms/library-4.jpg', 'img/rooms/library-5.jpg'],
         desc: '책을 읽고 모둠 활동도 할 수 있는 학교 도서실 「녹원책방」입니다.' },
       { name: '동아리실(풍물)', at: [93, 91], w: 9, anchor: [70.6, 88] },
-      { name: '야외 테라스', at: [45, 53], w: 10, anchor: [69.5, 53], rect: [25, 45, 40, 20],
+      { name: '야외 테라스', at: [45, 53], w: 10, anchor: [71.5, 53], rect: [25, 44, 43, 21],
         desc: '카페실습실 아래쪽의 야외 공간입니다.' },
-      { name: '외부 계단', at: [86, 53], w: 9, anchor: [71.5, 53], rect: [74, 45, 24, 18], note: '학교 밖으로 내려가는 계단',
+      { name: '외부 계단', at: [86, 53], w: 9, anchor: [73.5, 53], rect: [74, 45, 24, 18], note: '학교 밖으로 내려가는 계단',
         desc: '경비실 아래쪽, 학교 밖으로 내려가는 바깥 계단입니다. 왼쪽에서 오른쪽으로 내려가며, 가운데 난간으로 두 줄이 나뉘어 있어요.' },
       { name: 'E/L', elevator: true, at: [42.5, 65.7], w: 3, anchor: [42.5, 72], facility: true },
       { name: '화장실', quiet: true, at: [47.6, 65.7], w: 6, anchor: [47.6, 72], facility: true, where: '아래쪽 복도' }
@@ -128,10 +127,10 @@ window.TOUR_SCENES = {
     stairs: [
       { key: 'main', name: '주계단', at: [64.8, 7], anchor: [64.8, 19] },
       { key: 'west', name: '왼쪽 위 계단', at: [11, 4.5], anchor: [13.6, 17] },
-      { key: 'center', name: '가운데 계단', at: [55, 64.5], anchor: [55, 71] }
+      { key: 'center', name: '가운데 계단', at: [59, 64.8], anchor: [59, 71.5] }
     ],
-    walkAreas: [[12.5, 15.5, 85, 7], [12, 15.5, 3.2, 59], [2, 67.5, 68.5, 7], [66.3, 15.5, 4.7, 76], [13.4, 74, 8.2, 16]],
-    walkObstacles: [],
+    walkAreas: [[12.5, 15.5, 78, 7], [12, 15.5, 3.2, 59], [2, 68.9, 68.5, 6.6], [66.3, 15.5, 4.7, 76], [13.4, 74, 8.2, 16]],
+    walkObstacles: [[65.5, 62, 1.3, 4.6]],
     hints: [
       { at: [68.6, 35], dir: 'down', text: '온누리홀 · 보건실 방향' },
       { at: [68.6, 62], dir: 'up', text: '교무실 · 워크룸 방향' },
@@ -148,8 +147,8 @@ window.TOUR_SCENES = {
       { name: '워크룸4', at: [55, 7], w: 8, anchor: [55, 19] },
       { name: '화장실', quiet: true, at: [72.5, 7], w: 6, anchor: [72.5, 19], facility: true, where: '위쪽 복도' },
       { name: '취업지원센터', at: [85, 7], w: 10, anchor: [85, 19] },
-      { name: '면접지도실', at: [96, 5], w: 4, anchor: [95, 19], overflow: true },
-      { name: '파우더룸', at: [96, 12.5], w: 4, anchor: [95, 19], overflow: true },
+      { name: '면접지도실', at: [96, 5], w: 4, anchor: [90.3, 19], overflow: true },
+      { name: '파우더룸', at: [96, 12.5], w: 4, anchor: [90.3, 19], overflow: true },
       { name: '경영실습실', at: [23.5, 32], w: 9, anchor: [23.5, 19] },
       { name: '평가관리실', quiet: true, at: [33.5, 32], w: 4, anchor: [33.5, 19] },
       { name: '교무실', at: [51, 32], w: 14, anchor: [51, 19], rect: [36, 24, 30, 16], note: '교무 · 연구 · 교육과정', status: '선생님 교무실',
@@ -158,7 +157,7 @@ window.TOUR_SCENES = {
         desc: '직업교육부 선생님들이 근무하는 교무실입니다. 전공 실습과 직업교육 관련 업무를 맡고 있어요.' },
       { name: '취업지원부실', at: [90, 32], w: 12, anchor: [90, 19], status: '선생님 교무실',
         desc: '취업지원부 선생님들이 근무하는 교무실입니다. 학생들의 취업 준비와 진로 상담을 돕는 업무를 맡고 있어요.' },
-      { name: '화장실', quiet: true, at: [61, 45], w: 5, anchor: [68.5, 45], facility: true, where: '가운데' },
+      { name: '화장실', quiet: true, at: [59, 57], w: 5, anchor: [68.6, 57], facility: true, where: '가운데' },
       { name: 'E/L', elevator: true, at: [37, 64], w: 3, anchor: [37, 71], facility: true },
       { name: '발간실', quiet: true, at: [44, 64], w: 5, anchor: [44, 71] },
       { name: '온누리홀', at: [86, 75], w: 16, anchor: [68.6, 75], rect: [72, 61, 26, 30] },
@@ -185,7 +184,7 @@ window.TOUR_SCENES = {
       { key: 'west', name: '왼쪽 위 계단', at: [12.7, 6], anchor: [16.3, 23] },
       { key: 'center', name: '가운데 계단', at: [61.5, 66.5], anchor: [61.5, 75.5] }
     ],
-    walkAreas: [[15.5, 20.8, 82.5, 9], [67.8, 20.8, 6.6, 52], [74.4, 47.8, 23.6, 7.8], [2, 72, 96, 7]],
+    walkAreas: [[15.5, 20.8, 82.5, 9], [67.8, 20.8, 6.6, 52], [74.4, 47.8, 23.6, 7.8], [2, 72, 72.5, 7], [74.4, 73.9, 23.6, 4.7]],
     walkObstacles: [],
     hints: [
       { at: [71, 40], dir: 'down', text: 'AI비즈니스실 · 아래쪽 복도' },
@@ -233,13 +232,13 @@ window.TOUR_SCENES = {
     start: [45, 24.5],
     stairs: [
       { key: 'main', name: '주계단', at: [67.5, 10], anchor: [67.5, 24.5] },
-      { key: 'center', name: '가운데 계단', at: [58, 66], anchor: [58, 77] }
+      { key: 'center', name: '가운데 계단', at: [60.6, 66], anchor: [60.6, 77.5] }
     ],
-    walkAreas: [[17.5, 20.8, 81, 7.8], [64.2, 20.8, 7.2, 60.2], [71.4, 50, 26.6, 5.6], [17.5, 73.8, 80.5, 7.2]],
+    walkAreas: [[17.5, 20.8, 81, 7.8], [64.2, 20.8, 7.2, 29.4], [67.5, 50, 3.9, 25], [71.4, 50, 26.6, 5.6], [17.5, 74.6, 80.5, 6.2]],
     walkObstacles: [],
     hints: [
       { at: [67.8, 40], dir: 'down', text: '1-7 · 전산회계실 방향' },
-      { at: [67.8, 66], dir: 'up', text: '1-1~1-6 교실 방향' }
+      { at: [69.4, 66], dir: 'up', text: '1-1~1-6 교실 방향' }
     ],
     rooms: [
       { name: '체육관 2층', at: [9, 40], w: 10, anchor: [18.5, 24.5], rect: [2, 3, 15, 76], note: '아래 코트 · 보행 불가',
@@ -259,7 +258,7 @@ window.TOUR_SCENES = {
       { name: '1-4 교실', at: [55, 38], w: 8, anchor: [55, 24.5] },
       { name: '1-5 교실', at: [79, 38], w: 8, anchor: [79, 24.5] },
       { name: '1-6 교실', at: [92, 38], w: 8, anchor: [92, 24.5] },
-      { name: '화장실', quiet: true, at: [57.5, 54], w: 5, anchor: [67.5, 54], facility: true, where: '가운데' },
+      { name: '화장실', quiet: true, at: [60, 55.5], w: 5, anchor: [69.4, 55], facility: true, where: '가운데' },
       { name: 'E/L', elevator: true, at: [35, 66], w: 3, anchor: [35, 77], facility: true },
       { name: '화장실', quiet: true, at: [40.5, 66], w: 4, anchor: [40.5, 77], facility: true, where: 'E/L 옆' },
       { name: '상담실1', at: [45.5, 66], w: 4.5, anchor: [45.5, 77] },
