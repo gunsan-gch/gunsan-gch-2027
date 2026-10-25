@@ -1,5 +1,5 @@
 {
-  "note": "원본 그림 파일 이름과 지문(sha256). 드라이브에 같은 이름으로 올리면 바뀐 파일만 골라 변환합니다. 기준: GPT 전달본 cc1ed0e0",
+  "note": "원본 그림 파일 이름과 지문(sha256). 드라이브에 같은 이름으로 올리면 바뀐 파일만 골라 변환합니다. 기준: GPT 전달본 cc1ed0e0, 층 그림은 드라이브 2026-10-25_실제사진반영_중정_v6",
   "sources": {
     "outdoor-lawn.png": {
       "output": "outdoor.webp",
@@ -7,35 +7,35 @@
       "description": "야외 잔디마당 (2026-10-20 v3: 드론 사진을 참고해 건물을 다시 그림 / 드라이브 outdoor-lawn-photo-v3.png, 위쪽 33% 밖은 이전과 같음)",
       "sha256": "6615589207f9b1764c16213370e5fc5c18f61f29b59c0c668e73458a429090a9"
     },
-    "floor1-open-lobby-v6.png": {
+    "floor1-structure-v6-20261025.png": {
       "output": "floor1.webp",
       "kind": "background",
-      "description": "1층 (2026-10-20 v11: 준비실·창고, 경비실 분리, 가운데 야외 테라스, 오른쪽 바깥 계단 / 드라이브 floor1-outdoor-offices-v11.png)",
-      "sha256": "ce19d4b814d4c455fc963e5f6fc056c5a6e7bca05fb1d13535877958fd45b8f8"
+      "description": "1층 (2026-10-25 v6: 중정은 오른쪽 복도 입구 하나, 카페 왼편까지 카페 내부, 정보처리실·전산회계1실·식생활 교육관·도서실 내부를 실제 사진 반영)",
+      "sha256": "441e8346a06cd3b66e4cebe15a9c3abfca867b3d91818159c6e9376c6ad6bd3a"
     },
-    "floor2-wide.png": {
+    "floor2-structure-v6-20261025.png": {
       "output": "floor2.webp",
       "kind": "background",
-      "description": "2층 (2026-10-20 배치도 기준으로 다시 그림 / 드라이브 floor2-redrawn-fixed-20261020.png)",
-      "sha256": "9b09cd5ee4f4eb4cd3098eea14947206c47c4619ce9f29b541c478adfbf96720"
+      "description": "2층 (2026-10-25 v6 세트, v5와 같음: 면접지도실·파우더룸 각각 왼편 문, 온누리홀 위 회색 공간은 둘레 전체 벽)",
+      "sha256": "6245f08ef8a0a2e64e35e2de1ed3b6b5c664fa437e3dca81d1c5cb3a5114dc09"
     },
-    "floor3-wide.png": {
+    "floor3-structure-v6-20261025.png": {
       "output": "floor3.webp",
       "kind": "background",
-      "description": "3층 (2026-10-20 배치도 기준으로 다시 그림 / 드라이브 floor3-redrawn-fixed-20261020.png)",
-      "sha256": "cbc2950974d46ef53632af363bca54a2f56efd341afcbd4f742ce208d9c13020"
+      "description": "3층 (2026-10-25 v6 세트, v5와 같음: 드림스페이스 모둠 책상, 계단 맞은편 열린 학생쉼터, 체육관 배드민턴 표시)",
+      "sha256": "a0e33e3cea82f5af75e63c8715edc114120a2edffd886479ba5db670ee00e944"
     },
-    "floor4-wide.png": {
+    "floor4-structure-v6-20261025.png": {
       "output": "floor4.webp",
       "kind": "background",
-      "description": "4층 (2026-10-20 배치도 기준으로 다시 그림 / 드라이브 floor4-redrawn-fixed-20261020.png)",
-      "sha256": "5729e068aea4a9c9e020d8898a808bf05fa0a8faf61510a4dbab8cd479cc43ca"
+      "description": "4층 (2026-10-25 v6: 교육복지실 내부 실제 사진 반영, 오른쪽 두 교실 사이 가로 복도는 왼쪽 세로 복도와 열림)",
+      "sha256": "a7c92f18d0a95a567306766303382d57e5c94ba7b41484e711802db3aa333805"
     },
-    "floor5-wide.png": {
+    "floor5-structure-v6-20261025.png": {
       "output": "floor5.webp",
       "kind": "background",
-      "description": "5층",
-      "sha256": "782df14c5a542a2ca2ff7bc075b7ed4f7f1d547def06f537aa5cecd7ef746f0c"
+      "description": "5층 (2026-10-25 v6: 꿈다락 내부 실제 사진 반영, 옥상 문은 세로 통로 맨 아래)",
+      "sha256": "c80efec7f66012f28d329c0e8b4042d423dc12af76da7ba223eebf9ecdddec9e"
     },
     "overworld-atlas.png": {
       "output": "walker.png",

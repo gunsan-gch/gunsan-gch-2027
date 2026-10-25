@@ -55,7 +55,7 @@ window.TOUR_SCENES = {
 
   1: {
     name: '1층',
-    image: 'img/floor1.webp',
+    image: 'img/floor1.webp?v=20261025',
     notice: {
       title: '1층 · 실습실과 도서실',
       text: '정보처리실, 전산회계1실, 도서실, 식생활 교육관이 있어요. 조리제빵실과 카페실습실은 새로 꾸밀 공간이에요. 중앙현관으로 나가면 잔디마당이에요.'
@@ -86,7 +86,7 @@ window.TOUR_SCENES = {
       { name: '동아리실', at: [58.5, 8.2], w: 5.5, anchor: [58.5, 22] },
       { name: '화장실', quiet: true, at: [72, 7.8], w: 6, anchor: [72, 22], facility: true, where: '위쪽 복도' },
       { name: '문서작성실', at: [87, 8.2], w: 20, anchor: [87, 22] },
-      { name: '카페실습실', at: [35.6, 36.7], w: 14, anchor: [26.5, 24], rect: [28, 30, 16, 14],
+      { name: '카페실습실', at: [35.6, 36.7], w: 14, anchor: [26.5, 24], rect: [25, 28, 20, 16],
         status: '개편 예정', current: '기업자원관리실', note: '개편 예정', photo: FACILITY_IMG + 'cafe-lab.webp', wide: true,
         desc: '현재 기업자원관리실을 카페실습실로 조성할 예정입니다. 2027년 여름방학 중 완공을 목표로 합니다.' },
       { name: '전산회계1실', at: [51.5, 36], w: 11, anchor: [51.5, 24],
@@ -107,8 +107,8 @@ window.TOUR_SCENES = {
         photos: ['img/rooms/library-1.jpg', 'img/rooms/library-2.jpg', 'img/rooms/library-3.jpg', 'img/rooms/library-4.jpg', 'img/rooms/library-5.jpg'],
         desc: '책을 읽고 모둠 활동도 할 수 있는 학교 도서실 「녹원책방」입니다.' },
       { name: '동아리실(풍물)', at: [93, 91], w: 9, anchor: [70.6, 88] },
-      { name: '야외 테라스', at: [45, 53], w: 10, anchor: [71.5, 53], rect: [25, 44, 43, 21],
-        desc: '카페실습실 아래쪽의 야외 공간입니다.' },
+      { name: '야외 테라스', at: [45, 53], w: 10, anchor: [69.3, 53], rect: [25, 44, 43, 21],
+        desc: '카페실습실 아래쪽의 야외 공간입니다. 오른쪽 복도 쪽 문으로 드나들어요.' },
       { name: '외부 계단', at: [86, 53], w: 9, anchor: [73.5, 53], rect: [74, 45, 24, 18], note: '학교 밖으로 내려가는 계단',
         desc: '경비실 아래쪽, 학교 밖으로 내려가는 바깥 계단입니다. 왼쪽에서 오른쪽으로 내려가며, 가운데 난간으로 두 줄이 나뉘어 있어요.' },
       { name: 'E/L', elevator: true, at: [42.5, 65.7], w: 3, anchor: [42.5, 72], facility: true },
@@ -118,7 +118,7 @@ window.TOUR_SCENES = {
 
   2: {
     name: '2층',
-    image: 'img/floor2.webp',
+    image: 'img/floor2.webp?v=20261025',
     notice: {
       title: '2층 · 교무실과 온누리홀',
       text: '교무실, 취업지원센터, 음악실, 보건실, 온누리홀이 있어요. 문서고 왼쪽 계단으로 내려가면 잔디마당이에요.'
@@ -129,7 +129,8 @@ window.TOUR_SCENES = {
       { key: 'west', name: '왼쪽 위 계단', at: [11, 4.5], anchor: [13.6, 17] },
       { key: 'center', name: '가운데 계단', at: [59, 64.8], anchor: [59, 71.5] }
     ],
-    walkAreas: [[12.5, 15.5, 78, 7], [12, 15.5, 3.2, 59], [2, 68.9, 68.5, 6.6], [66.3, 15.5, 4.7, 76], [13.4, 74, 8.2, 16]],
+    walkAreas: [[12.5, 15.5, 78, 7], [12, 15.5, 3.2, 59], [2, 68.9, 68.5, 6.6], [66.3, 15.5, 4.7, 76], [13.4, 74, 8.2, 16],
+      [89.15, 2.6, 1.45, 13.5]],   // 마지막: 취업지원센터 오른쪽 짧은 세로 통로 (면접지도실 문 앞)
     walkObstacles: [[65.5, 62, 1.3, 4.6]],
     hints: [
       { at: [68.6, 35], dir: 'down', text: '온누리홀 · 보건실 방향' },
@@ -147,8 +148,8 @@ window.TOUR_SCENES = {
       { name: '워크룸4', at: [55, 7], w: 8, anchor: [55, 19] },
       { name: '화장실', quiet: true, at: [72.5, 7], w: 6, anchor: [72.5, 19], facility: true, where: '위쪽 복도' },
       { name: '취업지원센터', at: [85, 7], w: 10, anchor: [85, 19] },
-      { name: '면접지도실', at: [96, 5], w: 4, anchor: [90.3, 19], overflow: true },
-      { name: '파우더룸', at: [96, 12.5], w: 4, anchor: [90.3, 19], overflow: true },
+      { name: '면접지도실', at: [96, 5], w: 4, anchor: [89.85, 8.3], overflow: true },
+      { name: '파우더룸', at: [96, 12.5], w: 4, anchor: [89.9, 18.3], overflow: true },
       { name: '경영실습실', at: [23.5, 32], w: 9, anchor: [23.5, 19] },
       { name: '평가관리실', quiet: true, at: [33.5, 32], w: 4, anchor: [33.5, 19] },
       { name: '교무실', at: [51, 32], w: 14, anchor: [51, 19], rect: [36, 24, 30, 16], note: '교무 · 연구 · 교육과정', status: '선생님 교무실',
@@ -173,7 +174,7 @@ window.TOUR_SCENES = {
 
   3: {
     name: '3층',
-    image: 'img/floor3.webp',
+    image: 'img/floor3.webp?v=20261025',
     notice: {
       title: '3층 · 3학년 교실과 체육관',
       text: '3학년 교실, 과학실험실, 역사관, 체육관이 있어요. 세무실무실습실은 AI비즈니스실로 새로 꾸밀 예정이에요.'
@@ -224,7 +225,7 @@ window.TOUR_SCENES = {
 
   4: {
     name: '4층',
-    image: 'img/floor4.webp',
+    image: 'img/floor4.webp?v=20261025',
     notice: {
       title: '4층 · 1학년 교실',
       text: '1학년 교실, 전산회계2·3실, 금융실습실, 상담실이 있어요. 왼쪽 체육관 2층에서는 아래 코트가 내려다보여요.'
@@ -277,7 +278,7 @@ window.TOUR_SCENES = {
 
   5: {
     name: '5층',
-    image: 'img/floor5.webp',
+    image: 'img/floor5.webp?v=20261025',
     notice: {
       title: '5층 · 2학년 교실과 꿈다락',
       text: '2학년 교실, 미술실, 꿈다락, 예절실이 있어요. 아래쪽 옥상은 들어갈 수 없어요.'
@@ -287,8 +288,8 @@ window.TOUR_SCENES = {
       { key: 'main', name: '주계단', at: [65, 9], anchor: [65, 23.5] }
     ],
     elevatorStair: 'main',   // 엘리베이터는 4층까지 — 5층을 고르면 4층에서 주계단으로 올라온 것으로
-    // 옥상(아래쪽)과 옥상으로 가는 통로는 출입 불가라 걷는 영역에서 뺐습니다
-    walkAreas: [[14.2, 21.1, 83.2, 7.6]],
+    // 세로 통로는 옥상 문 앞까지만 (학생회 회의실 문이 이 통로에 있음). 문 뒤 옥상은 출입 불가라 걷는 영역에서 뺐습니다
+    walkAreas: [[14.2, 21.1, 83.2, 7.6], [62.8, 27, 4.7, 27.2]],
     walkObstacles: [],
     hints: [],
     rooms: [
@@ -306,10 +307,10 @@ window.TOUR_SCENES = {
       { name: '2-2 교실', at: [32, 39], w: 10, anchor: [32, 24] },
       { name: '2-3 교실', at: [44.5, 39], w: 10, anchor: [44.5, 24] },
       { name: '2-4 교실', at: [55.5, 39], w: 10, anchor: [55.5, 24] },
-      { name: '학생회 회의실', at: [60.5, 39], w: 4, anchor: [60.5, 24] },
+      { name: '학생회 회의실', at: [60.5, 39], w: 4, anchor: [63.5, 44] },
       { name: '2-5 교실', at: [77, 39], w: 10, anchor: [77, 24] },
       { name: '2-6 교실', at: [91, 39], w: 10, anchor: [91, 24] },
-      { name: '옥상', quiet: true, at: [56, 75], w: 14, anchor: [65.2, 25], note: '출입 불가',
+      { name: '옥상', quiet: true, at: [56, 75], w: 14, anchor: [65.2, 53], note: '출입 불가',
         desc: '학생이 이용할 수 없는 옥상입니다. 그림으로만 보여 드리며, 투어에서도 들어갈 수 없게 막아 두었어요.' }
     ]
   }
