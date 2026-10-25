@@ -131,7 +131,7 @@ class TourCamera {
     this.viewport.classList.toggle('compact-labels', width < COMPACT_STAGE);
     const label = document.querySelector('#zoom-value');
     if (label) label.textContent = Math.round(this.zoom * 100) + '%';
-    document.querySelector('#fit')?.setAttribute('aria-pressed', String(fit));
+    document.querySelectorAll('#fit, [data-map-action="fit"]').forEach(b => b.setAttribute('aria-pressed', String(fit)));
   }
 
   /** 창 크기가 바뀌어도 보고 있던 곳이 가운데에 오도록 유지 */

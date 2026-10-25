@@ -326,17 +326,28 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
   padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
   background: var(--navy);
 }
-.is-expanded .map-topbar { display: flex; align-items: center; gap: 6px; padding: 6px 8px; }
+.map-frame.is-expanded { --bar-h: 52px; }   /* 위 도구 줄 높이 — 지도 칸 높이 계산에 씀 */
+.is-expanded .map-topbar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 6px 8px; }
 .map-topbar-floors { display: flex; gap: 4px; flex: 1; min-width: 0; overflow-x: auto; }
+/* 크게 보기 안의 확대·축소·전체 보기·내 위치·멈춤 (아래 도구 버튼과 같은 동작) */
+.map-tools { display: flex; gap: 4px; flex-shrink: 0; }
+.map-tools button { white-space: nowrap; }
+.map-tools [data-map-action="zoom-out"], .map-tools [data-map-action="zoom-in"] { font-size: 18px; }
+/* 좁은 화면: 층 버튼·닫기 한 줄, 지도 조작 버튼은 그 아래 한 줄 */
+@media (max-width: 720px) {
+  .map-frame.is-expanded { --bar-h: 98px; }
+  .map-tools { order: 3; flex-basis: 100%; }
+  .map-tools button { flex: 1; min-width: 0; padding: 4px 6px; }
+}
 .map-topbar button {
   min-height: 40px; min-width: 44px; padding: 4px 10px; flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, .35); background: transparent; color: #fff; font-weight: 700; font-size: 14px;
 }
 .map-topbar button[aria-pressed="true"] { background: #fff; color: var(--navy); }
 .map-close { font-size: 18px !important; }
-.is-expanded #scene-scroll { border: 0; max-height: calc(100dvh - 52px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); }
+.is-expanded #scene-scroll { border: 0; max-height: calc(100dvh - var(--bar-h) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); }
 .is-expanded .rotate-hint {
-  display: block; position: absolute; z-index: 9; left: 50%; top: 58px; transform: translateX(-50%);
+  display: block; position: absolute; z-index: 9; left: 50%; top: calc(var(--bar-h) + 6px); transform: translateX(-50%);
   margin: 0; padding: 6px 12px; white-space: nowrap; pointer-events: none;
   background: rgba(20, 40, 90, .88); color: #fff; font-size: 13px;
   opacity: 0; transition: opacity .6s ease;

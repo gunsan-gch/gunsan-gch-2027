@@ -631,6 +631,11 @@
   $('#zoom-in').addEventListener('click', () => camera.setZoom(camera.zoom * 1.25));
   $('#zoom-out').addEventListener('click', () => camera.setZoom(camera.zoom / 1.25));
   $('#fit').addEventListener('click', () => camera.setZoom(camera.minZoom()));
+  // 크게 보기 안의 같은 버튼들 — 아래 도구 버튼을 그대로 눌러 같은 동작
+  const MAP_ACTIONS = { 'zoom-out': '#zoom-out', fit: '#fit', 'zoom-in': '#zoom-in', locate: '#locate-player', stop: '#stop-walking' };
+  document.querySelectorAll('[data-map-action]').forEach(button => {
+    button.addEventListener('click', () => $(MAP_ACTIONS[button.dataset.mapAction]).click());
+  });
 
   /* ---------- 크게 보기 (지도를 화면 가득) ---------- */
 
@@ -641,10 +646,18 @@
     mapFrame.classList.toggle('is-expanded', on);
     document.body.classList.toggle('map-expanded', on);
     expandButton.setAttribute('aria-expanded', String(on));
+    measureBar();
     camera.reset(motion.x, motion.y);
     if (on) { viewport.focus({ preventScroll: true }); flashRotateHint(); }
     else expandButton.focus({ preventScroll: true });
   }
+
+  // 위 도구 줄의 실제 높이 (한 줄·두 줄) — 지도 칸이 그 아래 남은 높이를 꽉 채우도록
+  const mapBar = $('.map-topbar');
+  function measureBar() {
+    if (mapFrame.classList.contains('is-expanded')) mapFrame.style.setProperty('--bar-h', mapBar.offsetHeight + 'px');
+  }
+  addEventListener('resize', measureBar);
 
   // '가로로 돌리면…' 안내는 크게 보기를 열 때 3.5초만 보여 줌
   const rotateHint = $('.rotate-hint');
