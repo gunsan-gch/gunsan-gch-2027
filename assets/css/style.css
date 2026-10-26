@@ -192,7 +192,35 @@ main:focus { outline: none; }
     radial-gradient(900px 480px at -10% 10%, rgba(31, 91, 214, .10), transparent 60%),
     linear-gradient(180deg, var(--sky) 0%, #f6fbfe 70%, #fff 100%);
 }
-.hero-inner { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
+.hero-inner { position: relative; display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
+/* 픽셀 학교 투어 띠 버튼: 넓은 화면에서 제목 오른쪽 빈 곳 (좁은 화면은 상담 카드의 .hb-tour) */
+.hero-tour {
+  position: absolute; right: 20px; top: 72px; z-index: 1;
+  display: flex; align-items: center; gap: 14px; padding: 14px 16px 14px 14px; border-radius: 20px;
+  background: var(--navy); color: #fff; text-decoration: none; box-shadow: 0 10px 24px rgba(20, 40, 90, .25);
+  transition: transform .2s, box-shadow .2s;
+}
+.hero-tour img { width: 64px; height: auto; margin: -28px 0 -14px; }
+.hero-tour-text { display: flex; flex-direction: column; }
+.hero-tour-text small { font-size: .85rem; font-weight: 800; color: var(--yellow); }
+.hero-tour-text strong { font-family: var(--font-title); font-weight: 700; font-size: 1.3rem; line-height: 1.3; }
+.hero-tour-cta {
+  display: inline-flex; align-items: center; gap: 4px; margin-left: 10px; padding: 9px 16px; border-radius: 999px;
+  background: var(--yellow); color: var(--navy); font-weight: 800; font-size: .95rem; white-space: nowrap;
+}
+.hero-tour-cta .icon { width: 16px; height: 16px; transition: transform .2s; }
+.hero-tour:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(20, 40, 90, .3); }
+.hero-tour:hover .hero-tour-cta { background: var(--yellow-dark); }
+.hero-tour:hover .hero-tour-cta .icon { transform: translateX(3px); }
+.hero-tour:focus-visible { outline: 3px solid var(--yellow-dark); outline-offset: 3px; }
+.hb-tour { display: none !important; }
+/* 띠가 들어갈 자리가 없는 화면: 띠 대신 상담 카드의 '입학 안내' 자리에 '군산여상 둘러보기' */
+@media (max-width: 1179px) {
+  .hero-tour { display: none; }
+  .hero-briefing.is-consult .hb-sub .hb-tour { display: inline-flex !important; flex: 0 0 auto; white-space: nowrap; padding-inline: 14px; }
+  .hero-briefing.is-consult .hb-sub .hb-more { display: none; }
+}
+@media (max-width: 400px) { .hero-briefing.is-consult .hb-sub .hb-tour { padding-inline: 10px; font-size: .9rem; } }
 .hero-eyebrow {
   display: inline-block; padding: 6px 14px; border-radius: 999px;
   background: var(--navy); color: #fff; font-weight: 700; font-size: .95rem;
@@ -1304,10 +1332,11 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 @media (min-width: 360px) and (max-width: 600px) {
   .contact-phones, .admission-contact .phone-pair { font-size: .94rem; column-gap: 7px; }
 }
-@media (max-width: 399px) {
-  .hero-briefing.is-consult .phone-pair { flex-direction: column; align-items: flex-start; }
-  .hero-briefing.is-consult .phone-sep { display: none; }
-}
+/* 첫 화면 상담 카드: 휴대폰에서도 두 번호를 한 줄로 (좁으면 글씨만 조금 줄임) */
+.hero-briefing.is-consult .phone-pair { flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 0 8px; }
+.hero-briefing.is-consult .phone-sep { display: inline; }
+@media (max-width: 374px) { .hero-briefing.is-consult .phone-pair { font-size: .9rem; gap: 0 6px; } }
+@media (max-width: 340px) { .hero-briefing.is-consult .phone-pair { font-size: .82rem; } }
 
 
 /* 2026-09-29: 현 고3 현황 / 새 기업 텍스트 카드 */
