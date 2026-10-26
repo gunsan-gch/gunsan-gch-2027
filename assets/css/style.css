@@ -193,7 +193,7 @@ main:focus { outline: none; }
     linear-gradient(180deg, var(--sky) 0%, #f6fbfe 70%, #fff 100%);
 }
 .hero-inner { position: relative; display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
-/* 픽셀 학교 투어 띠 버튼: 넓은 화면에서 제목 오른쪽 빈 곳 (좁은 화면은 상담 카드의 .hb-tour) */
+/* 픽셀 학교 투어 버튼: 넓은 화면은 제목 오른쪽 빈 곳에 띠, 좁은 화면은 제목 옆 작은 버튼 */
 .hero-tour {
   position: absolute; right: 20px; top: 72px; z-index: 1;
   display: flex; align-items: center; gap: 14px; padding: 14px 16px 14px 14px; border-radius: 20px;
@@ -213,14 +213,15 @@ main:focus { outline: none; }
 .hero-tour:hover .hero-tour-cta { background: var(--yellow-dark); }
 .hero-tour:hover .hero-tour-cta .icon { transform: translateX(3px); }
 .hero-tour:focus-visible { outline: 3px solid var(--yellow-dark); outline-offset: 3px; }
-.hb-tour { display: none !important; }
-/* 띠가 들어갈 자리가 없는 화면: 띠 대신 상담 카드의 '입학 안내' 자리에 '군산여상 둘러보기' */
-@media (max-width: 1179px) {
-  .hero-tour { display: none; }
-  .hero-briefing.is-consult .hb-sub .hb-tour { display: inline-flex !important; flex: 0 0 auto; white-space: nowrap; padding-inline: 14px; }
-  .hero-briefing.is-consult .hb-sub .hb-more { display: none; }
+.hero-tour-short { display: none; }
+@media (max-width: 959px) {
+  .hero-tour { right: 0; top: 56px; gap: 6px; padding: 8px 12px 8px 6px; border-radius: 14px; }
+  .hero-tour img { width: 38px; margin: -16px 0 -8px; }
+  .hero-tour-text, .hero-tour-cta { display: none; }
+  .hero-tour-short { display: block; font-weight: 800; font-size: .82rem; line-height: 1.25; }
 }
-@media (max-width: 400px) { .hero-briefing.is-consult .hb-sub .hb-tour { padding-inline: 10px; font-size: .9rem; } }
+/* 아주 좁은 화면: 제목과 겹치지 않게 '신입생 모집' 줄 높이로 올림 */
+@media (max-width: 359px) { .hero-tour { top: -4px; } }
 .hero-eyebrow {
   display: inline-block; padding: 6px 14px; border-radius: 999px;
   background: var(--navy); color: #fff; font-weight: 700; font-size: .95rem;

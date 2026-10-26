@@ -998,8 +998,7 @@
         : '<a class="btn btn-yellow hb-main" href="' + tel(D.admissionsPhone) + '">' + icon("phone") + '<span>전화 상담</span></a>') +
         '<div class="hb-sub">' + (videos.length ? '<a class="btn btn-video hb-video" href="#media"><span class="bv-dot">' + icon("play") + '</span><span>홍보 영상 보기</span>' +
           (videos.length > 1 ? '<small>' + videos.length + '편</small>' : '') + '</a>' : "") +
-        '<a class="btn btn-ghost hb-more" href="#admissions">입학 안내</a>' +
-        (has(D.tourUrl) ? '<a class="btn btn-ghost hb-tour" href="' + esc(D.tourUrl) + '" data-tour-link>군산여상 둘러보기</a>' : "") + '</div></div>';
+        '<a class="btn btn-ghost hb-more" href="#admissions">입학 안내</a></div></div>';
   }
   hb.hidden = false;
 
@@ -1287,12 +1286,12 @@
       if (window.wcs && typeof window.wcs.event === "function") window.wcs.event("ApplyForm", where.charAt(0).toUpperCase() + where.slice(1));
     } catch (err) { /* 네이버 분석 오류도 링크 이동에 영향을 주지 않습니다. */ }
   });
-  // 픽셀 학교 투어로 넘어간 횟수만 측정 (첫 화면 띠·상담 카드 버튼, 배너, 모바일 메뉴, 실습실 카드의 '위치 보기')
+  // 픽셀 학교 투어로 넘어간 횟수만 측정 (첫 화면 버튼, 배너, 모바일 메뉴, 실습실 카드의 '위치 보기')
   document.addEventListener("click", function (e) {
     var a = e.target.closest("a[data-tour-link], a.facility-tour-link");
     if (!a || !liveSite) return;
     var where = a.classList.contains("facility-tour-link") ? "facility" : a.classList.contains("tour-banner") ? "banner"
-      : a.classList.contains("hero-tour") ? "hero" : a.classList.contains("hb-tour") ? "hero_card" : "nav";
+      : a.classList.contains("hero-tour") ? "hero" : "nav";
     try {
       if (typeof window.gtag === "function") {
         window.gtag("event", "tour_click", {

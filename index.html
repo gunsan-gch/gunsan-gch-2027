@@ -35,7 +35,7 @@
   <link rel="icon" type="image/png" href="assets/img/brand/favicon.png">
   <link rel="apple-touch-icon" href="assets/img/brand/apple-touch-icon.png">
   <!-- ?v= 값: 고칠 때마다 바꾸면 휴대폰에 남은 예전 파일 대신 새 파일을 받습니다 (README 참고) -->
-  <link rel="stylesheet" href="assets/css/style.css?v=20261026a">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261026b">
   <link rel="preload" as="font" href="assets/fonts/EliceDXNeolli-Medium.otf" type="font/otf" crossorigin>
   <link rel="preload" as="font" href="assets/fonts/CookieRun-Black.otf" type="font/otf" crossorigin>
   <meta name="google-site-verification" content="fG7xD5bb5MYqujUC6RHyJgT8Rwqy-YeOj12afvQpXY4" />
@@ -141,7 +141,7 @@
                 <a class="btn btn-yellow hb-main js-talk" href="https://open.kakao.com/o/sDyxWESi" target="_blank" rel="noopener" data-where="hero"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span>카톡 상담</span><span class="sr-only">(새 창, 카카오톡 오픈채팅)</span></a>
                 <a class="btn btn-light hb-main" href="tel:0634600321"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span>전화 상담</span></a>
               </div>
-              <div class="hb-sub"><a class="btn btn-ghost hb-more" href="#admissions">입학 안내</a><a class="btn btn-ghost hb-tour" href="tour/index.html" data-tour-link>군산여상 둘러보기</a></div>
+              <div class="hb-sub"><a class="btn btn-ghost hb-more" href="#admissions">입학 안내</a></div>
             </div>
           </div>
           <!-- 첫 화면 숫자 카드 (스크립트가 site-data.js 기준으로 다시 그림) -->
@@ -164,10 +164,11 @@
         <div class="hero-visual">
           <ul class="hero-depts" id="hero-depts" aria-label="2027학년도 모집 학과"></ul>
         </div>
-        <!-- 픽셀 학교 투어: 넓은 화면은 제목 오른쪽 빈 곳에 띠 버튼, 좁은 화면은 상담 카드의 '군산여상 둘러보기' 버튼 -->
-        <a class="hero-tour" href="tour/index.html" data-tour-link data-tour-slot>
+        <!-- 픽셀 학교 투어: 넓은 화면은 제목 오른쪽 빈 곳에 띠 버튼, 좁은 화면은 제목 옆 작은 버튼 -->
+        <a class="hero-tour" href="tour/index.html" data-tour-link data-tour-slot aria-label="픽셀 학교 투어 - 군산여상 둘러보기">
           <img src="tour/img/guide.webp" width="240" height="354" alt="">
           <span class="hero-tour-text"><small>픽셀 학교 투어</small><strong>군산여상 둘러보기</strong></span>
+          <span class="hero-tour-short" aria-hidden="true">학교<br>둘러보기</span>
           <span class="hero-tour-cta" aria-hidden="true">둘러보기<svg class="icon"><use href="#i-arrow"/></svg></span>
         </a>
       </div>
@@ -412,7 +413,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="assets/js/site-data.js?v=20261022b"></script>
-  <script src="assets/js/main.js?v=20261026a"></script>
+  <script src="assets/js/main.js?v=20261026b"></script>
 <script type="text/javascript" src="//wcs.pstatic.net/wcslog.js"></script>
 <script type="text/javascript">
 if(!wcs_add) var wcs_add = {};
