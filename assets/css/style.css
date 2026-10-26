@@ -27,6 +27,8 @@
 }
 
 :root {
+  /* 휴대폰 브라우저의 '강제 다크 모드'가 그림·캐릭터 색을 뒤집지 않도록 늘 밝은 화면으로 */
+  color-scheme: only light;
   --navy: #14285a;
   --navy-2: #1d3673;
   --blue: #1f5bd6;
