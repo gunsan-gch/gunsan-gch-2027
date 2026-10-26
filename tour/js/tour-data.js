@@ -194,7 +194,8 @@ window.TOUR_SCENES = {
     rooms: [
       { name: '체육관', at: [8.5, 37], w: 10, anchor: [16.5, 25], rect: [2, 4, 14, 67],
         desc: '3층 체육관입니다.' },
-      { name: '과학실험실', at: [25, 13], w: 12, anchor: [21.2, 25] },
+      { name: '과학실험실', at: [25, 13], w: 12, anchor: [21.2, 25],
+        photos: ['img/rooms/science-1.jpg', 'img/rooms/science-2.jpg', 'img/rooms/science-3.jpg', 'img/rooms/science-4.jpg'] },
       { name: '과학준비실', quiet: true, at: [36.5, 13], w: 4.5, anchor: [36, 25] },
       { name: '드림스페이스', at: [51, 13], w: 16, anchor: [43.9, 25] },
       { name: '화장실', quiet: true, at: [72.5, 13], w: 6, anchor: [72.5, 25], facility: true, where: '위쪽 복도' },
