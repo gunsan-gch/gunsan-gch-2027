@@ -407,6 +407,9 @@
     $('#detail-title').textContent = room.name;
     $('#detail-description').textContent = room.desc || '';
     $('#detail-description').hidden = !room.desc;
+    const link = $('#detail-link');
+    link.hidden = !room.link;
+    if (room.link) { link.href = room.link.href; link.textContent = room.link.label; }
 
     const preview = $('#detail-image');
     preview.replaceChildren();
