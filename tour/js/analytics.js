@@ -13,7 +13,7 @@ window.tourTrack = (() => {
    * @param {object} params   GA4 매개변수 (예: { room_name: '도서실', floor_name: '1층' })
    * @param {string[]} naver  네이버 이벤트 [이름, 값] — 영문·숫자만
    */
-  return (name, params = {}, naver = null) => {
+  const track = (name, params = {}, naver = null) => {
     if (!live) return;
     // 두 도구를 따로 호출해 하나가 막혀도 다른 쪽과 투어 동작은 그대로
     try {
@@ -25,4 +25,6 @@ window.tourTrack = (() => {
       if (naver && window.wcs && typeof window.wcs.event === 'function') window.wcs.event(...naver);
     } catch (e) { /* 네이버 분석 오류도 마찬가지 */ }
   };
+  track.live = live;   // 수업 경로 판별(class-route.js)도 공개 주소에서만
+  return track;
 })();

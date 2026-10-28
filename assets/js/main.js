@@ -1107,6 +1107,8 @@
   // 검수 화면·로컬 미리보기는 운영 통계에 포함하지 않습니다.
   var liveSite = !reviewMode && location.hostname === "gunsan-gch.github.io" &&
     /^\/gunsan-gch-2027\/(?:index\.html)?$/.test(location.pathname);
+  // 수업 사이트 이동 세션 판별의 첫 단계 (assets/js/class-route.js)
+  if (liveSite && window.gchClassRoute) window.gchClassRoute.mark("home");
   (function trackRegistrationClicks() {
     if (!regOpen || !liveSite) return;
 

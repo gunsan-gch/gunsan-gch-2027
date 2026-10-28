@@ -83,7 +83,12 @@ GPT가 그린 배경(`tour-share-art.png`)에 `update_assets.py`가 학교 글�
 | `tour_room_open` | `room_name`, `floor_name` | `TourRoom` (Open) | 공간 설명 창 열림 |
 | `tour_expand` | — | `TourExpand` (Open) | 크게 보기 |
 | `tour_cta_click` | `cta_location`(header·bottom·footer), `link_section` | `TourCTA` | 입학 안내로 돌아가는 링크 |
+| `tour_room_link_click` | `room_name`, `link_url`, `route_status`(class_route·class_route_repeat·none) | — | 공간 설명의 바로가기 링크(예: 경영실습실 → 수업 사이트) |
+| `class_route_complete` | `room_name`, `link_url`, `route_steps`, `route_minutes` | — | 같은 방문에서 입학안내 → 투어 → 그 공간을 거쳐 링크를 처음 누름 (방문당 1회) |
 | `tour_click` (입학안내 페이지) | `cta_location`(banner·nav·facility) | `TourLink` | 입학안내 → 투어로 넘어감 |
+
+`class_route_complete`는 수업 시간 접속을 홍보 분석에서 빼고 보기 위한 표시입니다. 판별 방법과 GA4 탐색 설정은
+[`../docs/class-route-exclusion.md`](../docs/class-route-exclusion.md)를 보세요. 코드만으로는 어떤 보고서에서도 자동으로 빠지지 않습니다.
 
 GA4 보고서에서 공간 이름별로 보려면 관리 → 맞춤 정의 → 맞춤 측정기준 만들기에서
 `room_name`, `floor_name`, `move_method`, `cta_location`을 **이벤트 범위**로 등록하세요. (등록한 날부터 집계)
