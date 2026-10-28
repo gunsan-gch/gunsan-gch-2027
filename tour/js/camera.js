@@ -47,7 +47,7 @@ class TourCamera {
   defaultZoom() {
     const w = this.viewport.clientWidth;
     const fillHeight = innerWidth <= 760 || this.viewport.closest('.is-expanded');
-    if (!w || !fillHeight) return this.clampZoom(2);   // PC 첫 화면 200%
+    if (!w || !fillHeight) return this.clampZoom(1);   // PC 첫 화면 100%
     return this.clampZoom((2 * this.maxHeight()) / w);
   }
 
