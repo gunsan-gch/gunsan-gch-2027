@@ -409,7 +409,11 @@
     $('#detail-description').hidden = !room.desc;
     const link = $('#detail-link');
     link.hidden = !room.link;
-    if (room.link) { link.href = room.link.href; link.textContent = room.link.label; }
+    detailRoom = room;
+    if (room.link) {
+      link.href = room.link.href; link.textContent = room.link.label;
+      if (tourTrack.live) window.gchClassRoute?.mark('room', room.name);   // 수업 경로 3단계
+    }
 
     const preview = $('#detail-image');
     preview.replaceChildren();
@@ -766,6 +770,26 @@
     if (!e.target.closest('.space-search')) closeResults();
   });
 
+  /* ---------- 공간 상세의 바로가기 링크 (방문 분석 · 수업 사이트 이동 세션 표시) ---------- */
+
+  let detailRoom = null;
+  // 새 탭으로 열리므로 투어 화면은 남아 있고, 이벤트는 이 화면에서 보냅니다.
+  // 휠 클릭(auxclick)도 셉니다. 오른쪽 메뉴의 '새 탭에서 열기'는 브라우저가 알려 주지 않아 셀 수 없습니다.
+  function trackRoomLink(e) {
+    if (e.type === 'auxclick' && e.button !== 1) return;
+    const room = detailRoom;
+    if (!room?.link) return;
+    const route = tourTrack.live ? window.gchClassRoute?.complete(room.name) : null;
+    tourTrack('tour_room_link_click', { room_name: room.name, link_url: room.link.href,
+      route_status: !route ? 'none' : route.first ? 'class_route' : 'class_route_repeat' });
+    if (route?.first) {
+      tourTrack('class_route_complete', { room_name: room.name, link_url: room.link.href,
+        route_steps: 'home>tour>room>link', route_minutes: route.minutes });
+    }
+  }
+  $('#detail-link').addEventListener('click', trackRoomLink);
+  $('#detail-link').addEventListener('auxclick', trackRoomLink);
+
   /* ---------- 입학 안내로 돌아가는 링크 (방문 분석) ---------- */
 
   document.addEventListener('click', e => {
@@ -784,6 +808,7 @@
   const target = params.get('room') && allRooms.find(r => compactText(r.name) === compactText(params.get('room')));
   switchScene(target ? target.scene : (SCENES[hashScene] ? hashScene : 'outdoor'));
   motion.start();
+  if (tourTrack.live) window.gchClassRoute?.mark('tour');   // 수업 경로 2단계 (입학안내를 거친 같은 방문일 때만 이어짐)
   if (target) openRoom(target, null);
 
   // 다른 층 그림은 화면이 한가할 때 미리 받아 둡니다.
