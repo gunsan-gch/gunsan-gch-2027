@@ -35,7 +35,7 @@
   <link rel="icon" type="image/png" href="assets/img/brand/favicon.png">
   <link rel="apple-touch-icon" href="assets/img/brand/apple-touch-icon.png">
   <!-- ?v= 값: 고칠 때마다 바꾸면 휴대폰에 남은 예전 파일 대신 새 파일을 받습니다 (README 참고) -->
-  <link rel="stylesheet" href="assets/css/style.css?v=20261026c">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261111">
   <link rel="preload" as="font" href="assets/fonts/EliceDXNeolli-Medium.otf" type="font/otf" crossorigin>
   <link rel="preload" as="font" href="assets/fonts/CookieRun-Black.otf" type="font/otf" crossorigin>
   <meta name="google-site-verification" content="fG7xD5bb5MYqujUC6RHyJgT8Rwqy-YeOj12afvQpXY4" />
@@ -130,6 +130,8 @@
           <!-- 첫 화면 카드: 스크립트가 꺼진 환경·검색 수집기에서도 입학 상담 연락처가 보이도록 기본 내용을 넣어 둡니다.
                (스크립트가 켜지면 site-data.js 기준으로 다시 그립니다. 설명회를 다시 안내하면 설명회 일시·신청 링크로 바뀝니다.) -->
           <!-- 원서 안내 띠: site-data.js 의 admissionSchedule.formUrl 이 있으면 접수 마감 전까지 표시 -->
+          <!-- 면접 안내: site-data.js 의 interview 로 그림 (showUntil 이 지나면 숨김) -->
+          <div class="interview-note" id="interview-note" hidden></div>
           <div class="apply-note" id="apply-note" hidden></div>
           <div class="hero-briefing is-consult" id="hero-briefing">
             <div class="hb-info">
@@ -412,9 +414,9 @@
   </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="assets/js/site-data.js?v=20261022b"></script>
+  <script src="assets/js/site-data.js?v=20261111"></script>
   <script src="assets/js/class-route.js?v=20261028a"></script>
-  <script src="assets/js/main.js?v=20261028a"></script>
+  <script src="assets/js/main.js?v=20261111"></script>
 <script type="text/javascript" src="//wcs.pstatic.net/wcslog.js"></script>
 <script type="text/javascript">
 if(!wcs_add) var wcs_add = {};

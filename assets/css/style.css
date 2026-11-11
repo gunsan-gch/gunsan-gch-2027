@@ -1840,3 +1840,28 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
   .an-btn { flex: 1 1 100%; justify-content: center; }
 }
 .schedule-form { margin-top: 12px; min-height: 46px; }
+
+/* ---------- 첫 화면 면접 안내 ---------- */
+.interview-note { margin-top: 18px; padding: 16px 18px; border-radius: 18px; background: #fff; border: 2px solid var(--blue); box-shadow: var(--shadow); }
+.iv-title { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; font-weight: 800; font-size: 1.12rem; color: var(--navy); }
+.iv-times { display: grid; gap: 8px; margin-top: 12px; }
+.iv-times > div { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; padding: 10px 14px; border-radius: 12px; background: var(--bg-tint); }
+.iv-times dt { font-weight: 800; color: var(--navy); }
+.iv-times dd { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); font-weight: 600; }
+.iv-times dd strong { color: var(--blue); font-weight: 800; }
+.iv-times .icon, .iv-place .icon { color: var(--blue); flex: none; }
+.iv-place { display: flex; align-items: center; gap: 6px; margin-top: 10px; color: var(--ink-2); font-weight: 600; }
+.iv-place strong { color: var(--navy); }
+.iv-q { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 4px; }
+.iv-q > summary { display: flex; align-items: center; gap: 8px; min-height: 46px; cursor: pointer; list-style: none; font-weight: 800; color: var(--blue); }
+.iv-q > summary::-webkit-details-marker { display: none; }
+.iv-q > summary .more-chevron { margin-left: auto; color: var(--muted); }
+.iv-q[open] > summary .more-chevron { transform: rotate(180deg); }
+.iv-q ol { margin: 4px 0 0; padding-left: 1.4em; list-style: decimal; display: grid; gap: 6px; color: var(--ink); }
+.iv-q li::marker { color: var(--blue); font-weight: 800; }
+.iv-note { margin-top: 10px; font-size: .88rem; color: var(--muted); }
+.hero .interview-note + .apply-note:not([hidden]), .hero .interview-note:not([hidden]) + .apply-note[hidden] + .hero-briefing { margin-top: 12px; }
+@media (max-width: 600px) {
+  .interview-note { padding: 14px; }
+  .iv-times > div { padding: 9px 12px; }
+}

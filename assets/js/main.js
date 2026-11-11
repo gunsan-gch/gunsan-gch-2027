@@ -1020,6 +1020,23 @@
     }
     return null;
   }
+  // 첫 화면 면접 안내: interview.showUntil 전까지 맨 위에 표시
+  (function interviewNote() {
+    var box = $("interview-note"), iv = D.interview;
+    if (!box || !iv || !iv.showUntil || now >= new Date(iv.showUntil)) return;
+    var dd = iv.date ? seoulParts(new Date(iv.date)).dayIndex - seoulParts(now).dayIndex : null;
+    var badge = dd === null ? "" : dd > 0 ? "D-" + dd : "오늘";
+    box.innerHTML =
+      '<p class="iv-title">' + (badge ? '<b class="an-badge">' + badge + '</b>' : '') + esc(iv.title) + '</p>' +
+      '<dl class="iv-times">' + (iv.sessions || []).map(function (x) {
+        return '<div><dt>' + esc(x.depts) + '</dt><dd>' + icon("clock") + '<span>' + esc(iv.dateText || "") + ' <strong>' + esc(x.time) + '</strong></span></dd></div>';
+      }).join("") + '</dl>' +
+      (iv.place ? '<p class="iv-place">' + icon("pin") + '<span><strong>' + esc(iv.place) + '</strong>' + esc(iv.placeNote || "") + '</span></p>' : '') +
+      ((iv.questions || []).length ? '<details class="iv-q"><summary>' + icon("chat") + '<span>' + esc(iv.questionsTitle || "면접 예상 질문") + '</span>' + icon("chevron", "more-chevron") + '</summary>' +
+        '<ol>' + iv.questions.map(function (q) { return '<li>' + esc(q) + '</li>'; }).join("") + '</ol>' +
+        (iv.questionsNote ? '<p class="iv-note">' + esc(iv.questionsNote) + '</p>' : '') + '</details>' : '');
+    box.hidden = false;
+  })();
   // 첫 화면 원서 안내 띠: 다음 원서접수에 원서 주소(formUrl)가 있으면 접수 마감 전까지 표시
   (function applyNote() {
     var box = $("apply-note"), ap = nextApplication();
