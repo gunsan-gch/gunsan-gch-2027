@@ -1865,3 +1865,5 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
   .interview-note { padding: 14px; }
   .iv-times > div { padding: 9px 12px; }
 }
+.iv-group { margin: 10px 0 4px; font-size: .9rem; font-weight: 800; color: var(--teal-dark); }
+.iv-group:first-of-type { margin-top: 4px; }

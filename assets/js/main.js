@@ -1032,8 +1032,10 @@
         return '<div><dt>' + esc(x.depts) + '</dt><dd>' + icon("clock") + '<span>' + esc(iv.dateText || "") + ' <strong>' + esc(x.time) + '</strong></span></dd></div>';
       }).join("") + '</dl>' +
       (iv.place ? '<p class="iv-place">' + icon("pin") + '<span><strong>' + esc(iv.place) + '</strong>' + esc(iv.placeNote || "") + '</span></p>' : '') +
-      ((iv.questions || []).length ? '<details class="iv-q"><summary>' + icon("chat") + '<span>' + esc(iv.questionsTitle || "면접 예상 질문") + '</span>' + icon("chevron", "more-chevron") + '</summary>' +
-        '<ol>' + iv.questions.map(function (q) { return '<li>' + esc(q) + '</li>'; }).join("") + '</ol>' +
+      ((iv.questionGroups || []).length ? '<details class="iv-q"><summary>' + icon("chat") + '<span>' + esc(iv.questionsTitle || "면접 예상 질문") + '</span>' + icon("chevron", "more-chevron") + '</summary>' +
+        iv.questionGroups.map(function (g) {
+          return '<p class="iv-group">' + esc(g.label) + '</p><ol>' + (g.items || []).map(function (q) { return '<li>' + esc(q) + '</li>'; }).join("") + '</ol>';
+        }).join("") +
         (iv.questionsNote ? '<p class="iv-note">' + esc(iv.questionsNote) + '</p>' : '') + '</details>' : '');
     box.hidden = false;
   })();
