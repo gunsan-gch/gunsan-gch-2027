@@ -79,7 +79,7 @@ window.TOUR_SCENES = {
     rooms: [
       { name: '조리실', quiet: true, at: [7, 15], w: 8, anchor: [7, 23], rect: [2, 4, 9, 14],
         desc: '1층 왼쪽 별도 구역의 조리실입니다. 개편 예정인 조리제빵실과는 다른 공간입니다.' },
-      { name: '조리제빵실', at: [26.4, 8.2], w: 20, anchor: [30.4, 22], rect: [14, 2, 24, 13],
+      { name: '조리제빵실', at: [26.4, 8.2], w: 20, anchor: [30.4, 22], rect: [14, 2, 24, 13], game: 'bakery',
         status: '개편 예정', current: '가사실 · 가사준비실', note: '개편 예정', photo: FACILITY_IMG + 'bakery-lab.webp', wide: true,
         desc: '현재 가사실과 가사준비실 두 구역을 합쳐 조리제빵실로 조성할 예정입니다. 2027년 여름방학 중 완공을 목표로 합니다.' },
       { name: '정보처리실', at: [47, 8.2], w: 15, anchor: [44.3, 22], game: 'typing',
