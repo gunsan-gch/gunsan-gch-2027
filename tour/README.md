@@ -9,6 +9,8 @@
   입학 안내 페이지의 실습실 카드 **'학교 투어에서 위치 보기'** 가 이 주소를 씁니다 (`site-data.js`의 `tourRoom`).
 - 체험 게임 바로 열기: `tour/index.html?game=cafe` → 1층 카페실습실 「음료 만들기 체험」, `?game=ai` → 3층 AI비즈니스실 「AI 광고 문구 고르기」 창이 바로 열립니다. `?game=typing` → 1층 정보처리실 「타자 속도 재기」, `?game=rain` → 1층 사무자동화실 「타자 소나기」, `?game=bakery` → 1층 조리제빵실 「n.00초 빵 굽기」도 바로 열 수 있습니다.
 
+`tour/index.html?game=career`로 4층 커리어존 「내 취향 찾기」를 바로 열 수 있습니다.
+
 ## 폴더 구성
 
 ```
@@ -27,6 +29,7 @@ tour/
   js/game-typing.js        정보처리실 「타자 속도 재기」 (문장·별 기준은 파일 맨 위에서 수정)
   js/game-rain.js          사무자동화실 「타자 소나기」 (낱말·아이템·규칙은 파일 맨 위에서 수정)
   js/game-bakery.js        조리제빵실 「n.00초 빵 굽기」 (목표 시간·별 기준은 파일 맨 위에서 수정)
+  js/game-career.js        커리어존 「내 취향 찾기」 (7문항·답변·학과 활동은 파일 맨 위에서 수정)
   css/games.css            체험 게임 디자인
   img/                     배경(WebP)·캐릭터 그림, ASSET-SOURCES.json(원본 지문)
   img/games/cafe/          카페 게임 그림 (재료 아이콘·손님·카운터 배경)
@@ -107,6 +110,13 @@ GPT가 그린 배경(`tour-share-art.png`)에 `update_assets.py`가 학교 글�
 | `tour_game_start` | `game_id`(cafe·ai·typing·rain·bakery), `room_name` | `TourGame` (CafeStart·AiStart·TypingStart·RainStart·BakeryStart) | 체험 게임 시작 |
 | `tour_game_complete` | `game_id`, `stars`(총 별), `hints`(힌트 사용 수) | `TourGame` (CafeDone·AiDone·TypingDone·RainDone·BakeryDone) | 체험 게임 끝 (결과 화면) |
 | `tour_game_cta` | `game_id`, `cta`(dept) | `TourGame` (CafeDept·AiDept·TypingDept·RainDept·BakeryDept) | 결과 화면의 학과 소개 링크 클릭 |
+| `tour_career_pick` | `question_id`, `choice_id`, `dept`(erp·marketing·fintech·cafe·none), `repeat`(yes·no) | `TourCareer` (`<question_id>_<choice_id>`) | 커리어존에서 보기를 고른 즉시, 문항당 1회 |
+| `tour_career_result` | `dept`(erp·marketing·fintech·cafe·none), `commute`(q6 보기 id), `elsewhere`(q7 보기 id), `repeat`(yes·no) | `TourCareer` (`Result_<dept>`) | 커리어존 7문항 완료 |
+
+커리어존도 공통 `tour_game_start`·`tour_game_complete`·`tour_game_cta`를 보냅니다 (`game_id: career`, 네이버 `CareerStart`·`CareerDone`·`CareerDept`).
+답 카드의 새 탭 학과 링크는 `tour_game_cta`의 `cta: dept_<학과 id>`, 결과 링크는 기존 틀의 `cta: dept`, `transport_type: beacon`을 씁니다.
+같은 브라우저에서 완료한 적이 있으면 `gch-tour-career-done` 값 `1`을 읽어 `repeat: yes`로 표시하며, 재플레이를 막거나 집계에서 빼지 않습니다.
+선생님용 보기별 집계 방법·질문 id 표는 [커리어존 집계 안내](../docs/career-zone-results.md)를 보세요. 학과 그림은 `../assets/img/departments/`의 기존 그림을 씁니다.
 
 `class_route_complete`는 수업 시간 접속을 홍보 분석에서 빼고 보기 위한 표시입니다. 판별 방법과 GA4 탐색 설정은
 [`../docs/class-route-exclusion.md`](../docs/class-route-exclusion.md)를 보세요. 코드만으로는 어떤 보고서에서도 자동으로 빠지지 않습니다.
