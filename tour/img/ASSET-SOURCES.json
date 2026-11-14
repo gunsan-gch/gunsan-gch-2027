@@ -162,6 +162,36 @@
       "kind": "game",
       "description": "카페 게임 카운터 배경 (960×540, 가운데 아래는 컵 자리로 비움, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14) → WebP 변환)",
       "sha256": "448876c555af7fed8c59bc7b1e35bc0bb8a13ca185f29b76bba82cea9617327f"
+    },
+    "games/office/monitor.png": {
+      "output": "games/office/monitor.png",
+      "kind": "game",
+      "description": "타자 게임 모니터와 키보드 (128×128, tour/tools/make_office_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "5e3f535c36079fb6ff809cc5bc9b5db53ff292eb2650d3a2e5bba0f76f28d42b"
+    },
+    "games/office/item-ice.png": {
+      "output": "games/office/item-ice.png",
+      "kind": "game",
+      "description": "타자 게임 얼음 (64×64, tour/tools/make_office_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "4ae7f7015601afff1cbb046b35db3214ba2c6118448ff0f8933e0a4bb0d4f7df"
+    },
+    "games/office/item-slow.png": {
+      "output": "games/office/item-slow.png",
+      "kind": "game",
+      "description": "타자 게임 천천히 (64×64, tour/tools/make_office_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "a7dbb5c2b70e84f447d1f8fd2c45e237f65e9ae395e166db299ab1b6ac7787cb"
+    },
+    "games/office/item-bomb.png": {
+      "output": "games/office/item-bomb.png",
+      "kind": "game",
+      "description": "타자 게임 폭탄 (64×64, tour/tools/make_office_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "dfe750753fc58737e844058a50d57f8fa96f791cdb61b53bfc53ec27fffa848d"
+    },
+    "games/office/item-heart.png": {
+      "output": "games/office/item-heart.png",
+      "kind": "game",
+      "description": "타자 게임 하트 (64×64, tour/tools/make_office_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "0cf1d596de634f4b28365582906faa810f8b375d96e36a02142b94258732f121"
     }
   }
 }
