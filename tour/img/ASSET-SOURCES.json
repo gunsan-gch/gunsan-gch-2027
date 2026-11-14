@@ -192,6 +192,48 @@
       "kind": "game",
       "description": "타자 게임 하트 (64×64, tour/tools/make_office_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
       "sha256": "0cf1d596de634f4b28365582906faa810f8b375d96e36a02142b94258732f121"
+    },
+    "games/bakery/dough.png": {
+      "output": "games/bakery/dough.png",
+      "kind": "game",
+      "description": "빵 굽기 게임 반죽 공 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "651b6a62c650f2bc9288d9f1a775f8a0664dba1c92c12963852811a726473959"
+    },
+    "games/bakery/risen.png": {
+      "output": "games/bakery/risen.png",
+      "kind": "game",
+      "description": "빵 굽기 게임 부푼 반죽 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "e29b147a295ee9b3e0c8840abc682a3f369d573841fed3224a27d4683221fa5e"
+    },
+    "games/bakery/bread-perfect.png": {
+      "output": "games/bakery/bread-perfect.png",
+      "kind": "game",
+      "description": "빵 굽기 게임 노릇한 빵 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "d651d9bdc2dd9f414aa7931bac0126d149216291ac78755c138e85fd248caf2c"
+    },
+    "games/bakery/bread-good.png": {
+      "output": "games/bakery/bread-good.png",
+      "kind": "game",
+      "description": "빵 굽기 게임 조금 연한 빵 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "a2c60acef37115ea2430dd71b282944d670eab035faae32468360ff46a86171b"
+    },
+    "games/bakery/bread-okay.png": {
+      "output": "games/bakery/bread-okay.png",
+      "kind": "game",
+      "description": "빵 굽기 게임 한쪽만 연한 빵 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "14af8d7ddd57b5ab1065bbda623b85797c3bb35d70b439214b33372518e2c716"
+    },
+    "games/bakery/bread-raw.png": {
+      "output": "games/bakery/bread-raw.png",
+      "kind": "game",
+      "description": "빵 굽기 게임 덜 익은 빵 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "62d6a33098949ef07145eed9c4ebcf2d87b283d29a618be867474adabb11e24e"
+    },
+    "games/bakery/bread-burnt.png": {
+      "output": "games/bakery/bread-burnt.png",
+      "kind": "game",
+      "description": "빵 굽기 게임 탄 빵 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "0bce492eeb97cdb5aff6704ff3c45890773f0066665d34fde328fa39181cfc2c"
     }
   }
 }

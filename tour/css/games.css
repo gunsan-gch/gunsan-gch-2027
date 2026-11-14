@@ -402,3 +402,62 @@ body.game-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .rain-burst, .rain-shake { animation: none; }
 }
+
+/* ---------- 조리제빵실: n.00초 빵 굽기 ---------- */
+.bakery-game {
+  display: grid; gap: 10px; color: var(--navy); text-align: center;
+  grid-template-areas: "progress" "target" "tip" "clock" "bread" "feedback" "button";
+}
+.bakery-game > * { min-width: 0; }
+.bakery-progress { grid-area: progress; margin: 0; font-size: 14px; font-weight: 700; color: var(--green); }
+.bakery-target { grid-area: target; margin: 0; font-family: var(--font-title); font-size: 28px; }
+.bakery-tip { grid-area: tip; margin: 0; font-size: 14px; color: var(--muted); }
+.bakery-clock { grid-area: clock; align-self: center; }
+.bakery-time {
+  margin: 0; font-family: var(--font-title); font-size: 48px; line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+.bakery-time.bakery-hidden { color: var(--muted); }
+.bakery-guide { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+.bakery-bread { grid-area: bread; justify-self: center; align-self: center; width: 128px; height: 128px; image-rendering: pixelated; }
+.bakery-feedback { grid-area: feedback; }
+.bakery-error, .bakery-grade { margin: 0 0 4px; font-size: 15px; font-weight: 700; }
+.bakery-stars { margin: 0; font-size: 26px; line-height: 1.2; letter-spacing: 2px; color: #e0a21e; }
+.bakery-button { grid-area: button; width: 100%; min-height: 72px; font-size: 20px; touch-action: manipulation; }
+.bakery-summary { max-width: 100%; color: var(--navy); }
+.bakery-total { display: block; font-family: var(--font-title); font-size: clamp(24px, 5vw, 34px); }
+.bakery-detail { margin: 4px 0 0; font-size: 14px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.bakery-picked .bakery-bread { animation: bakery-rise .3s ease-out; }
+.bakery-miss .bakery-button { animation: bakery-shake .25s ease-in-out; }
+@keyframes bakery-rise { from { transform: translateY(6px); opacity: .5; } }
+@keyframes bakery-shake { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+
+/* PC: 왼쪽 빵, 오른쪽 숫자와 버튼 */
+@media (min-width: 761px) {
+  .bakery-game {
+    grid-template-columns: minmax(160px, 1fr) minmax(0, 1.5fr); gap: 12px 24px;
+    grid-template-areas: "progress progress" "target target" "tip tip" "bread clock" "bread feedback" "bread button";
+  }
+  .bakery-bread { width: 160px; height: 160px; }
+  .bakery-time { font-size: 64px; }
+}
+
+/* 휴대폰 가로: 두 열로 눌러 담고 팁을 숨깁니다. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .bakery-game {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 6px 16px;
+    grid-template-areas: "progress clock" "target clock" "bread feedback" "bread button";
+  }
+  .bakery-tip { display: none; }
+  .bakery-target { font-size: 24px; }
+  .bakery-time { font-size: 40px; }
+  .bakery-bread { width: 112px; height: 112px; }
+  .bakery-guide { margin-top: 4px; font-size: 12px; }
+  .bakery-button { min-height: 56px; font-size: 18px; }
+  .bakery-error, .bakery-grade { margin-bottom: 2px; font-size: 13px; }
+  .bakery-stars { font-size: 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bakery-picked .bakery-bread, .bakery-miss .bakery-button { animation: none; }
+}
