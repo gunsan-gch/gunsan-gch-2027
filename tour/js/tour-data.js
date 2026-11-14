@@ -212,7 +212,7 @@ window.TOUR_SCENES = {
       { name: '3-3 교실', at: [49.5, 39], w: 8, anchor: [45.7, 25] },
       { name: '3-4 교실', at: [80.5, 39], w: 8, anchor: [78.8, 25] },
       { name: '3-5 교실', at: [92.5, 39], w: 8, anchor: [89.8, 25] },
-      { name: 'AI비즈니스실', at: [86.5, 65], w: 14, anchor: [79.2, 51.5], rect: [75, 56, 23, 17], status: '개편 예정', current: '세무실무실습실', note: '개편 예정', photo: FACILITY_IMG + 'ai-business.webp', wide: true,
+      { name: 'AI비즈니스실', at: [86.5, 65], w: 14, anchor: [79.2, 51.5], rect: [75, 56, 23, 17], status: '개편 예정', current: '세무실무실습실', note: '개편 예정', photo: FACILITY_IMG + 'ai-business.webp', wide: true, game: 'ai',
         desc: '현재 3층 세무실무실습실이 AI비즈니스실로 개편될 예정입니다. 2027년 여름방학 중 완공을 목표로 합니다.' },
       { name: 'E/L', elevator: true, at: [38, 66.5], w: 3, anchor: [38, 75.5], facility: true },
       { name: '자기주도학습실(1)', at: [47.5, 66], w: 10, anchor: [47.5, 75.5] },

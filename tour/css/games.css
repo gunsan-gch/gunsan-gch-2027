@@ -221,3 +221,96 @@ body.game-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .cafe-layer.is-new, .cafe-cup.is-shake, .cafe-cup.is-served, .cafe-customer.is-happy img, .game-stamp-seal { animation: none !important; }
 }
+
+/* ---------- AI 광고 문구 고르기 ---------- */
+
+.ai {
+  display: grid; gap: 12px;
+  grid-template-areas: "progress" "product" "panel" "reaction" "next";
+  color: var(--navy);
+}
+.ai > * { min-width: 0; }
+.ai-progress { grid-area: progress; margin: 0; font-size: 13px; font-weight: 700; color: var(--green); }
+.ai-product {
+  grid-area: product; padding: 14px; text-align: center;
+  background: var(--cream); border: 2px solid var(--navy); box-shadow: var(--pixel-shadow);
+}
+.ai-product img, .ai-post img { display: block; width: 128px; height: 128px; margin: 0 auto; image-rendering: pixelated; }
+.ai-emoji { display: grid; place-items: center; width: 128px; height: 128px; margin: 0 auto; font-size: 72px; }
+.ai-name { margin: 8px 0 4px; font-family: var(--font-title); font-size: 21px; }
+.ai-description { margin: 0; font-size: 14px; }
+.ai-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 12px; }
+.ai-tag { padding: 3px 8px; background: var(--paper); border: 1px solid var(--line-strong); font-size: 12px; color: var(--green); }
+.ai-panel { grid-area: panel; display: flex; flex-direction: column; gap: 10px; }
+.ai-guide { margin: 0; font-size: 14px; font-weight: 700; }
+.ai-choices { display: grid; gap: 8px; }
+.ai-choice {
+  width: 100%; min-height: 56px; padding: 12px 14px;
+  border: 2px solid var(--line-strong); background: var(--paper); box-shadow: var(--pixel-shadow);
+  font-family: var(--font); font-size: 15px; font-weight: 700; line-height: 1.5; text-align: left;
+  overflow-wrap: anywhere;
+}
+.ai-choice:hover:not(:disabled) { border-color: var(--navy); background: var(--cream); }
+.ai-choice.is-dim { background: var(--cream); color: var(--muted); border-style: dashed; box-shadow: none; }
+.ai-hint-note { display: block; margin-top: 6px; color: var(--orange); font-size: 12px; }
+.ai-choice:disabled { opacity: .6; cursor: default; box-shadow: none; }
+.ai-hint { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; }
+.ai-hint img, .ai-hint .ai-emoji { width: 32px; height: 32px; margin: 0; image-rendering: pixelated; font-size: 24px; }
+.ai-hint[aria-pressed="true"] { border-color: var(--orange); color: var(--orange); background: var(--cream); }
+.ai-hint:disabled { opacity: .6; cursor: default; }
+.ai-reaction { grid-area: reaction; min-width: 0; }
+.ai-post { padding: 12px 16px; background: var(--paper); border: 2px solid var(--navy); box-shadow: var(--pixel-shadow); }
+.ai-post-head { margin: 0 0 6px; padding-bottom: 8px; border-bottom: 1px solid var(--line); font-size: 12px; color: var(--green); }
+.ai-caption { margin: 8px 0; font-size: 15px; font-weight: 700; }
+.ai-likes { margin: 8px 0 0; font-size: 20px; font-weight: 700; }
+.ai-heart { display: inline-block; color: #e85d75; animation: ai-heart-pop .6s ease-in-out 2; }
+@keyframes ai-heart-pop { 50% { transform: scale(1.15); } }
+.ai-count { font-variant-numeric: tabular-nums; }
+.ai-feedback { margin: 12px 0 6px; font-size: 14px; color: var(--green); font-weight: 700; }
+.ai-stars { margin: 0; font-size: 26px; letter-spacing: 2px; color: var(--orange); }
+.ai-next { grid-area: next; width: 100%; min-height: 44px; align-self: end; }
+.ai-total { margin: 0; font-family: var(--font-title); font-size: clamp(22px, 5vw, 30px); color: var(--navy); }
+.ai.is-picked .ai-panel { display: none; }
+
+/* PC: 왼쪽 상품이 반응 화면으로 바뀌고 오른쪽에는 고른 후보가 남습니다. */
+@media (min-width: 761px) {
+  .ai {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 18px;
+    grid-template-areas: "progress progress" "product panel";
+    align-items: start;
+  }
+  .ai-product { padding: 24px 16px; }
+  .ai-product img, .ai-product .ai-emoji { width: 160px; height: 160px; }
+  .ai.is-picked { grid-template-areas: "progress progress" "reaction panel" "reaction next"; }
+  .ai.is-picked .ai-product { display: none; }
+  .ai.is-picked .ai-panel { display: flex; }
+}
+
+/* 휴대폰 가로: 두 열, 버튼은 최소 44px 유지 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .ai {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6px 12px;
+    grid-template-areas: "progress panel" "product panel";
+    align-items: start;
+  }
+  .ai-product { padding: 8px; }
+  .ai-product img, .ai-post img, .ai-product .ai-emoji, .ai-post .ai-emoji { width: 80px; height: 80px; font-size: 50px; }
+  .ai-name { margin: 4px 0; font-size: 17px; }
+  .ai-description, .ai-guide, .ai-caption, .ai-feedback { font-size: 12px; }
+  .ai-tags { margin-top: 6px; gap: 4px; }
+  .ai-tag { padding: 2px 5px; font-size: 11px; }
+  .ai-panel, .ai-choices { gap: 6px; }
+  .ai-choice { min-height: 44px; padding: 6px 10px; font-size: 12px; }
+  .ai-hint { padding: 4px 10px; font-size: 13px; }
+  .ai-post { padding: 8px 12px; }
+  .ai-post-head { margin-bottom: 4px; padding-bottom: 4px; font-size: 11px; }
+  .ai-caption, .ai-feedback, .ai-likes { margin: 4px 0; }
+  .ai-stars { font-size: 20px; }
+  .ai.is-picked { grid-template-areas: "progress panel" "reaction panel" "reaction next"; }
+  .ai.is-picked .ai-product { display: none; }
+  .ai.is-picked .ai-panel { display: flex; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-heart { animation: none; }
+}
