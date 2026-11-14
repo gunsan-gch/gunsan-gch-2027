@@ -3,7 +3,7 @@
  */
 (() => {
   /* ---------- 선생님이 고칠 수 있는 데이터 ---------- */
-  // target은 목표 초, hideAfter는 숫자를 가리기 시작하는 초입니다.
+  // target은 목표 초, hideAfter는 히든 이벤트가 걸렸을 때 숫자를 가리기 시작하는 초입니다.
   const ROUNDS = [
     { name: '반죽 치대기', target: 5.00, hideAfter: 3.0, tip: '반죽은 딱 알맞게 치대야 쫄깃해요.' },
     { name: '발효', target: 7.00, hideAfter: 4.0, tip: '너무 오래 두면 반죽이 꺼져요.' },
@@ -16,6 +16,8 @@
     { within: 0.50, stars: 1, text: '아슬아슬', bread: 'okay' },
     { within: Infinity, stars: 1, text: '조금 더 집중!', bread: 'miss' }
   ];
+  // 히든 이벤트: 이 확률(0~1)로 그 라운드의 숫자가 hideAfter초부터 가려집니다. 평소에는 끝까지 보임
+  const HIDDEN_CHANCE = 0.2;
   const STAMP_TEXT = '조리제빵실 도장 획득!';
   const RESULT_TEXT = '카페비즈과에서는 제과제빵 실습으로 반죽부터 굽기까지 직접 만들어 봐요.'; // ※ 학교 확인
   const DEPT_LINK = { href: '../index.html#cafe', label: '카페비즈과 알아보기 →' };
@@ -31,7 +33,7 @@
   };
 
   function start(container, api) {
-    const state = { round: 0, phase: 'ready', began: 0, results: [] };
+    const state = { round: 0, phase: 'ready', began: 0, results: [], hidden: false };
     let frame = 0;
     let timer = 0;
     container.innerHTML = `
@@ -68,10 +70,15 @@
       const round = ROUNDS[state.round];
       state.phase = 'ready';
       root.classList.remove('bakery-picked', 'bakery-miss');
+      // 히든 이벤트 추첨 (window.TOUR_GAMES.bakery.hiddenChance 로 바꿀 수 있음)
+      state.hidden = Math.random() < (window.TOUR_GAMES.bakery.hiddenChance ?? HIDDEN_CHANCE);
+      root.classList.toggle('bakery-hidden-event', state.hidden);
       $('.bakery-progress').textContent = `${state.round + 1} / ${ROUNDS.length} · ${round.name}`;
       $('.bakery-target').textContent = `목표 ${round.target.toFixed(2)}초`;
       $('.bakery-tip').textContent = round.tip;
-      $('.bakery-guide').textContent = `숫자가 가려져요. 감으로 ${round.target.toFixed(2)}초에 멈춰요!`;
+      $('.bakery-guide').textContent = state.hidden
+        ? `🎲 히든 이벤트! 중간에 숫자가 가려져요. 감으로 ${round.target.toFixed(2)}초에 멈춰요!`
+        : `${round.target.toFixed(2)}초에 딱 맞춰 멈춰요!`;
       $('.bakery-feedback').hidden = true;
       time.textContent = '0.00';
       time.classList.remove('bakery-hidden');
@@ -79,7 +86,7 @@
       bread.alt = state.round === 1 ? '부푼 반죽' : '반죽 공';
       button.textContent = '시작' + KEY_HINT;
       button.focus({ preventScroll: true });
-      say(`${round.name}. 목표 ${round.target.toFixed(2)}초. 시작 버튼을 눌러요.`);
+      say(`${round.name}. 목표 ${round.target.toFixed(2)}초.${state.hidden ? ' 히든 이벤트: 중간에 숫자가 가려져요.' : ''} 시작 버튼을 눌러요.`);
     }
 
     function tick() {
@@ -88,7 +95,7 @@
       const elapsed = now - state.began;
       const round = ROUNDS[state.round];
       if (elapsed >= round.target * 2000) return stop(now);   // 목표의 두 배가 지나면 자동 정지
-      const hidden = elapsed >= round.hideAfter * 1000;
+      const hidden = state.hidden && elapsed >= round.hideAfter * 1000;
       time.textContent = hidden ? '?.??' : seconds(elapsed);
       time.classList.toggle('bakery-hidden', hidden);
       frame = requestAnimationFrame(tick);
@@ -193,6 +200,7 @@
     stamp: STAMP_TEXT,
     message: RESULT_TEXT,
     cta: DEPT_LINK,
+    hiddenChance: HIDDEN_CHANCE,
     start
   };
 })();
