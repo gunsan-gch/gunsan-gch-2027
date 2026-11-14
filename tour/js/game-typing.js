@@ -77,7 +77,8 @@
       // 진행 중에는 지금까지 친 글자 기준, 끝나면 문장 전체 기준
       const basis = finished ? target.length : Math.max(1, confirmed);
       return { seconds: Math.floor(elapsed), accuracy: Math.round(correct.length / basis * 100),
-        speed: elapsed ? Math.round(strokesOf(correct.join('')) * 60 / elapsed) : 0 };
+        // 1초 미만은 1초로 계산해 비정상적으로 큰 타수가 나오지 않게 함
+        speed: elapsed ? Math.round(strokesOf(correct.join('')) * 60 / Math.max(1, elapsed)) : 0 };
     }
 
     function render() {
