@@ -254,6 +254,7 @@ window.TOUR_SCENES = {
         desc: '체육관 2층에서 아래 코트를 내려다보는 공간입니다. 코트 바닥은 4층에서 걸을 수 있는 공간이 아닙니다.' },
       { name: '동아리실(춤나래)', at: [20.5, 10], w: 5, anchor: [19.6, 24.5] },
       { name: '커리어존', at: [32, 10], w: 12, anchor: [35.1, 24.5],
+        game: 'career',
         photos: ['img/rooms/career-2.jpg', 'img/rooms/career-3.jpg', 'img/rooms/career-1.jpg'],
         desc: '진로 관련 책이 꽂힌 책장과 모둠 테이블이 있는 진로 활동 공간입니다. 함께 모여 진로를 탐색하고 상담과 수업을 할 수 있어요.' },
       { name: '금융실습실', at: [48.5, 10], w: 11, anchor: [45.7, 24.5] },
