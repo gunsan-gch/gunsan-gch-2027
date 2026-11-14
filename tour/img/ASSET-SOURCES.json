@@ -133,6 +133,30 @@
       "description": "카페 게임 손님 상반신 — 학부모 (128×128, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
       "sha256": "67067c7aca56d5d8878fcbecbcabe9d9fd64e2836407c9fd604feef6e563bd29"
     },
+    "games/ai/product-1.png": {
+      "output": "games/ai/product-1.png",
+      "kind": "game",
+      "description": "AI 광고 게임 상품 — 흰찰쌀보리 쿠키 봉지 (128×128, tour/tools/make_ai_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "47336bd9755e903f879a41925e496a6f848032737c34dfeacb5bfcaffbf95f72"
+    },
+    "games/ai/product-2.png": {
+      "output": "games/ai/product-2.png",
+      "kind": "game",
+      "description": "AI 광고 게임 상품 — 무선 이어폰과 케이스 (128×128, tour/tools/make_ai_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "a4ad0854ab2ff7c51518dd889187dd892e01073576106cdc11d642f7b4ee9a60"
+    },
+    "games/ai/product-3.png": {
+      "output": "games/ai/product-3.png",
+      "kind": "game",
+      "description": "AI 광고 게임 상품 — 보온 텀블러 (128×128, tour/tools/make_ai_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "5379458f3896be610f0ad05061d2932ab5a9943514608afcce67efe57f7d4c91"
+    },
+    "games/ai/ai-bot.png": {
+      "output": "games/ai/ai-bot.png",
+      "kind": "game",
+      "description": "AI 광고 게임 힌트 로봇 (64×64, tour/tools/make_ai_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "187147e8d5abbea60212cce13f7a76486cea3b7e290f6c3e6dca8b6351183c32"
+    },
     "games/cafe/counter-bg.png": {
       "output": "games/cafe/counter-bg.webp",
       "kind": "game",
