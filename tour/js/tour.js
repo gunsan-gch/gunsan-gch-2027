@@ -414,6 +414,11 @@
       link.href = room.link.href; link.textContent = room.link.label;
       if (tourTrack.live) window.gchClassRoute?.mark('room', room.name);   // 수업 경로 3단계
     }
+    // 체험 게임 버튼 — games.js에 그 게임이 등록되어 있을 때만 (문구는 게임 쪽 button)
+    const game = room.game && window.TOUR_GAMES?.[room.game];
+    const gameButton = $('#detail-game');
+    gameButton.hidden = !game;
+    if (game) gameButton.textContent = game.button || game.title;
 
     const preview = $('#detail-image');
     preview.replaceChildren();
@@ -680,7 +685,8 @@
   });
   $('#collapse').addEventListener('click', () => setExpanded(false));
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && !dialog.open && mapFrame.classList.contains('is-expanded')) setExpanded(false);
+    // 상세 창·게임 창이 열려 있으면 Esc는 그 창을 닫는 데만 쓰임
+    if (e.key === 'Escape' && !document.querySelector('dialog[open]') && mapFrame.classList.contains('is-expanded')) setExpanded(false);
   });
   // 휴대폰을 돌리면 그 방향에 맞는 배율로 (가로 + 크게 보기 = 층 전체가 한 화면에)
   // 회전 직후에는 화면 크기가 아직 바뀌기 전일 수 있어, 크기가 자리 잡은 뒤 한 번 더 맞춤
@@ -790,6 +796,17 @@
   $('#detail-link').addEventListener('click', trackRoomLink);
   $('#detail-link').addEventListener('auxclick', trackRoomLink);
 
+  /* ---------- 공간 상세의 체험 게임 버튼 → 상세 창을 닫고 게임 창 열기 (games.js) ---------- */
+
+  $('#detail-game').addEventListener('click', () => {
+    const room = detailRoom;
+    if (!room?.game || !window.tourGame) return;
+    const from = opener;   // 게임을 닫으면 상세 창을 열었던 이름표·카드로 초점을 되돌림
+    // close 이벤트는 한 박자 뒤에 오므로, 상세 창 정리가 끝난 다음에 게임 창을 엽니다
+    dialog.addEventListener('close', () => window.tourGame.open(room.game, room, from), { once: true });
+    dialog.close();
+  });
+
   /* ---------- 입학 안내로 돌아가는 링크 (방문 분석) ---------- */
 
   document.addEventListener('click', e => {
@@ -802,11 +819,14 @@
 
   /* ---------- 시작 ---------- */
 
-  // 주소로 바로 열기: #floor-3, #outdoor, ?room=카페실습실
+  // 주소로 바로 열기: #floor-3, #outdoor, ?room=카페실습실, ?game=cafe
   const params = new URLSearchParams(location.search);
   const hashScene = location.hash.match(/^#(?:floor-)?(outdoor|\d)$/)?.[1];
   const target = params.get('room') && allRooms.find(r => compactText(r.name) === compactText(params.get('room')));
-  switchScene(target ? target.scene : (SCENES[hashScene] ? hashScene : 'outdoor'));
+  // ?game=cafe: 그 게임이 있는 공간의 층으로 가서 공간 앞에 선 채로 시작 (게임 창은 games.js가 엽니다)
+  const gameRoom = !target && params.get('game') && allRooms.find(r => r.game === params.get('game'));
+  if (gameRoom) switchScene(gameRoom.scene, { spawn: gameRoom.anchor });
+  else switchScene(target ? target.scene : (SCENES[hashScene] ? hashScene : 'outdoor'));
   motion.start();
   if (tourTrack.live) window.gchClassRoute?.mark('tour');   // 수업 경로 2단계 (입학안내를 거친 같은 방문일 때만 이어짐)
   if (target) openRoom(target, null);

@@ -60,6 +60,84 @@
       "kind": "photo",
       "description": "야외 '학교 전경 보기' 드론 사진 (2026-10-20 대화로 받은 2000×1498 사진, 이미 작고 촬영 정보가 없어 원본 그대로 사용)",
       "sha256": "f4534f9e7e1321cb68fc66191dc25f6140fbe2e9b1bef722993cf77692843eaa"
+    },
+    "games/cafe/cup-ice.png": {
+      "output": "games/cafe/cup-ice.png",
+      "kind": "game",
+      "description": "카페 게임 재료 아이콘 — 투명컵 (64×64, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "d2d797c132387e36b62c56ff9039cbb0cc7bf20cce4968b136ae62a822ef4f1e"
+    },
+    "games/cafe/cup-mug.png": {
+      "output": "games/cafe/cup-mug.png",
+      "kind": "game",
+      "description": "카페 게임 재료 아이콘 — 머그컵 (64×64, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "450b25877d45a9ee79778ff10acc3cb1db832253e539a34f084d7e832ac53fb8"
+    },
+    "games/cafe/ice.png": {
+      "output": "games/cafe/ice.png",
+      "kind": "game",
+      "description": "카페 게임 재료 아이콘 — 얼음 (64×64, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "a9e36f7a4ca3c21389e1b0a0530cb8b58dc2149abebdf7c6c0795469b5ba4e7c"
+    },
+    "games/cafe/shot.png": {
+      "output": "games/cafe/shot.png",
+      "kind": "game",
+      "description": "카페 게임 재료 아이콘 — 에스프레소 샷 (64×64, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "cdbc8c9db98596af2d4cd53e042765fdaadcde29f9e9f24f526e8e6c0b6b53c8"
+    },
+    "games/cafe/water.png": {
+      "output": "games/cafe/water.png",
+      "kind": "game",
+      "description": "카페 게임 재료 아이콘 — 물 (64×64, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "276525c4d3bc0f6c52273fc4aee36ae4f75395b800b3d4cc8e7f6c3f38137605"
+    },
+    "games/cafe/milk.png": {
+      "output": "games/cafe/milk.png",
+      "kind": "game",
+      "description": "카페 게임 재료 아이콘 — 우유 (64×64, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "d060d3de38743c6294d2ea3703c0cd6cba80ef9f35ad39a6ab4abb02f736343d"
+    },
+    "games/cafe/steamed-milk.png": {
+      "output": "games/cafe/steamed-milk.png",
+      "kind": "game",
+      "description": "카페 게임 재료 아이콘 — 스팀우유 (64×64, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "f669ca3c853fee985af002e0114e45fcff1ff315da149636ed6225127cef136d"
+    },
+    "games/cafe/vanilla.png": {
+      "output": "games/cafe/vanilla.png",
+      "kind": "game",
+      "description": "카페 게임 재료 아이콘 — 바닐라 시럽 (64×64, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "4946fa67958ae1b00545b940d0d63743bc3a1b892a797b73421119621ac029e8"
+    },
+    "games/cafe/strawberry.png": {
+      "output": "games/cafe/strawberry.png",
+      "kind": "game",
+      "description": "카페 게임 재료 아이콘 — 딸기청 (64×64, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "f4212b62021d2dbbdaff09e094f2aecf71e7789660249e1dae794dd777d122fe"
+    },
+    "games/cafe/customer-1.png": {
+      "output": "games/cafe/customer-1.png",
+      "kind": "game",
+      "description": "카페 게임 손님 상반신 — 교복 학생 (128×128, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "1d92af7571bb8cd2d8fb38b72b5e43164d60228230b977b6e532e1216de043a0"
+    },
+    "games/cafe/customer-2.png": {
+      "output": "games/cafe/customer-2.png",
+      "kind": "game",
+      "description": "카페 게임 손님 상반신 — 선생님 (128×128, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "c254f576c1df1cba8c2bbce0a78d0c72a37d6ff33eda7427282ac699496350bf"
+    },
+    "games/cafe/customer-3.png": {
+      "output": "games/cafe/customer-3.png",
+      "kind": "game",
+      "description": "카페 게임 손님 상반신 — 학부모 (128×128, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14))",
+      "sha256": "67067c7aca56d5d8878fcbecbcabe9d9fd64e2836407c9fd604feef6e563bd29"
+    },
+    "games/cafe/counter-bg.png": {
+      "output": "games/cafe/counter-bg.webp",
+      "kind": "game",
+      "description": "카페 게임 카운터 배경 (960×540, 가운데 아래는 컵 자리로 비움, tour/tools/make_cafe_game_art.mjs 로 그린 픽셀아트(2026-11-14) → WebP 변환)",
+      "sha256": "448876c555af7fed8c59bc7b1e35bc0bb8a13ca185f29b76bba82cea9617327f"
     }
   }
 }

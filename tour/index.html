@@ -33,7 +33,8 @@
   <link rel="icon" type="image/png" href="../assets/img/brand/favicon.png">
   <link rel="apple-touch-icon" href="../assets/img/brand/apple-touch-icon.png">
   <link rel="preload" as="image" href="img/outdoor.webp">
-  <link rel="stylesheet" href="css/tour.css?v=20261026">
+  <link rel="stylesheet" href="css/tour.css?v=20261114">
+  <link rel="stylesheet" href="css/games.css?v=20261114">
 </head>
 <body>
   <a class="skip-link" href="#tour-map">지도 바로가기</a>
@@ -190,8 +191,25 @@
       <span id="detail-status" class="tag"></span>
       <h2 id="detail-title"></h2>
       <p id="detail-description"></p>
-      <a id="detail-link" class="btn btn-primary detail-link" target="_blank" rel="noopener" hidden></a>
+      <div class="detail-actions">
+        <a id="detail-link" class="btn btn-primary detail-link" target="_blank" rel="noopener" hidden></a>
+        <!-- 체험 게임이 있는 공간(tour-data.js의 game)에서만 보임 -->
+        <button type="button" id="detail-game" class="btn btn-primary detail-link" hidden></button>
+      </div>
     </div>
+  </dialog>
+
+  <!-- 체험 게임 창: 틀은 js/games.js, 게임 본체는 js/game-○○.js -->
+  <dialog id="game" class="game-dialog" aria-labelledby="game-title">
+    <div class="game-head">
+      <div>
+        <span class="eyebrow" id="game-room"></span>
+        <h2 id="game-title"></h2>
+      </div>
+      <button type="button" id="game-close" aria-label="게임 닫기">✕</button>
+    </div>
+    <div id="game-body" class="game-body"></div>
+    <p id="game-status" class="sr-only" aria-live="polite"></p>
   </dialog>
 
   <script src="js/analytics.js"></script>
@@ -201,6 +219,8 @@
   <script src="js/camera.js"></script>
   <script src="js/labels.js"></script>
   <script src="js/tour.js"></script>
+  <script src="js/games.js?v=20261114"></script>
+  <script src="js/game-cafe.js?v=20261114"></script>
 <script type="text/javascript" src="//wcs.pstatic.net/wcslog.js"></script>
 <script type="text/javascript">
 if(!wcs_add) var wcs_add = {};

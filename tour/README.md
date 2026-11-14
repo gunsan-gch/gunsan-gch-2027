@@ -7,6 +7,7 @@
 - 바로 열기: `tour/index.html#floor-3` (3층), `tour/index.html#outdoor` (야외)
 - 특정 공간 열기: `tour/index.html?room=카페실습실` → 그 층으로 가서 캐릭터가 걸어간 뒤 설명이 열립니다.
   입학 안내 페이지의 실습실 카드 **'학교 투어에서 위치 보기'** 가 이 주소를 씁니다 (`site-data.js`의 `tourRoom`).
+- 체험 게임 바로 열기: `tour/index.html?game=cafe` → 1층 카페실습실 앞에서 「음료 만들기 체험」 창이 바로 열립니다.
 
 ## 폴더 구성
 
@@ -20,8 +21,13 @@ tour/
   js/labels.js             지도 위 공간 이름표
   js/tour.js               층 전환, 검색, 상세 창, 계단·현관 연결
   js/analytics.js          방문 분석 (GA4·네이버) 이벤트 보내기
+  js/games.js              ★ 체험 게임 틀 — 게임 창 열기·닫기, 결과 화면, 도장 저장(localStorage), 분석 이벤트
+  js/game-cafe.js          카페실습실 「음료 만들기 체험」 (주문·재료·문구는 파일 맨 위에서 수정)
+  css/games.css            체험 게임 디자인
   img/                     배경(WebP)·캐릭터 그림, ASSET-SOURCES.json(원본 지문)
+  img/games/cafe/          카페 게임 그림 (재료 아이콘·손님·카운터 배경)
   tools/update_assets.py   새 원본 그림 중 바뀐 것만 골라 변환하는 도구
+  tools/make_cafe_game_art.mjs  카페 게임 픽셀아트를 코드로 다시 그리는 도구 (Node.js)
 ```
 
 실습실 조성 예시 사진은 입학 안내 페이지와 같은 `../assets/img/facilities/` 파일을 함께 씁니다.
@@ -45,6 +51,7 @@ tour/
 | `photo` | 상세 창에 그림 대신 보여 줄 사진 |
 | `desc` | 상세 설명 (없으면 기본 문구) |
 | `link` | 상세 창 아래 바로가기 버튼 `{ href, label }` — 새 탭으로 열림 (예: 경영실습실 → 수업 실습 페이지) |
+| `game` | 체험 게임 id (예: `'cafe'`) — 상세 창에 체험 버튼이 생기고 `?game=cafe`로 바로 열림. 게임은 `js/games.js` 머리 주석대로 `js/game-○○.js`에 등록 |
 
 배치도에는 있지만 그림에 없는 공간은 층의 `omitted` 목록에 적으면 카드 아래에 안내됩니다.
 
@@ -86,12 +93,20 @@ GPT가 그린 배경(`tour-share-art.png`)에 `update_assets.py`가 학교 글�
 | `tour_room_link_click` | `room_name`, `link_url`, `route_status`(class_route·class_route_repeat·none) | — | 공간 설명의 바로가기 링크(예: 경영실습실 → 수업 사이트) |
 | `class_route_complete` | `room_name`, `link_url`, `route_steps`, `route_minutes` | — | 같은 방문에서 입학안내 → 투어 → 그 공간을 거쳐 링크를 처음 누름 (방문당 1회) |
 | `tour_click` (입학안내 페이지) | `cta_location`(banner·nav·facility) | `TourLink` | 입학안내 → 투어로 넘어감 |
+| `tour_game_start` | `game_id`, `room_name` | `TourGame` (CafeStart) | 체험 게임 시작 |
+| `tour_game_complete` | `game_id`, `stars`(총 별), `hints`(힌트 사용 수) | `TourGame` (CafeDone) | 체험 게임 끝 (결과 화면) |
+| `tour_game_cta` | `game_id`, `cta`(dept) | `TourGame` (CafeDept) | 결과 화면의 학과 소개 링크 클릭 |
 
 `class_route_complete`는 수업 시간 접속을 홍보 분석에서 빼고 보기 위한 표시입니다. 판별 방법과 GA4 탐색 설정은
 [`../docs/class-route-exclusion.md`](../docs/class-route-exclusion.md)를 보세요. 코드만으로는 어떤 보고서에서도 자동으로 빠지지 않습니다.
 
 GA4 보고서에서 공간 이름별로 보려면 관리 → 맞춤 정의 → 맞춤 측정기준 만들기에서
 `room_name`, `floor_name`, `move_method`, `cta_location`을 **이벤트 범위**로 등록하세요. (등록한 날부터 집계)
+
+## 체험 게임 도장 — `js/games.js`
+
+게임을 끝내면 브라우저 `localStorage`의 `gch-tour-stamps`에 `{ "cafe": { "stars": 7, "at": "2026-11-14" } }` 꼴로 최고 별 수만 남깁니다 (다음에 만들 스탬프 투어용).
+이름·연락처 같은 개인정보는 받지 않고 서버로 보내는 것도 없습니다. 저장이 막힌 브라우저에서도 게임은 그대로 됩니다.
 
 ## 확인 방법
 

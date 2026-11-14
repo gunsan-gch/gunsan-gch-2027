@@ -24,6 +24,7 @@
    - overflow  true면 칸이 좁아도 글씨를 줄이지 않고 한 줄로 (칸 밖으로 나가도 됨)
    - desc      상세 설명 (없으면 기본 문구)
    - link      상세 창 아래에 띄울 바로가기 버튼 { href, label } (새 탭으로 열림)
+   - game      체험 게임 id (js/games.js에 등록한 이름, 예: 'cafe') — 상세 창에 체험 버튼이 생기고 ?game=cafe 로 바로 열림
    - where     같은 층에 같은 이름이 둘 이상일 때 구분용 위치 (검색 결과·상세 창에 표시)
    - elevator  true면 엘리베이터 — 누르거나 앞에서 Enter를 누르면 갈 층을 고름 (E/L이 없는 위층은 그 층의 elevatorStair 계단에서 나옴)
    - door      야외의 층 입구 이름표 — 누르면 그 입구로 걸어가 건물 안으로 들어감 (값은 화면 읽기용 설명, 카드·검색에서 빠짐)
@@ -90,7 +91,7 @@ window.TOUR_SCENES = {
         desc: '아래 버튼으로 군산여상에서는 어떤 수업을 하는지 볼 수 있어요.',
         link: { href: 'https://gunsan-gch.github.io/word-practice/', label: '수업 실습 페이지 열기 ↗' } },
       { name: '카페실습실', at: [35.6, 36.7], w: 14, anchor: [26.5, 24], rect: [25, 28, 20, 16],
-        status: '개편 예정', current: '기업자원관리실', note: '개편 예정', photo: FACILITY_IMG + 'cafe-lab.webp', wide: true,
+        status: '개편 예정', current: '기업자원관리실', note: '개편 예정', photo: FACILITY_IMG + 'cafe-lab.webp', wide: true, game: 'cafe',
         desc: '현재 기업자원관리실을 카페실습실로 조성할 예정입니다. 2027년 여름방학 중 완공을 목표로 합니다.' },
       { name: '전산회계1실', at: [51.5, 36], w: 11, anchor: [46.2, 24],
         photos: ['img/rooms/acct-1.jpg', 'img/rooms/acct-2.jpg'],
