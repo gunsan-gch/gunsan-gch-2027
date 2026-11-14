@@ -7,7 +7,7 @@
 - 바로 열기: `tour/index.html#floor-3` (3층), `tour/index.html#outdoor` (야외)
 - 특정 공간 열기: `tour/index.html?room=카페실습실` → 그 층으로 가서 캐릭터가 걸어간 뒤 설명이 열립니다.
   입학 안내 페이지의 실습실 카드 **'학교 투어에서 위치 보기'** 가 이 주소를 씁니다 (`site-data.js`의 `tourRoom`).
-- 체험 게임 바로 열기: `tour/index.html?game=cafe` → 1층 카페실습실 「음료 만들기 체험」, `?game=ai` → 3층 AI비즈니스실 「AI 광고 문구 고르기」 창이 바로 열립니다.
+- 체험 게임 바로 열기: `tour/index.html?game=cafe` → 1층 카페실습실 「음료 만들기 체험」, `?game=ai` → 3층 AI비즈니스실 「AI 광고 문구 고르기」 창이 바로 열립니다. `?game=typing` → 1층 정보처리실 「타자 속도 재기」, `?game=rain` → 1층 사무자동화실 「타자 소나기」도 바로 열 수 있습니다.
 
 ## 폴더 구성
 
@@ -24,14 +24,18 @@ tour/
   js/games.js              ★ 체험 게임 틀 — 게임 창 열기·닫기, 결과 화면, 도장 저장(localStorage), 분석 이벤트
   js/game-cafe.js          카페실습실 「음료 만들기 체험」 (주문·재료·문구는 파일 맨 위에서 수정)
   js/game-ai.js            AI비즈니스실 「AI 광고 문구 고르기」 (상품·문구·좋아요 수는 파일 맨 위에서 수정)
+  js/game-typing.js        정보처리실 「타자 속도 재기」 (문장·별 기준은 파일 맨 위에서 수정)
+  js/game-rain.js          사무자동화실 「타자 소나기」 (낱말·아이템·규칙은 파일 맨 위에서 수정)
   css/games.css            체험 게임 디자인
   img/                     배경(WebP)·캐릭터 그림, ASSET-SOURCES.json(원본 지문)
   img/games/cafe/          카페 게임 그림 (재료 아이콘·손님·카운터 배경)
   img/games/ai/            AI 광고 게임 그림 (상품 3개·힌트 로봇)
+  img/games/office/        타자 게임 그림 (모니터·아이템 4종)
   tools/update_assets.py   새 원본 그림 중 바뀐 것만 골라 변환하는 도구
   tools/pixel.mjs          게임 픽셀아트 공통 도우미 (색·그리기·PNG 저장)
   tools/make_cafe_game_art.mjs  카페 게임 픽셀아트를 코드로 다시 그리는 도구 (Node.js)
   tools/make_ai_game_art.mjs    AI 광고 게임 픽셀아트 도구 (Node.js)
+  tools/make_office_game_art.mjs  타자 게임 픽셀아트 도구 (Node.js)
 ```
 
 실습실 조성 예시 사진은 입학 안내 페이지와 같은 `../assets/img/facilities/` 파일을 함께 씁니다.
@@ -97,9 +101,9 @@ GPT가 그린 배경(`tour-share-art.png`)에 `update_assets.py`가 학교 글�
 | `tour_room_link_click` | `room_name`, `link_url`, `route_status`(class_route·class_route_repeat·none) | — | 공간 설명의 바로가기 링크(예: 경영실습실 → 수업 사이트) |
 | `class_route_complete` | `room_name`, `link_url`, `route_steps`, `route_minutes` | — | 같은 방문에서 입학안내 → 투어 → 그 공간을 거쳐 링크를 처음 누름 (방문당 1회) |
 | `tour_click` (입학안내 페이지) | `cta_location`(banner·nav·facility) | `TourLink` | 입학안내 → 투어로 넘어감 |
-| `tour_game_start` | `game_id`(cafe·ai), `room_name` | `TourGame` (CafeStart·AiStart) | 체험 게임 시작 |
-| `tour_game_complete` | `game_id`, `stars`(총 별), `hints`(힌트 사용 수) | `TourGame` (CafeDone·AiDone) | 체험 게임 끝 (결과 화면) |
-| `tour_game_cta` | `game_id`, `cta`(dept) | `TourGame` (CafeDept·AiDept) | 결과 화면의 학과 소개 링크 클릭 |
+| `tour_game_start` | `game_id`(cafe·ai·typing·rain), `room_name` | `TourGame` (CafeStart·AiStart·TypingStart·RainStart) | 체험 게임 시작 |
+| `tour_game_complete` | `game_id`, `stars`(총 별), `hints`(힌트 사용 수) | `TourGame` (CafeDone·AiDone·TypingDone·RainDone) | 체험 게임 끝 (결과 화면) |
+| `tour_game_cta` | `game_id`, `cta`(dept) | `TourGame` (CafeDept·AiDept·TypingDept·RainDept) | 결과 화면의 학과 소개 링크 클릭 |
 
 `class_route_complete`는 수업 시간 접속을 홍보 분석에서 빼고 보기 위한 표시입니다. 판별 방법과 GA4 탐색 설정은
 [`../docs/class-route-exclusion.md`](../docs/class-route-exclusion.md)를 보세요. 코드만으로는 어떤 보고서에서도 자동으로 빠지지 않습니다.
