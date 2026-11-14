@@ -15,6 +15,7 @@
      };
 
    start()는 container 안에 화면을 만들고, 다 끝나면 api.done({ stars, hints })를 부릅니다.
+   api.done({ stars, hints, extra })의 extra는 별 줄 위에 넣을 DOM 요소입니다 (선택).
    api.announce(text)는 화면 읽기 프로그램용 안내, api.reducedMotion은 '움직임 줄이기' 설정 여부입니다.
    돌려준 함수(cleanup)는 창을 닫을 때 불려 타이머 등을 정리합니다 (없어도 됨).
 
@@ -109,17 +110,17 @@ window.tourGame = (() => {
 
   /* ---------- 끝: 결과 화면 ---------- */
 
-  function finish(session, { stars = 0, hints = 0 } = {}) {
+  function finish(session, { stars = 0, hints = 0, extra = null } = {}) {
     if (session !== current || session.finished) return;
     session.finished = true;
     const { id, game } = session;
     const max = game.maxStars || stars;
     tourTrack('tour_game_complete', { game_id: id, stars, hints }, ['TourGame', game.naver + 'Done']);
     const best = saveStamp(id, stars);
-    renderResult(session, stars, max, best);
+    renderResult(session, stars, max, best, extra);
   }
 
-  function renderResult(session, stars, max, best) {
+  function renderResult(session, stars, max, best, extra) {
     const { id, game } = session;
     try { session.cleanup?.(); } catch (e) { /* 정리 중 오류는 무시 */ }
     session.cleanup = null;
@@ -148,6 +149,7 @@ window.tourGame = (() => {
     message.className = 'game-result-text';
     message.textContent = game.message || '';
 
+    if (extra) box.append(extra);
     box.append(starRow, score, stamp, message);
     if (best && best.stars > stars) {
       const note = document.createElement('p');
