@@ -314,3 +314,91 @@ body.game-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .ai-heart { animation: none; }
 }
+
+/* ---------- 정보처리실: 타자 속도 재기 ---------- */
+.typing { display: grid; gap: 12px; max-width: 720px; margin: 0 auto; color: var(--navy); }
+.typing > * { min-width: 0; }
+.typing-guide { display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: var(--paper); border: 1px solid var(--line); }
+.typing-guide p { margin: 0; font-size: 14px; }
+.typing-monitor { flex: 0 0 48px; }
+.typing-monitor img { display: block; image-rendering: pixelated; }
+.typing-emoji { font-size: 32px; }
+.typing-target { margin: 0; padding: 14px; background: #fff; border: 2px solid var(--navy); font-size: 19px; line-height: 1.9; white-space: pre-wrap; word-break: break-all; }
+.typing-target span { border: 1px solid transparent; border-radius: 2px; }
+.typing-target .typing-correct { color: var(--green); }
+.typing-target .typing-wrong { color: #c8402e; text-decoration: underline; background: #fde8e6; }
+.typing-target .typing-current { border-color: var(--navy); }
+.typing-target .typing-pending { border-color: #87909b; color: var(--muted); }
+.typing-input, .rain-input { width: 100%; min-width: 0; min-height: 48px; padding: 10px; font: 16px/1.5 var(--font); color: var(--navy); background: #fff; border: 2px solid var(--line-strong); border-radius: 0; }
+.typing-input { resize: vertical; }
+.typing-stats { text-align: center; font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.typing-actions { display: flex; gap: 8px; }
+.typing-actions .btn { flex: 1; min-width: 44px; }
+.typing-summary, .rain-summary { color: var(--navy); }
+.typing-speed, .rain-total { display: block; font-family: var(--font-title); font-size: clamp(24px, 5vw, 34px); }
+.typing-detail, .rain-detail { margin: 4px 0 0; font-size: 14px; }
+
+/* ---------- 사무자동화실: 타자 소나기 ---------- */
+.rain-intro { display: grid; gap: 16px; max-width: 720px; margin: 0 auto; color: var(--navy); }
+.rain-rules { margin: 0; padding-left: 24px; }
+.rain-items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.rain-item-guide { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid var(--line-strong); background: var(--paper); }
+.rain-item-guide img, .rain-word img, .rain-emoji { flex-shrink: 0; width: 32px; height: 32px; image-rendering: pixelated; }
+.rain-emoji { display: inline-grid; place-items: center; font-size: 25px; }
+.rain-item-description p { margin: 2px 0 0; font-size: 13px; }
+.rain { display: grid; gap: 12px; grid-template-areas: "status" "sky" "controls"; color: var(--navy); }
+.rain > * { min-width: 0; }
+.rain-status { grid-area: status; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.rain-lives { color: #c8402e; letter-spacing: 2px; }
+.rain-lives span { display: inline-block; }
+.rain-effects { color: var(--green); }
+.rain-sky { grid-area: sky; position: relative; overflow: hidden; height: 320px; border: 2px solid var(--navy); background: linear-gradient(#eaf7ff, var(--paper)); }
+.rain-sky::after { content: ""; position: absolute; inset: auto 0 0; height: 10px; border-top: 2px solid var(--navy); background: #e8c48a; }
+.rain-word { position: absolute; width: calc(20% - 6px); margin-left: 2px; display: flex; flex-direction: column; align-items: center; padding: 5px 2px; border: 2px solid var(--navy); background: #fff; box-shadow: var(--pixel-shadow); font-size: 16px; font-weight: 700; line-height: 1.3; text-align: center; overflow-wrap: anywhere; word-break: break-all; }
+.rain-item { background: #fff4e0; border-color: var(--orange); }
+.rain-controls { grid-area: controls; display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; align-items: center; }
+.rain-controls .btn, .rain-start { min-width: 44px; min-height: 44px; }
+.rain-message { margin: 0; }
+.rain-burst { animation: rain-pop .25s ease-out forwards; z-index: 1; }
+.rain-shake { animation: rain-shake .25s ease-in-out; }
+@keyframes rain-pop { to { transform: scale(1.25); opacity: 0; } }
+@keyframes rain-shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+@media (max-width: 760px) {
+  .typing { gap: 8px; }
+  .typing-target { padding: 10px; font-size: 17px; line-height: 1.8; }
+  .typing-guide { padding: 4px 8px; gap: 8px; }
+  .typing-guide p { font-size: 13px; }
+  .rain-items { grid-template-columns: minmax(0, 1fr); }
+  .rain-sky { height: clamp(220px, 42dvh, 360px); }
+  .rain-word { font-size: 14px; }
+  .rain-controls { grid-template-columns: minmax(0, 1fr) auto; }
+  .rain-stop { grid-column: 1 / -1; }
+  .rain-status { gap: 4px 12px; }
+}
+
+/* 가로 화면: 문장과 입력을 가깝게, 소나기는 왼쪽에 둡니다. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .typing { gap: 6px; }
+  .typing-guide { display: none; }
+  .typing-target { padding: 8px; font-size: 16px; line-height: 1.6; }
+  .typing-input { padding: 6px 10px; }
+  .typing-actions .btn { padding: 6px 12px; }
+  .rain { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); grid-template-areas: "sky status" "sky controls"; gap: 8px 12px; align-items: start; }
+  .rain-sky { height: 160px; }
+  .rain-status { gap: 2px 10px; font-size: 13px; }
+  .rain-controls { grid-template-columns: minmax(0, 1fr) auto; gap: 6px; }
+  .rain-input { grid-column: 1 / -1; }
+  .rain-controls .btn { padding: 6px 10px; }
+  .rain-stop { grid-column: auto; }
+  .rain-word { font-size: 14px; }
+  .rain-intro { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+  .rain-items { grid-column: 2; grid-row: 1 / 3; grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .rain-item-guide { padding: 3px 8px; }
+  .rain-item-description p { font-size: 12px; }
+  .rain-start { align-self: end; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rain-burst, .rain-shake { animation: none; }
+}
