@@ -5,6 +5,7 @@
 (() => {
   /* ---------- 선생님이 고칠 수 있는 데이터 (문항·답변·학과 활동) ---------- */
   // dept: erp·marketing·fintech·cafe = 우리 학교 학과 / null = 우리 학교에 없는 분야(집계용)
+  // guide: 없는 분야지만 이 학과로 안내 — 답 카드 링크와 추천 점수에 반영 (집계의 dept는 none 그대로)
   // reply: 고르면 바로 보여 주는 한 줄. 우리 학교에 없는 분야는 "없다"고 잘라 말하지 않고,
   //        "하교 후 시간이 넉넉해 좋아하는 분야를 따로 배울 여유가 있다"는 식으로 돌려 말하며 가까운 학과를 안내
   const DEPT_NAMES = { erp: 'ERP비즈니스과', marketing: 'AI마케팅과', fintech: 'AI핀테크과', cafe: '카페비즈과' };
@@ -12,26 +13,26 @@
     { id: 'q1', text: '쉬는 날 뭐 할 때 제일 신나요?', choices: [
       { id: 'video', emoji: '🎬', text: '영상 찍고 편집하기', dept: 'marketing', reply: 'AI마케팅과에서 영상·숏폼 콘텐츠 만들기를 배워요!' },
       { id: 'dessert', emoji: '🧁', text: '빵·디저트 만들기', dept: 'cafe', reply: '카페비즈과에서 제과제빵을 직접 실습해요!' },
-      { id: 'beauty', emoji: '💅', text: '네일·메이크업', dept: null, reply: '네일·메이크업은 군산여상 동아리와 방과후 수업에서 배울 수 있어요! 학과 수업으로는 카페비즈과의 매장 꾸미기·SNS 홍보가 가까워요.' },
+      { id: 'beauty', emoji: '💅', text: '네일·메이크업', dept: null, guide: 'marketing', reply: '네일·메이크업은 군산여상 동아리와 방과후 수업에서 배울 수 있어요! 뷰티 콘텐츠와 SNS 홍보는 AI마케팅과에서 배워요.' },
       { id: 'money', emoji: '💰', text: '용돈 불리기(저축·투자)', dept: 'fintech', reply: 'AI핀테크과에서 금융과 투자를 데이터로 배워요!' } ] },
     { id: 'q2', text: '친구들이 나한테 자주 부탁하는 건?', choices: [
       { id: 'slides', emoji: '🖥️', text: '발표 자료 예쁘게 만들기', dept: 'erp', reply: 'ERP비즈니스과에서 문서·보고서 작성을 익혀요!' },
       { id: 'treasurer', emoji: '🧾', text: '돈 계산·모임 총무', dept: 'erp', reply: 'ERP비즈니스과에서 회계와 자료 정리를 배워요!' },
-      { id: 'hair', emoji: '💇', text: '머리 손질·화장 해 주기', dept: null, reply: '메이크업·네일은 동아리와 방과후 수업에서 배울 수 있어요. 손님을 대하는 서비스 매너는 전 학과에서 배워요.' },
+      { id: 'hair', emoji: '💇', text: '머리 손질·화장 해 주기', dept: null, guide: 'marketing', reply: '메이크업·네일은 동아리와 방과후 수업에서 배울 수 있어요. 꾸미는 감각은 AI마케팅과의 이미지·영상 콘텐츠 제작에서 살릴 수 있어요!' },
       { id: 'snack', emoji: '🍪', text: '맛있는 간식 만들어 주기', dept: 'cafe', reply: '카페비즈과에서 음료와 디저트 만들기를 배워요!' } ] },
     { id: 'q3', text: '꿈의 직업과 가장 가까운 건?', choices: [
       { id: 'cafe_owner', emoji: '☕', text: '카페·베이커리 사장', dept: 'cafe', reply: '카페비즈과에서 메뉴 개발부터 매장 운영까지 실습해요!' },
       { id: 'creator', emoji: '📱', text: 'SNS 마케터·크리에이터', dept: 'marketing', reply: 'AI마케팅과에서 SNS 마케팅과 콘텐츠 제작을 배워요!' },
       { id: 'bank', emoji: '🏦', text: '은행·핀테크 회사', dept: 'fintech', reply: 'AI핀테크과에서 금융 데이터와 AI를 배워요!' },
       { id: 'office', emoji: '🏢', text: '회사 사무·경영 지원', dept: 'erp', reply: 'ERP비즈니스과에서 인사·총무·회계 업무를 배워요!' },
-      { id: 'beauty_designer', emoji: '✂️', text: '헤어·뷰티 디자이너', dept: null, reply: '네일·메이크업 동아리와 방과후 수업으로 뷰티 감각을 키우고, 학과 수업에서는 카페비즈과의 매장 서비스를 경험해 봐요.' },
+      { id: 'beauty_designer', emoji: '✂️', text: '헤어·뷰티 디자이너', dept: null, guide: 'marketing', reply: '네일·메이크업 동아리와 방과후 수업으로 뷰티 감각을 키우고, AI마케팅과에서 뷰티 브랜드를 알리는 콘텐츠·SNS 마케팅을 배워 봐요!' },
       { id: 'nurse', emoji: '🩺', text: '간호·보건', dept: null, reply: '간호·보건 공부는 하교 후 시간에 이어 갈 수 있어요. 학교에서는 병원 행정과 가까운 ERP비즈니스과가 있어요.' } ] },
     { id: 'q4', text: '배워 보고 싶은 자격증은?', choices: [
       { id: 'barista', emoji: '🥐', text: '바리스타·제과제빵', dept: 'cafe', reply: '카페비즈과에서 바리스타·제과제빵 자격증을 준비해요!' },
       { id: 'gtq', emoji: '🎨', text: 'GTQ·영상 편집', dept: 'marketing', reply: 'AI마케팅과에서 GTQ·GTQ-AI를 준비해요!' },
       { id: 'erp_cert', emoji: '📊', text: '전산회계·ERP', dept: 'erp', reply: 'ERP비즈니스과에서 전산회계운용사·ERP정보관리사를 준비해요!' },
       { id: 'finance_cert', emoji: '📈', text: '금융·투자 자격증', dept: 'fintech', reply: 'AI핀테크과에서 금융 자격증을 준비해요!' },
-      { id: 'hairdresser', emoji: '💈', text: '미용사', dept: null, reply: '네일·메이크업은 동아리와 방과후 수업에서, 미용사 공부는 하교 후 여유 시간에 준비할 수 있어요. 학과 수업은 카페비즈과의 서비스·매장 운영이 가까워요.' },
+      { id: 'hairdresser', emoji: '💈', text: '미용사', dept: null, guide: 'marketing', reply: '네일·메이크업은 동아리와 방과후 수업에서, 미용사 공부는 하교 후 여유 시간에 준비할 수 있어요. 뷰티 숍을 알리는 SNS 마케팅은 AI마케팅과에서 배워요!' },
       { id: 'cook', emoji: '🍳', text: '조리사(한식·양식)', dept: null, reply: '조리는 카페비즈과의 제과제빵·음료 실습과 가까워요. 한식·양식 조리는 하교 후 시간에 더 배울 수 있어요.' } ] },
     { id: 'q5', text: '수업 시간에 제일 재밌을 것 같은 건?', choices: [
       { id: 'company', emoji: '🏭', text: '가상 회사 운영해 보기', dept: 'erp', reply: 'ERP비즈니스과에서 가상 회사의 매출·재고를 정리해 봐요!' },
@@ -43,7 +44,7 @@
       { id: 'far_ok', emoji: '🚌', text: '배우고 싶은 과가 있으면 멀어도(기숙사·통학버스) 갈래요', dept: null, reply: '멀리 가기 전에, 비슷한 걸 집 근처 군산여상에서 배울 수 있는지 꼭 확인해 보세요.' },
       { id: 'unsure', emoji: '🤔', text: '아직 모르겠어요', dept: null, reply: '괜찮아요. 투어를 돌며 천천히 찾아봐요.' } ] },
     { id: 'q7', text: '다른 학교에 가야만 배울 수 있는 분야 중 끌리는 게 있다면?', kind: 'elsewhere', choices: [
-      { id: 'beauty', emoji: '💄', text: '뷰티(헤어·메이크업·네일)', dept: null, reply: '알려 줘서 고마워요! 네일·메이크업은 군산여상 동아리와 방과후 수업에 있고, 하교 후 시간도 넉넉해 좋아하는 분야를 더 배울 수 있어요.' },
+      { id: 'beauty', emoji: '💄', text: '뷰티(헤어·메이크업·네일)', dept: null, guide: 'marketing', reply: '알려 줘서 고마워요! 네일·메이크업은 군산여상 동아리와 방과후 수업에 있고, 뷰티 콘텐츠·SNS 마케팅은 AI마케팅과에서 배울 수 있어요.' },
       { id: 'cooking', emoji: '🍜', text: '조리(한식·양식·중식)', dept: null, reply: '카페비즈과에 제과제빵·음료 실습이 있어요. 한식·양식 조리는 하교 후 시간에 배울 수 있어요.' },
       { id: 'nursing', emoji: '🏥', text: '간호·보건', dept: null, reply: '간호·보건 공부는 하교 후 시간에 이어 갈 수 있고, 학교에서는 병원 행정과 가까운 ERP비즈니스과가 있어요.' },
       { id: 'game_it', emoji: '🎮', text: '게임·IT 개발', dept: null, reply: 'AI핀테크과·AI마케팅과에서 AI 도구를 많이 쓰고, 개발 공부는 하교 후 시간에 더 할 수 있어요.' },
@@ -102,8 +103,8 @@
     box.append(el('h3', 'career-title', dept ? '나와 잘 맞는 학과: ' + DEPT_NAMES[dept] : '군산여상 4개 학과를 둘러보세요'));
     if (dept) box.append(el('p', 'career-activity', DEPT_ACTIVITY[dept]));
     const bars = el('div', 'career-bars');
-    // 막대는 학과 선택 문항 수를 기준으로 표시합니다 (통학·다른 분야 문항 제외).
-    const total = Math.max(1, QUESTIONS.filter(q => q.choices.some(c => c.dept)).length);
+    // 막대는 학과(안내 학과 포함)로 이어지는 문항 수를 기준으로 표시합니다 (통학 문항 제외).
+    const total = Math.max(1, QUESTIONS.filter(q => q.choices.some(c => c.dept || c.guide)).length);
     Object.keys(DEPT_NAMES).forEach(id => {
       const row = el('div', 'career-bar-row');
       row.setAttribute('role', 'img');
@@ -131,7 +132,7 @@
       <div class="career-game">
         <section class="career-intro">
           <h3 class="career-title">내 취향 찾기</h3>
-          <p>7문항, 1분이면 끝나요.<br>고른 보기는 이름 없이 횟수로만 집계돼 학과 운영에 참고해요.</p>
+          <p>7문항, 1분이면 끝나요.<br>마음이 끌리는 보기를 골라 보세요.</p>
           <button type="button" class="btn btn-primary career-start">시작</button>
         </section>
         <section class="career-question" aria-live="polite" aria-atomic="true"></section>
@@ -178,10 +179,11 @@
       answers.push({ question, choice });
       for (const item of choices.children) item.disabled = true;
       button.setAttribute('aria-pressed', 'true');
-      reply.classList.toggle('career-reply-other', !choice.dept && question.kind !== 'commute' && choice.id !== 'none');
+      const lead = choice.dept || choice.guide;   // 답 카드에서 안내할 학과
+      reply.classList.toggle('career-reply-other', !lead && question.kind !== 'commute' && choice.id !== 'none');
       reply.classList.toggle('career-reply-animate', !api.reducedMotion);
       reply.append(el('p', 'career-reply-text', choice.emoji + ' ' + choice.reply));
-      if (choice.dept) reply.append(deptLink(choice.dept));
+      if (lead) reply.append(deptLink(lead));
       reply.hidden = false;
       next.hidden = false;
       next.focus();
@@ -190,10 +192,12 @@
     function finish() {
       finished = true;
       const counts = Object.fromEntries(Object.keys(DEPT_NAMES).map(id => [id, 0]));
-      answers.forEach(({ choice }) => { if (choice.dept) counts[choice.dept]++; });
+      const leadOf = choice => choice.dept || choice.guide;
+      answers.forEach(({ choice }) => { if (leadOf(choice)) counts[leadOf(choice)]++; });
       const highest = Math.max(...Object.values(counts));
       // 동률이면 문항 순서상 먼저 고른 학과. 학과 선택이 없으면 전체 학과를 안내합니다.
-      const dept = answers.find(({ choice }) => choice.dept && counts[choice.dept] === highest)?.choice.dept;
+      const first = answers.find(({ choice }) => leadOf(choice) && counts[leadOf(choice)] === highest);
+      const dept = first ? leadOf(first.choice) : undefined;
       const selected = kind => answers.find(answer => answer.question.kind === kind)?.choice.id || 'none';
       window.TOUR_GAMES.career.cta = dept
         ? { href: '../index.html#' + dept, label: DEPT_NAMES[dept] + ' 알아보기 →' }
