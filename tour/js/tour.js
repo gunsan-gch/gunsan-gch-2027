@@ -50,6 +50,7 @@
     walker.style.left = state.x + '%';
     walker.style.top = state.y + '%';
     walker.dataset.facing = state.facing;
+    document.dispatchEvent(new CustomEvent('tour:avatar', {detail:state}));
     const row = ['down', 'right', 'up', 'left'].indexOf(state.facing);
     walker.style.backgroundPosition = `${state.frame * 50}% ${row * 100 / 3}%`;
     if (!state.moving) return;
@@ -90,6 +91,7 @@
     camera.apply();
     camera.center(motion.x, motion.y);
     if (!quiet) say(`${scene.name}에 도착했어요. 바닥이나 공간 이름을 누르면 걸어가요.`);
+    document.dispatchEvent(new CustomEvent('tour:scene', {detail:{id:scene.id}}));
     // 주소 뒤 #floor-3 갱신 (다른 페이지 안에 넣어 보여 줄 때 막혀도 투어는 계속 동작)
     try { history.replaceState(null, '', '#' + (id === 'outdoor' ? 'outdoor' : 'floor-' + id)); } catch (e) { /* 무시 */ }
   }
@@ -818,6 +820,22 @@
       ['TourCTA', where[0].toUpperCase() + where.slice(1)]);
   });
 
+  // Add-on adapter: reuses the original movement, camera, scenes and room flow.
+  window.tourAddonHost = {
+    scene: () => scene?.id,
+    position: () => ({x:motion.x,y:motion.y,facing:motion.facing,frame:motion.frame,moving:motion.moving}),
+    stop: () => { walkRequest++; pressedKeys.clear(); motion.cancel(); motion.paint(false); },
+    room: (name, from) => { const room=allRooms.find(r=>r.name===name); if(room) return openRoom(room,from); },
+    go: async (id, point, label) => {
+      if(scene?.id!==String(id)) switchScene(String(id),{via:'floor_button'});
+      const ticket=++walkRequest, from=scene;
+      viewport.scrollIntoView({block:'nearest',behavior:'instant'});
+      viewport.focus({preventScroll:true}); say(label+' 앞으로 걸어가고 있어요.');
+      const arrived=await motion.go(...point);
+      if(!arrived || ticket!==walkRequest || scene!==from) return false;
+      say(label+' 앞에 도착했어요.'); return true;
+    }
+  };
   /* ---------- 시작 ---------- */
 
   // 주소로 바로 열기: #floor-3, #outdoor, ?room=카페실습실, ?game=cafe

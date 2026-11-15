@@ -1,0 +1,70 @@
+/* These rules are scoped to the two new features. Original tour/game CSS is unchanged. */
+#festival-open,#wardrobe-open{border-color:var(--green);background:var(--green-soft);color:var(--green)}
+.addon-dialog{max-width:760px}.addon-dialog .game-body{padding:24px}.addon-dialog .game-head h2{font-size:25px}.addon-dialog p{line-height:1.8}.addon-dialog .addon-lead{margin-top:0;color:var(--muted)}
+.addon-actions{display:flex;flex-wrap:wrap;gap:9px;justify-content:flex-end;margin-top:20px}.addon-actions .btn{font-size:14px}.addon-small{font-size:12px;color:var(--muted)}
+.addon-npc-talk{display:grid;grid-template-columns:80px minmax(0,1fr);gap:20px}.addon-npc-talk canvas{width:80px;height:100px;image-rendering:pixelated;background:var(--green-soft);border-bottom:5px solid var(--line-strong)}.addon-npc-talk h3{font-size:23px;margin:0 0 12px}.addon-npc-talk p{margin:0 0 12px}
+.addon-tasks{padding:0;list-style:none;display:grid;gap:10px}.addon-tasks li{border:1px solid var(--line);padding:12px;display:flex;gap:15px;align-items:center;background:white}.addon-tasks canvas{width:45px;height:45px;image-rendering:pixelated;flex:none}.addon-tasks .addon-task-copy{flex:1}.addon-tasks strong{font-size:16px}.addon-tasks small{display:block;font-size:12px;color:var(--muted)}.addon-tasks .is-got{background:var(--green-soft)}.addon-tasks .btn{padding:7px 12px;font-size:13px;min-width:72px}.addon-inventory{display:flex;gap:16px;justify-content:center;margin:20px 0}.addon-inventory canvas{width:60px;height:60px;image-rendering:pixelated}
+.addon-rule{padding:12px 15px;border-left:3px solid var(--green);background:var(--green-soft);font-size:13px}.addon-game-note{font-size:14px;color:var(--green);background:var(--green-soft);padding:12px;text-align:center}
+.addon-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:100;background:var(--navy);color:white;padding:12px 20px;max-width:90vw;border:2px solid var(--paper);font-size:14px;box-shadow:3px 3px 0 var(--line-strong)}.addon-toast[hidden]{display:none}
+.addon-point{position:absolute;z-index:4;width:max(28px,calc(var(--stage-w)*.045));padding:0;border:0;background:none;transform:translate(-50%,-85%);cursor:pointer;color:var(--navy);overflow:visible}.addon-point canvas{width:100%;height:auto;display:block;image-rendering:pixelated;pointer-events:none}.addon-point .addon-npc-name{position:absolute;top:89%;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:"Elice DX Neolli",sans-serif;font-size:clamp(10px,calc(var(--stage-w)*.008),15px);padding:2px 5px;background:var(--paper);border:1px solid var(--green);line-height:1.35}.addon-point .addon-alert{position:absolute;bottom:100%;left:45%;font-weight:900;border:2px solid var(--navy);background:#f5d378;width:25px;height:29px;line-height:24px;text-align:center}.addon-point.is-item{width:max(22px,calc(var(--stage-w)*.025));transform:translate(-50%,-70%)}.addon-point:focus-visible{outline:3px solid var(--orange);outline-offset:6px}
+#scene-walker.has-addon-outfit{background-image:none!important}#scene-walker .addon-outfit-layer{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.addon-closet{display:grid;grid-template-columns:180px minmax(0,1fr);gap:22px}.addon-avatar-preview{text-align:center}.addon-avatar-preview canvas{width:144px;height:180px;image-rendering:pixelated;background:var(--green-soft);border-bottom:6px solid var(--line-strong)}.addon-turns{display:flex;gap:4px;justify-content:center;margin-top:10px}.addon-turns button{font:inherit;font-size:11px;padding:5px;background:var(--paper);border:1px solid var(--line-strong);cursor:pointer}.addon-turns [aria-pressed=true]{background:var(--navy);color:white}.addon-closet-list{display:grid;gap:10px}.addon-outfit{display:flex;align-items:center;gap:12px;border:1px solid var(--line);padding:12px;background:white}.addon-outfit canvas{width:42px;height:42px;image-rendering:pixelated;flex:none}.addon-outfit>div{flex:1;font-size:14px}.addon-outfit small{display:block;color:var(--muted);font-size:11px}.addon-outfit .btn{padding:6px 10px;font-size:12px}.addon-preview-label{font-size:12px;line-height:1.6;min-height:38px;color:var(--muted);margin:10px 0}.addon-preview-label.is-preview{color:#8a4d15}.addon-earned{font-size:14px;padding:12px;background:var(--green-soft);margin:0 0 20px}.addon-end{border:2px dashed #b39a54;background:#fff4d5;padding:20px;text-align:center}.addon-end canvas{width:85px;height:85px;image-rendering:pixelated}.addon-end h3{margin:8px 0;font-size:25px}.addon-end p{margin:0;font-size:14px}
+@media(max-width:650px){.addon-dialog .game-body{padding:18px}.addon-dialog .game-head h2{font-size:20px}.addon-closet{grid-template-columns:1fr;gap:15px}.addon-avatar-preview{display:grid;grid-template-columns:100px 1fr;gap:0 15px;align-items:center}.addon-avatar-preview canvas{grid-row:1/4;width:96px;height:120px}.addon-preview-label{min-height:0}.addon-npc-talk{grid-template-columns:64px minmax(0,1fr);gap:14px}.addon-npc-talk canvas{width:64px;height:80px}.addon-npc-talk h3{font-size:20px}.addon-npc-talk p{font-size:14px}.addon-tasks li{gap:10px;padding:10px}.addon-tasks canvas{width:32px;height:32px}.addon-tasks strong{font-size:14px}.addon-tasks small{font-size:11px}.addon-tasks .btn{min-width:60px;padding:6px 8px}.addon-outfit{gap:9px;padding:9px}.addon-outfit>div{font-size:13px}}
+
+/* Expanded wardrobe. All changes below stay inside the add-on. */
+#scene-walker .addon-outfit-layer{inset:auto;left:-25%;top:-30%;width:150%;height:130%;max-width:none;pointer-events:none}
+.addon-dialog.is-wardrobe{max-width:920px;width:calc(100% - 32px)}
+.addon-dialog.is-wardrobe .game-body{overflow:visible}
+.addon-closet-top{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:16px}
+.addon-closet-top p{margin:0;font-size:13px;color:var(--muted)}.addon-closet-top>span{white-space:nowrap;font-size:12px}.addon-closet-top b{font-size:21px;color:var(--green)}
+.addon-unlock-track{display:flex;align-items:center;gap:8px;margin-bottom:22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 0}
+.addon-unlock-track strong{font-size:13px;margin-right:auto}.addon-unlock-track>span{border:1px solid var(--line);padding:4px 10px;font-size:12px;color:var(--muted);background:#fff}
+.addon-unlock-track small{font-size:10px;margin-left:5px}.addon-unlock-track .is-open{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.addon-closet{grid-template-columns:216px minmax(0,1fr);gap:24px;align-items:start}
+.addon-avatar-preview{position:sticky;top:0;display:block;background:var(--paper);border:1px solid var(--line);padding:12px}
+.addon-fitting-stage{height:224px;position:relative;background:#e7eee6;display:flex;justify-content:center;align-items:center;border:1px solid #c2cfc2}
+.addon-fitting-tag{position:absolute;top:9px;left:0;right:0;font-size:9px;letter-spacing:2px;color:#668375;font-weight:800}
+.addon-fitting-floor{position:absolute;bottom:30px;width:116px;height:12px;background:#c8d9c5;border-bottom:4px solid #abbfaa}
+.addon-avatar-preview .addon-fitting-stage canvas{position:relative;z-index:1;width:192px;height:208px;background:none;border:0;image-rendering:pixelated;max-width:none}
+.addon-turns{gap:4px;margin-top:12px}.addon-turns button{flex:1;font-size:11px;min-height:30px}.addon-walk-toggle{font-size:12px!important;padding:6px 12px!important;margin-top:9px;width:100%}
+.addon-walk-toggle[aria-pressed=true]{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.addon-preview-label{font-size:11px;margin:12px 0 6px;line-height:1.6!important;min-height:35px}.addon-equipped-names{font-size:11px;color:var(--navy);margin:0 0 10px;min-height:35px;line-height:1.6!important}
+#addon-show-equipped{font-size:10px;padding:5px 8px;border:0;text-decoration:underline;background:none;color:var(--muted);box-shadow:none}
+.addon-collection{min-width:0}.addon-filters{display:flex;gap:7px;margin-bottom:12px}.addon-filters button{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--paper);padding:7px 12px;cursor:pointer}.addon-filters small{opacity:.65;margin-left:4px}.addon-filters [aria-pressed=true]{color:white;background:var(--navy);border-color:var(--navy)}
+.addon-closet-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.addon-outfit{display:grid;grid-template-columns:64px minmax(0,1fr);gap:8px;align-items:center;padding:10px 8px;border:1px solid var(--line);background:#fffdfa;position:relative}
+.addon-outfit.is-selected{border-color:var(--green);outline:1px solid var(--green);background:#eef3e8}
+.addon-outfit>div{flex:initial}.addon-item-art{text-align:center;background:#f1efe8;position:relative;padding:2px 0 18px}
+.addon-outfit .addon-item-art canvas{width:60px;height:65px;image-rendering:pixelated}
+.addon-item-art>span{position:absolute;bottom:4px;left:0;right:0;font-size:9px;color:#786b58}.is-unlocked .addon-item-art>span{color:var(--green)}
+.addon-item-copy{min-width:0}.addon-outfit .addon-item-copy strong{display:block;font-size:12px;line-height:1.5;word-break:keep-all;margin:3px 0 8px}.addon-outfit .addon-item-copy small{font-size:9px;color:#817564}
+.addon-outfit .btn{padding:4px 10px;font-size:11px;min-height:28px}.addon-closet-rule{border-top:1px solid var(--line);padding-top:14px;margin-top:22px}
+@media(max-width:650px){
+ .addon-dialog.is-wardrobe{width:calc(100% - 16px)}.addon-dialog.is-wardrobe .game-body{padding:14px}.addon-dialog.is-wardrobe .game-head{padding:16px}.addon-closet-top{gap:10px;margin-bottom:12px}.addon-closet-top p{font-size:11px}.addon-closet-top>span{font-size:10px}.addon-closet-top b{font-size:18px}
+ .addon-unlock-track{gap:4px;margin-bottom:14px}.addon-unlock-track strong{font-size:11px}.addon-unlock-track>span{font-size:10px;padding:4px 6px}.addon-unlock-track small{display:none}
+ .addon-closet{display:block}.addon-avatar-preview{margin-bottom:16px;position:sticky;top:0;z-index:2;display:grid;grid-template-columns:128px minmax(0,1fr);gap:12px;padding:10px}.addon-fitting-stage{height:152px}.addon-fitting-tag{font-size:7px;top:6px;letter-spacing:1px}.addon-avatar-preview .addon-fitting-stage canvas{width:120px;height:130px}.addon-fitting-floor{bottom:23px;width:80px;height:8px;border-bottom-width:3px}.addon-turns{margin-top:0;gap:2px}.addon-turns button{font-size:10px;padding:3px;min-height:26px}.addon-walk-toggle{margin-top:6px;font-size:10px!important;padding:4px 6px!important}.addon-preview-label{margin:7px 0 4px;font-size:10px;min-height:0}.addon-equipped-names{font-size:10px;margin-bottom:0;min-height:0}#addon-show-equipped{font-size:9px;padding:4px 0}
+ .addon-closet-list{gap:8px}.addon-outfit{grid-template-columns:46px minmax(0,1fr);gap:6px;padding:7px 5px}.addon-outfit .addon-item-art canvas{width:44px;height:48px}.addon-item-art>span{font-size:8px}.addon-outfit .addon-item-copy strong{font-size:11px;line-height:1.4}.addon-outfit .addon-item-copy small{font-size:8px}.addon-outfit .btn{font-size:10px;padding:3px 7px}.addon-filters button{font-size:11px;padding:6px 12px}
+}
+@media(prefers-reduced-motion:reduce){.addon-toast{animation:none}}
+
+/* Preview choices never equip until the explicit apply action. */
+.addon-clear-slots{display:flex;gap:6px;margin:10px 0}
+.addon-clear-slots button{flex:1;font:inherit;font-size:10px;padding:4px 2px;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--muted)}
+.addon-clear-slots button:disabled{opacity:.45;cursor:default}
+#addon-apply-outfit{width:100%;font-size:13px;padding:9px 5px}
+#addon-apply-outfit:disabled{background:#e8e7df;color:#858378;border-color:#d4d2c5;box-shadow:none;cursor:default;transform:none}
+.addon-apply-help{font-size:10px!important;line-height:1.5!important;color:var(--muted);margin:8px 0;min-height:30px}
+.addon-outfit [data-addon-equip][aria-pressed=true]{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.addon-unlock-result{margin:22px 0;padding:20px;border:2px solid var(--green);background:var(--green-soft);text-align:center}
+.addon-unlock-result h3{font-size:23px;line-height:1.4;margin:7px 0 16px;color:var(--navy)}
+.addon-unlock-pair{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:18px}
+.addon-unlock-pair figure{margin:0;display:flex;align-items:center;text-align:left;gap:10px;background:var(--paper);border:1px solid var(--line);padding:10px 14px}
+.addon-unlock-pair canvas{width:60px;height:65px;image-rendering:pixelated;flex:none}
+.addon-unlock-pair small{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}.addon-unlock-pair strong{font-size:14px}
+.addon-unlock-result>p{font-size:12px;margin:12px 0 0;color:var(--muted);line-height:1.6}
+@media(max-width:650px){
+ .addon-unlock-track{gap:3px}.addon-unlock-track>span{font-size:10px;padding:4px;min-width:21px;text-align:center}.addon-unlock-track strong{font-size:10px}
+ .addon-avatar-preview{align-items:start}.addon-clear-slots{margin:7px 0;gap:4px}.addon-clear-slots button{font-size:9px;padding:4px 1px}
+ #addon-apply-outfit{font-size:11px;padding:6px 4px}.addon-apply-help{font-size:9px!important;min-height:0;margin:5px 0}
+ .addon-unlock-result{padding:14px 10px}.addon-unlock-result h3{font-size:19px}.addon-unlock-pair{gap:8px}.addon-unlock-pair figure{padding:8px;gap:7px;flex:1;min-width:110px;display:block;text-align:center}.addon-unlock-pair strong{font-size:12px}
+}
