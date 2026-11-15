@@ -166,7 +166,7 @@
   window.TOUR_GAMES.typing = {
     title: '타자 속도 재기', button: '⌨️ 타자 속도 재기', room: '정보처리실', naver: 'Typing', maxStars: 3,
     stamp: '정보처리실 도장 획득!',
-    message: '군산여상에서는 모든 학과가 1학년부터 워드프로세서·컴퓨터활용능력·ITQ 같은 사무 자격증을 준비해요.', // ※ 학교 확인
+    message: '모든 학과가 1학년부터 워드·컴활·ITQ 자격증을 준비해요.', // ※ 학교 확인
     cta: { href: '../index.html#departments', label: '4개 학과 알아보기 →' },
     passages: PASSAGES,
     start

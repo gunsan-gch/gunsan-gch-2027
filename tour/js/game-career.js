@@ -13,27 +13,27 @@
     { id: 'q1', text: '쉬는 날 뭐 할 때 제일 신나요?', choices: [
       { id: 'video', emoji: '🎬', text: '영상 찍고 편집하기', dept: 'marketing', reply: 'AI마케팅과에서 영상·숏폼 콘텐츠 만들기를 배워요!' },
       { id: 'dessert', emoji: '🧁', text: '빵·디저트 만들기', dept: 'cafe', reply: '카페비즈과에서 제과제빵을 직접 실습해요!' },
-      { id: 'beauty', emoji: '💅', text: '네일·메이크업', dept: null, guide: 'marketing', reply: '네일·메이크업은 군산여상 동아리와 방과후 수업에서 배울 수 있어요! 뷰티 콘텐츠와 SNS 홍보는 AI마케팅과에서 배워요.' },
+      { id: 'beauty', emoji: '💅', text: '네일·메이크업', dept: null, guide: 'marketing', reply: '네일·메이크업은 동아리와 방과후 수업에서! 뷰티 콘텐츠·SNS 홍보는 AI마케팅과에서 배워요.' },
       { id: 'money', emoji: '💰', text: '용돈 불리기(저축·투자)', dept: 'fintech', reply: 'AI핀테크과에서 금융과 투자를 데이터로 배워요!' } ] },
     { id: 'q2', text: '친구들이 나한테 자주 부탁하는 건?', choices: [
       { id: 'slides', emoji: '🖥️', text: '발표 자료 예쁘게 만들기', dept: 'erp', reply: 'ERP비즈니스과에서 문서·보고서 작성을 익혀요!' },
       { id: 'treasurer', emoji: '🧾', text: '돈 계산·모임 총무', dept: 'erp', reply: 'ERP비즈니스과에서 회계와 자료 정리를 배워요!' },
-      { id: 'hair', emoji: '💇', text: '머리 손질·화장 해 주기', dept: null, guide: 'marketing', reply: '메이크업·네일은 동아리와 방과후 수업에서 배울 수 있어요. 꾸미는 감각은 AI마케팅과의 이미지·영상 콘텐츠 제작에서 살릴 수 있어요!' },
+      { id: 'hair', emoji: '💇', text: '머리 손질·화장 해 주기', dept: null, guide: 'marketing', reply: '메이크업·네일은 동아리와 방과후 수업에서! 꾸미는 감각은 AI마케팅과에서 살려요.' },
       { id: 'snack', emoji: '🍪', text: '맛있는 간식 만들어 주기', dept: 'cafe', reply: '카페비즈과에서 음료와 디저트 만들기를 배워요!' } ] },
     { id: 'q3', text: '꿈의 직업과 가장 가까운 건?', choices: [
       { id: 'cafe_owner', emoji: '☕', text: '카페·베이커리 사장', dept: 'cafe', reply: '카페비즈과에서 메뉴 개발부터 매장 운영까지 실습해요!' },
       { id: 'creator', emoji: '📱', text: 'SNS 마케터·크리에이터', dept: 'marketing', reply: 'AI마케팅과에서 SNS 마케팅과 콘텐츠 제작을 배워요!' },
       { id: 'bank', emoji: '🏦', text: '은행·핀테크 회사', dept: 'fintech', reply: 'AI핀테크과에서 금융 데이터와 AI를 배워요!' },
       { id: 'office', emoji: '🏢', text: '회사 사무·경영 지원', dept: 'erp', reply: 'ERP비즈니스과에서 인사·총무·회계 업무를 배워요!' },
-      { id: 'beauty_designer', emoji: '✂️', text: '헤어·뷰티 디자이너', dept: null, guide: 'marketing', reply: '네일·메이크업 동아리와 방과후 수업으로 뷰티 감각을 키우고, AI마케팅과에서 뷰티 브랜드를 알리는 콘텐츠·SNS 마케팅을 배워 봐요!' },
-      { id: 'nurse', emoji: '🩺', text: '간호·보건', dept: null, reply: '간호·보건 공부는 하교 후 시간에 이어 갈 수 있어요. 학교에서는 병원 행정과 가까운 ERP비즈니스과가 있어요.' } ] },
+      { id: 'beauty_designer', emoji: '✂️', text: '헤어·뷰티 디자이너', dept: null, guide: 'marketing', reply: '뷰티 감각은 동아리와 방과후 수업에서, 뷰티 브랜드 마케팅은 AI마케팅과에서 배워요!' },
+      { id: 'nurse', emoji: '🩺', text: '간호·보건', dept: null, reply: '하교 후 시간에 이어 갈 수 있어요. 병원 행정은 ERP비즈니스과와 가까워요.' } ] },
     { id: 'q4', text: '배워 보고 싶은 자격증은?', choices: [
       { id: 'barista', emoji: '🥐', text: '바리스타·제과제빵', dept: 'cafe', reply: '카페비즈과에서 바리스타·제과제빵 자격증을 준비해요!' },
       { id: 'gtq', emoji: '🎨', text: 'GTQ·영상 편집', dept: 'marketing', reply: 'AI마케팅과에서 GTQ·GTQ-AI를 준비해요!' },
       { id: 'erp_cert', emoji: '📊', text: '전산회계·ERP', dept: 'erp', reply: 'ERP비즈니스과에서 전산회계운용사·ERP정보관리사를 준비해요!' },
       { id: 'finance_cert', emoji: '📈', text: '금융·투자 자격증', dept: 'fintech', reply: 'AI핀테크과에서 금융 자격증을 준비해요!' },
-      { id: 'hairdresser', emoji: '💈', text: '미용사', dept: null, guide: 'marketing', reply: '네일·메이크업은 동아리와 방과후 수업에서, 미용사 공부는 하교 후 여유 시간에 준비할 수 있어요. 뷰티 숍을 알리는 SNS 마케팅은 AI마케팅과에서 배워요!' },
-      { id: 'cook', emoji: '🍳', text: '조리사(한식·양식)', dept: null, reply: '조리는 카페비즈과의 제과제빵·음료 실습과 가까워요. 한식·양식 조리는 하교 후 시간에 더 배울 수 있어요.' } ] },
+      { id: 'hairdresser', emoji: '💈', text: '미용사', dept: null, guide: 'marketing', reply: '네일·메이크업은 동아리와 방과후 수업에서! 뷰티 숍 SNS 마케팅은 AI마케팅과에서 배워요.' },
+      { id: 'cook', emoji: '🍳', text: '조리사(한식·양식)', dept: null, reply: '카페비즈과의 제과제빵·음료 실습과 가까워요!' } ] },
     { id: 'q5', text: '수업 시간에 제일 재밌을 것 같은 건?', choices: [
       { id: 'company', emoji: '🏭', text: '가상 회사 운영해 보기', dept: 'erp', reply: 'ERP비즈니스과에서 가상 회사의 매출·재고를 정리해 봐요!' },
       { id: 'ad', emoji: '📣', text: '상품 광고 만들기', dept: 'marketing', reply: 'AI마케팅과에서 군산의 상품을 알리는 카드뉴스를 만들어요!' },
@@ -44,10 +44,10 @@
       { id: 'far_ok', emoji: '🚌', text: '배우고 싶은 과가 있으면 멀어도(기숙사·통학버스) 갈래요', dept: null, reply: '멀리 가기 전에, 비슷한 걸 집 근처 군산여상에서 배울 수 있는지 꼭 확인해 보세요.' },
       { id: 'unsure', emoji: '🤔', text: '아직 모르겠어요', dept: null, reply: '괜찮아요. 투어를 돌며 천천히 찾아봐요.' } ] },
     { id: 'q7', text: '다른 학교에 가야만 배울 수 있는 분야 중 끌리는 게 있다면?', kind: 'elsewhere', choices: [
-      { id: 'beauty', emoji: '💄', text: '뷰티(헤어·메이크업·네일)', dept: null, guide: 'marketing', reply: '알려 줘서 고마워요! 네일·메이크업은 군산여상 동아리와 방과후 수업에 있고, 뷰티 콘텐츠·SNS 마케팅은 AI마케팅과에서 배울 수 있어요.' },
-      { id: 'cooking', emoji: '🍜', text: '조리(한식·양식·중식)', dept: null, reply: '카페비즈과에 제과제빵·음료 실습이 있어요. 한식·양식 조리는 하교 후 시간에 배울 수 있어요.' },
-      { id: 'nursing', emoji: '🏥', text: '간호·보건', dept: null, reply: '간호·보건 공부는 하교 후 시간에 이어 갈 수 있고, 학교에서는 병원 행정과 가까운 ERP비즈니스과가 있어요.' },
-      { id: 'game_it', emoji: '🎮', text: '게임·IT 개발', dept: null, reply: 'AI핀테크과·AI마케팅과에서 AI 도구를 많이 쓰고, 개발 공부는 하교 후 시간에 더 할 수 있어요.' },
+      { id: 'beauty', emoji: '💄', text: '뷰티(헤어·메이크업·네일)', dept: null, guide: 'marketing', reply: '네일·메이크업은 동아리와 방과후 수업에 있어요! 뷰티 마케팅은 AI마케팅과에서 배워요.' },
+      { id: 'cooking', emoji: '🍜', text: '조리(한식·양식·중식)', dept: null, reply: '카페비즈과에 제과제빵·음료 실습이 있어요!' },
+      { id: 'nursing', emoji: '🏥', text: '간호·보건', dept: null, reply: '하교 후 시간에 이어 갈 수 있어요. 병원 행정은 ERP비즈니스과와 가까워요.' },
+      { id: 'game_it', emoji: '🎮', text: '게임·IT 개발', dept: null, reply: 'AI핀테크과·AI마케팅과에서 AI 도구를 많이 써요!' },
       { id: 'none', emoji: '👍', text: '없어요, 상업·경영 쪽이 좋아요', dept: null, reply: '그렇다면 군산여상 4개 학과를 바로 비교해 보세요!' } ] }
   ];
   const DEPT_ACTIVITY = { erp: '가상 회사의 매출·재고를 정리하고 ERP와 엑셀로 보고서 만들기', marketing: '군산의 상품을 알리는 카드뉴스·숏폼을 만들고 홍보 결과 분석하기', fintech: 'AI로 금융·회계 보고서 초안을 만들고 수치가 맞는지 확인하기', cafe: '디저트·음료 메뉴와 원가표를 만들고 SNS 홍보물로 모의 매장 운영하기' };
@@ -227,7 +227,7 @@
   window.TOUR_GAMES.career = {
     title: '내 취향 찾기', button: '🧭 내 취향 찾기', room: '커리어존', naver: 'Career', maxStars: 3,
     stamp: '커리어존 도장 획득!',
-    message: '군산여상은 기숙사·통학버스 없이 집 근처에서 편하게 다니며 4개 학과를 배울 수 있어요.', // ※ 학교 확인
+    message: '기숙사·통학버스 없이 집 근처에서 편하게 다녀요.', // ※ 학교 확인
     cta: { ...DEFAULT_CTA },
     start
   };

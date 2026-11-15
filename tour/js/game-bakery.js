@@ -19,7 +19,7 @@
   // 히든 이벤트: 이 확률(0~1)로 그 라운드의 숫자가 hideAfter초부터 가려집니다. 평소에는 끝까지 보임
   const HIDDEN_CHANCE = 0.2;
   const STAMP_TEXT = '조리제빵실 도장 획득!';
-  const RESULT_TEXT = '카페비즈과에서는 제과제빵 실습으로 반죽부터 굽기까지 직접 만들어 봐요.'; // ※ 학교 확인
+  const RESULT_TEXT = '카페비즈과에서는 반죽부터 굽기까지 직접 실습해요.'; // ※ 학교 확인
   const DEPT_LINK = { href: '../index.html#cafe', label: '카페비즈과 알아보기 →' };
   const IMG = 'img/games/bakery/';
   const seconds = ms => (ms / 1000).toFixed(2);
