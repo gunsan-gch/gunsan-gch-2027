@@ -10,6 +10,7 @@
 - 체험 게임 바로 열기: `tour/index.html?game=cafe` → 1층 카페실습실 「음료 만들기 체험」, `?game=ai` → 3층 AI비즈니스실 「AI 광고 문구 고르기」 창이 바로 열립니다. `?game=typing` → 1층 정보처리실 「타자 속도 재기」, `?game=rain` → 1층 사무자동화실 「타자 소나기」, `?game=bakery` → 1층 조리제빵실 「n.00초 빵 굽기」도 바로 열 수 있습니다.
 
 `tour/index.html?game=career`로 4층 커리어존 「내 취향 찾기」를 바로 열 수 있습니다.
+`tour/index.html?game=phishing`로 4층 금융실습실 「피싱 탐정」, `tour/index.html?game=cashier`로 1층 전산회계1실 「매점 계산왕」을 바로 열 수 있습니다.
 
 ## 폴더 구성
 
@@ -30,18 +31,22 @@ tour/
   js/game-rain.js          사무자동화실 「타자 소나기」 (낱말·아이템·규칙은 파일 맨 위에서 수정)
   js/game-bakery.js        조리제빵실 「n.00초 빵 굽기」 (목표 시간·별 기준은 파일 맨 위에서 수정)
   js/game-career.js        커리어존 「내 취향 찾기」 (7문항·답변·학과 활동은 파일 맨 위에서 수정)
+  js/game-phishing.js      금융실습실 「피싱 탐정」 (문자 16통·보상·별 기준은 파일 맨 위에서 수정)
+  js/game-cashier.js       전산회계1실 「매점 계산왕」 (물건·손님 대사·규칙은 파일 맨 위에서 수정)
   css/games.css            체험 게임 디자인
   img/                     배경(WebP)·캐릭터 그림, ASSET-SOURCES.json(원본 지문)
   img/games/cafe/          카페 게임 그림 (재료 아이콘·손님·카운터 배경)
   img/games/ai/            AI 광고 게임 그림 (상품 3개·힌트 로봇)
   img/games/office/        타자 게임 그림 (모니터·아이템 4종)
   img/games/bakery/        빵 굽기 게임 그림 (반죽·발효·굽기 결과 7장)
+  img/games/finance/       금융 게임 그림 (탐정·지폐·동전·매점 물건 10종)
   tools/update_assets.py   새 원본 그림 중 바뀐 것만 골라 변환하는 도구
   tools/pixel.mjs          게임 픽셀아트 공통 도우미 (색·그리기·PNG 저장)
   tools/make_cafe_game_art.mjs  카페 게임 픽셀아트를 코드로 다시 그리는 도구 (Node.js)
   tools/make_ai_game_art.mjs    AI 광고 게임 픽셀아트 도구 (Node.js)
   tools/make_office_game_art.mjs  타자 게임 픽셀아트 도구 (Node.js)
   tools/make_bakery_game_art.mjs  빵 굽기 게임 픽셀아트 도구 (Node.js)
+  tools/make_finance_game_art.mjs  금융 게임 픽셀아트 도구 (Node.js)
 ```
 
 실습실 조성 예시 사진은 입학 안내 페이지와 같은 `../assets/img/facilities/` 파일을 함께 씁니다.
@@ -107,9 +112,9 @@ GPT가 그린 배경(`tour-share-art.png`)에 `update_assets.py`가 학교 글�
 | `tour_room_link_click` | `room_name`, `link_url`, `route_status`(class_route·class_route_repeat·none) | — | 공간 설명의 바로가기 링크(예: 경영실습실 → 수업 사이트) |
 | `class_route_complete` | `room_name`, `link_url`, `route_steps`, `route_minutes` | — | 같은 방문에서 입학안내 → 투어 → 그 공간을 거쳐 링크를 처음 누름 (방문당 1회) |
 | `tour_click` (입학안내 페이지) | `cta_location`(banner·nav·facility) | `TourLink` | 입학안내 → 투어로 넘어감 |
-| `tour_game_start` | `game_id`(cafe·ai·typing·rain·bakery), `room_name` | `TourGame` (CafeStart·AiStart·TypingStart·RainStart·BakeryStart) | 체험 게임 시작 |
-| `tour_game_complete` | `game_id`, `stars`(총 별), `hints`(힌트 사용 수) | `TourGame` (CafeDone·AiDone·TypingDone·RainDone·BakeryDone) | 체험 게임 끝 (결과 화면) |
-| `tour_game_cta` | `game_id`, `cta`(dept) | `TourGame` (CafeDept·AiDept·TypingDept·RainDept·BakeryDept) | 결과 화면의 학과 소개 링크 클릭 |
+| `tour_game_start` | `game_id`(cafe·ai·typing·rain·bakery·phishing·cashier), `room_name` | `TourGame` (CafeStart·AiStart·TypingStart·RainStart·BakeryStart·PhishingStart·CashierStart) | 체험 게임 시작 |
+| `tour_game_complete` | `game_id`, `stars`(총 별), `hints`(힌트 사용 수) | `TourGame` (CafeDone·AiDone·TypingDone·RainDone·BakeryDone·PhishingDone·CashierDone) | 체험 게임 끝 (결과 화면) |
+| `tour_game_cta` | `game_id`, `cta`(dept) | `TourGame` (CafeDept·AiDept·TypingDept·RainDept·BakeryDept·PhishingDept·CashierDept) | 결과 화면의 학과 소개 링크 클릭 |
 | `tour_career_pick` | `question_id`, `choice_id`, `dept`(erp·marketing·fintech·cafe·none), `repeat`(yes·no) | `TourCareer` (`<question_id>_<choice_id>`) | 커리어존에서 보기를 고른 즉시, 문항당 1회 |
 | `tour_career_result` | `dept`(erp·marketing·fintech·cafe·none), `commute`(q6 보기 id), `elsewhere`(q7 보기 id), `repeat`(yes·no) | `TourCareer` (`Result_<dept>`) | 커리어존 7문항 완료 |
 
