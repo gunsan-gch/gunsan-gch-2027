@@ -234,6 +234,102 @@
       "kind": "game",
       "description": "빵 굽기 게임 탄 빵 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
       "sha256": "0bce492eeb97cdb5aff6704ff3c45890773f0066665d34fde328fa39181cfc2c"
+    },
+    "games/finance/bill-1000.png": {
+      "output": "games/finance/bill-1000.png",
+      "kind": "game",
+      "description": "금융 게임 bill-1000.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "bfbe9561259d2f2d312e83714694886921e6ed7a411ae9732078b02c96855905"
+    },
+    "games/finance/bill-10000.png": {
+      "output": "games/finance/bill-10000.png",
+      "kind": "game",
+      "description": "금융 게임 bill-10000.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "4b7d92af886059167b956c3d896908be6a1acf53665f1efa1128b53e05dc64d9"
+    },
+    "games/finance/bill-5000.png": {
+      "output": "games/finance/bill-5000.png",
+      "kind": "game",
+      "description": "금융 게임 bill-5000.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "7e5ddd4455b93fda215d0129870632a51cfbba8ea0366becd74d3fdb35210bdd"
+    },
+    "games/finance/coin-100.png": {
+      "output": "games/finance/coin-100.png",
+      "kind": "game",
+      "description": "금융 게임 coin-100.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "6a59c99920116700a1c39a28b6b572393e1dee477e8216ac74d9fbd97e46ec7c"
+    },
+    "games/finance/coin-500.png": {
+      "output": "games/finance/coin-500.png",
+      "kind": "game",
+      "description": "금융 게임 coin-500.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "faa0b996023a25792b53e67bb5653baef2dd5d9b2f4503a0c3e077f54f814c28"
+    },
+    "games/finance/detective.png": {
+      "output": "games/finance/detective.png",
+      "kind": "game",
+      "description": "금융 게임 detective.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "37d6b69039e86588aac2508e15cc83a4f65db46cc3c1fb7d80782250376b7dee"
+    },
+    "games/finance/goods-bread.png": {
+      "output": "games/finance/goods-bread.png",
+      "kind": "game",
+      "description": "금융 게임 goods-bread.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "3d08becc4932b4a851dd48fbf2e71571d74d066daa672b22ef3785d1b0caa6dc"
+    },
+    "games/finance/goods-ice.png": {
+      "output": "games/finance/goods-ice.png",
+      "kind": "game",
+      "description": "금융 게임 goods-ice.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "fa0693e867601f1ca187e67d540201a784962419fab73e407083b4682ad40340"
+    },
+    "games/finance/goods-jelly.png": {
+      "output": "games/finance/goods-jelly.png",
+      "kind": "game",
+      "description": "금융 게임 goods-jelly.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "cd545c1c9b376a148362276cab4317af816e7282b338e72f3822e89010451491"
+    },
+    "games/finance/goods-milk.png": {
+      "output": "games/finance/goods-milk.png",
+      "kind": "game",
+      "description": "금융 게임 goods-milk.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "d723e08529fd30e41269b0a8ac7c6e66f6fa1ef578dc764bd5606d3377d7faa1"
+    },
+    "games/finance/goods-noodle.png": {
+      "output": "games/finance/goods-noodle.png",
+      "kind": "game",
+      "description": "금융 게임 goods-noodle.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "845e3ce34b675ee58116989f99e68b8b19c14d6cca245734c4a298d6cd19d75d"
+    },
+    "games/finance/goods-pen.png": {
+      "output": "games/finance/goods-pen.png",
+      "kind": "game",
+      "description": "금융 게임 goods-pen.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "e2736878d8bb1f7d6b126aa84d0f873c44afdfabe4d49304ef389d528166c05c"
+    },
+    "games/finance/goods-rice.png": {
+      "output": "games/finance/goods-rice.png",
+      "kind": "game",
+      "description": "금융 게임 goods-rice.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "6686777376e46082b6465d3527d664374ef86eb97a8f99e9e32e645931551f4e"
+    },
+    "games/finance/goods-sandwich.png": {
+      "output": "games/finance/goods-sandwich.png",
+      "kind": "game",
+      "description": "금융 게임 goods-sandwich.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "b640e87fb8351bdcfa8acc3f626a86f3edcc1b98d983402aae2e8ac6636a6704"
+    },
+    "games/finance/goods-snack.png": {
+      "output": "games/finance/goods-snack.png",
+      "kind": "game",
+      "description": "금융 게임 goods-snack.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "8c63dfc94b095b4624956f6a0d6a8befd63cfe0b4fc5a18be53a07152b7142ae"
+    },
+    "games/finance/goods-water.png": {
+      "output": "games/finance/goods-water.png",
+      "kind": "game",
+      "description": "금융 게임 goods-water.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
+      "sha256": "ffc3fbc03246e24dc0601e4579ed6348f55c783871b3e900bbc61c48e84da5ed"
     }
   }
 }
