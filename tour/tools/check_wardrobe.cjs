@@ -28,9 +28,9 @@ function widthAt(data, yStart, yEnd) {
   const empty = createCanvas(sprite.width, sprite.height);
   const headIds = [null, ...art.items.filter(x => x.slot === 'head').map(x => x.id)];
   const backIds = [null, ...art.items.filter(x => x.slot === 'back').map(x => x.id)];
-  assert.equal(art.items.length, 16);
-  assert.equal(new Set(art.items.map(x => x.id)).size, 16);
-  for (let tier = 1; tier <= 8; tier++) {
+  assert.equal(art.items.length, 24);
+  assert.equal(new Set(art.items.map(x => x.id)).size, 24);
+  for (const tier of [1,3,5,7,9,11,13,15,17,19,21,24]) {
     const pair = art.items.filter(x => x.at === tier);
     assert.equal(pair.length, 2);
     assert.deepEqual(Array.from(pair, x => x.slot).sort(), ['back', 'head']);
@@ -68,13 +68,13 @@ function widthAt(data, yStart, yEnd) {
         faceChecks++;
       }
     }
-    for (const back of ['balloon', 'wings', 'bag', 'breadbag', 'starbag']) {
+    for (const back of ['balloon', 'wings', 'bag', 'breadbag', 'starbag', 'milkbag', 'umbrella', 'noteballoon', 'planet']) {
       const front = render(empty, 'down', frame, { back });
       const side = render(empty, 'left', frame, { back });
       // Isolate balloon body from its connecting string; other profiles use all rows.
-      const start = back === 'balloon' ? 10 : 0, end = back === 'balloon' ? 22 : 52;
+      const start = ['balloon','noteballoon','planet'].includes(back) ? 9 : 0, end = ['balloon','noteballoon','planet'].includes(back) ? 22 : 52;
       assert(widthAt(side, start, end) < widthAt(front, start, end), `${back}: side silhouette is not narrower`);
     }
   }
-  console.log(JSON.stringify({ renders, hairChecks, faceChecks, crownLeaks: 0, edgeClipping: 0, sideProfiles: '5 accessories × 3 frames', unlocks: '2 items per stamp, unchanged' }));
+  console.log(JSON.stringify({ renders, hairChecks, faceChecks, crownLeaks: 0, edgeClipping: 0, sideProfiles: '9 accessories × 3 frames', unlocks: '24 items at 12 best-star milestones' }));
 })().catch(error => { console.error(error); process.exitCode = 1; });

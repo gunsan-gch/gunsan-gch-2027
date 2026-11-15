@@ -2,23 +2,32 @@
    Hats replace the covered crown pixels; hair below the brim remains visible.
    48x52 output adds room for ears/wings without changing the walker hitbox. */
 (() => {
+  // at is the total best-star threshold. legacyAt preserves pre-star rewards once.
   const items = [
-    {id:'ribbon',name:'봄날 리본 핀',at:1,slot:'head',theme:'봄 소풍'},
-    {id:'breadbag',name:'바게트 소풍백',at:1,slot:'back',theme:'방과 후 피크닉'},
-    {id:'flower',name:'데이지 머리핀',at:2,slot:'head',theme:'봄 소풍'},
-    {id:'bowback',name:'사르르 리본',at:2,slot:'back',theme:'봄 소풍'},
-    {id:'bunny',name:'포근 토끼 모자',at:3,slot:'head',theme:'동물 친구'},
-    {id:'bag',name:'민트 미니백',at:3,slot:'back',theme:'방과 후 피크닉'},
-    {id:'cat',name:'밤고양이 모자',at:4,slot:'head',theme:'동물 친구'},
-    {id:'starbag',name:'반짝 별 가방',at:4,slot:'back',theme:'별빛 산책'},
-    {id:'beret',name:'별빛 베레모',at:5,slot:'head',theme:'별빛 산책'},
-    {id:'wings',name:'구름 깃털 날개',at:5,slot:'back',theme:'하늘과 바다'},
-    {id:'sailor',name:'바다 산책 모자',at:6,slot:'head',theme:'하늘과 바다'},
-    {id:'balloon',name:'둥실 별 풍선',at:6,slot:'back',theme:'별빛 산책'},
-    {id:'crown',name:'작은 별 왕관',at:7,slot:'head',theme:'축제의 주인공'},
-    {id:'cape',name:'축제 리본 망토',at:7,slot:'back',theme:'축제의 주인공'},
-    {id:'witch',name:'라일락 마법 모자',at:8,slot:'head',theme:'달빛 마법'},
-    {id:'moon',name:'초승달 산책',at:8,slot:'back',theme:'달빛 마법'},
+    {id:'ribbon',name:'봄날 리본 핀',at:1,legacyAt:1,slot:'head',theme:'봄 소풍'},
+    {id:'breadbag',name:'바게트 소풍백',at:1,legacyAt:1,slot:'back',theme:'방과 후 피크닉'},
+    {id:'flower',name:'데이지 머리핀',at:3,legacyAt:2,slot:'head',theme:'봄 소풍'},
+    {id:'bowback',name:'사르르 리본',at:3,legacyAt:2,slot:'back',theme:'봄 소풍'},
+    {id:'cherry',name:'체리 머리핀',at:5,slot:'head',theme:'달콤한 소풍'},
+    {id:'milkbag',name:'딸기우유 가방',at:5,slot:'back',theme:'달콤한 소풍'},
+    {id:'bunny',name:'포근 토끼 모자',at:7,legacyAt:3,slot:'head',theme:'동물 친구'},
+    {id:'bag',name:'민트 미니백',at:7,legacyAt:3,slot:'back',theme:'방과 후 피크닉'},
+    {id:'cat',name:'밤고양이 모자',at:9,legacyAt:4,slot:'head',theme:'동물 친구'},
+    {id:'starbag',name:'반짝 별 가방',at:9,legacyAt:4,slot:'back',theme:'별빛 산책'},
+    {id:'frog',name:'작은 개구리 모자',at:11,slot:'head',theme:'비 오는 날'},
+    {id:'umbrella',name:'접은 우산',at:11,slot:'back',theme:'비 오는 날'},
+    {id:'beret',name:'별빛 베레모',at:13,legacyAt:5,slot:'head',theme:'별빛 산책'},
+    {id:'wings',name:'구름 깃털 날개',at:13,legacyAt:5,slot:'back',theme:'하늘과 바다'},
+    {id:'sailor',name:'바다 산책 모자',at:15,legacyAt:6,slot:'head',theme:'하늘과 바다'},
+    {id:'balloon',name:'둥실 별 풍선',at:15,legacyAt:6,slot:'back',theme:'별빛 산책'},
+    {id:'headphones',name:'파스텔 헤드폰',at:17,slot:'head',theme:'음악 시간'},
+    {id:'noteballoon',name:'음표 풍선',at:17,slot:'back',theme:'음악 시간'},
+    {id:'crown',name:'작은 별 왕관',at:19,legacyAt:7,slot:'head',theme:'축제의 주인공'},
+    {id:'cape',name:'축제 리본 망토',at:19,legacyAt:7,slot:'back',theme:'축제의 주인공'},
+    {id:'witch',name:'라일락 마법 모자',at:21,legacyAt:8,slot:'head',theme:'달빛 마법'},
+    {id:'moon',name:'초승달 산책',at:21,legacyAt:8,slot:'back',theme:'달빛 마법'},
+    {id:'helmet',name:'작은 우주 헬멧',at:24,slot:'head',theme:'밤하늘 여행'},
+    {id:'planet',name:'토성 풍선',at:24,slot:'back',theme:'밤하늘 여행'},
   ];
   const P={ink:'#343c54',cream:'#fff4dc',white:'#fffdf1',rose:'#e78b9b',pink:'#ffc2c7',roseD:'#aa5c7e',
     gold:'#edbd5c',goldD:'#ac794b',yellow:'#ffe9a3',mint:'#8acdbb',mintD:'#508d88',
@@ -40,6 +49,8 @@
     cat:{down:12,up:13,left:12,right:12},
     sailor:{down:12,up:12,left:12,right:12},
     witch:{down:12,up:12,left:12,right:12},
+    frog:{down:12,up:12,left:12,right:12},
+    helmet:{down:12,up:12,left:12,right:12},
   };
   const covered=new Set(Object.keys(crownCut));
   function tinyStar(r,x,y){r(x+2,y,1,5,'goldD');r(x,y+2,5,1,'goldD');r(x+1,y+1,3,3,'gold');r(x+2,y+1,1,2,'yellow');}
@@ -57,6 +68,36 @@
       r(x+2,y-2,3,3,'goldD');r(x-1,y+1,9,3,'goldD');r(x+2,y+4,3,3,'goldD');
       r(x+2,y-1,3,2,'white');r(x,y+1,2,3,'white');r(x+5,y+1,2,3,'white');r(x+2,y+4,3,2,'white');r(x+2,y+1,3,3,'gold');r(x+2,y+2,1,1,'yellow');
       r(x+5,y+6,3,1,'mintD');r(x+6,y+5,2,1,'mint');
+    }
+    if(id==='cherry'){
+      const x=side?(right?19:5):(rear?5:18),y=7;
+      pixelLine(r,x+4,y-2,x+1,y+3,'mintD');pixelLine(r,x+4,y-2,x+6,y+3,'mintD');
+      r(x+4,y-3,4,2,'mint');r(x+1,y+2,3,4,'roseD');r(x,y+3,5,2,'roseD');r(x+1,y+3,2,2,'rose');r(x+1,y+3,1,1,'pink');
+      r(x+6,y+3,3,4,'roseD');r(x+5,y+4,5,2,'roseD');r(x+6,y+4,2,2,'rose');r(x+6,y+4,1,1,'pink');
+    }
+    if(id==='frog'){
+      const x=side?8:6,w=side?18:20;
+      r(x+2,4,w-4,1,'mintD');r(x,5,w,7,'mintD');r(x+1,6,w-2,5,'mint');r(x+3,5,w-6,1,'mint');r(x+2,10,w-4,1,'cream');
+      const eyes=side?[right?x+w-6:x+2]:[x+2,x+w-6];
+      for(const ex of eyes){r(ex,2,4,5,'mintD');r(ex+1,3,2,3,'cream');if(!rear)r(ex+(right?2:1),4,1,2,'ink');}
+      if(!rear){r(side?(right?21:10):14,9,side?2:4,1,'mintD');r(x+2,8,2,1,'pink');if(!side)r(x+w-4,8,2,1,'pink');}
+    }
+    if(id==='headphones'){
+      const x=side?9:5,w=side?15:22;
+      r(x+4,1,w-8,2,'purpleD');r(x+2,3,2,2,'purpleD');r(x+w-4,3,2,2,'purpleD');
+      r(x,5,2,6,'purpleD');r(x+w-2,5,2,6,'purpleD');r(x+4,2,w-8,1,'pale');
+      const cups=side?[right?10:18]:[4,23];
+      for(const ex of cups){r(ex,10,5,7,'purpleD');r(ex+1,11,3,5,'pink');r(ex+2,12,1,3,'cream');}
+    }
+    if(id==='helmet'){
+      const x=side?7:5,w=side?19:22;
+      r(x+5,2,w-10,1,'ink');r(x+2,3,w-4,1,'ink');r(x+1,4,w-2,2,'ink');r(x,6,w,6,'ink');
+      r(x+3,4,w-6,2,'white');r(x+2,6,w-4,2,'cream');r(x+1,8,w-2,3,rear?'blueD':'navy');
+      if(!rear){r(x+3,8,w-6,2,'blue');r(side?(right?x+10:x+3):x+4,8,3,1,'white');}
+      else{r(14,6,4,2,'blue');r(15,6,1,1,'white');}
+      const ex=side?(right?8:21):x;r(ex,10,3,5,'blueD');r(ex+1,11,1,3,'cream');
+      if(!side){r(x+w-3,10,3,5,'blueD');r(x+w-2,11,1,3,'cream');}
+      r(side?(right?9:22):7,11,1,1,'rose');
     }
     if(id==='beret'){
       const x=side?8:5,w=side?18:22;
@@ -107,6 +148,36 @@
   }
   function back(c,id,dir,frame=1){
     const r=pen(c),rear=dir==='up',front=dir==='down',side=!rear&&!front,right=dir==='right',x=side?(right?5:21):10;
+    if(id==='milkbag'){
+      if(side){const bx=right?6:22;r(bx+1,17,2,3,'roseD');r(bx,20,5,10,'roseD');r(bx+1,20,3,9,'pink');r(bx+2,22,1,5,'cream');r(right?11:20,20,1,9,'roseD');}
+      else{r(12,16,7,2,'roseD');r(11,18,9,2,'roseD');r(10,20,11,10,'roseD');r(12,18,7,2,'pink');r(11,20,9,9,'cream');r(11,20,9,3,'pink');r(14,24,4,3,'rose');r(15,23,2,1,'mintD');r(15,25,1,1,'yellow');r(18,21,2,8,'pink');}
+    }
+    if(id==='umbrella'){
+      // A folded umbrella strapped vertically to the back; narrower in profile.
+      const bx=side?(right?7:22):15,w=side?3:5;
+      r(bx+1,11,1,4,'ink');r(bx,15,w,3,'blueD');r(bx-1,18,w+2,10,'blueD');
+      r(bx,18,w,9,'blue');r(bx+1,16,1,11,'cream');r(bx-1,23,w+2,2,'navy');
+      r(bx+1,28,1,4,'goldD');r(bx+2,31,2,1,'goldD');r(bx+3,29,1,2,'goldD');
+      if(side)r(right?11:20,21,1,8,'blueD');
+    }
+    if(id==='noteballoon'||id==='planet'){
+      const dy=frame===2?-1:0;
+      c.save();if((side&&right)||rear){c.translate(32,0);c.scale(-1,1);}const q=pen(c);
+      let knot=30;
+      if(id==='noteballoon'){
+        if(side){q(28,-1+dy,3,10,'purpleD');q(29,dy,1,7,'pink');q(27,6+dy,4,3,'purpleD');q(28,7+dy,2,1,'pale');knot=29;}
+        else{q(30,-2+dy,2,10,'purpleD');q(31,-2+dy,4,3,'purpleD');q(32,-1+dy,2,1,'pink');q(26,6+dy,6,4,'purpleD');q(27,7+dy,4,2,'pink');q(27,7+dy,1,1,'white');knot=29;}
+        q(knot,10+dy,1,1,'purpleD');
+      }else{
+        const bx=side?27:24,w=side?5:9;
+        q(bx+1,-1+dy,w-2,1,'goldD');q(bx,-0+dy,w,7,'goldD');q(bx+1,7+dy,w-2,1,'goldD');
+        q(bx+1,dy,w-2,6,'gold');q(bx+1,1+dy,side?1:3,2,'yellow');
+        // The ring is elliptical edge-on, with an offset front arc.
+        pixelLine(q,bx-1,5+dy,bx+w,1+dy,'purpleD');pixelLine(q,bx-1,6+dy,bx+w+1,2+dy,'pale');
+        q(bx-1,5+dy,1,2,'purpleD');q(bx+w+1,1+dy,1,2,'purpleD');knot=bx+Math.floor(w/2);q(knot,8+dy,1,2,'goldD');
+      }
+      pixelLine(q,knot,11+dy,29,17,'purpleD');pixelLine(q,29,17,25,21,'purpleD');pixelLine(q,25,21,20,24,'purpleD');c.restore();
+    }
     if(id==='cape'){
       if(side){r(x,18,6,3,'roseD');r(x,21,5,5,'rose');r(x-1,26,7,3,'roseD');r(x,27,5,1,'gold');}
       else{r(10,18,12,3,'roseD');r(8,21,16,5,'roseD');r(6,26,20,4,'roseD');r(10,20,12,7,'rose');r(8,25,16,3,'rose');r(7,28,18,1,'gold');r(11,20,2,5,'pink');r(19,21,2,6,'roseD');if(rear){bow(r,11,17);r(15,25,2,2,'yellow');}}
@@ -192,7 +263,7 @@
     // a hat independently of it. Clear only the crown, above the visible face.
     const cut=crownCut[equip.head]?.[dir];
     if(cut)bc.clearRect(0,0,32,cut);
-    const floating=equip.back==='moon'||equip.back==='balloon';
+    const floating=['moon','balloon','noteballoon','planet'].includes(equip.back);
     if(dir==='down'||floating)back(c,equip.back,dir,frame);
     c.drawImage(base,0,0);
     if(dir!=='down'&&!floating){

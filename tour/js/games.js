@@ -69,7 +69,9 @@ window.tourGame = (() => {
   function readStamps() {
     try {
       const stamps = JSON.parse(localStorage.getItem(STAMP_KEY) || '{}');
-      return stamps && typeof stamps === 'object' ? stamps : {};
+      if (!stamps || typeof stamps !== 'object' || Array.isArray(stamps)) return {};
+      return Object.fromEntries(Object.entries(stamps).filter(([, value]) => value && typeof value === 'object').map(([id, value]) =>
+        [id, { ...value, stars: window.TourStarProgress.normalizeStars(value.stars, GAMES[id]?.maxStars || 3) }]));
     } catch (e) { return {}; }
   }
 
@@ -77,8 +79,7 @@ window.tourGame = (() => {
   function saveStamp(id, stars, max) {
     const stamps = readStamps();
     const best = stamps[id];
-    // 예전에는 별이 9개까지인 게임이 있었음 → 지금 만점(3개) 기준으로 한 번 환산
-    if (best && max && best.stars > max) best.stars = Math.max(1, Math.round(best.stars * max / 9));
+    stars = window.TourStarProgress.normalizeStars(stars, max || 3);
     if (!best || stars > (best.stars || 0)) stamps[id] = { stars, at: today() };
     try { localStorage.setItem(STAMP_KEY, JSON.stringify(stamps)); } catch (e) { /* 저장 못 해도 게임은 계속 */ }
     return stamps[id];
@@ -134,6 +135,7 @@ window.tourGame = (() => {
     tourTrack('tour_game_complete', { game_id: id, stars, hints }, ['TourGame', game.naver + 'Done']);
     const best = saveStamp(id, stars, max);
     renderResult(session, stars, max, best, extra);
+    document.dispatchEvent(new CustomEvent('tour:game-result', { detail: { id } }));
   }
 
   function renderResult(session, stars, max, best, extra) {
@@ -271,6 +273,20 @@ window.tourGame = (() => {
       .map(room => ({ room, sceneId, floor: scenes[sceneId].name, game: GAMES[room.game] })));
   }
 
+  /** Highest stars across playable rooms; never accumulates repeat attempts. */
+  function progress() {
+    return window.TourStarProgress.summarize(readStamps(), stampRooms().map(item => ({
+      id: item.room.game, title: item.game.title, room: item.room.name,
+      sceneId: item.sceneId, floor: item.floor, maxStars: item.game.maxStars || 3
+    })));
+  }
+  function practice(id, opener = boardButton) {
+    const item = stampRooms().find(item => item.room.game === id);
+    if (!item) return;
+    document.querySelector(`.scene-nav [data-scene="${item.sceneId}"][aria-pressed="false"]`)?.click();
+    open(id, item.room, opener);
+  }
+
   /** 지도 위 도장 버튼의 숫자를 고치고 { got, total }을 돌려줌 */
   function updateStampCount() {
     const rooms = stampRooms();
@@ -346,6 +362,8 @@ window.tourGame = (() => {
     document.getElementById('stamps-summary').textContent = complete
       ? `🎉 도장 ${total}개 완성! 군산여상 탐험 완료`
       : `도장 ${got} / ${total} · 🎮 표시가 있는 공간에서 모아요`;
+    const score = progress();
+    document.getElementById('stamps-summary').textContent += ` · ★ ${score.stars} / ${score.maxStars}`;
     document.getElementById('stamps-done').hidden = !complete;
     if (resetButton) resetButton.disabled = got === 0;
     return { got, total };
@@ -392,6 +410,7 @@ window.tourGame = (() => {
         resetStatus.textContent = '기록을 지우지 못했어요. 브라우저 저장 설정을 확인한 뒤 다시 시도해 주세요.';
         return;
       }
+      document.dispatchEvent(new CustomEvent('tour:stamps-reset'));
       closeResetPrompt();
       renderBoard();
       resetStatus.textContent = '도장과 별 기록을 모두 초기화했어요. 다시 도전해 보세요!';
@@ -405,5 +424,5 @@ window.tourGame = (() => {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', whenReady);
   else whenReady();
 
-  return { open, close: () => dialog.close(), stamps: readStamps, openBoard };
+  return { open, close: () => dialog.close(), stamps: readStamps, openBoard, progress, practice };
 })();
