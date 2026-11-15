@@ -35,6 +35,7 @@
   <link rel="preload" as="image" href="img/outdoor.webp">
   <link rel="stylesheet" href="css/tour.css?v=20261115">
   <link rel="stylesheet" href="css/games.css?v=20261115-reset1">
+  <link rel="stylesheet" href="css/addons.css?v=20261115-wardrobe1">
 </head>
 <body>
   <a class="skip-link" href="#tour-map">지도 바로가기</a>
@@ -79,6 +80,8 @@
       <div class="tour-position">
         <strong id="current-floor">지금은 야외</strong>
         <button type="button" id="stamp-open" class="stamp-open">🎮 도장 0 / 8</button>
+        <button type="button" id="wardrobe-open">👕 내 옷장</button>
+        <button type="button" id="festival-open">✦ 탐험 미션</button>
         <button type="button" id="locate-player">◎ 내 위치</button>
         <button type="button" id="stop-walking">이동 멈춤</button>
       </div>
@@ -234,6 +237,7 @@
         <button type="button" id="stamps-reset" class="btn" aria-expanded="false" aria-controls="stamps-reset-panel">도장 초기화</button>
         <div id="stamps-reset-panel" class="stamp-reset-panel" role="group" aria-labelledby="stamps-reset-question" hidden>
           <p id="stamps-reset-question"><strong>모은 도장과 별 기록을 모두 지울까요?</strong></p>
+          <p>도장 수에 따라 열린 꾸미기 보상도 다시 잠기며 착용이 해제돼요. 탐험 미션 기록은 유지돼요.</p>
           <p>이 브라우저에 저장된 기록만 지워지며, 되돌릴 수 없어요.</p>
           <div class="stamp-reset-actions">
             <button type="button" id="stamps-reset-cancel" class="btn">취소</button>
@@ -245,13 +249,22 @@
     </div>
   </dialog>
 
+  <dialog id="festival-dialog" class="game-dialog addon-dialog" aria-labelledby="festival-title">
+    <div class="game-head">
+      <div><span class="eyebrow" id="festival-eyebrow">탐험 미션</span><h2 id="festival-title">녹원축제 준비 대작전</h2></div>
+      <button type="button" id="festival-close" aria-label="추가 기능 창 닫기">✕</button>
+    </div>
+    <div id="festival-body" class="game-body"></div>
+  </dialog>
+  <p class="addon-toast" id="addon-toast" role="status" aria-live="polite" hidden></p>
+
   <script src="js/analytics.js"></script>
   <script src="../assets/js/class-route.js?v=20261028a"></script>
   <script src="js/tour-data.js?v=20261115"></script>
   <script src="js/motion.js"></script>
   <script src="js/camera.js"></script>
   <script src="js/labels.js?v=20261115"></script>
-  <script src="js/tour.js?v=20261115"></script>
+  <script src="js/tour.js?v=20261115-wardrobe1"></script>
   <script src="js/games.js?v=20261115-reset1"></script>
   <script src="js/game-cafe.js?v=20261115-rewards1"></script>
   <script src="js/game-ai.js?v=20261115b"></script>
@@ -261,6 +274,8 @@
   <script src="js/game-career.js?v=20261115-reset1"></script>
   <script src="js/game-phishing.js?v=20261115b"></script>
   <script src="js/game-cashier.js?v=20261115b"></script>
+  <script src="js/wardrobe-art.js?v=20261115-wardrobe1"></script>
+  <script src="js/tour-addons.js?v=20261115-wardrobe1"></script>
 <script type="text/javascript" src="//wcs.pstatic.net/wcslog.js"></script>
 <script type="text/javascript">
 if(!wcs_add) var wcs_add = {};
