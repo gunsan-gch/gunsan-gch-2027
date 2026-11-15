@@ -76,6 +76,27 @@ function widthAt(data, yStart, yEnd) {
       assert(widthAt(side, start, end) < widthAt(front, start, end), `${back}: side silhouette is not narrower`);
     }
   }
+  let bobChecks=0;
+  const carried=['bag','breadbag','starbag','milkbag','bowback','wings','umbrella'];
+  for(const back of carried)for(const direction of directions){
+    const idle=render(empty,direction,1,{back});
+    for(const [frame,dy]of [[0,-1],[1,0],[2,1]]){
+      const moving=render(empty,direction,frame,{back});
+      // Below the strap, every pixel must move exactly one source pixel, with
+      // no horizontal drift, scaling or fractional filtering in any direction.
+      for(let y=25;y<40;y++)for(let x=0;x<48;x++)for(let k=0;k<4;k++)
+        assert.equal(moving[((y+12)*48+x)*4+k],(idle[((y-dy+12)*48+x)*4+k]??0),`${back}/${direction}/${frame}: vertical bob`);
+      if(dy)assert.notDeepEqual(moving,idle,`${back}/${direction}: walking must animate`);
+      if(direction!=='down'){
+        const [x,y]=direction==='up'?[15,20]:[back==='umbrella'?(direction==='left'?20:11):(direction==='left'?19:12),21];
+        const i=((y+12)*48+x+8)*4;
+        assert(idle[i+3],`${back}/${direction}: shoulder strap must exist`);
+        for(let k=0;k<4;k++)assert.equal(moving[i+k],idle[i+k],`${back}/${direction}: shoulder must stay attached`);
+      }
+      bobChecks++;
+    }
+    assert.deepEqual(render(empty,direction,1,{back}),idle,`${back}/${direction}: stopping restores rest pose`);
+  }
   let capeChecks=0;
   for (const direction of directions) {
     const overlays=[0,1,2].map(frame=>render(empty,direction,frame,{back:'cape'}));
@@ -101,5 +122,5 @@ function widthAt(data, yStart, yEnd) {
     for(let y=0;y<52;y++)for(let x=0;x<48;x++)for(let k=0;k<4;k++)
       assert.equal(left[(y*48+x)*4+k],right[(y*48+47-x)*4+k],`cape: symmetric side placement ${frame}`);
   }
-  console.log(JSON.stringify({ renders, hairChecks, faceChecks, capeChecks, crownLeaks: 0, edgeClipping: 0, sideProfiles: '9 accessories × 3 frames', unlocks: '24 items at 12 best-star milestones' }));
+  console.log(JSON.stringify({ renders, hairChecks, faceChecks, capeChecks, bobChecks, crownLeaks: 0, edgeClipping: 0, sideProfiles: '9 accessories × 3 frames', unlocks: '24 items at 12 best-star milestones' }));
 })().catch(error => { console.error(error); process.exitCode = 1; });
