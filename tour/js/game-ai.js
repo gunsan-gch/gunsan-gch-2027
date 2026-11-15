@@ -49,7 +49,7 @@
 
   const QUALITY_STARS = { best: 3, mid: 2, weak: 1 };
   const STAMP_TEXT = 'AI비즈니스실 도장 획득!';
-  const RESULT_TEXT = 'AI마케팅과에서는 상품을 알리는 콘텐츠를 만들고, 반응 데이터를 보며 마케팅을 배워요.';   // ※ 학교 확인 후 바뀔 수 있는 문구
+  const RESULT_TEXT = 'AI마케팅과에서는 콘텐츠를 만들고 반응 데이터를 분석해요.';   // ※ 학교 확인 후 바뀔 수 있는 문구
   const DEPT_LINK = { href: '../index.html#marketing', label: 'AI마케팅과 알아보기 →' };
   const GUIDE_TEXT = '상품과 대상 손님을 보고, 가장 어울리는 광고 문구를 골라요.';
   const HINT_TEXT = 'AI 추천 보기';

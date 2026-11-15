@@ -663,3 +663,29 @@ body.game-open { overflow: hidden; }
   .phishing-arrive, .phishing-shake, .phishing-gain, .phishing-loss,
   .cashier-drop, .cashier-arrive, .cashier-shake { animation: none; }
 }
+
+/* ---------- 도장판 (스탬프 투어) ---------- */
+.tour-position .stamp-open { font-weight: 700; border-color: var(--navy); background: #fff; }
+.tour-position .stamp-open.is-complete { background: var(--green); border-color: var(--green); color: #fff; }
+#stamps-close { flex-shrink: 0; width: 44px; height: 44px; border: 0; background: none; font-size: 20px; }
+.stamp-summary { margin: 0 0 12px; font-weight: 700; color: var(--navy); }
+.stamp-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.stamp-item {
+  display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; gap: 10px; align-items: center;
+  padding: 8px 10px; background: var(--paper); border: 1px solid var(--line-strong);
+}
+.stamp-seal {
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  border: 2px dashed var(--line-strong); color: var(--muted); font-weight: 700; font-size: 13px;
+}
+.stamp-item.is-got .stamp-seal { border: 3px double #c8402e; color: #c8402e; font-family: var(--font-title); transform: rotate(-12deg); }
+.stamp-info strong { display: block; font-size: 15px; line-height: 1.3; color: var(--navy); }
+.stamp-info small { display: block; font-size: 12px; color: var(--muted); }
+.stamp-stars { font-size: 13px; letter-spacing: 1px; color: #e0a21e; }
+.stamp-item .btn { min-width: 60px; padding: 8px 12px; }
+.stamp-done { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.stamp-done .btn { flex: 1 1 auto; }
+.game-result-board {
+  min-height: 44px; padding: 8px 12px; border: 0; background: none;
+  color: var(--navy); font-weight: 700; font-size: 14px; text-decoration: underline;
+}

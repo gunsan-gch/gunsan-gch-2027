@@ -34,7 +34,7 @@
   <link rel="apple-touch-icon" href="../assets/img/brand/apple-touch-icon.png">
   <link rel="preload" as="image" href="img/outdoor.webp">
   <link rel="stylesheet" href="css/tour.css?v=20261115">
-  <link rel="stylesheet" href="css/games.css?v=20261115e">
+  <link rel="stylesheet" href="css/games.css?v=20261115f">
 </head>
 <body>
   <a class="skip-link" href="#tour-map">지도 바로가기</a>
@@ -78,6 +78,7 @@
     <div class="tour-tools">
       <div class="tour-position">
         <strong id="current-floor">지금은 야외</strong>
+        <button type="button" id="stamp-open" class="stamp-open">🎮 도장 0 / 8</button>
         <button type="button" id="locate-player">◎ 내 위치</button>
         <button type="button" id="stop-walking">이동 멈춤</button>
       </div>
@@ -91,7 +92,7 @@
         <ul>
           <li><b>걷기</b> — 지도를 한 번 누른 뒤 방향키 / 휴대폰은 지도 왼쪽 아래 동그란 조이스틱을 누른 채 밀기</li>
           <li><b>빨리 가기</b> — 복도 바닥이나 공간 이름을 누르면 길을 찾아 걸어가요</li>
-          <li><b>체험 게임</b> — 🎮 표시가 있는 공간을 누르면 설명 창에서 1분 미니게임을 할 수 있어요(도장도 받아요)</li>
+          <li><b>체험 게임</b> — 🎮 표시가 있는 공간에서 1분 미니게임, 도장은 [🎮 도장] 버튼에서 확인</li>
           <li><b>층 이동</b> — 계단 옆 ↑·↓ 층 버튼, 계단 앞에서 Enter·스페이스바, 또는 위의 층 버튼. E/L(엘리베이터)을 누르면 갈 층을 고를 수 있어요(4층까지, 5층은 계단으로)</li>
           <li><b>확대</b> — +/− 버튼, 두 손가락 벌리기, PC는 Ctrl+마우스 휠</li>
           <li><b>크게 보기</b> — 지도를 화면 가득 펼쳐요. 휴대폰을 가로로 돌리면 층 전체가 보여요</li>
@@ -213,6 +214,25 @@
     <p id="game-status" class="sr-only" aria-live="polite"></p>
   </dialog>
 
+  <!-- 도장판: 체험 게임에서 모은 도장 모아 보기 (js/games.js) -->
+  <dialog id="stamps" class="stamp-dialog" aria-labelledby="stamps-title">
+    <div class="game-head">
+      <div>
+        <span class="eyebrow">스탬프 투어</span>
+        <h2 id="stamps-title">내 도장판</h2>
+      </div>
+      <button type="button" id="stamps-close" aria-label="도장판 닫기">✕</button>
+    </div>
+    <div class="game-body">
+      <p id="stamps-summary" class="stamp-summary" aria-live="polite"></p>
+      <ul id="stamps-list" class="stamp-list"></ul>
+      <div id="stamps-done" class="stamp-done" hidden>
+        <a class="btn btn-primary" href="../index.html#admissions">입학 안내 보기 →</a>
+        <a class="btn" href="../index.html#contact">입학 상담</a>
+      </div>
+    </div>
+  </dialog>
+
   <script src="js/analytics.js"></script>
   <script src="../assets/js/class-route.js?v=20261028a"></script>
   <script src="js/tour-data.js?v=20261115"></script>
@@ -220,15 +240,15 @@
   <script src="js/camera.js"></script>
   <script src="js/labels.js?v=20261115"></script>
   <script src="js/tour.js?v=20261115"></script>
-  <script src="js/games.js?v=20261115"></script>
+  <script src="js/games.js?v=20261115b"></script>
   <script src="js/game-cafe.js?v=20261115"></script>
-  <script src="js/game-ai.js?v=20261115"></script>
-  <script src="js/game-typing.js?v=20261115b"></script>
-  <script src="js/game-rain.js?v=20261115"></script>
-  <script src="js/game-bakery.js?v=20261115b"></script>
-  <script src="js/game-career.js?v=20261115b"></script>
-  <script src="js/game-phishing.js?v=20261115"></script>
-  <script src="js/game-cashier.js?v=20261115"></script>
+  <script src="js/game-ai.js?v=20261115b"></script>
+  <script src="js/game-typing.js?v=20261115c"></script>
+  <script src="js/game-rain.js?v=20261115b"></script>
+  <script src="js/game-bakery.js?v=20261115c"></script>
+  <script src="js/game-career.js?v=20261115c"></script>
+  <script src="js/game-phishing.js?v=20261115b"></script>
+  <script src="js/game-cashier.js?v=20261115b"></script>
 <script type="text/javascript" src="//wcs.pstatic.net/wcslog.js"></script>
 <script type="text/javascript">
 if(!wcs_add) var wcs_add = {};

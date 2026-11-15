@@ -278,7 +278,7 @@
   window.TOUR_GAMES.rain = {
     title: '타자 소나기', button: '🌧️ 타자 소나기', room: '사무자동화실', naver: 'Rain', maxStars: 3,
     stamp: '사무자동화실 도장 획득!',
-    message: '사무자동화실에서는 문서 작성과 사무 프로그램을 익히며 자격증 실기를 준비해요.', // ※ 학교 확인
+    message: '문서 작성과 사무 프로그램으로 자격증 실기를 준비해요.', // ※ 학교 확인
     cta: { href: '../index.html#departments', label: '4개 학과 알아보기 →' },
     rules: RULES,
     start

@@ -22,6 +22,7 @@
    공간 데이터(tour-data.js)에 game: 'cafe' 를 적으면 그 공간의 상세 창에 버튼이 생기고,
    tour/index.html?game=cafe 로 들어오면 바로 열립니다.
 
+   지도 위 [🎮 도장 n / m] 버튼은 도장판(<dialog id="stamps">)을 엽니다 — 게임이 있는 공간과 모은 도장·별을 보여 주고 바로 도전할 수 있습니다.
    도장은 localStorage 'gch-tour-stamps'에 { cafe: { stars: 2, at: '2026-11-14' } } 꼴로, 최고 별 수만 남깁니다.
    이름·연락처 같은 개인정보는 받지 않고, 서버로 보내는 것도 없습니다.
    ========================================================================= */
@@ -197,7 +198,20 @@ window.tourGame = (() => {
     }
     actions.append(back);
     box.append(actions);
+    const count = updateStampCount();
+    if (board && count.total) {   // 모은 도장 수 + 도장판으로 가는 버튼
+      const more = document.createElement('button');
+      more.type = 'button';
+      more.className = 'game-result-board';
+      more.textContent = `🎮 모은 도장 ${count.got} / ${count.total} · 도장판 보기`;
+      more.addEventListener('click', () => {
+        dialog.addEventListener('close', openBoard, { once: true });
+        dialog.close();
+      });
+      box.append(more);
+    }
     body.append(box);
+    checkAllStamps(count);
 
     announce(`끝났어요. 별 ${max}개 중 ${stars}개. ${game.stamp || '도장 획득!'} ${game.message || ''}`);
     retry.focus({ preventScroll: true });
@@ -227,8 +241,117 @@ window.tourGame = (() => {
     const rooms = Object.values(window.TOUR_SCENES || {}).flatMap(scene => scene.rooms || []);
     open(wanted, rooms.find(r => r.game === wanted) || null, null);
   };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', openFromAddress);
-  else openFromAddress();
+  /* ---------- 도장판 (스탬프 투어): 게임이 있는 공간과 모은 도장을 한눈에 ---------- */
 
-  return { open, close: () => dialog.close(), stamps: readStamps };
+  const board = document.getElementById('stamps');
+  const boardButton = document.getElementById('stamp-open');
+  const ALL_DONE_KEY = 'gch-tour-stamps-done';   // 도장을 다 모은 것을 한 번만 집계하기 위한 표시
+
+  /** 게임이 있는 공간 목록 (층 순서) */
+  function stampRooms() {
+    const scenes = window.TOUR_SCENES || {};
+    return (window.TOUR_ORDER || Object.keys(scenes)).flatMap(sceneId => (scenes[sceneId]?.rooms || [])
+      .filter(room => room.game && GAMES[room.game])
+      .map(room => ({ room, sceneId, floor: scenes[sceneId].name, game: GAMES[room.game] })));
+  }
+
+  /** 지도 위 도장 버튼의 숫자를 고치고 { got, total }을 돌려줌 */
+  function updateStampCount() {
+    const rooms = stampRooms();
+    const stamps = readStamps();
+    const got = rooms.filter(item => stamps[item.room.game]).length;
+    if (boardButton) {
+      boardButton.textContent = `🎮 도장 ${got} / ${rooms.length}`;
+      boardButton.classList.toggle('is-complete', rooms.length > 0 && got === rooms.length);
+    }
+    return { got, total: rooms.length };
+  }
+
+  /** 도장을 모두 모으면 한 번만 집계 (개인정보 없이 횟수만) */
+  function checkAllStamps({ got, total }) {
+    if (!total || got < total) return;
+    try {
+      if (localStorage.getItem(ALL_DONE_KEY) === '1') return;
+      localStorage.setItem(ALL_DONE_KEY, '1');
+    } catch (e) { return; }
+    tourTrack('tour_stamp_complete', { stamp_total: total }, ['TourStamp', 'Complete']);
+  }
+
+  /** 도장판에서 고른 공간의 층으로 옮긴 뒤 게임 열기 */
+  function playFromBoard(item) {
+    board.addEventListener('close', () => {
+      document.querySelector(`.scene-nav [data-scene="${item.sceneId}"][aria-pressed="false"]`)?.click();
+      open(item.room.game, item.room, boardButton);
+    }, { once: true });
+    board.close();
+  }
+
+  function renderBoard() {
+    const rooms = stampRooms();
+    const stamps = readStamps();
+    const { got, total } = updateStampCount();
+    const list = document.getElementById('stamps-list');
+    list.replaceChildren();
+    for (const item of rooms) {
+      const stamp = stamps[item.room.game];
+      const row = document.createElement('li');
+      row.className = 'stamp-item' + (stamp ? ' is-got' : '');
+      const seal = document.createElement('span');
+      seal.className = 'stamp-seal';
+      seal.setAttribute('aria-hidden', 'true');
+      seal.textContent = stamp ? '도장' : '?';
+      const info = document.createElement('div');
+      info.className = 'stamp-info';
+      const name = document.createElement('strong');
+      name.textContent = item.room.name;
+      const sub = document.createElement('small');
+      sub.textContent = `${item.floor} · ${item.game.title}`;
+      info.append(name, sub);
+      if (stamp) {
+        const max = item.game.maxStars || 3;
+        const stars = document.createElement('span');
+        stars.className = 'stamp-stars';
+        stars.setAttribute('role', 'img');
+        stars.setAttribute('aria-label', `별 ${max}개 중 ${Math.min(stamp.stars, max)}개`);
+        stars.textContent = '★'.repeat(Math.min(stamp.stars, max)) + '☆'.repeat(Math.max(0, max - stamp.stars));
+        info.append(stars);
+      }
+      const go = document.createElement('button');
+      go.type = 'button';
+      go.className = 'btn' + (stamp ? '' : ' btn-primary');
+      go.textContent = stamp ? '다시' : '도전';
+      go.setAttribute('aria-label', `${item.room.name} ${item.game.title} ${stamp ? '다시 하기' : '도전하기'}`);
+      go.addEventListener('click', () => playFromBoard(item));
+      row.append(seal, info, go);
+      list.append(row);
+    }
+    const complete = total > 0 && got === total;
+    document.getElementById('stamps-summary').textContent = complete
+      ? `🎉 도장 ${total}개 완성! 군산여상 탐험 완료`
+      : `도장 ${got} / ${total} · 🎮 표시가 있는 공간에서 모아요`;
+    document.getElementById('stamps-done').hidden = !complete;
+    return { got, total };
+  }
+
+  function openBoard() {
+    if (!board || board.open || dialog.open) return;
+    const count = renderBoard();
+    tourTrack('tour_stamp_open', { stamp_count: count.got, stamp_total: count.total }, ['TourStamp', 'Open']);
+    board.showModal();
+    document.getElementById('stamps-close').focus({ preventScroll: true });
+  }
+
+  if (board && boardButton) {
+    boardButton.addEventListener('click', openBoard);
+    document.getElementById('stamps-close').addEventListener('click', () => board.close());
+    board.addEventListener('close', () => { if (!dialog.open) boardButton.focus({ preventScroll: true }); });
+    // 게임 창을 닫을 때마다 숫자 맞추기 (도장 저장 뒤)
+    dialog.addEventListener('close', updateStampCount);
+  }
+
+  const whenReady = () => { updateStampCount(); openFromAddress(); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', whenReady);
+  else whenReady();
+
+  return { open, close: () => dialog.close(), stamps: readStamps, openBoard };
 })();

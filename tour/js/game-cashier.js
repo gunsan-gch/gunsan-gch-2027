@@ -77,8 +77,8 @@
       <div class="cashier-intro">
         <div class="cashier-intro-art" aria-hidden="true"></div>
         <h3>점심시간 매점!</h3><p>60초 동안 거스름돈을 정확히 건네요.</p>
-        <ul><li>물건값을 더하고, 낸 돈에서 빼요.</li><li>돈 버튼으로 잔돈을 담고 [건네기]를 눌러요.</li>
-          <li>실수하면 −3초, 3콤보부터 +1초! 고장 난 계산대를 구하면 팁!</li></ul>
+        <ul><li>돈 버튼으로 잔돈을 담고 [건네기]</li>
+          <li>실수 −3초 · 3콤보부터 +1초</li></ul>
         <button type="button" class="btn btn-primary cashier-start">문 열기</button>
       </div>
       <div class="cashier-game" hidden>
@@ -299,7 +299,7 @@
   window.TOUR_GAMES.cashier = {
     title: '매점 계산왕', button: '🧾 매점 계산왕', room: '전산회계1실', naver: 'Cashier', maxStars: 3,
     stamp: '전산회계1실 도장 획득!',
-    message: 'ERP비즈니스과에서는 전표와 장부를 정리하며 돈의 흐름을 맞추는 회계 실무를 배워요.', // ※ 학교 확인
+    message: 'ERP비즈니스과에서는 전표와 장부로 회계 실무를 배워요.', // ※ 학교 확인
     cta: { href: '../index.html#erp', label: 'ERP비즈니스과 알아보기 →' },
     rules: RULES, seed: null, brokenChance: BROKEN_CHANCE,
     start
