@@ -7,7 +7,7 @@
        title: '음료 만들기 체험',          // 게임 창 제목
        button: '☕ 음료 만들기 체험',      // 공간 상세 창의 버튼 문구
        naver: 'Cafe',                      // 네이버 이벤트 값 앞글자 (영문·숫자만) → CafeStart · CafeDone · CafeDept
-       maxStars: 9,                        // 받을 수 있는 최고 별 수
+       maxStars: 3,                        // 받을 수 있는 최고 별 수 (모든 게임 3개로 통일)
        stamp: '카페실습실 도장 획득!',      // 결과 화면의 도장 문구
        message: '카페비즈과에서는 …',       // 결과 화면 안내 문구
        cta: { href: '../index.html#cafe', label: '카페비즈과 알아보기 →' },   // 결과 화면의 학과 링크
@@ -22,7 +22,7 @@
    공간 데이터(tour-data.js)에 game: 'cafe' 를 적으면 그 공간의 상세 창에 버튼이 생기고,
    tour/index.html?game=cafe 로 들어오면 바로 열립니다.
 
-   도장은 localStorage 'gch-tour-stamps'에 { cafe: { stars: 7, at: '2026-11-14' } } 꼴로, 최고 별 수만 남깁니다.
+   도장은 localStorage 'gch-tour-stamps'에 { cafe: { stars: 2, at: '2026-11-14' } } 꼴로, 최고 별 수만 남깁니다.
    이름·연락처 같은 개인정보는 받지 않고, 서버로 보내는 것도 없습니다.
    ========================================================================= */
 
@@ -60,9 +60,11 @@ window.tourGame = (() => {
   }
 
   /** 최고 별 수만 남김. 돌려주는 값은 저장된(=최고) 기록 */
-  function saveStamp(id, stars) {
+  function saveStamp(id, stars, max) {
     const stamps = readStamps();
     const best = stamps[id];
+    // 예전에는 별이 9개까지인 게임이 있었음 → 지금 만점(3개) 기준으로 한 번 환산
+    if (best && max && best.stars > max) best.stars = Math.max(1, Math.round(best.stars * max / 9));
     if (!best || stars > (best.stars || 0)) stamps[id] = { stars, at: today() };
     try { localStorage.setItem(STAMP_KEY, JSON.stringify(stamps)); } catch (e) { /* 저장 못 해도 게임은 계속 */ }
     return stamps[id];
@@ -116,7 +118,7 @@ window.tourGame = (() => {
     const { id, game } = session;
     const max = game.maxStars || stars;
     tourTrack('tour_game_complete', { game_id: id, stars, hints }, ['TourGame', game.naver + 'Done']);
-    const best = saveStamp(id, stars);
+    const best = saveStamp(id, stars, max);
     renderResult(session, stars, max, best, extra);
   }
 

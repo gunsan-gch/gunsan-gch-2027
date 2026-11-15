@@ -6,7 +6,7 @@
    규칙
    - 컵을 맨 먼저 고릅니다. 컵 없이 재료를 누르면 "먼저 컵을 골라요".
    - 재료는 순서 상관없이 구성이 정확히 같으면 정답. 같은 재료를 두 번 누르면 무시.
-   - 라운드마다 별 3개로 시작, [레시피 보기]·틀린 음료마다 1개씩 줄고 최소 1개.
+   - 라운드마다 별 3개로 시작, [레시피 보기]·틀린 음료마다 1개씩 줄고 최소 1개. 최종 별은 세 라운드 평균(최대 3개).
    ========================================================================= */
 
 (() => {
@@ -248,7 +248,9 @@
 
     function nextRound() {
       if (state.round >= ORDERS.length - 1) {
-        api.done({ stars: state.stars.reduce((a, b) => a + b, 0), hints: state.hints });
+        // 최종 별은 라운드 평균(반올림) — 모든 게임이 최대 3개로 같음
+        const sum = state.stars.reduce((a, b) => a + b, 0);
+        api.done({ stars: Math.max(1, Math.round(sum / ORDERS.length)), hints: state.hints });
         return;
       }
       state.round++;
@@ -294,7 +296,7 @@
     button: '☕ 음료 만들기 체험',
     room: '카페실습실',
     naver: 'Cafe',
-    maxStars: ORDERS.length * STARS_PER_ROUND,
+    maxStars: STARS_PER_ROUND,
     stamp: STAMP_TEXT,
     message: RESULT_TEXT,
     cta: DEPT_LINK,

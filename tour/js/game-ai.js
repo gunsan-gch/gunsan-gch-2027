@@ -10,7 +10,7 @@
 
   /* ---------- 선생님이 고칠 수 있는 데이터 ---------- */
 
-  // 후보는 적힌 순서대로 표시. best 3별 · mid 2별 · weak 1별, 힌트는 1별 감점 (최소 1별)
+  // 후보는 적힌 순서대로 표시. best 3별 · mid 2별 · weak 1별, 힌트는 1별 감점 (최소 1별). 최종 별은 세 라운드 평균
   const PRODUCTS = [
     { name: '흰찰쌀보리 쿠키', desc: '군산 흰찰쌀보리로 구운 담백한 쿠키', emoji: '🍪',
       target: '간식 찾는 10대', channel: '인스타그램', image: 'product-1.png',
@@ -187,7 +187,8 @@
         return;
       }
       const extra = likesRow(state.likes, true);
-      api.done({ stars: state.stars, hints: state.hints, extra });
+      // 최종 별은 라운드 평균(반올림) — 모든 게임이 최대 3개로 같음
+      api.done({ stars: Math.max(1, Math.round(state.stars / PRODUCTS.length)), hints: state.hints, extra });
       // games.js가 결과 요소를 문서에 붙인 다음 집계를 시작합니다.
       countLikes(extra.querySelector('.ai-count'), state.likes);
     }
@@ -234,7 +235,7 @@
     button: '📣 광고 문구 고르기 체험',
     room: 'AI비즈니스실',
     naver: 'Ai',
-    maxStars: 9,
+    maxStars: 3,
     stamp: STAMP_TEXT,
     message: RESULT_TEXT,
     cta: DEPT_LINK,
