@@ -5,7 +5,7 @@
 
    규칙
    - 컵을 맨 먼저 고릅니다. 컵 없이 재료를 누르면 "먼저 컵을 골라요".
-   - 재료는 순서 상관없이 구성이 정확히 같으면 정답. 같은 재료를 두 번 누르면 무시.
+   - 재료는 순서 상관없이 구성이 정확히 같으면 정답. 담긴 재료를 다시 누르면 뺍니다.
    - 라운드마다 별 3개로 시작, [레시피 보기]·틀린 음료마다 1개씩 줄고 최소 1개. 최종 별은 세 라운드 평균(최대 3개).
    ========================================================================= */
 
@@ -30,11 +30,11 @@
 
   // 라운드별 주문. recipe는 재료 id 목록 (컵 하나 + 재료들, 순서는 상관없음). customer는 손님 그림 번호
   const ORDERS = [
-    { drink: '아이스 아메리카노', customer: 1, who: '학생', say: '아이스 아메리카노 한 잔 주세요!',
+    { drink: '아이스 아메리카노', image: 'drink-americano.png', customer: 1, who: '학생', say: '아이스 아메리카노 한 잔 주세요!',
       recipe: ['cup-ice', 'ice', 'water', 'shot'] },
-    { drink: '따뜻한 카페라떼', customer: 2, who: '선생님', say: '따뜻한 카페라떼 한 잔 부탁해요.',
+    { drink: '따뜻한 카페라떼', image: 'drink-hot-latte.png', customer: 2, who: '선생님', say: '따뜻한 카페라떼 한 잔 부탁해요.',
       recipe: ['cup-mug', 'shot', 'steamed-milk'] },
-    { drink: '아이스 바닐라라떼', customer: 3, who: '학부모', say: '아이스 바닐라라떼로 주세요.',
+    { drink: '아이스 바닐라라떼', image: 'drink-vanilla-latte.png', customer: 3, who: '학부모', say: '아이스 바닐라라떼로 주세요.',
       recipe: ['cup-ice', 'vanilla', 'ice', 'milk', 'shot'] }
   ];
 
@@ -82,11 +82,14 @@
             <span class="cafe-cup-hint" aria-hidden="true">컵을 골라요</span>
             <div class="cafe-layers"></div>
           </div>
+          <img class="cafe-finished" width="144" height="144" alt="" hidden>
         </div>
         <p class="cafe-message" role="status" aria-live="polite"></p>
-        <div class="cafe-tray" role="group" aria-label="컵과 재료 (누르면 컵에 담겨요)"></div>
+        <div class="cafe-tray" role="group" aria-label="컵과 재료 (담긴 재료를 다시 누르면 빼요)">
+          <p class="cafe-tray-help">담긴 재료를 다시 누르면 뺄 수 있어요.</p>
+        </div>
         <div class="cafe-actions">
-          <button type="button" class="btn cafe-hint-button" aria-pressed="false">💡 레시피 보기</button>
+          <button type="button" class="btn cafe-hint-button" aria-pressed="false">레시피 보기 −★1</button>
           <button type="button" class="btn cafe-reset">처음부터</button>
           <button type="button" class="btn btn-primary cafe-serve">음료 내기</button>
         </div>
@@ -101,12 +104,17 @@
     const roundEl = $('.cafe-round');
     const starsEl = $('.cafe-stars');
     const cupEl = $('.cafe-cup');
+    const finishedImg = $('.cafe-finished');
     const layersEl = $('.cafe-layers');
     const messageEl = $('.cafe-message');
     const tray = $('.cafe-tray');
     const hintButton = $('.cafe-hint-button');
     const resetButton = $('.cafe-reset');
     const serveButton = $('.cafe-serve');
+    finishedImg.addEventListener('error', () => {
+      finishedImg.hidden = true;
+      cupEl.hidden = false;
+    });
 
     // 손님 그림을 못 불러오면 이모지로
     const CUSTOMER_EMOJI = ['🧑‍🎓', '🧑‍🏫', '🧑'];
@@ -181,7 +189,11 @@
         return say(`${object(item.name)} 골랐어요. 이제 재료를 담아요.`);
       }
       if (!state.cup) { shake(); return say('먼저 컵을 골라요.'); }
-      if (state.items.includes(item.id)) return say(`${object(item.name)} 이미 넣었어요.`);
+      if (state.items.includes(item.id)) {
+        state.items = state.items.filter(id => id !== item.id);
+        render();
+        return say(`${object(item.name)} 뺐어요.`);
+      }
       state.items.push(item.id);
       render(item.id);
       say(`${object(item.name)} 넣었어요.`);
@@ -202,6 +214,7 @@
       recipeEl.hidden = false;
       recipeEl.textContent = `레시피: ${recipe}`;
       hintButton.setAttribute('aria-pressed', 'true');
+      hintButton.textContent = '레시피 다시 보기';
       if (state.hinted) return say(`레시피: ${recipe}`);
       state.hinted = true;
       state.hints++;
@@ -235,6 +248,10 @@
       state.locked = true;
       customerBox.classList.add('is-happy');
       cupEl.classList.add('is-served');
+      finishedImg.src = IMG + order.image;
+      finishedImg.alt = `완성된 ${order.drink}`;
+      finishedImg.hidden = false;
+      cupEl.hidden = true;
       whoEl.textContent = `${order.who} 손님`;
       orderEl.textContent = `고마워요! 딱 제가 원하던 ${order.drink}예요.`;
       recipeEl.hidden = true;
@@ -262,6 +279,10 @@
       Object.assign(state, { cup: null, items: [], penalty: 0, hinted: false, locked: false });
       customerBox.classList.remove('is-happy');
       cupEl.classList.remove('is-served');
+      cupEl.hidden = false;
+      finishedImg.hidden = true;
+      finishedImg.removeAttribute('src');
+      finishedImg.alt = '';
       customerImg.hidden = false;
       delete customerBox.dataset.emoji;
       customerImg.src = `${IMG}customer-${order.customer}.png`;
@@ -272,6 +293,7 @@
       recipeEl.textContent = '';
       roundEl.textContent = `${state.round + 1} / ${ORDERS.length} 라운드`;
       hintButton.disabled = false;
+      hintButton.textContent = '레시피 보기 −★1';
       hintButton.setAttribute('aria-pressed', 'false');
       resetButton.disabled = false;
       serveButton.textContent = '음료 내기';

@@ -330,6 +330,96 @@
       "kind": "game",
       "description": "금융 게임 goods-water.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
       "sha256": "ffc3fbc03246e24dc0601e4579ed6348f55c783871b3e900bbc61c48e84da5ed"
+    },
+    "games/stamps/bakery.png": {
+      "output": "games/stamps/bakery.png",
+      "kind": "game",
+      "description": "게임별 도장 bakery — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "1c5674058a59fd7adbba01196ea547c051790f298d61a3138c8fbfbd432d49eb"
+    },
+    "games/stamps/typing.png": {
+      "output": "games/stamps/typing.png",
+      "kind": "game",
+      "description": "게임별 도장 typing — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "68bc854e94963458eddf073967e3a93f113705f51ad24af97a94054d9027354d"
+    },
+    "games/stamps/cafe.png": {
+      "output": "games/stamps/cafe.png",
+      "kind": "game",
+      "description": "게임별 도장 cafe — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "98166238cdd253f0aa0fe813c006198b89f45d0e3dd3414eef0270f13bd9d2ef"
+    },
+    "games/stamps/cashier.png": {
+      "output": "games/stamps/cashier.png",
+      "kind": "game",
+      "description": "게임별 도장 cashier — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "21268287c50a558c970eba2ee5749296177f8e1be689575d2752980e4477d400"
+    },
+    "games/stamps/rain.png": {
+      "output": "games/stamps/rain.png",
+      "kind": "game",
+      "description": "게임별 도장 rain — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "195347e83022b4a99315ffb18049b75eabc514fea92088cdf322ea65787f93d4"
+    },
+    "games/stamps/ai.png": {
+      "output": "games/stamps/ai.png",
+      "kind": "game",
+      "description": "게임별 도장 ai — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "c455fb52cea963c4ad346a9c03beb7a01e141449b53ee6e4367e8b883bfeb33f"
+    },
+    "games/stamps/career.png": {
+      "output": "games/stamps/career.png",
+      "kind": "game",
+      "description": "게임별 도장 career — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "60dbb0a51e57279e79272020a64e71a4ab0c6a1abde19d96aa2c766bfa54b466"
+    },
+    "games/stamps/phishing.png": {
+      "output": "games/stamps/phishing.png",
+      "kind": "game",
+      "description": "게임별 도장 phishing — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "8c832cadd79c53422fd08110a16d56fca8ed4b95d198a784f7c811e3d18ed0c6"
+    },
+    "games/departments/erp.png": {
+      "output": "games/departments/erp.png",
+      "kind": "game",
+      "description": "학과 픽셀 배지 erp — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "86c545e7df9be6f55108a383829e921b40a0dbd3ce20d8793725db5c8e38a06f"
+    },
+    "games/departments/marketing.png": {
+      "output": "games/departments/marketing.png",
+      "kind": "game",
+      "description": "학과 픽셀 배지 marketing — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "c455fb52cea963c4ad346a9c03beb7a01e141449b53ee6e4367e8b883bfeb33f"
+    },
+    "games/departments/fintech.png": {
+      "output": "games/departments/fintech.png",
+      "kind": "game",
+      "description": "학과 픽셀 배지 fintech — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "e0c8a622b76b565592a2c8d6b9880583554dfa9c6f32c69b46136bd1ab157a5c"
+    },
+    "games/departments/cafe.png": {
+      "output": "games/departments/cafe.png",
+      "kind": "game",
+      "description": "학과 픽셀 배지 cafe — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "d4557dc6576d1d3af0610e64476a2e3e13efd68873976ff88ea2a1e6638ef57b"
+    },
+    "games/cafe/drink-americano.png": {
+      "output": "games/cafe/drink-americano.png",
+      "kind": "game",
+      "description": "완성 아이스 아메리카노 — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "567d9274371d473b2c64425355bf84725f0639727bd2f61f74a0545d281984c2"
+    },
+    "games/cafe/drink-hot-latte.png": {
+      "output": "games/cafe/drink-hot-latte.png",
+      "kind": "game",
+      "description": "완성 따뜻한 카페라떼 — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "43632edf1416585cd65f5b5b4ef85a66b7865263e84751b2b4d521cd92daaaa5"
+    },
+    "games/cafe/drink-vanilla-latte.png": {
+      "output": "games/cafe/drink-vanilla-latte.png",
+      "kind": "game",
+      "description": "완성 아이스 바닐라라떼 — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
+      "sha256": "d658286bc64fa8c9f8d7eba4201ef1f582f0f554872aecbfaf541b90e5c79318"
     }
   }
 }

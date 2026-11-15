@@ -80,7 +80,7 @@ tour/
 ## 그림 교체 (GPT로 새로 그린 그림 반영)
 
 1. 새 그림은 **기존과 같은 파일 이름**으로 저장합니다. 이름 목록은 `img/ASSET-SOURCES.json`에 있습니다.
-   - 배경(`outdoor-lawn.png`, `floor1-open-lobby-v6.png`, `floor2-wide.png` …): **가로:세로 2:1**, 1774×887 권장
+   - 배경(`outdoor-lawn.png`, `floor1-structure-v6-20261025.png`, `floor2-structure-v6-20261025.png` …): **가로:세로 2:1**, 1774×887 권장
    - 걷는 캐릭터(`overworld-atlas.png`): 96×160, 칸 32×40, 3열(걸음A·서기·걸음B) × 4행(아래·오른쪽·위·왼쪽)
    - 공유 미리보기 배경(`tour-share-art.png`): 1200×630, 왼쪽 45%는 글자용 남색 여백, 글자 없이
 2. 원본 PNG를 한 폴더에 모아 실행합니다 (Python + Pillow 필요).
@@ -121,7 +121,7 @@ GPT가 그린 배경(`tour-share-art.png`)에 `update_assets.py`가 학교 글�
 커리어존도 공통 `tour_game_start`·`tour_game_complete`·`tour_game_cta`를 보냅니다 (`game_id: career`, 네이버 `CareerStart`·`CareerDone`·`CareerDept`).
 답 카드의 새 탭 학과 링크는 `tour_game_cta`의 `cta: dept_<학과 id>`, 결과 링크는 기존 틀의 `cta: dept`, `transport_type: beacon`을 씁니다.
 같은 브라우저에서 완료한 적이 있으면 `gch-tour-career-done` 값 `1`을 읽어 `repeat: yes`로 표시하며, 재플레이를 막거나 집계에서 빼지 않습니다.
-선생님용 보기별 집계 방법·질문 id 표는 [커리어존 집계 안내](../docs/career-zone-results.md)를 보세요. 학과 그림은 `../assets/img/departments/`의 기존 그림을 씁니다.
+선생님용 보기별 집계 방법·질문 id 표는 [커리어존 집계 안내](../docs/career-zone-results.md)를 보세요. 학과 그림은 `img/games/departments/`의 48×48 픽셀 배지를 2배로 표시합니다. 결과의 연결 문항 수는 학과를 직접 선택한 횟수가 아니라, 안내 학과로 연결된 관심사 문항까지 포함합니다.
 
 `class_route_complete`는 수업 시간 접속을 홍보 분석에서 빼고 보기 위한 표시입니다. 판별 방법과 GA4 탐색 설정은
 [`../docs/class-route-exclusion.md`](../docs/class-route-exclusion.md)를 보세요. 코드만으로는 어떤 보고서에서도 자동으로 빠지지 않습니다.
@@ -137,7 +137,7 @@ GA4 보고서에서 공간 이름별로 보려면 관리 → 맞춤 정의 → �
 공간 데이터에 `game`을 붙이면 목록과 숫자에 자동으로 들어갑니다. 모두 모으면 입학 안내·입학 상담 링크가 나옵니다.
 분석 이벤트: `tour_stamp_open`(`stamp_count`, `stamp_total` / 네이버 `TourStamp` Open), `tour_stamp_complete`(`stamp_total` / 네이버 `TourStamp` Complete, 브라우저당 한 번 — `gch-tour-stamps-done`).
 
-게임을 끝내면 브라우저 `localStorage`의 `gch-tour-stamps`에 `{ "cafe": { "stars": 2, "at": "2026-11-14" }, "ai": { "stars": 3, "at": "2026-11-14" } }` 꼴로 게임별 최고 별 수만 남깁니다 (다음에 만들 스탬프 투어용).
+게임을 끝내면 브라우저 `localStorage`의 `gch-tour-stamps`에 `{ "cafe": { "stars": 2, "at": "2026-11-14" }, "ai": { "stars": 3, "at": "2026-11-14" } }` 꼴로 게임별 최고 별 수만 남깁니다 (도장판에 표시).
 이름·연락처 같은 개인정보는 받지 않고 서버로 보내는 것도 없습니다. 저장이 막힌 브라우저에서도 게임은 그대로 됩니다.
 
 ## 확인 방법
@@ -157,4 +157,13 @@ GA4 보고서에서 공간 이름별로 보려면 관리 → 맞춤 정의 → �
 - 그림은 2026학년도 학교배치도를 참고한 일러스트입니다. 실측 도면·실제 출입 경로가 아닙니다.
 - 조리제빵실·카페실습실(1층)·AI비즈니스실(3층)은 개편 예정 공간을 상상한 그림입니다.
 - 4층 체육관 2층의 코트 바닥은 걸을 수 없게 해 두었고, 5층 옥상은 이용할 수 없는 곳이라 걸어 들어갈 수 없게 막아 두었습니다(그림과 '출입 불가' 이름표만 표시).
-- 1층 그림은 두 수정본을 합친 것입니다: 준비실·창고를 넣은 v6 수정본 + 경비실/사무자동화실을 나눈 v7의 해당 부분(가로 1320~1740px, 세로 240~400px).
+- 현재 1~5층 그림의 원본 기준은 `img/ASSET-SOURCES.json`의 `floor1~5-structure-v6-20261025.png` 기록입니다. 이전 1층 v6/v7 합성 설명은 현재 파일의 기준으로 사용하지 않습니다.
+
+## 보상·완성 음료 픽셀 에셋 (2026-11-15)
+
+- 도장 8종: `img/games/stamps/`. 미획득은 회색 그림과 **미획득** 글자, 획득은 원색 그림과 **획득**·별로 구분합니다.
+- 학과 배지 4종: `img/games/departments/`. 학과 홍보 일러스트와 별도로 게임에 사용합니다.
+- 완성 음료 3종: `img/games/cafe/drink-*.png`. 정답 뒤 표시하고 다음 손님에서 초기화합니다.
+- 재생성: `node tour/tools/make_reward_game_art.mjs` (저장소 루트에서). 48×48 RGBA PNG, 알파 0/255, 무손실·정수 좌표. 생성 시 원본 기록의 SHA-256도 갱신합니다.
+- 카페: 담긴 재료를 다시 누르면 취소합니다. 힌트 버튼에 `레시피 보기 −★1`을 미리 표시하고, 같은 라운드 재열람에는 추가 감점이 없습니다.
+- 실제 사진 미확보 항목은 [실습실 사진 보완 기록](../docs/tour-photo-backlog.md)에 별도로 정리했습니다.

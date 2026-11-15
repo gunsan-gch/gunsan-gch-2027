@@ -32,12 +32,9 @@ body.game-open { overflow: hidden; }
   font-size: 18px; color: var(--navy);
 }
 .game-stamp-seal {
-  display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%;
-  border: 3px double #c8402e; color: #c8402e; font-family: var(--font-title); font-weight: 900; font-size: 15px;
-  transform: rotate(-12deg);
-  animation: game-stamp-in .4s cubic-bezier(.2, 1.4, .5, 1) both;
+  display: grid; place-items: center; width: 48px; height: 48px; flex-shrink: 0;
 }
-@keyframes game-stamp-in { from { transform: rotate(-12deg) scale(2.2); opacity: 0; } }
+.game-stamp-seal img, .stamp-seal img { display: block; width: 48px; height: 48px; image-rendering: pixelated; }
 .game-result-text { margin: 0; max-width: 480px; font-size: 15px; }
 .game-result-best { margin: 0; font-size: 13px; color: var(--muted); }
 .game-result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 10px; width: 100%; }
@@ -79,6 +76,8 @@ body.game-open { overflow: hidden; }
   display: flex; flex-direction: column; justify-content: flex-end;
   border: 3px dashed rgba(20, 40, 90, .55); background: rgba(255, 255, 255, .25);
 }
+.cafe-cup[hidden], .cafe-finished[hidden] { display: none; }
+.cafe-finished { display: block; width: 144px; height: 144px; object-fit: contain; image-rendering: pixelated; }
 .cafe-cup-hint { position: absolute; inset: 0; display: grid; place-items: center; font-size: 13px; font-weight: 700; color: var(--navy); }
 .cafe-cup[data-cup]:not([data-cup=""]) .cafe-cup-hint { display: none; }
 .cafe-cup[data-cup="ice"] {
@@ -115,6 +114,7 @@ body.game-open { overflow: hidden; }
 
 /* 재료 버튼 9개 (3×3, 최소 44px) */
 .cafe-tray { grid-area: tray; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.cafe-tray-help { grid-column: 1 / -1; margin: 0; align-self: end; font-size: 12px; color: var(--muted); }
 .cafe-ing {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
   min-height: 78px; padding: 6px 4px;
@@ -199,6 +199,7 @@ body.game-open { overflow: hidden; }
   .cafe-round { display: inline; margin-right: 6px; }
   .cafe-stars { font-size: 18px; }
   .cafe-stage { height: 118px; padding-bottom: 8px; }
+  .cafe-finished { width: 96px; height: 96px; }
   .cafe-cup { width: 54px; height: 84px; border-width: 2px; }
   .cafe-cup[data-cup="mug"] { width: 62px; height: 68px; }
   .cafe-cup[data-cup="mug"]::after { right: -14px; top: 10px; width: 14px; height: 32px; border-width: 2px; }
@@ -215,7 +216,7 @@ body.game-open { overflow: hidden; }
   .game-result { gap: 6px; padding: 0; }
   .game-result-stars { font-size: 26px; }
   .game-stamp { margin: 2px 0; padding: 8px 14px; font-size: 16px; }
-  .game-stamp-seal { width: 44px; height: 44px; font-size: 13px; }
+  .game-stamp-seal { width: 48px; height: 48px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -490,7 +491,8 @@ body.game-open { overflow: hidden; }
 .career-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: 6px; font-size: 14px; color: var(--navy); }
 .career-start, .career-next { min-height: 44px; min-width: 44px; }
 .career-next { width: 100%; }
-.career-picture { display: block; width: 96px; height: 96px; margin: 0 auto 10px; object-fit: cover; }
+.career-picture { display: block; width: 96px; height: 96px; margin: 0 auto 10px; object-fit: contain; image-rendering: pixelated; }
+.career-count-help { margin: 8px 0; font-size: 13px; color: var(--muted); }
 .career-emoji { display: grid; place-items: center; font-size: 60px; }
 .career-activity { margin: 8px 0 16px; font-size: 15px; }
 .career-bars { display: grid; gap: 8px; margin: 16px 0; text-align: left; }
@@ -671,14 +673,16 @@ body.game-open { overflow: hidden; }
 .stamp-summary { margin: 0 0 12px; font-weight: 700; color: var(--navy); }
 .stamp-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .stamp-item {
-  display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; gap: 10px; align-items: center;
+  display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 10px; align-items: center;
   padding: 8px 10px; background: var(--paper); border: 1px solid var(--line-strong);
 }
 .stamp-seal {
-  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
-  border: 2px dashed var(--line-strong); color: var(--muted); font-weight: 700; font-size: 13px;
+  display: grid; place-items: center; width: 48px; height: 48px;
+  color: var(--muted); font-weight: 700;
 }
-.stamp-item.is-got .stamp-seal { border: 3px double #c8402e; color: #c8402e; font-family: var(--font-title); transform: rotate(-12deg); }
+.stamp-item:not(.is-got) .stamp-seal img { filter: grayscale(1); opacity: .45; }
+.stamp-item.is-got { border-color: var(--navy); }
+.stamp-item.is-got .stamp-state { color: var(--navy); font-weight: 700; }
 .stamp-info strong { display: block; font-size: 15px; line-height: 1.3; color: var(--navy); }
 .stamp-info small { display: block; font-size: 12px; color: var(--muted); }
 .stamp-stars { font-size: 13px; letter-spacing: 1px; color: #e0a21e; }
