@@ -370,6 +370,7 @@
         sub.textContent = detail;
         button.append(sub);
       }
+      if (room.game) button.append(Object.assign(document.createElement('small'), { className: 'scene-card-game', textContent: '🎮 체험 게임' }));
       cards.append(button);
     }
     facilities.hidden = !facilities.children.length;

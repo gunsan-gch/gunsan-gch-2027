@@ -113,7 +113,7 @@ GPT가 그린 배경(`tour-share-art.png`)에 `update_assets.py`가 학교 글�
 | `class_route_complete` | `room_name`, `link_url`, `route_steps`, `route_minutes` | — | 같은 방문에서 입학안내 → 투어 → 그 공간을 거쳐 링크를 처음 누름 (방문당 1회) |
 | `tour_click` (입학안내 페이지) | `cta_location`(banner·nav·facility) | `TourLink` | 입학안내 → 투어로 넘어감 |
 | `tour_game_start` | `game_id`(cafe·ai·typing·rain·bakery·phishing·cashier), `room_name` | `TourGame` (CafeStart·AiStart·TypingStart·RainStart·BakeryStart·PhishingStart·CashierStart) | 체험 게임 시작 |
-| `tour_game_complete` | `game_id`, `stars`(총 별), `hints`(힌트 사용 수) | `TourGame` (CafeDone·AiDone·TypingDone·RainDone·BakeryDone·PhishingDone·CashierDone) | 체험 게임 끝 (결과 화면) |
+| `tour_game_complete` | `game_id`, `stars`(별 1~3 — 2026-11-15 이전의 카페·AI·빵 굽기는 9개 만점), `hints`(힌트 사용 수) | `TourGame` (CafeDone·AiDone·TypingDone·RainDone·BakeryDone·PhishingDone·CashierDone) | 체험 게임 끝 (결과 화면) |
 | `tour_game_cta` | `game_id`, `cta`(dept) | `TourGame` (CafeDept·AiDept·TypingDept·RainDept·BakeryDept·PhishingDept·CashierDept) | 결과 화면의 학과 소개 링크 클릭 |
 | `tour_career_pick` | `question_id`, `choice_id`, `dept`(erp·marketing·fintech·cafe·none), `repeat`(yes·no) | `TourCareer` (`<question_id>_<choice_id>`) | 커리어존에서 보기를 고른 즉시, 문항당 1회 |
 | `tour_career_result` | `dept`(erp·marketing·fintech·cafe·none), `commute`(q6 보기 id), `elsewhere`(q7 보기 id), `repeat`(yes·no) | `TourCareer` (`Result_<dept>`) | 커리어존 7문항 완료 |
@@ -131,7 +131,9 @@ GA4 보고서에서 공간 이름별로 보려면 관리 → 맞춤 정의 → �
 
 ## 체험 게임 도장 — `js/games.js`
 
-게임을 끝내면 브라우저 `localStorage`의 `gch-tour-stamps`에 `{ "cafe": { "stars": 7, "at": "2026-11-14" }, "ai": { "stars": 9, "at": "2026-11-14" } }` 꼴로 게임별 최고 별 수만 남깁니다 (다음에 만들 스탬프 투어용).
+별은 모든 게임이 최대 3개입니다(여러 라운드 게임은 라운드 평균). 게임이 있는 공간은 지도 이름표와 공간 카드에 🎮 로 표시됩니다.
+
+게임을 끝내면 브라우저 `localStorage`의 `gch-tour-stamps`에 `{ "cafe": { "stars": 2, "at": "2026-11-14" }, "ai": { "stars": 3, "at": "2026-11-14" } }` 꼴로 게임별 최고 별 수만 남깁니다 (다음에 만들 스탬프 투어용).
 이름·연락처 같은 개인정보는 받지 않고 서버로 보내는 것도 없습니다. 저장이 막힌 브라우저에서도 게임은 그대로 됩니다.
 
 ## 확인 방법

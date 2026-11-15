@@ -156,7 +156,9 @@
       extra.append(el('strong', 'bakery-total', `총 오차 ${seconds(total)}초`));
       extra.append(el('p', 'bakery-detail', state.results.map(result =>
         `${result.target.toFixed(2)}→${seconds(result.elapsed)}`).join(' · ')));
-      api.done({ stars: state.results.reduce((sum, result) => sum + result.stars, 0), hints: 0, extra });
+      // 최종 별은 라운드 평균(반올림) — 모든 게임이 최대 3개로 같음
+      const starSum = state.results.reduce((sum, result) => sum + result.stars, 0);
+      api.done({ stars: Math.max(1, Math.round(starSum / ROUNDS.length)), hints: 0, extra });
     }
 
     function act(now) {
@@ -196,7 +198,7 @@
 
   window.TOUR_GAMES = window.TOUR_GAMES || {};
   window.TOUR_GAMES.bakery = {
-    title: 'n.00초 빵 굽기', button: '🍞 n.00초 빵 굽기', room: '조리제빵실', naver: 'Bakery', maxStars: 9,
+    title: 'n.00초 빵 굽기', button: '🍞 n.00초 빵 굽기', room: '조리제빵실', naver: 'Bakery', maxStars: 3,
     stamp: STAMP_TEXT,
     message: RESULT_TEXT,
     cta: DEPT_LINK,
