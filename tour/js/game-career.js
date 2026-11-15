@@ -79,7 +79,7 @@
       fallback.setAttribute('aria-hidden', 'true');
       img.replaceWith(fallback);
     }, { once: true });
-    img.src = '../assets/img/departments/' + dept + '.webp';
+    img.src = 'img/games/departments/' + dept + '.png';
     return img;
   }
 
@@ -100,20 +100,21 @@
   function summary(dept, counts) {
     const box = el('section', 'career-summary');
     if (dept) box.append(picture(dept));
-    box.append(el('h3', 'career-title', dept ? '나와 잘 맞는 학과: ' + DEPT_NAMES[dept] : '군산여상 4개 학과를 둘러보세요'));
+    box.append(el('h3', 'career-title', dept ? '관심사와 연결되는 학과: ' + DEPT_NAMES[dept] : '군산여상 4개 학과를 둘러보세요'));
     if (dept) box.append(el('p', 'career-activity', DEPT_ACTIVITY[dept]));
+    box.append(el('p', 'career-count-help', '연결 문항 수 · 선택한 관심사를 학과 활동과 연결했어요.'));
     const bars = el('div', 'career-bars');
     // 막대는 학과(안내 학과 포함)로 이어지는 문항 수를 기준으로 표시합니다 (통학 문항 제외).
     const total = Math.max(1, QUESTIONS.filter(q => q.choices.some(c => c.dept || c.guide)).length);
     Object.keys(DEPT_NAMES).forEach(id => {
       const row = el('div', 'career-bar-row');
       row.setAttribute('role', 'img');
-      row.setAttribute('aria-label', DEPT_NAMES[id] + ': ' + counts[id] + '회 선택');
+      row.setAttribute('aria-label', DEPT_NAMES[id] + ': 연결 문항 ' + counts[id] + '개');
       const track = el('div', 'career-bar-track');
       const fill = el('div', 'career-bar-fill');
       fill.style.width = (counts[id] / total * 100) + '%';
       track.append(fill);
-      row.append(el('span', 'career-bar-label', DEPT_NAMES[id]), track, el('span', 'career-count', counts[id] + '회'));
+      row.append(el('span', 'career-bar-label', DEPT_NAMES[id]), track, el('span', 'career-count', counts[id] + '개'));
       bars.append(row);
     });
     box.append(bars);

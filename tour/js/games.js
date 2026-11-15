@@ -32,6 +32,19 @@ window.TOUR_GAMES = window.TOUR_GAMES || {};
 window.tourGame = (() => {
   const GAMES = window.TOUR_GAMES;
   const STAMP_KEY = 'gch-tour-stamps';
+  const STAMP_ART = new Set(['bakery', 'typing', 'cafe', 'cashier', 'rain', 'ai', 'career', 'phishing']);
+  function stampArt(id, className) {
+    const seal = document.createElement('span');
+    seal.className = className;
+    seal.setAttribute('aria-hidden', 'true');
+    if (!STAMP_ART.has(id)) { seal.textContent = '★'; return seal; }
+    const img = document.createElement('img');
+    img.width = 48; img.height = 48; img.alt = '';
+    img.src = `img/games/stamps/${id}.png`;
+    img.addEventListener('error', () => { seal.textContent = '★'; }, { once: true });
+    seal.append(img);
+    return seal;
+  }
   const dialog = document.getElementById('game');
   if (!dialog) return null;
 
@@ -145,7 +158,7 @@ window.tourGame = (() => {
 
     const stamp = document.createElement('div');
     stamp.className = 'game-stamp';
-    stamp.innerHTML = '<span class="game-stamp-seal" aria-hidden="true">도장</span><strong></strong>';
+    stamp.append(stampArt(id, 'game-stamp-seal'), document.createElement('strong'));
     stamp.querySelector('strong').textContent = game.stamp || '도장 획득!';
 
     const message = document.createElement('p');
@@ -296,10 +309,7 @@ window.tourGame = (() => {
       const stamp = stamps[item.room.game];
       const row = document.createElement('li');
       row.className = 'stamp-item' + (stamp ? ' is-got' : '');
-      const seal = document.createElement('span');
-      seal.className = 'stamp-seal';
-      seal.setAttribute('aria-hidden', 'true');
-      seal.textContent = stamp ? '도장' : '?';
+      const seal = stampArt(item.room.game, 'stamp-seal');
       const info = document.createElement('div');
       info.className = 'stamp-info';
       const name = document.createElement('strong');
@@ -307,6 +317,10 @@ window.tourGame = (() => {
       const sub = document.createElement('small');
       sub.textContent = `${item.floor} · ${item.game.title}`;
       info.append(name, sub);
+      const earned = document.createElement('small');
+      earned.className = 'stamp-state';
+      earned.textContent = stamp ? '획득' : '미획득';
+      info.append(earned);
       if (stamp) {
         const max = item.game.maxStars || 3;
         const stars = document.createElement('span');
