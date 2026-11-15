@@ -146,7 +146,26 @@
       if(!rear)tinyStar(r,side?(right?20:8):21,6);
     }
   }
+  const carriedColors={bag:'mintD',breadbag:'roseD',starbag:'goldD',milkbag:'roseD',bowback:'roseD',wings:'goldD',umbrella:'blueD'};
   function back(c,id,dir,frame=1){
+    const color=carriedColors[id];
+    if(!color){backArt(c,id,dir,frame);return;}
+    // Match the existing 0,1,2,1 walk cycle: up one pixel, rest, down one, rest.
+    // Only the accessory moves; the body, hair and collision box stay fixed.
+    const bob=frame===0?-1:frame===2?1:0;
+    c.save();c.translate(0,bob);backArt(c,id,dir,frame);c.restore();
+    // A short strap/root stays on the shoulder while its far end follows the item.
+    const r=pen(c);
+    if(dir==='up'){
+      pixelLine(r,15,20,15,22+bob,color);
+      r(14,20,3,1,color);
+    }else if(dir==='left'||dir==='right'){
+      const right=dir==='right',from=id==='umbrella'?(right?11:20):(right?12:19);
+      const to=id==='wings'?(right?11:20):(right?9:22);
+      pixelLine(r,from,21,to,22+bob,color);
+    }
+  }
+  function backArt(c,id,dir,frame=1){
     const r=pen(c),rear=dir==='up',front=dir==='down',side=!rear&&!front,right=dir==='right',x=side?(right?5:21):10;
     if(id==='milkbag'){
       if(side){const bx=right?6:22;r(bx+1,17,2,3,'roseD');r(bx,20,5,10,'roseD');r(bx+1,20,3,9,'pink');r(bx+2,22,1,5,'cream');r(right?11:20,20,1,9,'roseD');}
