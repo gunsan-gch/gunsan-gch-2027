@@ -330,6 +330,30 @@
       "kind": "game",
       "description": "금융 게임 goods-water.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
       "sha256": "ffc3fbc03246e24dc0601e4579ed6348f55c783871b3e900bbc61c48e84da5ed"
+    },
+    "games/interview/robot-neutral.png": {
+      "output": "games/interview/robot-neutral.png",
+      "kind": "game",
+      "description": "AI 면접 게임 면접관 로봇 — 기본 표정 (128×128, tour/tools/make_interview_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "0b6d6128bd278baa7d27755fdd6eb717c360ccfa5cff805c211a835a2bf0b9d2"
+    },
+    "games/interview/robot-happy.png": {
+      "output": "games/interview/robot-happy.png",
+      "kind": "game",
+      "description": "AI 면접 게임 면접관 로봇 — 좋은 답 표정 (128×128, tour/tools/make_interview_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "424af624f54d75cf8733b3b55a333da05e6e81d059cc023d82ba89cc1f5d8e78"
+    },
+    "games/interview/robot-love.png": {
+      "output": "games/interview/robot-love.png",
+      "kind": "game",
+      "description": "AI 면접 게임 면접관 로봇 — 콤보 표정 (128×128, tour/tools/make_interview_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "3a82865b5e27ec4c0122c62d8e0ae514f1272e543037b535ea4099fe6fe958a0"
+    },
+    "games/interview/robot-error.png": {
+      "output": "games/interview/robot-error.png",
+      "kind": "game",
+      "description": "AI 면접 게임 면접관 로봇 — 당황 표정 (128×128, tour/tools/make_interview_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
+      "sha256": "61c614cb6b1a1f30a9629d2abca34cfe4804d568e79f76a63d5bf13bcd006d46"
     }
   }
 }

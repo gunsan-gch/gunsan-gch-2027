@@ -264,7 +264,7 @@ window.TOUR_SCENES = {
       { name: '교육복지실', at: [87, 10], w: 10, anchor: [83.8, 24.5],
         photos: ['img/rooms/welfare-1.jpg', 'img/rooms/welfare-2.jpg'],
         desc: '교육복지 프로그램과 상담이 이루어지는 공간입니다.' },
-      { name: 'AI 면접실', at: [96.5, 10], w: 4, anchor: [95.2, 24.5] },
+      { name: 'AI 면접실', at: [96.5, 10], w: 4, anchor: [95.2, 24.5], game: 'interview' },
       { name: '1-1 교실', at: [23, 38], w: 8, anchor: [27.3, 24.5] },
       { name: '1-2 교실', at: [33.5, 38], w: 8, anchor: [37.7, 24.5] },
       { name: '1-3 교실', at: [44, 38], w: 8, anchor: [48, 24.5] },
