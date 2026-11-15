@@ -7,11 +7,12 @@
   const clean=()=>({started:false,ribbon:false,bread:false,poster:false,complete:false,equip:{head:null,back:null}});
   let state=clean();
   try{const s=JSON.parse(localStorage.getItem(KEY));if(s){state={...clean(),started:!!s.started,ribbon:!!s.ribbon,bread:!!s.bread,poster:!!s.poster,complete:!!s.complete,equip:Object.fromEntries(['head','back'].map(slot=>[slot,rewards.some(r=>r.slot===slot&&r.id===s.equip?.[slot])?s.equip[slot]:null]))};if(!(state.ribbon&&state.bread&&state.poster))state.complete=false;}}catch{}
-  const gameIds=['bakery','typing','cafe','cashier','rain','ai','career','phishing'];
+  const gameIds=['bakery','typing','cafe','cashier','rain','ai','career','phishing','interview'];
   const host=window.tourAddonHost;
   const sprite=new Image();
   let spriteReady=false;
-  const count=()=>gameIds.filter(id=>window.tourGame?.stamps()[id]).length;
+  // 게임은 9개지만 옷장 해금 단계는 8개 — 어느 게임이든 도장 8개면 모두 열립니다.
+  const count=()=>Math.min(8,gameIds.filter(id=>window.tourGame?.stamps()[id]).length);
   function save(){try{localStorage.setItem(KEY,JSON.stringify(state));return true;}catch{toast('이 브라우저에서는 추가 기능의 진행 기록을 저장할 수 없어요.');return false;}}
   let toastTimer;
   function toast(message){const el=$('#addon-toast');el.textContent=message;el.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.hidden=true,4200)}

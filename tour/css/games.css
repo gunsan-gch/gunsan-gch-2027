@@ -701,3 +701,92 @@ body.game-open { overflow: hidden; }
   min-height: 44px; padding: 8px 12px; border: 0; background: none;
   color: var(--navy); font-weight: 700; font-size: 14px; text-decoration: underline;
 }
+
+/* ---------- AI 면접실: AI 면접 도전 ---------- */
+.interview-intro { display: grid; gap: 12px; justify-items: center; max-width: 560px; margin: 0 auto; text-align: center; color: var(--navy); }
+.interview-intro h3 { margin: 0; font-family: var(--font-title); font-size: 24px; }
+.interview-intro ul { margin: 0; padding-left: 20px; text-align: left; font-size: 15px; }
+.interview-intro .btn { width: 100%; min-height: 48px; }
+.interview-face { display: grid; place-items: center; }
+.interview-robot { display: block; width: 96px; height: 96px; image-rendering: pixelated; }
+span.interview-robot { display: grid; place-items: center; font-size: 64px; }
+.interview-game {
+  display: grid; gap: 10px; max-width: 640px; margin: 0 auto; color: var(--navy);
+  grid-template-areas: "stats" "stage" "event" "timer" "answers" "feedback" "next";
+}
+.interview-game > * { min-width: 0; }
+.interview-stats { grid-area: stats; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 14px; font-weight: 700; }
+.interview-gauge { height: 16px; background: #fff; border: 2px solid var(--navy); }
+.interview-gauge-fill { height: 100%; width: 40%; background: #e85d75; transition: width .4s ease-out; }
+.interview-score { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.interview-stage { grid-area: stage; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: center; }
+.interview-bubble { position: relative; padding: 12px 14px; background: #fff; border: 2px solid var(--navy); box-shadow: var(--pixel-shadow); }
+.interview-bubble::before {
+  content: ""; position: absolute; left: -9px; top: 50%; width: 12px; height: 12px;
+  transform: translateY(-50%) rotate(45deg); background: #fff; border-left: 2px solid var(--navy); border-bottom: 2px solid var(--navy);
+}
+.interview-question { margin: 0; font-size: 17px; font-weight: 700; line-height: 1.4; }
+.interview-reaction { margin: 6px 0 0; font-size: 14px; font-weight: 700; color: var(--green); }
+.interview-reaction:empty { display: none; }
+.interview-event { grid-area: event; margin: 0; font-size: 14px; font-weight: 700; color: var(--orange); }
+.interview-event:empty { display: none; }
+.interview-timer { grid-area: timer; height: 8px; background: var(--green-soft); }
+.interview-timer div { height: 100%; width: 100%; background: var(--green); }
+.interview-rush .interview-timer div { background: var(--orange); }
+.interview-timer .interview-urgent { background: #c8402e; }
+.interview-answers { grid-area: answers; display: grid; gap: 8px; align-content: start; }
+.interview-answer {
+  width: 100%; min-height: 52px; padding: 10px 14px; text-align: left;
+  border: 2px solid var(--line-strong); background: var(--paper); color: var(--navy);
+  font: 700 15px/1.45 var(--font); box-shadow: var(--pixel-shadow); overflow-wrap: anywhere; touch-action: manipulation;
+}
+.interview-answer:hover:not(:disabled) { border-color: var(--navy); background: var(--cream); }
+.interview-answer:disabled { cursor: default; box-shadow: none; color: var(--muted); }
+.interview-answer.is-best { border-color: var(--green); background: var(--green-soft); color: var(--green); }
+.interview-answer.is-best::after { content: " ✓"; }
+.interview-answer.is-picked { box-shadow: inset 0 0 0 2px currentColor; }
+.interview-answer.is-picked.is-mid { border-color: var(--orange); background: #fff4e0; color: var(--orange); }
+.interview-answer.is-picked.is-bad { border-color: #c8402e; background: #fde8e6; color: #c8402e; }
+.interview-feedback { grid-area: feedback; }
+.interview-feedback strong { display: block; font-size: 16px; }
+.interview-feedback .is-plus { color: var(--green); }
+.interview-feedback .is-minus { color: #c8402e; }
+.interview-feedback p { margin: 2px 0 0; font-size: 14px; }
+.interview-next { grid-area: next; width: 100%; min-height: 48px; }
+.interview-summary { display: grid; justify-items: center; gap: 4px; color: var(--navy); }
+.interview-summary .interview-robot { width: 80px; height: 80px; }
+.interview-grade { font-family: var(--font-title); font-size: clamp(24px, 5vw, 32px); }
+.interview-detail { margin: 0; font-size: 14px; }
+.interview-pop { animation: interview-pop .3s ease-out; }
+.interview-shake { animation: interview-shake .3s ease-in-out; }
+@keyframes interview-pop { 50% { transform: translateY(-6px) scale(1.08); } }
+@keyframes interview-shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+@media (max-width: 760px) {
+  .interview-stage { grid-template-columns: 72px minmax(0, 1fr); gap: 12px; }
+  .interview-stage .interview-robot { width: 72px; height: 72px; }
+  .interview-question { font-size: 16px; }
+}
+
+/* 휴대폰 가로: 왼쪽 면접관, 오른쪽 답변 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .interview-game {
+    max-width: none; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 6px 12px;
+    grid-template-areas: "stats answers" "stage answers" "event answers" "timer answers" "feedback next";
+  }
+  .interview-stage { grid-template-columns: 56px minmax(0, 1fr); gap: 10px; }
+  .interview-stage .interview-robot { width: 56px; height: 56px; }
+  .interview-bubble { padding: 6px 10px; }
+  .interview-question { font-size: 14px; }
+  .interview-reaction, .interview-feedback p { font-size: 12px; }
+  .interview-answers { gap: 6px; }
+  .interview-answer { min-height: 44px; padding: 6px 10px; font-size: 13px; }
+  .interview-next { min-height: 44px; align-self: end; }
+  .interview-intro { grid-template-columns: auto minmax(0, 1fr); text-align: left; justify-items: start; }
+  .interview-intro .interview-face { grid-row: 1 / 4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interview-pop, .interview-shake { animation: none; }
+  .interview-gauge-fill { transition: none; }
+}

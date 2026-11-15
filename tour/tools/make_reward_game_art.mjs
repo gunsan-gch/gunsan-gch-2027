@@ -1,4 +1,4 @@
-/* 도장 8종·학과 배지 4종·완성 음료 3종. 기존 pixel.mjs 팔레트 확장.
+/* 도장 9종·학과 배지 4종·완성 음료 3종. 기존 pixel.mjs 팔레트 확장.
  * node tour/tools/make_reward_game_art.mjs [출력 img/games 폴더]
  * 모두 48×48 투명 PNG. 글자·그라데이션·안티앨리어싱 없음.
  */
@@ -75,6 +75,13 @@ function shield(c) {
   for(let y=12;y<37;y++) {const half=y<26?12:Math.max(1,12-(y-25));rect(c,24-half,y,half*2+1,1,C.N);if(half>1)rect(c,25-half,y,half*2-1,1,C.G);}
   line(c,17,23,22,28,C.E,2);line(c,22,28,31,18,C.E,2);
 }
+function robot(c) {   // AI 면접실: 면접관 로봇 얼굴
+  rect(c,23,10,2,4,C.N);box(c,21,8,6,3,C.Y);
+  box(c,11,19,4,7,C.A);box(c,33,19,4,7,C.A);
+  box(c,14,14,20,16,C.I);rect(c,17,17,14,10,C.N);
+  rect(c,20,20,2,3,C.I);rect(c,26,20,2,3,C.I);rect(c,21,24,6,1,C.I);
+  rect(c,22,30,4,2,C.D);box(c,16,32,16,6,C.A);rect(c,23,33,2,4,C.G);
+}
 function erp(c) {
   box(c,10,13,27,20,C.N);rect(c,12,15,23,15,C.I);
   for(let x=15;x<34;x+=6) rect(c,x,18,1,10,C.A);
@@ -87,7 +94,7 @@ function fintech(c) {
   line(c,15,29,20,24,C.G,2);line(c,20,24,23,27,C.G,2);line(c,23,27,27,19,C.G,2);
   rect(c,19,36,4,1,C.E);coin(c,33,31,7);diamond(c,36,13,2,C.Y);
 }
-const stamps={bakery:[bread,C.M],typing:[keyboard,C.L],cafe:[mug,C.P],cashier:[receipt,C.M],rain:[rain,C.I],ai:[megaphone,C.P],career:[compass,C.L],phishing:[shield,'#dcebd9']};
+const stamps={bakery:[bread,C.M],typing:[keyboard,C.L],cafe:[mug,C.P],cashier:[receipt,C.M],rain:[rain,C.I],ai:[megaphone,C.P],career:[compass,C.L],phishing:[shield,'#dcebd9'],interview:[robot,C.L]};
 const departments={erp:[erp,C.L],marketing:[megaphone,C.P],fintech:[fintech,'#dcebd9'],cafe:[mug,C.M]};
 const generated=[];
 function output(folder,name,c,description) {

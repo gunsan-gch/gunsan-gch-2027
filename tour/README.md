@@ -9,7 +9,7 @@
   입학 안내 페이지의 실습실 카드 **'학교 투어에서 위치 보기'** 가 이 주소를 씁니다 (`site-data.js`의 `tourRoom`).
 - 체험 게임 바로 열기: `tour/index.html?game=cafe` → 1층 카페실습실 「음료 만들기 체험」, `?game=ai` → 3층 AI비즈니스실 「AI 광고 문구 고르기」 창이 바로 열립니다. `?game=typing` → 1층 정보처리실 「타자 속도 재기」, `?game=rain` → 1층 사무자동화실 「타자 소나기」, `?game=bakery` → 1층 조리제빵실 「n.00초 빵 굽기」도 바로 열 수 있습니다.
 
-`tour/index.html?game=career`로 4층 커리어존 「내 취향 찾기」를 바로 열 수 있습니다.
+`tour/index.html?game=career`로 4층 커리어존 「내 취향 찾기」, `?game=interview`로 4층 AI 면접실 「AI 면접 도전」을 바로 열 수 있습니다.
 `tour/index.html?game=phishing`로 4층 금융실습실 「피싱 탐정」, `tour/index.html?game=cashier`로 1층 전산회계1실 「매점 계산왕」을 바로 열 수 있습니다.
 
 ## 폴더 구성
@@ -30,6 +30,7 @@ tour/
   js/game-typing.js        정보처리실 「타자 속도 재기」 (문장·별 기준은 파일 맨 위에서 수정)
   js/game-rain.js          사무자동화실 「타자 소나기」 (낱말·아이템·규칙은 파일 맨 위에서 수정)
   js/game-bakery.js        조리제빵실 「n.00초 빵 굽기」 (목표 시간·별 기준은 파일 맨 위에서 수정)
+  js/game-interview.js     AI 면접실 「AI 면접 도전」 (질문·답·호감도 점수는 파일 맨 위에서 수정)
   js/game-career.js        커리어존 「내 취향 찾기」 (7문항·답변·학과 활동은 파일 맨 위에서 수정)
   js/game-phishing.js      금융실습실 「피싱 탐정」 (문자 16통·보상·별 기준은 파일 맨 위에서 수정)
   js/game-cashier.js       전산회계1실 「매점 계산왕」 (물건·손님 대사·규칙은 파일 맨 위에서 수정)
@@ -44,6 +45,8 @@ tour/
   tools/pixel.mjs          게임 픽셀아트 공통 도우미 (색·그리기·PNG 저장)
   tools/make_cafe_game_art.mjs  카페 게임 픽셀아트를 코드로 다시 그리는 도구 (Node.js)
   tools/make_ai_game_art.mjs    AI 광고 게임 픽셀아트 도구 (Node.js)
+  img/games/interview/     AI 면접 게임 그림 (면접관 로봇 표정 4장)
+  tools/make_interview_game_art.mjs  AI 면접 게임 픽셀아트 도구 (Node.js)
   tools/make_office_game_art.mjs  타자 게임 픽셀아트 도구 (Node.js)
   tools/make_bakery_game_art.mjs  빵 굽기 게임 픽셀아트 도구 (Node.js)
   tools/make_finance_game_art.mjs  금융 게임 픽셀아트 도구 (Node.js)
@@ -112,9 +115,9 @@ GPT가 그린 배경(`tour-share-art.png`)에 `update_assets.py`가 학교 글�
 | `tour_room_link_click` | `room_name`, `link_url`, `route_status`(class_route·class_route_repeat·none) | — | 공간 설명의 바로가기 링크(예: 경영실습실 → 수업 사이트) |
 | `class_route_complete` | `room_name`, `link_url`, `route_steps`, `route_minutes` | — | 같은 방문에서 입학안내 → 투어 → 그 공간을 거쳐 링크를 처음 누름 (방문당 1회) |
 | `tour_click` (입학안내 페이지) | `cta_location`(banner·nav·facility) | `TourLink` | 입학안내 → 투어로 넘어감 |
-| `tour_game_start` | `game_id`(cafe·ai·typing·rain·bakery·phishing·cashier), `room_name` | `TourGame` (CafeStart·AiStart·TypingStart·RainStart·BakeryStart·PhishingStart·CashierStart) | 체험 게임 시작 |
-| `tour_game_complete` | `game_id`, `stars`(별 1~3 — 2026-11-15 이전의 카페·AI·빵 굽기는 9개 만점), `hints`(힌트 사용 수) | `TourGame` (CafeDone·AiDone·TypingDone·RainDone·BakeryDone·PhishingDone·CashierDone) | 체험 게임 끝 (결과 화면) |
-| `tour_game_cta` | `game_id`, `cta`(dept) | `TourGame` (CafeDept·AiDept·TypingDept·RainDept·BakeryDept·PhishingDept·CashierDept) | 결과 화면의 학과 소개 링크 클릭 |
+| `tour_game_start` | `game_id`(cafe·ai·typing·rain·bakery·phishing·cashier·interview), `room_name` | `TourGame` (CafeStart·AiStart·TypingStart·RainStart·BakeryStart·PhishingStart·CashierStart·InterviewStart) | 체험 게임 시작 |
+| `tour_game_complete` | `game_id`, `stars`(별 1~3 — 2026-11-15 이전의 카페·AI·빵 굽기는 9개 만점), `hints`(힌트 사용 수) | `TourGame` (CafeDone·AiDone·TypingDone·RainDone·BakeryDone·PhishingDone·CashierDone·InterviewDone) | 체험 게임 끝 (결과 화면) |
+| `tour_game_cta` | `game_id`, `cta`(dept) | `TourGame` (CafeDept·AiDept·TypingDept·RainDept·BakeryDept·PhishingDept·CashierDept·InterviewDept) | 결과 화면의 학과 소개 링크 클릭 |
 | `tour_career_pick` | `question_id`, `choice_id`, `dept`(erp·marketing·fintech·cafe·none), `repeat`(yes·no) | `TourCareer` (`<question_id>_<choice_id>`) | 커리어존에서 보기를 고른 즉시, 문항당 1회 |
 | `tour_career_result` | `dept`(erp·marketing·fintech·cafe·none), `commute`(q6 보기 id), `elsewhere`(q7 보기 id), `repeat`(yes·no) | `TourCareer` (`Result_<dept>`) | 커리어존 7문항 완료 |
 
@@ -162,7 +165,7 @@ GA4 보고서에서 공간 이름별로 보려면 관리 → 맞춤 정의 → �
 
 ## 보상·완성 음료 픽셀 에셋 (2026-11-15)
 
-- 도장 8종: `img/games/stamps/`. 미획득은 회색 그림과 **미획득** 글자, 획득은 원색 그림과 **획득**·별로 구분합니다.
+- 도장 9종: `img/games/stamps/`. 미획득은 회색 그림과 **미획득** 글자, 획득은 원색 그림과 **획득**·별로 구분합니다.
 - 학과 배지 4종: `img/games/departments/`. 학과 홍보 일러스트와 별도로 게임에 사용합니다.
 - 완성 음료 3종: `img/games/cafe/drink-*.png`. 정답 뒤 표시하고 다음 손님에서 초기화합니다.
 - 재생성: `node tour/tools/make_reward_game_art.mjs` (저장소 루트에서). 48×48 RGBA PNG, 알파 0/255, 무손실·정수 좌표. 생성 시 원본 기록의 SHA-256도 갱신합니다.
@@ -174,7 +177,7 @@ GA4 보고서에서 공간 이름별로 보려면 관리 → 맞춤 정의 → �
 
 도장판 옆 **내 옷장**에서 머리 장식과 등 소품을 하나씩 조합합니다. 잠긴 소품도 미리 볼 수 있으며, 해금한 소품을 골라 **이 코디로 입기**를 눌러야 지도에 적용됩니다. 닫기/취소는 미리보기만 버립니다. 네 방향 및 걷기 미리보기를 지원합니다.
 
-기존 8개 게임의 서로 다른 도장마다 머리 1종과 등 1종, 총 16종이 열립니다. 재도전과 별 점수 상승은 추가 해금하지 않습니다. 새 도장 결과창의 **바로 입어보기**는 새 아이템을 옷장에 미리 선택해 주며 자동 착용하지 않습니다.
+서로 다른 게임의 도장을 하나 모을 때마다 머리 1종과 등 1종, 8개까지 총 16종이 열립니다(게임은 9개이며 어느 8개든 됩니다). 재도전과 별 점수 상승은 추가 해금하지 않습니다. 새 도장 결과창의 **바로 입어보기**는 새 아이템을 옷장에 미리 선택해 주며 자동 착용하지 않습니다.
 
 | 도장 | 머리 장식 | 등 소품 |
 | --- | --- | --- |
