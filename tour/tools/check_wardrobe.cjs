@@ -76,5 +76,30 @@ function widthAt(data, yStart, yEnd) {
       assert(widthAt(side, start, end) < widthAt(front, start, end), `${back}: side silhouette is not narrower`);
     }
   }
-  console.log(JSON.stringify({ renders, hairChecks, faceChecks, crownLeaks: 0, edgeClipping: 0, sideProfiles: '9 accessories × 3 frames', unlocks: '24 items at 12 best-star milestones' }));
+  let capeChecks=0;
+  for (const direction of directions) {
+    const overlays=[0,1,2].map(frame=>render(empty,direction,frame,{back:'cape'}));
+    for (let frame=0;frame<3;frame++) {
+      const plain=render(sprite,direction,frame,{}),cape=render(sprite,direction,frame,{back:'cape'});
+      for(let y=0;y<40;y++)for(let x=0;x<32;x++) {
+        const i=((y+12)*48+x+8)*4;
+        // Cloth must leave head/face and all legs visible; in profile the body
+        // occludes the cape, except for the tiny collar fastening at rows 21–22.
+        const side=direction==='left'||direction==='right';
+        const collar=y>=21&&y<=22&&x>=12&&x<=19;
+        if(y<20||y>=30||(side&&plain[i+3]&&!collar))
+          for(let k=0;k<4;k++)assert.equal(cape[i+k],plain[i+k],`cape ${direction}/${frame}: body occlusion at ${x},${y}`);
+        if(y<26)for(let k=0;k<4;k++)assert.equal(overlays[frame][i+k],overlays[1][i+k],`cape ${direction}: shoulder must stay anchored`);
+      }
+      capeChecks++;
+    }
+    assert.notDeepEqual(overlays[0],overlays[1],`cape ${direction}: walking hem frame 0`);
+    assert.notDeepEqual(overlays[2],overlays[1],`cape ${direction}: walking hem frame 2`);
+  }
+  for(let frame=0;frame<3;frame++){
+    const left=render(empty,'left',frame,{back:'cape'}),right=render(empty,'right',frame,{back:'cape'});
+    for(let y=0;y<52;y++)for(let x=0;x<48;x++)for(let k=0;k<4;k++)
+      assert.equal(left[(y*48+x)*4+k],right[(y*48+47-x)*4+k],`cape: symmetric side placement ${frame}`);
+  }
+  console.log(JSON.stringify({ renders, hairChecks, faceChecks, capeChecks, crownLeaks: 0, edgeClipping: 0, sideProfiles: '9 accessories × 3 frames', unlocks: '24 items at 12 best-star milestones' }));
 })().catch(error => { console.error(error); process.exitCode = 1; });

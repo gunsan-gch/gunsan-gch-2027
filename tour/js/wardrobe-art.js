@@ -179,8 +179,23 @@
       pixelLine(q,knot,11+dy,29,17,'purpleD');pixelLine(q,29,17,25,21,'purpleD');pixelLine(q,25,21,20,24,'purpleD');c.restore();
     }
     if(id==='cape'){
-      if(side){r(x,18,6,3,'roseD');r(x,21,5,5,'rose');r(x-1,26,7,3,'roseD');r(x,27,5,1,'gold');}
-      else{r(10,18,12,3,'roseD');r(8,21,16,5,'roseD');r(6,26,20,4,'roseD');r(10,20,12,7,'rose');r(8,25,16,3,'rose');r(7,28,18,1,'gold');r(11,20,2,5,'pink');r(19,21,2,6,'roseD');if(rear){bow(r,11,17);r(15,25,2,2,'yellow');}}
+      // Shoulder stays fixed beneath the hair; only the lower cloth sways.
+      const sway=frame===0?-1:frame===2?1:0;
+      if(side){
+        c.save();if(right){c.translate(32,0);c.scale(-1,1);}const q=pen(c);
+        q(18,20,4,3,'roseD');q(18,23,5,3,'roseD');
+        q(19+sway,26,5,3,'roseD');q(20+sway,29,3,1,'roseD');
+        q(19,21,2,4,'rose');q(20,23,2,3,'rose');
+        q(20+sway,26,3,2,'rose');q(21+sway,28,2,1,'gold');
+        q(19,22,1,3,'pink');c.restore();
+      }else{
+        r(11,20,10,4,'roseD');r(10,24,12,3,'roseD');
+        r(9+sway,27,14,2,'roseD');r(10+sway,29,12,1,'roseD');
+        r(12,21,8,3,'rose');r(11,24,10,3,'rose');
+        r(10+sway,27,12,2,'rose');r(12,22,1,4,'pink');
+        r(18,23,1,4,'roseD');r(11+sway,28,2,1,'gold');r(19+sway,28,2,1,'gold');
+        if(rear){r(14,21,4,1,'pink');r(15,24,2,3,'gold');r(14,25,4,1,'gold');r(15,25,1,1,'yellow');}
+      }
     }
     if(id==='bag'){
       if(side){
@@ -264,13 +279,16 @@
     const cut=crownCut[equip.head]?.[dir];
     if(cut)bc.clearRect(0,0,32,cut);
     const floating=['moon','balloon','noteballoon','planet'].includes(equip.back);
-    if(dir==='down'||floating)back(c,equip.back,dir,frame);
+    const capeSide=equip.back==='cape'&&(dir==='left'||dir==='right');
+    if(dir==='down'||floating||capeSide)back(c,equip.back,dir,frame);
     c.drawImage(base,0,0);
-    if(dir!=='down'&&!floating){
+    if(dir!=='down'&&!floating&&!capeSide){
       back(c,equip.back,dir,frame);
       // Backpacks and capes sit under the hair, including in side views.
       c.drawImage(base,0,0,32,20,0,0,32,20);
     }
+    // A small neck fastening joins the cloth to the uniform, below the face.
+    if(equip.back==='cape'){const r=pen(c);if(dir==='down'){r(12,21,3,1,'roseD');r(18,21,2,1,'roseD');r(15,22,3,1,'rose');r(16,21,1,2,'gold');}else if(capeSide){r(dir==='left'?18:12,21,2,1,'roseD');r(dir==='left'?18:13,22,1,1,'gold');}}
     head(c,equip.head,dir);c.restore();
   }
   window.TourCostumes={items,draw,covered:[...covered],crownCut};
