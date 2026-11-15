@@ -43,12 +43,12 @@
       { id: 'near', emoji: '🏠', text: '집 근처에서 편하게 다니고 싶어요', dept: null, reply: '군산여상은 기숙사·통학버스 없이 집 근처에서 편하게 다닐 수 있어요!' },
       { id: 'far_ok', emoji: '🚌', text: '배우고 싶은 과가 있으면 멀어도(기숙사·통학버스) 갈래요', dept: null, reply: '멀리 가기 전에, 비슷한 걸 집 근처 군산여상에서 배울 수 있는지 꼭 확인해 보세요.' },
       { id: 'unsure', emoji: '🤔', text: '아직 모르겠어요', dept: null, reply: '괜찮아요. 투어를 돌며 천천히 찾아봐요.' } ] },
-    { id: 'q7', text: '다른 학교에 가야만 배울 수 있는 분야 중 끌리는 게 있다면?', kind: 'elsewhere', choices: [
+    { id: 'q7', text: '그 밖에 관심 있는 분야가 있나요?', kind: 'elsewhere', choices: [
       { id: 'beauty', emoji: '💄', text: '뷰티(헤어·메이크업·네일)', dept: null, guide: 'marketing', reply: '네일·메이크업은 동아리와 방과후 수업에 있어요! 뷰티 마케팅은 AI마케팅과에서 배워요.' },
       { id: 'cooking', emoji: '🍜', text: '조리(한식·양식·중식)', dept: null, reply: '카페비즈과에 제과제빵·음료 실습이 있어요!' },
       { id: 'nursing', emoji: '🏥', text: '간호·보건', dept: null, reply: '하교 후 시간에 이어 갈 수 있어요. 병원 행정은 ERP비즈니스과와 가까워요.' },
       { id: 'game_it', emoji: '🎮', text: '게임·IT 개발', dept: null, reply: 'AI핀테크과·AI마케팅과에서 AI 도구를 많이 써요!' },
-      { id: 'none', emoji: '👍', text: '없어요, 상업·경영 쪽이 좋아요', dept: null, reply: '그렇다면 군산여상 4개 학과를 바로 비교해 보세요!' } ] }
+      { id: 'none', emoji: '👍', text: '상업·경영 분야가 더 좋아요', dept: null, reply: '그렇다면 군산여상 4개 학과를 바로 비교해 보세요!' } ] }
   ];
   const DEPT_ACTIVITY = { erp: '가상 회사의 매출·재고를 정리하고 ERP와 엑셀로 보고서 만들기', marketing: '군산의 상품을 알리는 카드뉴스·숏폼을 만들고 홍보 결과 분석하기', fintech: 'AI로 금융·회계 보고서 초안을 만들고 수치가 맞는지 확인하기', cafe: '디저트·음료 메뉴와 원가표를 만들고 SNS 홍보물로 모의 매장 운영하기' };
 

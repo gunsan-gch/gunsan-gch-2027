@@ -258,6 +258,9 @@ window.tourGame = (() => {
 
   const board = document.getElementById('stamps');
   const boardButton = document.getElementById('stamp-open');
+  const resetButton = document.getElementById('stamps-reset');
+  const resetPanel = document.getElementById('stamps-reset-panel');
+  const resetStatus = document.getElementById('stamps-reset-status');
   const ALL_DONE_KEY = 'gch-tour-stamps-done';   // 도장을 다 모은 것을 한 번만 집계하기 위한 표시
 
   /** 게임이 있는 공간 목록 (층 순서) */
@@ -344,11 +347,19 @@ window.tourGame = (() => {
       ? `🎉 도장 ${total}개 완성! 군산여상 탐험 완료`
       : `도장 ${got} / ${total} · 🎮 표시가 있는 공간에서 모아요`;
     document.getElementById('stamps-done').hidden = !complete;
+    if (resetButton) resetButton.disabled = got === 0;
     return { got, total };
+  }
+
+  function closeResetPrompt() {
+    if (resetPanel) resetPanel.hidden = true;
+    resetButton?.setAttribute('aria-expanded', 'false');
   }
 
   function openBoard() {
     if (!board || board.open || dialog.open) return;
+    closeResetPrompt();
+    if (resetStatus) resetStatus.textContent = '';
     const count = renderBoard();
     tourTrack('tour_stamp_open', { stamp_count: count.got, stamp_total: count.total }, ['TourStamp', 'Open']);
     board.showModal();
@@ -358,7 +369,34 @@ window.tourGame = (() => {
   if (board && boardButton) {
     boardButton.addEventListener('click', openBoard);
     document.getElementById('stamps-close').addEventListener('click', () => board.close());
-    board.addEventListener('close', () => { if (!dialog.open) boardButton.focus({ preventScroll: true }); });
+    board.addEventListener('close', () => {
+      closeResetPrompt();
+      if (!dialog.open) boardButton.focus({ preventScroll: true });
+    });
+    resetButton?.addEventListener('click', () => {
+      resetStatus.textContent = '';
+      resetPanel.hidden = false;
+      resetButton.setAttribute('aria-expanded', 'true');
+      document.getElementById('stamps-reset-cancel').focus();
+    });
+    document.getElementById('stamps-reset-cancel')?.addEventListener('click', () => {
+      closeResetPrompt();
+      resetButton.focus();
+    });
+    document.getElementById('stamps-reset-confirm')?.addEventListener('click', () => {
+      // 도장·별만 초기화. 커리어존 재참여 표시와 브라우저당 1회 완료 집계는 유지합니다.
+      try {
+        localStorage.removeItem(STAMP_KEY);
+        if (localStorage.getItem(STAMP_KEY) !== null) throw new Error('Stamp reset failed');
+      } catch (e) {
+        resetStatus.textContent = '기록을 지우지 못했어요. 브라우저 저장 설정을 확인한 뒤 다시 시도해 주세요.';
+        return;
+      }
+      closeResetPrompt();
+      renderBoard();
+      resetStatus.textContent = '도장과 별 기록을 모두 초기화했어요. 다시 도전해 보세요!';
+      document.getElementById('stamps-close').focus({ preventScroll: true });
+    });
     // 게임 창을 닫을 때마다 숫자 맞추기 (도장 저장 뒤)
     dialog.addEventListener('close', updateStampCount);
   }
