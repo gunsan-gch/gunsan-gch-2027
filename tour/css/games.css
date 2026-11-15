@@ -517,3 +517,149 @@ body.game-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .career-reply-animate { animation: none; }
 }
+
+/* ---------- 금융실습실: 피싱 탐정 ---------- */
+.phishing-intro, .cashier-intro { max-width: 640px; margin: 0 auto; text-align: center; color: var(--navy); }
+.phishing-intro h3, .cashier-intro h3 { font: 24px/1.4 var(--font-title); margin: 8px 0; }
+.phishing-intro ul, .cashier-intro ul { text-align: left; padding-left: 24px; font-size: 15px; }
+.phishing-start, .cashier-start { width: 100%; min-height: 56px; }
+.phishing-detective { display: block; width: 128px; height: 128px; margin: auto; image-rendering: pixelated; font-size: 80px; }
+.phishing-game { display: grid; gap: 14px; grid-template-areas: "stats" "phone" "panel"; color: var(--navy); }
+.phishing-game > *, .cashier-game > * { min-width: 0; }
+.phishing-stats { grid-area: stats; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 14px; font-variant-numeric: tabular-nums; }
+.phishing-wallet { font: 24px/1.4 var(--font-title); }
+.phishing-negative { color: #c8402e; }
+.phishing-progress, .phishing-combo { font-size: 14px; font-weight: 700; }
+.phishing-phone { grid-area: phone; width: 100%; max-width: 360px; justify-self: center; min-height: 250px; padding: 14px; border: 6px solid var(--navy); border-radius: 26px; background: #eaf7ff; box-shadow: var(--pixel-shadow); }
+.phishing-phone-head { display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid #aebfe3; font-size: 13px; font-weight: 700; }
+.phishing-phone-head span { font-size: 9px; }
+.phishing-from { font-size: 13px; font-weight: 700; margin: 10px 0; }
+.phishing-timer { height: 8px; border-radius: 4px; overflow: hidden; background: #cfe8f7; }
+.phishing-timer div { height: 100%; width: 100%; background: var(--green); }
+.phishing-timer .phishing-urgent { background: #c8402e; }
+.phishing-bubble { margin: 14px 0 4px; padding: 14px; background: #fff; border: 1px solid #aebfe3; border-radius: 14px 14px 14px 2px; overflow-wrap: anywhere; font-size: 16px; }
+.phishing-panel { grid-area: panel; display: flex; flex-direction: column; gap: 10px; }
+.phishing-event, .cashier-event { margin: 0; padding: 8px 12px; background: #fff4e0; color: var(--orange); font-size: 14px; font-weight: 700; border-left: 4px solid var(--orange); }
+.phishing-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.phishing-choices .btn { display: flex; flex-direction: column; gap: 2px; min-height: 64px; font-size: 20px; padding: 10px 6px; }
+.phishing-real { background: var(--green-soft); border-color: var(--green); }
+.phishing-scam { background: #fff4e0; border-color: var(--orange); }
+.phishing-key, .cashier-key { font: 12px/1.2 var(--font); color: var(--muted); }
+.phishing-feedback { font-size: 15px; }
+.phishing-feedback p { margin: 4px 0 0; }
+.phishing-feedback:empty, .phishing-clue-result:empty { display: none; }
+.phishing-clues { display: grid; gap: 6px; }
+.phishing-clue { min-width: 44px; min-height: 44px; padding: 8px 12px; text-align: left; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; color: var(--navy); border: 2px solid var(--line-strong); background: var(--paper); }
+.phishing-clue:disabled { cursor: default; }
+.phishing-found { border-color: var(--green); background: var(--green-soft); font-weight: 700; }
+.phishing-found::before { content: "🔎 "; }
+.phishing-clue-result { margin: 0; font-size: 14px; color: var(--green); }
+.phishing-next, .phishing-open { min-height: 48px; width: 100%; }
+.phishing-summary, .cashier-summary { color: var(--navy); overflow-wrap: anywhere; }
+.phishing-total, .cashier-summary-total { display: block; font: clamp(24px, 5vw, 34px)/1.4 var(--font-title); }
+.phishing-summary p, .cashier-summary p { margin: 6px 0; font-size: 14px; }
+.phishing-rank { color: var(--green); font-weight: 700; }
+.phishing-arrive { animation: phishing-arrive .2s ease-out; }
+.phishing-shake { animation: phishing-shake .25s ease-in-out; }
+.phishing-gain { animation: phishing-gain .4s ease-out; }
+.phishing-loss { animation: phishing-loss .4s ease-out; }
+@keyframes phishing-arrive { from { transform: translateY(10px); opacity: 0; } }
+@keyframes phishing-shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+@keyframes phishing-gain { 0%, 75% { color: var(--green); background: var(--green-soft); } }
+@keyframes phishing-loss { 0%, 75% { color: #c8402e; background: #fde8e6; } }
+
+/* ---------- 전산회계1실: 매점 계산왕 ---------- */
+.cashier-intro-art { display: flex; justify-content: center; gap: 12px; margin: 20px 0; }
+.cashier-intro-art img, .cashier-game img { image-rendering: pixelated; object-fit: contain; }
+.cashier-game { display: grid; gap: 12px; color: var(--navy); }
+.cashier-stats { display: flex; align-items: center; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; font-size: 14px; font-variant-numeric: tabular-nums; }
+.cashier-time { font: 32px/1.2 var(--font-title); }
+.cashier-urgent { color: #c8402e; }
+.cashier-sales { color: var(--green); }
+.cashier-counter { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-items: center; }
+.cashier-customer { display: flex; align-items: center; gap: 12px; }
+.cashier-person { flex-shrink: 0; width: 80px; height: 80px; display: grid; place-items: center; }
+.cashier-person img { width: 100%; height: 100%; }
+.cashier-emoji { display: inline-grid; place-items: center; font-size: 30px; }
+.cashier-person .cashier-emoji { font-size: 60px; }
+.cashier-line { margin: 0; padding: 10px 12px; border: 2px solid var(--navy); background: #fff; box-shadow: var(--pixel-shadow); font-size: 14px; }
+.cashier-receipt { min-width: 0; padding: 12px; border: 2px dashed var(--line-strong); background: var(--paper); }
+.cashier-receipt h3 { margin: 0 0 8px; font-size: 15px; text-align: center; }
+.cashier-goods { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.cashier-good { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: center; gap: 8px; font-size: 14px; }
+.cashier-good img { width: 36px; height: 36px; }
+.cashier-total { margin: 8px 0 4px; padding-top: 8px; border-top: 1px dashed var(--line-strong); font-weight: 700; }
+.cashier-paid { display: block; font-size: 18px; }
+.cashier-controls { display: grid; gap: 10px; }
+.cashier-tray { padding: 8px 12px; border: 2px solid var(--navy); border-radius: 8px; background: #eaf7ff; }
+.cashier-coins { display: flex; flex-wrap: wrap; align-content: start; height: 46px; overflow-y: auto; overflow-x: hidden; gap: 0 2px; }
+.cashier-coins img { flex-shrink: 0; width: 40px; height: 40px; }
+.cashier-tray-total { display: block; text-align: right; font-variant-numeric: tabular-nums; }
+.cashier-money { display: flex; gap: 6px; }
+.cashier-money-button { flex: 1; min-width: 44px; min-height: 76px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 6px 2px; border: 2px solid var(--line-strong); background: var(--paper); font-size: 14px; font-weight: 700; touch-action: manipulation; }
+.cashier-money-button:hover { border-color: var(--navy); background: var(--green-soft); }
+.cashier-money-button img { width: 40px; height: 32px; }
+.cashier-actions { display: flex; gap: 8px; }
+.cashier-actions .btn { flex: 1; min-height: 48px; min-width: 44px; }
+.cashier-feedback { min-height: 24px; margin: 0; font-size: 14px; font-weight: 700; }
+.cashier-ledger { max-width: 600px; margin: auto; color: var(--navy); }
+.cashier-ledger h3 { text-align: center; font: 26px/1.4 var(--font-title); }
+.cashier-ledger-table { width: 100%; border-collapse: collapse; font-size: 15px; background: var(--paper); }
+.cashier-ledger-table th, .cashier-ledger-table td { padding: 10px; border-bottom: 1px solid var(--line); }
+.cashier-ledger-table th { text-align: left; }
+.cashier-ledger-table td { text-align: right; font-variant-numeric: tabular-nums; }
+.cashier-ledger-note { font-weight: 700; color: var(--green); }
+.cashier-result { width: 100%; min-height: 48px; }
+.cashier-drop { animation: cashier-drop .2s ease-out; }
+.cashier-arrive { animation: cashier-arrive .2s ease-out; }
+.cashier-shake { animation: cashier-shake .25s ease-in-out; }
+@keyframes cashier-drop { from { transform: translateY(-12px); opacity: 0; } }
+@keyframes cashier-arrive { from { transform: translateX(-14px); opacity: 0; } }
+@keyframes cashier-shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+/* PC: 휴대폰 오른쪽에 상태와 조작, 매점은 손님과 영수증 두 열 */
+@media (min-width: 761px) {
+  .phishing-game { grid-template-columns: 360px minmax(0, 1fr); grid-template-areas: "phone stats" "phone panel"; gap: 14px 24px; align-items: start; max-width: 840px; margin: auto; }
+  .phishing-phone { min-height: 390px; }
+  .phishing-stats { align-self: end; }
+  .cashier-counter { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
+  .cashier-customer { flex-direction: column; }
+  .cashier-person { width: 128px; height: 128px; }
+  .cashier-controls { max-width: 720px; width: 100%; margin: auto; }
+}
+
+/* 휴대폰 가로: 두 열로 담고 세로 스크롤은 허용합니다. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .phishing-game { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "phone stats" "phone panel"; gap: 8px 14px; }
+  .phishing-phone { min-height: 220px; padding: 10px; border-width: 4px; border-radius: 18px; }
+  .phishing-bubble { font-size: 14px; padding: 10px; margin-top: 8px; }
+  .phishing-wallet { font-size: 20px; }
+  .phishing-choices .btn { min-height: 48px; font-size: 16px; padding: 6px; }
+  .phishing-panel { gap: 6px; }
+  .phishing-event, .cashier-event, .phishing-feedback { font-size: 12px; }
+  .phishing-detective { width: 80px; height: 80px; }
+  .cashier-game { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 14px; }
+  .cashier-stats, .cashier-event { grid-column: 1 / -1; }
+  .cashier-counter { grid-template-columns: minmax(0, 1fr); gap: 6px; align-content: start; }
+  .cashier-customer { flex-direction: row; gap: 6px; }
+  .cashier-person { width: 48px; height: 48px; }
+  .cashier-line { font-size: 12px; padding: 6px; }
+  .cashier-receipt { padding: 8px; }
+  .cashier-receipt h3 { font-size: 13px; margin-bottom: 4px; }
+  .cashier-good { font-size: 12px; grid-template-columns: 24px minmax(0, 1fr) auto; }
+  .cashier-good img { width: 24px; height: 24px; }
+  .cashier-total { margin-top: 4px; padding-top: 4px; font-size: 13px; }
+  .cashier-paid { font-size: 15px; }
+  .cashier-controls { gap: 6px; align-content: start; }
+  .cashier-money-button { min-height: 60px; font-size: 12px; }
+  .cashier-money-button img { height: 24px; }
+  .cashier-feedback { font-size: 12px; }
+}
+
+@media (pointer: coarse) {
+  .phishing-key, .cashier-key { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .phishing-arrive, .phishing-shake, .phishing-gain, .phishing-loss,
+  .cashier-drop, .cashier-arrive, .cashier-shake { animation: none; }
+}
