@@ -689,6 +689,14 @@ body.game-open { overflow: hidden; }
 .stamp-item .btn { min-width: 60px; padding: 8px 12px; }
 .stamp-done { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .stamp-done .btn { flex: 1 1 auto; }
+.stamp-reset-area { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line-strong); }
+.stamp-reset-panel { margin-top: 12px; padding: 12px; border: 2px solid #9b352c; background: #fff6e6; }
+.stamp-reset-panel[hidden] { display: none; }
+.stamp-reset-panel p { margin: 0 0 10px; font-size: 14px; }
+.stamp-reset-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.stamp-reset-confirm { background: #9b352c; border-color: #9b352c; color: #fff; }
+.stamp-reset-status { margin: 10px 0 0; font-size: 14px; color: var(--navy); }
+.stamp-reset-status:empty { display: none; }
 .game-result-board {
   min-height: 44px; padding: 8px 12px; border: 0; background: none;
   color: var(--navy); font-weight: 700; font-size: 14px; text-decoration: underline;
