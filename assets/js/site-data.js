@@ -385,7 +385,8 @@ window.SITE_DATA = {
   },
 
   // 첫 화면 '신입생 모집' 옆 강조 배지 (누르면 취업·진학으로 이동). 내리려면 null
-  heroBadge: { text: "코레일 3년 연속 최종 합격!", href: "#careers" },
+  // style: "logo" = 흰 배지 + 로고, "line" = 학교 이름 아래 한 줄 문구
+  heroBadge: { style: "logo", logo: "assets/img/employers/korail.webp", logoAlt: "코레일", text: "3년 연속 최종 합격", lineText: "코레일 3년 연속 최종 합격", href: "#careers" },
 
   /* ---------------- 공개 여부 스위치 ---------------- */
   // 최종 모집요강의 일정과 다르면 admissionSchedule 을 고치거나 false 로 두세요.

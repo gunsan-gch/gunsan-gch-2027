@@ -1890,3 +1890,16 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
   .hero-feat { padding: 5px 11px; font-size: .84rem; gap: 4px; }
   .hero-feat .icon { width: 14px; height: 14px; }
 }
+/* 강조 배지: 흰 바탕 + 로고 */
+.hero-feat.is-logo {
+  gap: 8px; padding: 5px 14px 5px 10px; background: #fff; color: var(--navy); font-weight: 800;
+  border: 1px solid var(--line); box-shadow: 0 2px 8px rgba(20, 40, 90, .08);
+}
+.hero-feat.is-logo:hover { background: #fff; border-color: var(--blue); }
+.hero-feat.is-logo img { height: 20px; width: auto; }
+.hero-feat.is-logo span { padding-left: 8px; border-left: 1px solid var(--line); }
+@media (max-width: 420px) { .hero-feat.is-logo img { height: 17px; } .hero-feat.is-logo { padding: 4px 11px 4px 8px; } }
+/* 강조 문구: 학교 이름 아래 한 줄 */
+.hero-feat-line { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; color: var(--ink-2); font-weight: 700; font-size: 1rem; text-decoration: none; }
+.hero-feat-line .icon { width: 18px; height: 18px; padding: 2px; border-radius: 50%; background: var(--blue); color: #fff; stroke-width: 3; }
+.hero-feat-line:hover span { text-decoration: underline; }
