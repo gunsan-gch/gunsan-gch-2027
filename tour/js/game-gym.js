@@ -3,7 +3,7 @@
   const IMG = 'img/games/gym/', R = window.TourGymRules;
   const IDS = ['curling', 'target', 'badminton'], KEY = 'gch-tour-gym-best-v1';
   const INFO = {
-    curling: { title: '스톤을 굴려라!', sport: '컬링', subtitle: '방향과 힘으로 만드는 한 수', intro: '내 스톤 3개를 중심 가까이! 민트 스톤을 밀어내도 좋아.', help: '화면을 위로 밀고 놓기 · 또는 방향·힘 조절 후 밀기', rewards: '완주 ★1 · 10점 ★2 · 20점 ★3', practice: '스톤 1개 연습', max: 30 },
+    curling: { title: '스톤을 굴려라!', sport: '컬링', subtitle: '방향과 힘으로 만드는 한 수', intro: '매번 출발 위치가 달라져! 방향과 힘을 정해 내 스톤 3개를 중심 가까이.', help: '위로 밀고 놓기 · 또는 방향·힘 조절 후 밀기 · 힘은 매번 새로 정해요', rewards: '완주 ★1 · 10점 ★2 · 20점 ★3', practice: '스톤 1개 연습', max: 30 },
     target: { title: '정중앙을 노려라!', sport: '사격', subtitle: '숨 고르고, 지금!', intro: '움직이는 조준점이 중심에 올 때 발사! 기회는 5번이야.', help: '화면 터치 / 발사 버튼 / Space · 8점 이상 연속 명중 +1점', rewards: '완주 ★1 · 28점 ★2 · 44점 ★3', practice: '3발 연습', max: 54 },
     badminton: { title: '랠리! 배드민턴', sport: '배드민턴', subtitle: '받아치고, 스매시!', intro: '바닥 표시로 이동해서 받아쳐! 먼저 5점을 얻으면 승리야.', help: '← → / A D 이동 · Space 치기 · 모바일은 드래그 + 치기', rewards: '완주 ★1 · 3득점 또는 6랠리 ★2 · 승리 ★3', practice: '3번 받아치기 연습', max: 5 }
   };
@@ -47,7 +47,7 @@
       <div class="gym-field"><canvas width="320" height="240" tabindex="0" role="img" aria-label="${info.sport} 경기장"></canvas><div class="gym-overlay" hidden></div></div>
       <p class="gym-message" role="status" aria-live="polite">${info.subtitle}</p>
       <div class="gym-setup"><button type="button" class="btn btn-primary" data-action="start">실전 시작</button><button type="button" class="btn" data-action="practice">${info.practice}</button></div>
-      ${kind === 'curling' ? `<div class="gym-curling-controls"><label>방향 <output class="gym-angle-label">0°</output><input class="gym-angle" type="range" min="-28" max="28" value="0" step="1" aria-label="스톤 방향" disabled></label><label>힘 <output class="gym-power-label">60%</output><input class="gym-power" type="range" min="20" max="100" value="60" step="1" aria-label="스톤 힘" disabled></label></div>` : ''}
+      ${kind === 'curling' ? `<div class="gym-curling-controls"><label>방향 <output class="gym-angle-label">0°</output><input class="gym-angle" type="range" min="-28" max="28" value="0" step="1" aria-label="스톤 방향" disabled></label><label>힘 <output class="gym-power-label">0%</output><input class="gym-power" type="range" min="0" max="100" value="0" step="1" aria-label="스톤 힘" disabled></label></div>` : ''}
       <div class="gym-controls">${kind === 'badminton' ? '<button type="button" data-action="left" aria-label="왼쪽 이동" disabled>◀</button>' : ''}<button type="button" class="gym-main-action" data-action="act" disabled>${kind === 'curling' ? '스톤 밀기' : kind === 'target' ? '발사!' : '받아치기'}</button>${kind === 'badminton' ? '<button type="button" data-action="right" aria-label="오른쪽 이동" disabled>▶</button>' : ''}</div>
       <p class="gym-help">${info.help}</p><div class="gym-tools"><button type="button" class="btn" data-action="hub">종목 선택</button><button type="button" class="btn" data-action="pause" disabled>잠깐 쉬기</button><button type="button" class="btn" data-action="sound" aria-pressed="false">소리 켜짐</button></div>
       <p class="gym-rewards">${info.rewards}</p></section>`;
@@ -77,11 +77,13 @@
         art('curling-rink', 0, 0, 320, 240);
         for (const stone of s?.stones || []) art('stone-' + stone.owner, stone.x - 12, stone.y - 12, 24, 24);
         if (!s || s.phase === 'aim') {
-          art('stone-coral', 148, 202, 24, 24);
-          const a = (s?.angle || 0) * Math.PI / 180, power = s?.power || 60;
-          ctx.fillStyle = '#14285a'; for (let d = 18; d < 35 + power * .6; d += 9) ctx.fillRect(Math.round(160 + Math.sin(a) * d) - 1, Math.round(210 - Math.cos(a) * d), 3, 3);
+          const launchX = s?.launchX ?? 100;
+          ctx.fillStyle = '#f3d78d'; ctx.fillRect(launchX - 16, 200, 32, 28);
+          art('stone-coral', launchX - 12, 202, 24, 24);
+          const a = (s?.angle || 0) * Math.PI / 180, power = s?.power || 0;
+          if (power > 0) { ctx.fillStyle = '#14285a'; for (let d = 18; d < 35 + power * .6; d += 9) ctx.fillRect(Math.round(launchX + Math.sin(a) * d) - 1, Math.round(210 - Math.cos(a) * d), 3, 3); }
         }
-        player(103, 233, 'up');
+        player(Math.max(48, (s?.launchX ?? 100) - 43), 233, 'up');
       } else if (kind === 'target') {
         ctx.fillStyle = '#e9ead5'; ctx.fillRect(0, 0, 320, 240); ctx.fillStyle = '#b9c4aa'; ctx.fillRect(14, 8, 292, 224);
         art('target-board', 40, 0, 240, 240);
@@ -119,9 +121,9 @@
       const s = engine.state;
       if ($('.gym-game').dataset.phase !== s.phase) $('.gym-game').dataset.phase = s.phase;
       text('.gym-score', s.practice ? '연습 중' : kind === 'badminton' ? `나 ${s.mine} : ${s.theirs} 수아` : `${s.score}점`);
-      text('.gym-round', kind === 'curling' ? `${s.throws} / ${s.limit}개` : kind === 'target' ? `${s.shots.length} / ${s.limit}발${s.combo > 1 ? ` · ${s.combo}연속` : ''}` : s.practice ? `${s.returns} / 3번 성공` : `${s.rally}랠리 · 먼저 5점`);
+      text('.gym-round', kind === 'curling' ? `${s.throws} / ${s.limit}개 · ${s.launchX < 130 ? '왼쪽' : s.launchX > 190 ? '오른쪽' : '가운데'} 출발` : kind === 'target' ? `${s.shots.length} / ${s.limit}발${s.combo > 1 ? ` · ${s.combo}연속` : ''}` : s.practice ? `${s.returns} / 3번 성공` : `${s.rally}랠리 · 먼저 5점`);
       const running = !['paused', 'finished'].includes(s.phase);
-      disabled('[data-action="act"]', !running || (kind !== 'badminton' && s.phase !== 'aim'));
+      disabled('[data-action="act"]', !running || (kind !== 'badminton' && s.phase !== 'aim') || (kind === 'curling' && s.power <= 0));
       disabled('[data-action="pause"]', !running);
       for (const button of container.querySelectorAll('[data-action="left"],[data-action="right"]')) if (button.disabled !== !running) button.disabled = !running;
       if (kind === 'curling') {
@@ -129,6 +131,8 @@
         if (Number($('.gym-angle').value) !== Math.round(s.angle)) $('.gym-angle').value = Math.round(s.angle);
         if (Number($('.gym-power').value) !== Math.round(s.power)) $('.gym-power').value = Math.round(s.power);
         text('.gym-angle-label', `${Math.round(s.angle)}°`); text('.gym-power-label', `${Math.round(s.power)}%`);
+        text('[data-action="act"]', s.phase === 'aim' && s.power <= 0 ? '힘을 먼저 정해요' : '스톤 밀기');
+        if (s.phase === 'aim' && lastEvent !== s.event) $('.gym-angle').focus({ preventScroll: true });
       }
       if (lastEvent !== s.event) { lastEvent = s.event; $('.gym-message').textContent = s.message; }
       const label = `${info.sport}, ${$('.gym-score').textContent}, ${$('.gym-round').textContent}${kind === 'badminton' && s.phase === 'incoming' ? `, 셔틀콕 도착 위치 ${Math.round(s.toX / 3.2)}퍼센트` : ''}`;
@@ -140,7 +144,7 @@
       $('.gym-setup').hidden = true; overlay.hidden = true; last = performance.now(); audio?.unlock();
       const instructions = practice ? (kind === 'curling' ? '스톤 1개로 방향과 힘을 익혀 봐. 연습은 별을 주지 않아.' : kind === 'target' ? '세 발로 조준 타이밍을 익혀 봐. 연습은 별을 주지 않아.' : '세 번만 받아쳐 봐! 놓쳐도 괜찮아. 연습은 계속할 수 있어.') : info.intro;
       text('.gym-guide p', instructions);
-      hud(); paint(last); $('[data-action="act"]').focus({ preventScroll: true }); raf = requestAnimationFrame(tick);
+      hud(); paint(last); (kind === 'curling' ? $('.gym-angle') : $('[data-action="act"]')).focus({ preventScroll: true }); raf = requestAnimationFrame(tick);
       api.announce(`${info.sport} ${practice ? '연습' : '실전'} 시작. ${instructions}`);
     }
     function finish() {
@@ -183,7 +187,7 @@
     function resume() {
       if (!engine?.resume()) return; overlay.hidden = true; last = performance.now(); audio?.unlock(); hud();
       api.announce(`${info.sport} 경기를 이어서 시작해요.`);
-      $('[data-action="act"]').focus({ preventScroll: true }); raf = requestAnimationFrame(tick);
+      (kind === 'curling' ? (engine.state.phase === 'aim' ? $('.gym-angle') : canvas) : $('[data-action="act"]')).focus({ preventScroll: true }); raf = requestAnimationFrame(tick);
     }
     function click(e) {
       const action = e.target.closest('[data-action]')?.dataset.action;

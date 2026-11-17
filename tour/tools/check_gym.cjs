@@ -10,7 +10,10 @@ for (const [d, pts] of [[0,10],[8,10],[8.01,7],[20,7],[20.01,4],[32,4],[32.01,2]
 for (const [d, pts] of [[0,10],[8,10],[8.1,9],[27,9],[27.1,7],[50,7],[50.1,5],[72,5],[72.1,3],[96,3],[97,0]]) check(R.targetPoints(d) === pts, 'target ring boundary '+d);
 for (let seed = 1; seed <= 100; seed++) {
   const e = R.curling({ random: seeded(seed) }), random = seeded(seed + 400);
+  check(e.state.launches[0] !== e.state.launches[1] && Math.abs(e.state.launches[0] - e.state.launches[1]) >= 104, 'opposite visible starting wings');
+  check(e.state.launches[2] >= 152 && e.state.launches[2] <= 168, 'last throw starts near middle');
   for (let n = 0; n < 3; n++) {
+    check(e.state.power === 0 && !e.release() && e.state.throws === n, 'every throw requires newly chosen power');
     check(e.aim(-28 + 56 * random(), 20 + 80 * random()), 'set shot while aiming');
     check(e.release() && !e.release(), 'only one stone per release');
     check(!e.aim(0,60), 'cannot change a moving shot'); settle(e);
@@ -20,12 +23,21 @@ for (let seed = 1; seed <= 100; seed++) {
   check(e.state.score >= 0 && e.state.score <= 30, 'only own stones contribute score');
 }
 const endpoints = [];
-for (const fps of [30,60,120]) { const e = R.curling({ practice:true }); e.aim(0,63); e.release(); settle(e,1/fps); endpoints.push(e.state.stones[0].y); check(e.state.score === 10 && R.stars('curling',e.state) === 0,'practice center throw without reward'); }
+for (const fps of [30,60,120]) { const e = R.curling({ practice:true, random:()=>.5 }); e.aim(Math.atan2(160-e.state.launchX,150)*180/Math.PI,68); e.release(); settle(e,1/fps); endpoints.push(e.state.stones[0].y); check(e.state.score === 10 && R.stars('curling',e.state) === 0,'deliberately aimed practice center throw without reward'); }
 check(Math.max(...endpoints)-Math.min(...endpoints)<.02,'curling physics is frame-rate independent');
-let e=R.curling({random:()=>.5}); const original=e.state.stones.map(s=>({x:s.x,y:s.y})); e.aim(-5,65); e.release();settle(e);
+let e=R.curling({random:()=>.5}); const original=e.state.stones.map(s=>({x:s.x,y:s.y})); e.aim(-24,70); e.release();settle(e);
 check(e.state.stones.slice(0,2).some((s,i)=>Math.hypot(s.x-original[i].x,s.y-original[i].y)>2),'actual stone collision transfers momentum');
+let fixedScoreMax=0;
+for(let seed=1;seed<=100;seed++){
+  e=R.curling({random:seeded(seed)});
+  for(let n=0;n<3;n++){for(let repeat=0;repeat<3;repeat++)check(!e.release(),'repeated unadjusted input cannot throw');e.aim(0,60);e.release();settle(e);if(n<2)check(R.curlingPoints(e.state.stones[e.state.stones.length-1].x,e.state.stones[e.state.stones.length-1].y)===0,'former default misses from wing');}
+  fixedScoreMax=Math.max(fixedScoreMax,e.state.score);check(e.state.score<=10&&R.stars('curling',e.state)<3,'fixed former solution cannot earn high score');
+}
+e=R.curling({random:seeded(1)});
+for(let n=0;n<3;n++){const dx=[145,175,160][n]-e.state.launchX,dy=214-[65,65,70][n];e.aim(Math.atan2(dx,dy)*180/Math.PI,Math.hypot(dx,dy)/2.4);e.release();settle(e);}
+check(e.state.score>=20&&R.stars('curling',e.state)===3,'adjusted direction and power can still earn three stars');
 for (const kind of ['curling','target','badminton']) {
-  e=R[kind]({random:()=>.2}); if(kind==='curling')e.release();e.advance(.05);check(e.pause(),'pause '+kind);
+  e=R[kind]({random:()=>.2}); if(kind==='curling'){e.aim(10,50);e.release();}e.advance(.05);check(e.pause(),'pause '+kind);
   const snapshot=JSON.stringify(e.state); for(let k=0;k<200;k++)e.advance(.1);check(JSON.stringify(e.state)===snapshot,'pause freezes state '+kind);
   check(kind==='curling'?!e.release():kind==='target'?!e.shoot():!e.hit(),'pause blocks action '+kind);check(e.resume()&&!e.resume(),'resume once '+kind);
 }
@@ -68,4 +80,4 @@ check(ctx.window.TourStarProgress.TITLE_AT===27,'existing wardrobe title unchang
 const assets=Object.values(JSON.parse(fs.readFileSync(path.join(root,'img/ASSET-SOURCES.json'),'utf8')).sources).filter(a=>a.generator==='tools/make_gym_game_art.mjs');
 check(assets.length===16,'16 original documented assets');for(const a of assets)check(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'img',a.output))).digest('hex')===a.sha256,'asset fingerprint '+a.output);
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');check(html.indexOf('gym-engine.js')<html.indexOf('game-gym.js'),'rules loaded before UI');
-console.log(JSON.stringify({checks,curlingSeeds:100,badmintonSeeds:100,physicsFps:[30,60,120],games:actual.games.length,maxStars:actual.maxStars,assets:assets.length,oldProgress:'preserved',practice:'no rewards'}));
+console.log(JSON.stringify({checks,curlingSeeds:100,badmintonSeeds:100,fixedFormerAim:{seeds:100,maxScore:fixedScoreMax},physicsFps:[30,60,120],games:actual.games.length,maxStars:actual.maxStars,assets:assets.length,oldProgress:'preserved',practice:'no rewards'}));
