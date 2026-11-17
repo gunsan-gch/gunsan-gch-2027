@@ -308,7 +308,7 @@ window.TOUR_SCENES = {
       { name: '미술실', at: [22, 11], w: 16, anchor: [28.2, 24] },
       { name: '2학년부실', at: [36, 11], w: 10, anchor: [39.3, 24], status: '선생님 교무실',
         desc: '2학년 선생님들이 근무하는 교무실입니다. 2학년 교실과 같은 5층에 있어요.' },
-      { name: '꿈다락', at: [52, 11], w: 19, anchor: [44.7, 24],
+      { name: '꿈다락', game: 'stairs', at: [52, 11], w: 19, anchor: [44.7, 24],
         photos: ['img/rooms/dream-2.jpg', 'img/rooms/dream-3.jpg', 'img/rooms/dream-4.jpg', 'img/rooms/dream-1.jpg'],   // 라운지 → 공부방 → 입구
         desc: '편하게 쉬고 함께 공부할 수 있는 학생 공간입니다. 소파와 테이블이 놓인 넓은 라운지와, 모둠 활동이나 공부를 할 수 있는 작은 공부방이 있어요.' },
       { name: '화장실', quiet: true, at: [74.5, 11], w: 10, anchor: [74.5, 24], facility: true },

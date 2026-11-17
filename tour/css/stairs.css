@@ -1,0 +1,85 @@
+/* Dream stairs — scoped arcade layout, large touch targets, crisp pixel artwork. */
+#game:has(.stairs-game), #game:has(.stairs-summary) { width: min(560px, 100% - 20px); }
+.stairs-game { max-width: 500px; margin: auto; color: var(--navy); }
+.stairs-guide { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.stairs-guide img { width: 52px; height: 52px; image-rendering: pixelated; flex: 0 0 auto; }
+.stairs-guide strong { font-size: 12px; color: var(--green); }
+.stairs-guide p { margin: 2px 0 0; font-size: 15px; font-weight: 700; line-height: 1.35; }
+.stairs-hud { display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 8px 10px; background: #14285a; color: #fffbed; }
+.stairs-hud strong { font-size: 24px; line-height: 1; white-space: nowrap; }
+.stairs-hud small, .stairs-best, .stairs-floor { font-size: 12px; }
+.stairs-best { color: #ffe4a0; }
+.stairs-energy { display: flex; gap: 10px; align-items: center; background: #e5ebdd; padding: 6px 10px; font-size: 11px; }
+.stairs-energy progress { flex: 1; min-width: 0; width: 50%; height: 8px; accent-color: #35634c; }
+.stairs-energy progress::-webkit-progress-bar { background: #c4cebd; }
+.stairs-energy progress::-webkit-progress-value { background: #35634c; }
+.stairs-energy.is-low progress { accent-color: #b84b4f; }
+.stairs-energy.is-low progress::-webkit-progress-value { background: #b84b4f; }
+.stairs-time { min-width: 100px; text-align: right; font-variant-numeric: tabular-nums; }
+.stairs-stage { position: relative; overflow: hidden; border: 2px solid #14285a; border-top: 0; background: #edf5eb; }
+.stairs-stage canvas { display: block; width: 100%; height: clamp(220px, 38dvh, 340px); object-fit: contain; image-rendering: pixelated; }
+.stairs-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px; padding: 18px; text-align: center; background: #fffbeded; }
+.stairs-overlay[hidden] { display: none; }
+.stairs-kicker { color: #35634c; letter-spacing: 2px; font-size: 10px; font-weight: 800; }
+.stairs-overlay h3 { margin: 0; font-family: var(--font-title); font-size: clamp(21px, 5vw, 28px); }
+.stairs-overlay p { margin: 0; font-size: 14px; line-height: 1.6; }
+.stairs-start-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 4px; }
+.stairs-next { margin: 6px 0; min-height: 20px; font-size: 13px; text-align: center; font-weight: 700; }
+.stairs-next.is-miss { color: #a13b44; }
+.stairs-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stairs-controls button { display: grid; grid-template-columns: 28px 1fr; align-items: center; gap: 0 4px; min-height: 68px; padding: 7px; border: 2px solid #14285a; border-radius: 0; box-shadow: 0 3px 0 #14285a; color: #14285a; cursor: pointer; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.stairs-turn { background: #f5ddbb; }
+.stairs-climb { background: #d7e8d8; }
+.stairs-controls button>span { grid-row: 1 / 3; font-size: 28px; line-height: 1; }
+.stairs-controls b { font-size: 14px; }
+.stairs-controls small { font-size: 10px; }
+.stairs-controls button:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 1px 0 #14285a; }
+.stairs-controls button:disabled { opacity: .5; cursor: default; }
+.stairs-controls button.is-hint { outline: 3px solid #c28b23; outline-offset: -6px; }
+.stairs-footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 10px; }
+.stairs-footer>span { font-size: 11px; }
+.stairs-footer .btn { padding: 7px 9px; min-height: 36px; font-size: 12px; }
+.stairs-note { font-size: 10px; color: var(--muted); text-align: center; margin: 6px 0 0; }
+.stairs-summary { text-align: center; }
+.stairs-summary img { image-rendering: pixelated; }
+.stairs-summary h3 { font-family: var(--font-title); font-size: 22px; margin: 4px 0; }
+.stairs-summary p { margin: 4px 0; }
+@media(max-width: 400px) {
+  #game:has(.stairs-game) .game-body { padding: 10px; }
+  .stairs-controls { gap: 7px; }
+  .stairs-controls button { grid-template-columns: 22px 1fr; }
+  .stairs-controls b { font-size: 12px; }
+  .stairs-footer { gap: 4px; }
+  .stairs-footer>span { font-size: 10px; }
+}
+@media(pointer: coarse) { .stairs-controls small { display: none; } .stairs-controls button>span { grid-row: auto; } }
+@media(prefers-reduced-motion: reduce) { .stairs-controls button:active:not(:disabled) { transform: none; } }
+@media(max-height: 520px) and (min-width: 600px) {
+  #game:has(.stairs-game) { width: min(780px, 100% - 20px); }
+  #game:has(.stairs-game) .game-body { padding: 8px 12px; }
+  .stairs-game { max-width: none; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 4px 12px; }
+  .stairs-guide { grid-column: 1 / 3; margin: 0; }
+  .stairs-guide img { width: 32px; height: 32px; }
+  .stairs-guide p { display: inline; margin-left: 8px; font-size: 12px; }
+  .stairs-hud { grid-column: 1; padding: 5px 8px; }
+  .stairs-energy { grid-column: 2; }
+  .stairs-stage { grid-column: 1; grid-row: 3 / 7; border-top: 2px solid #14285a; }
+  .stairs-stage canvas { height: clamp(120px, 44dvh, 210px); }
+  .stairs-next { grid-column: 2; grid-row: 3; margin: 3px 0; }
+  .stairs-controls { grid-column: 2; grid-row: 4; }
+  .stairs-footer { grid-column: 2; grid-row: 5; margin: 0; flex-wrap: wrap; }
+  .stairs-note { grid-column: 2; grid-row: 6; margin: 0; }
+  .stairs-overlay { padding: 6px; gap: 4px; }
+  .stairs-overlay h3 { font-size: 19px; }
+  .stairs-overlay p { font-size: 11px; line-height: 1.3; }
+  .stairs-start-actions .btn { padding: 5px 10px; font-size: 12px; }
+}
+@media(max-width: 760px) {
+  #game:has(.stairs-game), #game:has(.stairs-summary) { width: 100%; }
+}
+@media(max-width: 599px) and (max-height: 740px) {
+  .stairs-stage canvas { height: clamp(160px, 32dvh, 238px); }
+  .stairs-guide img { width: 40px; height: 40px; }
+  .stairs-guide p { font-size: 13px; }
+  .stairs-controls button { min-height: 60px; }
+}
