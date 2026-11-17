@@ -1057,6 +1057,24 @@
         : '<a class="btn an-btn" href="#admissions">' + icon("info") + '<span>모집 인원·지원 안내</span></a>');
     box.hidden = false;
   })();
+  // 첫 화면 강조 배지
+  (function heroBadge() {
+    var a = $("hero-feat"), hb = D.heroBadge;
+    if (!a || !hb || !has(hb.text)) return;
+    if (hb.style === "line") {
+      // 학교 이름 아래 한 줄 문구로
+      var line = document.createElement("a");
+      line.className = "hero-feat-line"; line.href = hb.href || "#careers";
+      line.innerHTML = icon("check") + '<span>' + esc(hb.lineText || hb.text) + '</span>';
+      var school = document.querySelector(".hero-school");
+      if (school) school.parentNode.insertBefore(line, school.nextSibling);
+      return;
+    }
+    a.className = "hero-feat is-logo";
+    a.innerHTML = (has(hb.logo) ? '<img src="' + esc(hb.logo) + '" alt="' + esc(hb.logoAlt || "") + '" width="265" height="117">' : '') + '<span>' + esc(hb.text) + '</span>';
+    if (has(hb.href)) a.setAttribute("href", hb.href);
+    a.hidden = false;
+  })();
   (function heroHooks() {
     var box = $("hero-hooks");
     if (!box) return;
