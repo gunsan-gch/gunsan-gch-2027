@@ -1341,6 +1341,7 @@ window.SITE_DATA = {
         applied: 3,
         firstStagePassed: 2,
         finalPassed: 1, // 최종 결과가 나오면 입력 (있으면 '최종 결과 발표 전' 대신 최종 합격 인원 표시)
+        show: "final", // 최종 합격 표시 방식: "final" = 최종 합격 인원만, "pass-final" = 1차 합격 → 최종 합격, 빈칸 = 지원 → 1차 → 최종
         logo: {
           src: "assets/img/employers/korail.webp",
           width: 265,
