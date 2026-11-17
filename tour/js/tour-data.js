@@ -200,8 +200,8 @@ window.TOUR_SCENES = {
       { at: [71, 66], dir: 'up', text: '위쪽 복도' }
     ],
     rooms: [
-      { name: '체육관', at: [8.5, 37], w: 10, anchor: [16.5, 25], rect: [2, 4, 14, 67],
-        desc: '3층 체육관입니다.' },
+      { name: '체육관', game: 'gym', games: ['curling', 'target', 'badminton'], at: [8.5, 37], w: 10, anchor: [16.5, 25], rect: [2, 4, 14, 67],
+        desc: '배드민턴·사격·컬링 미니게임 대회를 만나는 3층 체육관이에요. 수아 선배와 세 종목에 도전해 보세요.' },
       { name: '과학실험실', at: [25, 13], w: 12, anchor: [21.2, 25],
         photos: ['img/rooms/science-1.jpg', 'img/rooms/science-2.jpg', 'img/rooms/science-3.jpg', 'img/rooms/science-4.jpg'],
         desc: '칠판과 실험대가 놓인 과학 실험 교실입니다. 안쪽에는 실험 기구와 재료를 보관하는 장이 있어요.' },

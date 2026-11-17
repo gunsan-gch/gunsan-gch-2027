@@ -843,7 +843,7 @@
   const hashScene = location.hash.match(/^#(?:floor-)?(outdoor|\d)$/)?.[1];
   const target = params.get('room') && allRooms.find(r => compactText(r.name) === compactText(params.get('room')));
   // ?game=cafe: 그 게임이 있는 공간의 층으로 가서 공간 앞에 선 채로 시작 (게임 창은 games.js가 엽니다)
-  const gameRoom = !target && params.get('game') && allRooms.find(r => r.game === params.get('game'));
+  const gameRoom = !target && params.get('game') && allRooms.find(r => r.game === params.get('game') || r.games?.includes(params.get('game')));
   if (gameRoom) switchScene(gameRoom.scene, { spawn: gameRoom.anchor });
   else switchScene(target ? target.scene : (SCENES[hashScene] ? hashScene : 'outdoor'));
   motion.start();

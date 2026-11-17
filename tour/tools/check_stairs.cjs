@@ -21,7 +21,7 @@ for(const [steps,stars] of [[0,1],[39,1],[40,2],[79,2],[80,3]])check(R.stars(ste
 for(const [steps,floor] of [[0,1],[19,1],[20,2],[40,3],[60,4],[80,5]])check(R.floor(steps)===floor,'floor threshold '+steps);
 vm.runInContext(fs.readFileSync(path.join(root,'js/tour-data.js'),'utf8'),ctx);
 vm.runInContext(fs.readFileSync(path.join(root,'js/star-progress.js'),'utf8'),ctx);
-const rooms=Object.values(ctx.window.TOUR_SCENES).flatMap(s=>s.rooms).filter(r=>r.game);
+const rooms=Object.values(ctx.window.TOUR_SCENES).flatMap(s=>s.rooms).flatMap(r=>(r.games||(r.game?[r.game]:[])).map(id=>({...r,game:id})));
 check(rooms.length>=10&&rooms.filter(r=>r.game==='stairs').length===1,'one dream stairs room among all games');
 const progress=ctx.window.TourStarProgress.summarize(Object.fromEntries(rooms.map(r=>[r.game,{stars:3}])),rooms.map(r=>({id:r.game,maxStars:3})));
 check(progress.maxStars===rooms.length*3&&progress.stars===rooms.length*3,'every game contributes three best stars');check(ctx.window.TourStarProgress.TITLE_AT===27,'existing title threshold preserved');
