@@ -1057,6 +1057,14 @@
         : '<a class="btn an-btn" href="#admissions">' + icon("info") + '<span>모집 인원·지원 안내</span></a>');
     box.hidden = false;
   })();
+  // 첫 화면 강조 배지
+  (function heroBadge() {
+    var a = $("hero-feat"), hb = D.heroBadge;
+    if (!a || !hb || !has(hb.text)) return;
+    a.innerHTML = icon("spark") + '<span>' + esc(hb.text) + '</span>';
+    if (has(hb.href)) a.setAttribute("href", hb.href);
+    a.hidden = false;
+  })();
   (function heroHooks() {
     var box = $("hero-hooks");
     if (!box) return;

@@ -1875,3 +1875,18 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
   .senior-flow.has-final .senior-metric > span { font-size: .78rem; }
   .senior-flow.has-final .senior-metric.is-final > span { padding: 2px 8px; }
 }
+
+/* 첫 화면 '신입생 모집' 옆 강조 배지 (heroBadge) */
+.hero-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.hero-feat {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px;
+  background: var(--yellow); color: var(--navy); font-weight: 800; font-size: .95rem; text-decoration: none;
+  box-shadow: 0 4px 12px rgba(245, 197, 24, .35);
+}
+.hero-feat .icon { width: 16px; height: 16px; }
+.hero-feat:hover { background: var(--yellow-dark); }
+@media (max-width: 420px) {
+  .hero-tags { gap: 6px; }
+  .hero-feat { padding: 5px 11px; font-size: .84rem; gap: 4px; }
+  .hero-feat .icon { width: 14px; height: 14px; }
+}
