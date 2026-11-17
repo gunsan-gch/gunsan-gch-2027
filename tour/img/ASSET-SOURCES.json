@@ -450,6 +450,76 @@
       "kind": "game",
       "description": "게임별 도장 interview — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
       "sha256": "43611403129e2cdfbb75b75453348c1e69ce9e3b960415cf9a0323103527941d"
+    },
+    "games/stairs/tile-step.png": {
+      "output": "games/stairs/tile-step.png",
+      "kind": "game-pixel-art",
+      "description": "민트 장식과 밝은 발판의 계단 타일",
+      "sha256": "7134865348a1e6c76c87a5b2417796565583a41ad8cb57f80838daed8b1935f8",
+      "generator": "tools/make_stairs_game_art.mjs"
+    },
+    "games/stairs/floor-1.png": {
+      "output": "games/stairs/floor-1.png",
+      "kind": "game-pixel-art",
+      "description": "1층 배경 — 민트빛 화분과 정원 창문",
+      "sha256": "3379f2f82f74d477f50af08dbc0665dd8ebba56084e49cfd2d0983bf3f70a25f",
+      "generator": "tools/make_stairs_game_art.mjs"
+    },
+    "games/stairs/floor-2.png": {
+      "output": "games/stairs/floor-2.png",
+      "kind": "game-pixel-art",
+      "description": "2층 배경 — 하늘빛 컴퓨터 교실 장식",
+      "sha256": "a530bfa92122beafbd6a8d1699b4232bea42927a5cd773f40963e6d916dd7d1f",
+      "generator": "tools/make_stairs_game_art.mjs"
+    },
+    "games/stairs/floor-3.png": {
+      "output": "games/stairs/floor-3.png",
+      "kind": "game-pixel-art",
+      "description": "3층 배경 — 복숭아빛 미술 작품과 꽃",
+      "sha256": "c687fa48f035afc561e0f78fbcc0d690f72ad8256928681c1e347250d226608a",
+      "generator": "tools/make_stairs_game_art.mjs"
+    },
+    "games/stairs/floor-4.png": {
+      "output": "games/stairs/floor-4.png",
+      "kind": "game-pixel-art",
+      "description": "4층 배경 — 연보라빛 책과 지구본",
+      "sha256": "c41a6f415e3fb46ae4bafbc77b3374f1f9d256eb9b2f8a43d7e13e4151a1a0cc",
+      "generator": "tools/make_stairs_game_art.mjs"
+    },
+    "games/stairs/floor-5.png": {
+      "output": "games/stairs/floor-5.png",
+      "kind": "game-pixel-art",
+      "description": "5층 배경 — 포근한 나무 서까래와 책, 별 모빌",
+      "sha256": "8c5801b4e4d8f531413b3d9c276fb94413240499041c3f3069753e09f7492442",
+      "generator": "tools/make_stairs_game_art.mjs"
+    },
+    "games/stairs/guide-minju.png": {
+      "output": "games/stairs/guide-minju.png",
+      "kind": "game-pixel-art",
+      "description": "민트 리본 포니테일과 남색 교복을 입은 민주 선배",
+      "sha256": "37bc9d4dccc12aa952f4ecddeb18534b7b0f8232b6179a2e952b3a2105ca052e",
+      "generator": "tools/make_stairs_game_art.mjs"
+    },
+    "games/stairs/goal-attic.png": {
+      "output": "games/stairs/goal-attic.png",
+      "kind": "game-pixel-art",
+      "description": "별이 반짝이는 꿈다락 지붕과 민트 문",
+      "sha256": "597a4486250976ff1972a1e02681392029fd2bfdbf4f7a5f5657419f86ab6ac4",
+      "generator": "tools/make_stairs_game_art.mjs"
+    },
+    "games/stairs/star-token.png": {
+      "output": "games/stairs/star-token.png",
+      "kind": "game-pixel-art",
+      "description": "작은 금빛 별 토큰",
+      "sha256": "f4035063bde0a9029e51d6f8f775bc515de871d6893c0c5d24d5c021cb4ab142",
+      "generator": "tools/make_stairs_game_art.mjs"
+    },
+    "games/stamps/stairs.png": {
+      "output": "games/stamps/stairs.png",
+      "kind": "game-pixel-art",
+      "description": "별을 향해 올라가는 세 계단 완주 도장",
+      "sha256": "6fbedf9a7b7848c81cac19869c76525669a038aecd54c5c630cab676599980e0",
+      "generator": "tools/make_stairs_game_art.mjs"
     }
   }
 }
