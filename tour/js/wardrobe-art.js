@@ -28,6 +28,18 @@
     {id:'moon',name:'초승달 산책',at:21,legacyAt:8,slot:'back',theme:'달빛 마법'},
     {id:'helmet',name:'작은 우주 헬멧',at:24,slot:'head',theme:'밤하늘 여행'},
     {id:'planet',name:'토성 풍선',at:24,slot:'back',theme:'밤하늘 여행'},
+    {id:'trailcap',name:'꿈다락 탐험모',at:27,slot:'head',theme:'꿈다락 탐험'},
+    {id:'cloudpack',name:'구름 등산가방',at:27,slot:'back',theme:'꿈다락 탐험'},
+    {id:'melodyband',name:'멜로디 별 머리띠',at:30,slot:'head',theme:'음악 시간'},
+    {id:'pianobag',name:'미니 피아노 가방',at:30,slot:'back',theme:'음악 시간'},
+    {id:'shuttlepin',name:'셔틀콕 머리핀',at:33,slot:'head',theme:'배드민턴 시간'},
+    {id:'racketbag',name:'배드민턴 라켓백',at:33,slot:'back',theme:'배드민턴 시간'},
+    {id:'curlingbeanie',name:'컬링 니트모',at:36,slot:'head',theme:'빙판 위 컬링'},
+    {id:'stonebag',name:'컬링 스톤 가방',at:36,slot:'back',theme:'빙판 위 컬링'},
+    {id:'targetribbon',name:'명중 리본',at:39,slot:'head',theme:'정중앙 도전'},
+    {id:'targetpack',name:'과녁 배낭',at:39,slot:'back',theme:'정중앙 도전'},
+    {id:'laurel',name:'챔피언 월계관',at:42,slot:'head',theme:'챔피언 축제'},
+    {id:'trophybag',name:'우승 트로피 가방',at:42,slot:'back',theme:'챔피언 축제'},
   ];
   const P={ink:'#343c54',cream:'#fff4dc',white:'#fffdf1',rose:'#e78b9b',pink:'#ffc2c7',roseD:'#aa5c7e',
     gold:'#edbd5c',goldD:'#ac794b',yellow:'#ffe9a3',mint:'#8acdbb',mintD:'#508d88',
@@ -51,6 +63,8 @@
     witch:{down:12,up:12,left:12,right:12},
     frog:{down:12,up:12,left:12,right:12},
     helmet:{down:12,up:12,left:12,right:12},
+    trailcap:{down:12,up:12,left:12,right:12},
+    curlingbeanie:{down:12,up:12,left:12,right:12},
   };
   const covered=new Set(Object.keys(crownCut));
   function tinyStar(r,x,y){r(x+2,y,1,5,'goldD');r(x,y+2,5,1,'goldD');r(x+1,y+1,3,3,'gold');r(x+2,y+1,1,2,'yellow');}
@@ -62,6 +76,52 @@
   function head(c,id,dir){
     const r=pen(c),side=dir==='left'||dir==='right',right=dir==='right',rear=dir==='up';
     // Use a true side silhouette, rather than keeping the front decoration on the back.
+    if(id==='trailcap'){
+      const x=side?8:6,w=side?17:20;
+      r(x+4,3,w-8,1,'mintD');r(x+2,4,w-4,2,'mintD');r(x+1,6,w-2,4,'mintD');
+      r(x+3,5,w-6,4,'mint');r(x+5,4,w-10,1,'cream');r(x+2,9,w-4,2,'goldD');r(x+3,9,w-6,1,'gold');
+      // A short turned brim projects only toward the face in profile.
+      const bx=side?(right?x+1:x-2):x-1,bw=side?w+1:w+2;
+      r(bx,11,bw,1,'mintD');r(bx+1,10,bw-2,1,'mint');
+      if(!rear){const ex=side?(right?20:9):20;r(ex,6,3,3,'goldD');r(ex+1,6,1,2,'yellow');r(ex,7,3,1,'yellow');}
+      else{r(14,7,4,2,'mintD');r(15,7,2,1,'cream');}
+    }
+    if(id==='curlingbeanie'){
+      const x=side?8:6,w=side?17:20;
+      r(x+7,0,4,3,'blueD');r(x+8,0,2,2,'white');r(x+4,3,w-8,1,'blueD');r(x+2,4,w-4,2,'blueD');r(x,6,w,6,'blueD');
+      r(x+3,4,w-6,2,'blue');r(x+1,6,w-2,3,'blue');
+      for(let i=x+3;i<x+w-2;i+=3){r(i,6,1,1,'cream');r(i+1,7,1,1,'cream');}
+      r(x+1,9,w-2,2,'cream');for(let i=x+2;i<x+w-1;i+=3)r(i,10,1,1,'gold');
+      if(!rear){const ex=side?(right?20:10):20;r(ex,8,3,3,'roseD');r(ex+1,9,1,1,'pink');}
+    }
+    if(id==='melodyband'){
+      const x=side?9:6,w=side?15:20;
+      r(x+3,2,w-6,1,'purpleD');r(x+1,3,2,2,'purpleD');r(x+w-3,3,2,2,'purpleD');r(x,5,1,5,'purple');r(x+w-1,5,1,5,'purple');
+      if(rear){r(10,3,12,1,'pale');r(12,4,2,1,'purple');}
+      else{const ex=side?(right?20:7):21;tinyStar(r,ex-1,0);r(ex+1,5,1,4,'purpleD');r(ex-1,8,3,2,'purpleD');r(ex,8,1,1,'pink');}
+    }
+    if(id==='shuttlepin'){
+      const x=side?(right?21:5):(rear?6:21);
+      // Three separate feather vanes taper into the rose cork.
+      r(x-2,3,1,4,'blueD');r(x,2,1,5,'blueD');r(x+2,3,1,4,'blueD');
+      r(x-1,3,1,3,'white');r(x+1,3,1,3,'cream');r(x-1,7,3,1,'blueD');
+      r(x,8,2,3,'roseD');r(x,8,1,2,'pink');r(x-2,11,5,1,'goldD');
+    }
+    if(id==='targetribbon'){
+      const x=side?(right?21:5):(rear?7:21);
+      r(x-3,5,3,5,'roseD');r(x+3,5,3,5,'roseD');r(x-2,6,2,3,'rose');r(x+3,6,2,3,'pink');
+      r(x-1,6,4,5,'blueD');r(x,7,2,3,'cream');r(x,8,2,1,'roseD');
+      r(x-2,10,2,4,'rose');r(x+3,10,2,4,'rose');r(x-1,13,1,1,'gold');r(x+3,13,1,1,'gold');
+    }
+    if(id==='laurel'){
+      if(side){
+        const x=right?12:17;r(x,4,1,7,'goldD');r(x-1,4,3,2,'mintD');r(x-2,6,3,2,'mint');r(x,8,3,2,'mintD');r(x,10,2,2,'gold');r(x-1,5,1,1,'yellow');
+      }else{
+        for(const flip of [false,true]){c.save();if(flip){c.translate(32,0);c.scale(-1,1);}const q=pen(c);
+          pixelLine(q,7,4,12,11,'goldD');q(6,3,2,3,'mintD');q(8,4,3,2,'mint');q(7,7,2,3,'mintD');q(10,7,3,2,'mint');q(10,10,3,2,'mintD');q(8,5,1,1,'yellow');c.restore();}
+        if(rear){r(14,10,4,2,'goldD');r(14,12,1,3,'gold');r(17,12,1,3,'gold');}else{r(14,11,4,1,'gold');r(15,10,2,1,'yellow');}
+      }
+    }
     if(id==='ribbon'){const x=side?(right?16:5):(rear?5:17);bow(r,x,6);}
     if(id==='flower'){
       const x=side?(right?21:4):(rear?6:20),y=8;
@@ -146,7 +206,7 @@
       if(!rear)tinyStar(r,side?(right?20:8):21,6);
     }
   }
-  const carriedColors={bag:'mintD',breadbag:'roseD',starbag:'goldD',milkbag:'roseD',bowback:'roseD',wings:'goldD',umbrella:'blueD'};
+  const carriedColors={bag:'mintD',breadbag:'roseD',starbag:'goldD',milkbag:'roseD',bowback:'roseD',wings:'goldD',umbrella:'blueD',cloudpack:'mintD',pianobag:'purpleD',racketbag:'blueD',stonebag:'blueD',targetpack:'roseD',trophybag:'goldD'};
   function back(c,id,dir,frame=1){
     const color=carriedColors[id];
     if(!color){backArt(c,id,dir,frame);return;}
@@ -167,6 +227,49 @@
   }
   function backArt(c,id,dir,frame=1){
     const r=pen(c),rear=dir==='up',front=dir==='down',side=!rear&&!front,right=dir==='right',x=side?(right?5:21):10;
+    if(id==='cloudpack'){
+      const bx=side?(right?5:22):9,w=side?5:14;
+      r(bx+1,18,w-2,2,'mintD');r(bx,20,w,11,'mintD');r(bx+1,20,w-2,10,'mint');
+      r(bx,20,w,2,'goldD');r(bx+1,20,w-2,1,'gold');r(bx+1,29,w-2,1,'cream');
+      if(side){r(bx+1,24,3,4,'blueD');r(bx+2,25,1,2,'white');}
+      else{r(12,23,3,2,'white');r(16,22,3,3,'white');r(11,25,10,3,'blueD');r(12,24,8,3,'white');r(13,26,6,1,'cream');r(8,23,2,5,'blueD');r(23,23,2,5,'blueD');}
+    }
+    if(id==='pianobag'){
+      const bx=side?(right?5:22):9,w=side?5:14;
+      r(bx+1,19,w-2,1,'purpleD');r(bx,20,w,10,'ink');r(bx+1,21,w-2,8,'purpleD');
+      if(side){r(bx+1,22,2,6,'purple');r(bx+3,22,1,6,'cream');r(bx+1,26,1,1,'gold');}
+      else{r(10,21,12,3,'purple');r(10,25,12,4,'cream');for(let k=12;k<22;k+=2)r(k,25,1,3,'ink');r(11,26,1,2,'white');r(19,21,1,2,'gold');r(17,23,3,1,'yellow');}
+    }
+    if(id==='racketbag'){
+      const bx=side?(right?6:22):11,w=side?4:10;
+      r(bx+1,15,w-2,1,'blueD');r(bx,16,w,9,'blueD');r(bx+1,16,w-2,8,'cream');
+      if(!side){for(let k=bx+2;k<bx+w-1;k+=2)r(k,17,1,6,'blue');for(let y=18;y<24;y+=2)r(bx+1,y,w-2,1,'blue');}
+      else r(bx+1,17,1,6,'blue');
+      r(bx,24,w,3,'navy');r(bx+1,24,w-2,2,'blue');
+      const cx=bx+Math.floor(w/2)-1;r(cx,27,2,6,'goldD');r(cx,28,1,4,'gold');r(cx,30,2,1,'cream');
+      if(!side){r(10,25,2,5,'roseD');r(11,26,1,2,'pink');}
+    }
+    if(id==='stonebag'){
+      const bx=side?(right?5:22):8,w=side?5:16;
+      r(bx+1,23,w-2,1,'navy');r(bx,24,w,6,'navy');r(bx+1,24,w-2,5,'blue');r(bx+1,29,w-2,1,'blueD');r(bx+1,25,w-2,1,'cream');
+      const hw=side?3:8,hx=bx+Math.floor((w-hw)/2);
+      r(hx,20,hw,2,'roseD');r(hx,22,2,2,'roseD');r(hx+hw-2,22,2,2,'roseD');r(hx+1,20,hw-2,1,'pink');
+      if(!side){r(10,27,3,1,'white');r(20,27,2,1,'blueD');}
+    }
+    if(id==='targetpack'){
+      const bx=side?(right?5:22):9,w=side?5:14;
+      r(bx+2,19,w-4,1,'roseD');r(bx+1,20,w-2,1,'roseD');r(bx,21,w,8,'roseD');r(bx+1,29,w-2,1,'roseD');
+      r(bx+1,21,w-2,8,'cream');
+      if(side){r(bx+2,22,1,6,'blue');r(bx+1,24,1,2,'gold');}
+      else{r(12,21,8,8,'blueD');r(11,23,10,4,'blueD');r(13,22,6,6,'rose');r(12,24,8,2,'rose');r(14,23,4,4,'gold');r(15,24,2,2,'yellow');}
+    }
+    if(id==='trophybag'){
+      const bx=side?(right?6:22):11,w=side?4:10;
+      r(bx,20,w,6,'goldD');r(bx+1,21,w-2,5,'gold');r(bx+1,21,1,3,'yellow');r(bx+1,26,w-2,1,'goldD');
+      const cx=bx+Math.floor(w/2)-1;r(cx,27,2,3,'goldD');r(cx,27,1,2,'yellow');r(bx,30,w,2,'goldD');r(bx+1,30,w-2,1,'gold');
+      if(side){r(bx-1,21,1,4,'goldD');r(bx-2,21,1,3,'gold');}
+      else{r(8,20,3,1,'goldD');r(8,21,1,4,'goldD');r(9,24,3,2,'goldD');r(21,20,3,1,'goldD');r(23,21,1,4,'goldD');r(20,24,3,2,'goldD');r(14,22,4,3,'roseD');r(15,22,2,2,'pink');r(12,31,7,1,'navy');}
+    }
     if(id==='milkbag'){
       if(side){const bx=right?6:22;r(bx+1,17,2,3,'roseD');r(bx,20,5,10,'roseD');r(bx+1,20,3,9,'pink');r(bx+2,22,1,5,'cream');r(right?11:20,20,1,9,'roseD');}
       else{r(12,16,7,2,'roseD');r(11,18,9,2,'roseD');r(10,20,11,10,'roseD');r(12,18,7,2,'pink');r(11,20,9,9,'cream');r(11,20,9,3,'pink');r(14,24,4,3,'rose');r(15,23,2,1,'mintD');r(15,25,1,1,'yellow');r(18,21,2,8,'pink');}

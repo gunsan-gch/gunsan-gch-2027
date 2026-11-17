@@ -30,7 +30,7 @@
 .addon-walk-toggle[aria-pressed=true]{background:var(--green-soft);border-color:var(--green);color:var(--green)}
 .addon-preview-label{font-size:11px;margin:12px 0 6px;line-height:1.6!important;min-height:35px}.addon-equipped-names{font-size:11px;color:var(--navy);margin:0 0 10px;min-height:35px;line-height:1.6!important}
 #addon-show-equipped{font-size:10px;padding:5px 8px;border:0;text-decoration:underline;background:none;color:var(--muted);box-shadow:none}
-.addon-collection{min-width:0}.addon-filters{display:flex;gap:7px;margin-bottom:12px}.addon-filters button{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--paper);padding:7px 12px;cursor:pointer}.addon-filters small{opacity:.65;margin-left:4px}.addon-filters [aria-pressed=true]{color:white;background:var(--navy);border-color:var(--navy)}
+.addon-collection{min-width:0}.addon-filters{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}.addon-filters button{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--paper);padding:7px 12px;cursor:pointer}.addon-filters small{opacity:.65;margin-left:4px}.addon-filters [aria-pressed=true]{color:white;background:var(--navy);border-color:var(--navy)}
 .addon-closet-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .addon-outfit{display:grid;grid-template-columns:64px minmax(0,1fr);gap:8px;align-items:center;padding:10px 8px;border:1px solid var(--line);background:#fffdfa;position:relative}
 .addon-outfit.is-selected{border-color:var(--green);outline:1px solid var(--green);background:#eef3e8}
@@ -69,11 +69,13 @@
  .addon-unlock-result{padding:14px 10px}.addon-unlock-result h3{font-size:19px}.addon-unlock-pair{gap:8px}.addon-unlock-pair figure{padding:8px;gap:7px;flex:1;min-width:110px;display:block;text-align:center}.addon-unlock-pair strong{font-size:12px}
 }
 
-/* Best-star collection: twelve milestones wrap instead of overflowing phones. */
+/* Best-star collection: eighteen milestones wrap instead of overflowing phones. */
 .addon-star-progress{background:#f3f1e4;border:1px solid var(--line);padding:16px;margin-bottom:14px}
 .addon-star-total{display:flex;align-items:center;justify-content:space-between;gap:12px}.addon-star-total>strong{font-size:24px;color:#88651f;white-space:nowrap}.addon-star-total small{font-size:13px;color:var(--muted)}.addon-star-total>span{font-size:11px;color:var(--muted);text-align:right}
 .addon-star-progress progress{display:block;appearance:none;width:100%;height:8px;border:0;margin:12px 0;background:#e0dfcf;color:var(--green)}.addon-star-progress progress::-webkit-progress-bar{background:#e0dfcf}.addon-star-progress progress::-webkit-progress-value{background:var(--green)}.addon-star-progress progress::-moz-progress-bar{background:var(--green)}
-.addon-star-progress .addon-unlock-track{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;padding:0;border:0;margin:0 0 12px}.addon-star-progress .addon-unlock-track>span{padding:5px 1px;text-align:center;font-size:10px;min-width:0}
+.addon-star-progress .addon-unlock-track{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:4px;padding:0;border:0;margin:0 0 12px}.addon-star-progress .addon-unlock-track>span{padding:5px 1px;text-align:center;font-size:10px;min-width:0}
 .addon-next-reward{margin:0;font-size:12px}.addon-next-reward b{color:var(--green);white-space:nowrap}.addon-star-title{font-size:11px!important;color:var(--muted);margin:10px 0 0;padding-top:8px;border-top:1px solid var(--line)}.addon-star-title.is-earned{color:#77531d;font-weight:800}
 .addon-practice{margin:0 0 18px;border:1px solid var(--line);padding:12px 14px;background:var(--paper)}.addon-practice summary{font-size:13px;font-weight:700;color:var(--green);cursor:pointer}.addon-practice>p{font-size:11px;color:var(--muted);margin:10px 0}.addon-practice ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}.addon-practice li{display:flex;justify-content:space-between;align-items:center;gap:8px;border:1px solid var(--line);padding:10px;background:#fff}.addon-practice li>div{min-width:0}.addon-practice strong{display:block;font-size:12px}.addon-practice small{display:block;font-size:10px;color:var(--muted);margin-top:4px}.addon-practice .btn{font-size:11px;white-space:nowrap;padding:7px 9px}
 @media(max-width:650px){.addon-star-progress{padding:12px}.addon-star-total>strong{font-size:22px}.addon-star-total>span{font-size:10px;max-width:150px}.addon-star-progress .addon-unlock-track{grid-template-columns:repeat(6,minmax(0,1fr))}.addon-next-reward{font-size:11px}.addon-practice ul{grid-template-columns:1fr}.addon-practice{padding:10px}.addon-practice summary{font-size:12px}}
+/* A tall fitting panel must not cover the collection controls on small screens. */
+@media(max-width:650px){.addon-avatar-preview{position:relative;top:auto}.addon-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}}

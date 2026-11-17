@@ -28,9 +28,9 @@ function widthAt(data, yStart, yEnd) {
   const empty = createCanvas(sprite.width, sprite.height);
   const headIds = [null, ...art.items.filter(x => x.slot === 'head').map(x => x.id)];
   const backIds = [null, ...art.items.filter(x => x.slot === 'back').map(x => x.id)];
-  assert.equal(art.items.length, 24);
-  assert.equal(new Set(art.items.map(x => x.id)).size, 24);
-  for (const tier of [1,3,5,7,9,11,13,15,17,19,21,24]) {
+  assert.equal(art.items.length, 36);
+  assert.equal(new Set(art.items.map(x => x.id)).size, 36);
+  for (const tier of [1,3,5,7,9,11,13,15,17,19,21,24,27,30,33,36,39,42]) {
     const pair = art.items.filter(x => x.at === tier);
     assert.equal(pair.length, 2);
     assert.deepEqual(Array.from(pair, x => x.slot).sort(), ['back', 'head']);
@@ -68,7 +68,7 @@ function widthAt(data, yStart, yEnd) {
         faceChecks++;
       }
     }
-    for (const back of ['balloon', 'wings', 'bag', 'breadbag', 'starbag', 'milkbag', 'umbrella', 'noteballoon', 'planet']) {
+    for (const back of ['balloon', 'wings', 'bag', 'breadbag', 'starbag', 'milkbag', 'umbrella', 'noteballoon', 'planet', 'cloudpack', 'pianobag', 'racketbag', 'stonebag', 'targetpack', 'trophybag']) {
       const front = render(empty, 'down', frame, { back });
       const side = render(empty, 'left', frame, { back });
       // Isolate balloon body from its connecting string; other profiles use all rows.
@@ -77,7 +77,7 @@ function widthAt(data, yStart, yEnd) {
     }
   }
   let bobChecks=0;
-  const carried=['bag','breadbag','starbag','milkbag','bowback','wings','umbrella'];
+  const carried=['bag','breadbag','starbag','milkbag','bowback','wings','umbrella','cloudpack','pianobag','racketbag','stonebag','targetpack','trophybag'];
   for(const back of carried)for(const direction of directions){
     const idle=render(empty,direction,1,{back});
     for(const [frame,dy]of [[0,-1],[1,0],[2,1]]){
@@ -122,5 +122,5 @@ function widthAt(data, yStart, yEnd) {
     for(let y=0;y<52;y++)for(let x=0;x<48;x++)for(let k=0;k<4;k++)
       assert.equal(left[(y*48+x)*4+k],right[(y*48+47-x)*4+k],`cape: symmetric side placement ${frame}`);
   }
-  console.log(JSON.stringify({ renders, hairChecks, faceChecks, capeChecks, bobChecks, crownLeaks: 0, edgeClipping: 0, sideProfiles: '9 accessories × 3 frames', unlocks: '24 items at 12 best-star milestones' }));
+  console.log(JSON.stringify({ renders, hairChecks, faceChecks, capeChecks, bobChecks, crownLeaks: 0, edgeClipping: 0, sideProfiles: '15 accessories × 3 frames', unlocks: '36 items at 18 best-star milestones' }));
 })().catch(error => { console.error(error); process.exitCode = 1; });
