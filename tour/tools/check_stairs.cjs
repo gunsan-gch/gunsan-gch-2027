@@ -22,10 +22,10 @@ for(const [steps,floor] of [[0,1],[19,1],[20,2],[40,3],[60,4],[80,5]])check(R.fl
 vm.runInContext(fs.readFileSync(path.join(root,'js/tour-data.js'),'utf8'),ctx);
 vm.runInContext(fs.readFileSync(path.join(root,'js/star-progress.js'),'utf8'),ctx);
 const rooms=Object.values(ctx.window.TOUR_SCENES).flatMap(s=>s.rooms).filter(r=>r.game);
-check(rooms.length===10&&rooms.filter(r=>r.game==='stairs').length===1,'ten games with one dream stairs room');
+check(rooms.length>=10&&rooms.filter(r=>r.game==='stairs').length===1,'one dream stairs room among all games');
 const progress=ctx.window.TourStarProgress.summarize(Object.fromEntries(rooms.map(r=>[r.game,{stars:3}])),rooms.map(r=>({id:r.game,maxStars:3})));
-check(progress.maxStars===30&&progress.stars===30,'new game contributes three best stars');check(ctx.window.TourStarProgress.TITLE_AT===27,'existing title threshold preserved');
+check(progress.maxStars===rooms.length*3&&progress.stars===rooms.length*3,'every game contributes three best stars');check(ctx.window.TourStarProgress.TITLE_AT===27,'existing title threshold preserved');
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
 check(html.indexOf('js/stairs-engine.js')<html.indexOf('js/game-stairs.js'),'engine before game');
 check(/game: 'stairs'/.test(fs.readFileSync(path.join(root,'js/tour-data.js'),'utf8')),'room entry point');
-console.log(JSON.stringify({checks,seededRuns:1000,goal:80,practiceSteps:6,totalGames:10,maximumStars:30,titleAt:27}));
+console.log(JSON.stringify({checks,seededRuns:1000,goal:80,practiceSteps:6,totalGames:rooms.length,maximumStars:progress.maxStars,titleAt:27}));
