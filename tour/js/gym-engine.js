@@ -15,7 +15,13 @@
   }
   function curling({ practice = false, random = Math.random } = {}) {
     const state = { kind: 'curling', phase: 'aim', practice, throws: 0, limit: practice ? 1 : 3,
-      angle: 0, power: 60, score: 0, elapsed: 0, stones: [], event: 0, message: '방향과 힘을 정해 스톤을 밀어 봐!' };
+      angle: 0, power: 0, score: 0, elapsed: 0, stones: [], event: 0, message: '출발 위치를 보고 방향과 힘을 정해 봐!' };
+    // Visible starting positions vary; the throw itself remains deterministic.
+    // Both wings come first, so a fixed straight shot cannot solve the round.
+    const left = 92 + Math.floor(random01(random) * 17), right = 212 + Math.floor(random01(random) * 17);
+    const center = 152 + Math.floor(random01(random) * 17);
+    state.launches = random01(random) < .5 ? [left, right, center] : [right, left, center];
+    state.launchX = state.launches[0];
     if (!practice) state.stones.push(
       { x: 140 + random01(random) * 12, y: 55 + random01(random) * 10, vx: 0, vy: 0, owner: 'mint' },
       { x: 180 + random01(random) * 10, y: 75 + random01(random) * 10, vx: 0, vy: 0, owner: 'mint' });
@@ -23,12 +29,12 @@
     const score = () => state.stones.filter(s => s.owner === 'coral').reduce((sum, s) => sum + curlingPoints(s.x, s.y), 0);
     function aim(angle, power) {
       if (state.phase !== 'aim') return false;
-      state.angle = clamp(angle, -28, 28); state.power = clamp(power, 20, 100); return true;
+      state.angle = clamp(angle, -28, 28); state.power = clamp(power, 0, 100); return true;
     }
     function release() {
-      if (state.phase !== 'aim' || state.throws >= state.limit) return false;
-      const a = state.angle * Math.PI / 180, v = 95 + state.power * 2.8;
-      state.stones.push({ x: 160, y: 214, vx: Math.sin(a) * v, vy: -Math.cos(a) * v, owner: 'coral' });
+      if (state.phase !== 'aim' || state.throws >= state.limit || state.power <= 0) return false;
+      const a = state.angle * Math.PI / 180, v = state.power * 4.3;
+      state.stones.push({ x: state.launchX, y: 214, vx: Math.sin(a) * v, vy: -Math.cos(a) * v, owner: 'coral' });
       state.throws++; state.phase = 'rolling'; state.message = '스톤이 멈출 때까지 기다려 봐!'; state.event++;
       rollingTime = 0; accumulated = 0; return true;
     }
@@ -54,7 +60,8 @@
       if (rollingTime > 8 || state.stones.every(s => !s.vx && !s.vy)) {
         state.stones.forEach(s => { s.vx = 0; s.vy = 0; }); state.score = score();
         state.phase = state.throws === state.limit ? 'finished' : 'aim'; state.event++;
-        state.message = state.phase === 'finished' ? `내 스톤 최종 합계 ${state.score}점!` : `${state.throws}번째 스톤 도착! 다음 스톤을 밀어 봐.`;
+        if (state.phase === 'aim') { state.launchX = state.launches[state.throws]; state.angle = 0; state.power = 0; }
+        state.message = state.phase === 'finished' ? `내 스톤 최종 합계 ${state.score}점!` : `${state.throws}번째 스톤 도착! 새 출발 위치에서 다시 조준해 봐.`;
       }
     }
     function advance(seconds) {
