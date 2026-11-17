@@ -1875,3 +1875,6 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
   .senior-flow.has-final .senior-metric > span { font-size: .78rem; }
   .senior-flow.has-final .senior-metric.is-final > span { padding: 2px 8px; }
 }
+/* 첫 화면 숫자 카드: 강조 성과 (heroHighlight) */
+.hero-hooks li.is-highlight a { background: #eef4ff; border-color: #bcd0f7; }
+.hero-hooks li.is-highlight b { color: var(--blue); }

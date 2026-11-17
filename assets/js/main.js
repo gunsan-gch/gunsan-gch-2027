@@ -1067,14 +1067,17 @@
       hooks.push({ href: "#briefing", big: phase === "ongoing" ? "오늘" : (dLabel || shortDay(start)), label: "입학설명회", small: shortDay(start) + " " + seoulParts(start).hh + ":" + seoulParts(start).mm });
     }
     if (D.employment) {
-      hooks.push({ href: "#careers", big: "취업현황", label: "선배들의 취업처", small: "공공기관·금융·기업" });
+      // heroHighlight 가 있으면 '취업현황' 자리에 강조 성과를 보여 줌
+      var hl = D.heroHighlight;
+      hooks.push(hl && has(hl.big) ? { href: hl.href || "#careers", big: hl.big, label: hl.label, small: hl.small, cls: "is-highlight" }
+        : { href: "#careers", big: "취업현황", label: "선배들의 취업처", small: "공공기관·금융·기업" });
     }
     hooks.push({ href: "#departments", big: (D.departments || []).length + "개 학과", label: D.totalSeats + "명 모집", small: "학급당 " + D.seatsPerClass + "명" });
     var g2 = RM && RM.grades && RM.grades[1];
     if (g2) hooks.push({ href: "#" + g2.id, big: g2.grade, label: "AI 중점학년", small: "운영 예정" });
     box.style.setProperty("--n", Math.min(hooks.length, 4));
     box.innerHTML = hooks.slice(0, 4).map(function (h) {
-      return '<li><a href="' + esc(h.href) + '"><b>' + esc(h.big) + '</b><span>' + esc(h.label) + '</span>' + (h.small ? '<small>' + esc(h.small) + '</small>' : '') + '</a></li>';
+      return '<li' + (h.cls ? ' class="' + h.cls + '"' : '') + '><a href="' + esc(h.href) + '"><b>' + esc(h.big) + '</b><span>' + esc(h.label) + '</span>' + (h.small ? '<small>' + esc(h.small) + '</small>' : '') + '</a></li>';
     }).join("");
   })();
 

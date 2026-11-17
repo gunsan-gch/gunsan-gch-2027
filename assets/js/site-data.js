@@ -384,6 +384,9 @@ window.SITE_DATA = {
     questionsNote: "정답을 보는 면접이 아니니, 자기 생각을 솔직하게 말하면 됩니다."
   },
 
+  // 첫 화면 숫자 카드의 '취업현황' 자리에 보여 줄 강조 성과. 내리려면 null
+  heroHighlight: { big: "3년 연속", label: "코레일 최종 합격", small: "한국철도공사", href: "#careers" },
+
   /* ---------------- 공개 여부 스위치 ---------------- */
   // 최종 모집요강의 일정과 다르면 admissionSchedule 을 고치거나 false 로 두세요.
   publishDetailedAdmissionSchedule: true,
