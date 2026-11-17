@@ -1270,7 +1270,7 @@ window.SITE_DATA = {
   currentSeniors: {
     title: "현 고3 취업·진로 현황",
     cohort: "2026년 고3 · 2027년 졸업예정",
-    updatedAt: "2026-10-19",
+    updatedAt: "2026-11-17",
     // 최종 합격 카드 (맨 앞줄, 위에서부터 순서대로 표시). tone: "army"·"airforce" 는 카드 윗선 색
     finals: [
       {
@@ -1340,6 +1340,7 @@ window.SITE_DATA = {
         short: "코레일", // 첫 화면 숫자 카드에 쓰는 짧은 이름
         applied: 3,
         firstStagePassed: 2,
+        finalPassed: 1, // 최종 결과가 나오면 입력 (있으면 '최종 결과 발표 전' 대신 최종 합격 인원 표시)
         logo: {
           src: "assets/img/employers/korail.webp",
           width: 265,
