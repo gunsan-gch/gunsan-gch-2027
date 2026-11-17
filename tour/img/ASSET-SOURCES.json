@@ -520,6 +520,69 @@
       "description": "별을 향해 올라가는 세 계단 완주 도장",
       "sha256": "6fbedf9a7b7848c81cac19869c76525669a038aecd54c5c630cab676599980e0",
       "generator": "tools/make_stairs_game_art.mjs"
+    },
+    "games/melody/guide-hyuna.png": {
+      "output": "games/melody/guide-hyuna.png",
+      "kind": "game-pixel-art",
+      "description": "코랄 리본과 짧은 옆땋기, 남색 교복에 지휘봉을 든 현아 선배",
+      "sha256": "8144b46cf3024843f6f57fe12dabb394a8954d3a17d7d4f7a4b74a68a145fe27",
+      "generator": "tools/make_melody_game_art.mjs"
+    },
+    "games/melody/stage.png": {
+      "output": "games/melody/stage.png",
+      "kind": "game-pixel-art",
+      "description": "민트 커튼과 창문, 피아노·스피커가 있는 차분한 음악실 공연 공간",
+      "sha256": "ba388fcbbb21314f9cdb715e3d4a5bcf9ac97dc34d386fa7419e1369ce655220",
+      "generator": "tools/make_melody_game_art.mjs"
+    },
+    "games/melody/trophy.png": {
+      "output": "games/melody/trophy.png",
+      "kind": "game-pixel-art",
+      "description": "민트 받침 위의 금빛 음표 트로피",
+      "sha256": "b300d558e34a74333b7b52eafd993841490c0667b40bd6c501f24cd352522a32",
+      "generator": "tools/make_melody_game_art.mjs"
+    },
+    "games/melody/song-morning.png": {
+      "output": "games/melody/song-morning.png",
+      "kind": "game-pixel-art",
+      "description": "등굣길 아침 햇살과 민트 책가방",
+      "sha256": "ff0b10122b225815ca9ed645f2a780e74dae1fe163cd88fca9d843920057a951",
+      "generator": "tools/make_melody_game_art.mjs"
+    },
+    "games/melody/song-window.png": {
+      "output": "games/melody/song-window.png",
+      "kind": "game-pixel-art",
+      "description": "민트 커튼 너머 구름이 보이는 창가",
+      "sha256": "d15c3baeb1ebbad95d097688a7f99adf05b5b70a63a16e632c63f5c61bb120fa",
+      "generator": "tools/make_melody_game_art.mjs"
+    },
+    "games/melody/song-break.png": {
+      "output": "games/melody/song-break.png",
+      "kind": "game-pixel-art",
+      "description": "쉬는 시간의 샌드위치와 우유",
+      "sha256": "ff4a3e69b72336208ca1fb8d7a0a0ec03aad007aebc1cae97c355d454590e4f4",
+      "generator": "tools/make_melody_game_art.mjs"
+    },
+    "games/melody/song-stars.png": {
+      "output": "games/melody/song-stars.png",
+      "kind": "game-pixel-art",
+      "description": "별빛을 품은 초승달",
+      "sha256": "c097d5b8eca202bb3590dd8eca74288dc54a46e079d5d5b08209f2bc35d5d250",
+      "generator": "tools/make_melody_game_art.mjs"
+    },
+    "games/melody/song-attic.png": {
+      "output": "games/melody/song-attic.png",
+      "kind": "game-pixel-art",
+      "description": "따뜻하게 빛나는 꿈다락 창문",
+      "sha256": "0bbe1450581f67bdd5aff84cdb5d91d30fbf378b52c6de8c2f538a299f15e8bf",
+      "generator": "tools/make_melody_game_art.mjs"
+    },
+    "games/stamps/melody.png": {
+      "output": "games/stamps/melody.png",
+      "kind": "game-pixel-art",
+      "description": "민트빛 음표가 새겨진 금테 멜로디 완주 도장",
+      "sha256": "b18b71dcf951855e4b512b644a15c3f07d2ab14b782763d2e6099463d2744a60",
+      "generator": "tools/make_melody_game_art.mjs"
     }
   }
 }

@@ -1,0 +1,91 @@
+/* The music room's four-colour toy keyboard uses the tour's existing pixel palette. */
+#game:has(.melody-game), #game:has(.melody-summary) { width: min(600px, 100% - 24px); }
+.melody-game { color: var(--navy); display: grid; gap: 8px; max-width: 540px; margin: auto; }
+.melody-song { display: flex; align-items: center; gap: 10px; }
+.melody-song img { image-rendering: pixelated; flex: none; }
+.melody-song h3 { font-family: var(--font-title); font-size: 23px; margin: 0; line-height: 1.3; }
+.melody-song div>span { font-size: 11px; color: var(--green); font-weight: 700; }
+.melody-random { font-size: 11px; text-align: right; margin-left: auto; line-height: 1.6; }
+.melody-random small { font-size: 10px; color: var(--muted); }
+.melody-stage { height: 152px; position: relative; overflow: hidden; border: 2px solid var(--navy); background: #edf3e7 url('../img/games/melody/stage.png') center / cover no-repeat; image-rendering: pixelated; }
+.melody-hyuna { position: absolute; bottom: 24px; left: calc(36% - 32px); width: 64px; height: 64px; image-rendering: pixelated; }
+.melody-player { position: absolute; bottom: 12px; left: calc(64% - 48px); width: 96px; height: 104px; image-rendering: pixelated; }
+.melody-name, .melody-player-name { position: absolute; bottom: 4px; font-size: 10px; background: #fffbed; padding: 0 5px; border: 1px solid #c3cec1; transform: translateX(-50%); }
+.melody-name { left: 36%; }.melody-player-name { left: 64%; }
+.melody-float-note { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); font-family: var(--font-title); color: #486d63; font-size: 26px; }
+.melody-stage.is-playing .melody-hyuna { transform: translateY(-2px); }
+.melody-hud { display: flex; gap: 8px; align-items: center; background: var(--navy); color: #fffbed; padding: 6px 8px; font-size: 12px; }
+.melody-lives { color: #ffc4c6; margin-left: auto; white-space: nowrap; font-size: 13px; }
+.melody-sound { background: #fffbed; border: 0; border-radius: 0; color: var(--navy); padding: 6px; min-height: 32px; font-size: 11px; cursor: pointer; }
+.melody-prompt { text-align: center; }
+.melody-phase { font-family: var(--font-title); font-size: 19px; }
+.melody-hint { font-size: 12px; margin: 2px 0 0; line-height: 1.4; }
+.melody-sequence { display: flex; justify-content: center; gap: 6px; min-height: 30px; }
+.melody-sequence>span { display: grid; place-items: center; width: 30px; height: 30px; border: 2px solid #b8c6ba; color: #53685a; background: #eff3e9; font-size: 12px; font-weight: 700; }
+.melody-sequence>span.is-current { border-color: var(--navy); background: #f7d887; color: var(--navy); }
+.melody-sequence>span.is-entered { background: #d8eddf; border-color: #4d7c68; color: #234e3b; }
+.melody-pads { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 10px; padding: 0 0 5px; }
+.melody-pad { position: relative; display: grid; place-items: center; min-height: 92px; padding: 7px; color: #14285a; border: 2px solid #14285a; border-radius: 0; box-shadow: 0 5px 0 var(--key-dark); background: var(--key-colour); cursor: pointer; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.melody-pad-0 { --key-colour: #f8c4c2; --key-dark: #ad6577; }
+.melody-pad-1 { --key-colour: #f8e1a4; --key-dark: #b28e4f; }
+.melody-pad-2 { --key-colour: #c3e6d6; --key-dark: #598e7c; }
+.melody-pad-3 { --key-colour: #c4def2; --key-dark: #638aa9; }
+.melody-pad>span { position: absolute; top: 4px; left: 7px; font-size: 11px; }
+.melody-pad b { font-family: var(--font-title); font-size: 28px; line-height: 1.2; }
+.melody-pad kbd { font-family: inherit; font-size: 11px; border: 1px solid #637287; background: #ffffff70; min-width: 22px; }
+.melody-pad:disabled { cursor: default; opacity: 1; }
+.melody-pad.is-lit, .melody-pad:active:not(:disabled) { background: #fffdf0; outline: 4px solid var(--key-dark); outline-offset: -7px; transform: translateY(4px); box-shadow: 0 1px 0 var(--key-dark); }
+.melody-actions { display: flex; gap: 8px; align-items: stretch; }
+.melody-actions .btn { flex: 1; min-height: 42px; padding: 8px 10px; font-size: 13px; }
+.melody-actions .melody-main { flex: 1.7; }
+.melody-actions .btn:disabled { opacity: .65; cursor: default; }
+.melody-game [hidden] { display: none !important; }
+.melody-help, .melody-rewards { font-size: 11px; text-align: center; margin: 0; color: var(--muted); line-height: 1.4; }
+.melody-rewards { color: var(--navy); }
+.melody-audio-warning { margin: 0; font-size: 12px; color: #80452f; text-align: center; }
+.melody-summary { text-align: center; }
+.melody-summary img { image-rendering: pixelated; }
+.melody-summary h3 { font-family: var(--font-title); font-size: 23px; margin: 4px 0; }
+.melody-summary p { margin: 4px 0; font-size: 14px; }
+@media(max-width: 760px) {
+  #game:has(.melody-game), #game:has(.melody-summary) { width: 100%; }
+  #game:has(.melody-game) .game-body { padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px)); }
+  .melody-stage { height: 128px; }
+  .melody-pads { gap: 7px; }
+  .melody-pad { min-height: 82px; }
+}
+@media(max-width: 599px) and (max-height: 700px) {
+  .melody-game { gap: 6px; }
+  .melody-stage { height: 102px; }
+  .melody-hyuna { width: 64px; height: 64px; left: calc(36% - 32px); bottom: 17px; }
+  .melody-player { width: 72px; height: 78px; left: calc(64% - 36px); bottom: 10px; }
+  .melody-song img { width: 40px; height: 40px; }
+  .melody-song h3 { font-size: 20px; }
+  .melody-pad { min-height: 72px; }
+  .melody-phase { font-size: 17px; }
+}
+@media(max-height: 500px) and (min-width: 600px) {
+  #game:has(.melody-game) { width: 100%; }
+  .melody-game { max-width: 900px; grid-template-columns: minmax(0,1fr) minmax(0,1.2fr); gap: 5px 14px; }
+  .melody-song { grid-column: 1; grid-row: 1; }
+  .melody-song img { width: 40px; height: 40px; }
+  .melody-song h3 { font-size: 20px; }
+  .melody-random small { display: none; }
+  .melody-stage { grid-column: 1; grid-row: 2 / 6; height: 148px; }
+  .melody-hud { grid-column: 2; grid-row: 1; font-size: 11px; padding: 4px 6px; }
+  .melody-prompt { grid-column: 2; grid-row: 2; }
+  .melody-phase { font-size: 17px; }
+  .melody-hint { font-size: 11px; }
+  .melody-sequence { grid-column: 2; grid-row: 3; }
+  .melody-pads { grid-column: 2; grid-row: 4; }
+  .melody-pad { min-height: 64px; }
+  .melody-pad b { font-size: 23px; }
+  .melody-actions { grid-column: 2; grid-row: 5; }
+  .melody-actions .btn { min-height: 36px; padding: 5px 7px; font-size: 12px; }
+  .melody-help { grid-column: 1; grid-row: 6; }
+  .melody-rewards { grid-column: 2; grid-row: 6; }
+  .melody-audio-warning { grid-column: 1 / 3; }
+}
+@media(prefers-reduced-motion: reduce) {
+  .melody-pad.is-lit, .melody-pad:active:not(:disabled), .melody-stage.is-playing .melody-hyuna { transform: none; }
+}
