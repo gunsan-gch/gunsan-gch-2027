@@ -52,10 +52,10 @@ check(e.listen() && e.state.entered === 0 && e.state.lives === 3, 'replay clears
 check(e.pause() && !e.listened() && e.press(0) === 'ignored', 'pause cancels listening and input');
 check(e.listen() && e.listened() && e.state.entered === 0, 'resume starts current pattern again');
 load('js/tour-data.js'); load('js/star-progress.js');
-const rooms = Object.values(ctx.window.TOUR_SCENES).flatMap(s => s.rooms).filter(r => r.game);
-check(rooms.length === 11 && rooms.filter(r => r.game === 'melody' && r.name === '음악실').length === 1, 'eleven games, one music-room entry');
+const rooms = Object.values(ctx.window.TOUR_SCENES).flatMap(s => s.rooms).flatMap(r => (r.games || (r.game ? [r.game] : [])).map(id => ({...r,game:id})));
+check(rooms.length >= 11 && rooms.filter(r => r.game === 'melody' && r.name === '음악실').length === 1, 'all games, one music-room entry');
 const progress = ctx.window.TourStarProgress.summarize(Object.fromEntries(rooms.map(r => [r.game, {stars:3}])), rooms.map(r => ({id:r.game,maxStars:3})));
-check(progress.maxStars === 33 && progress.stars === 33 && ctx.window.TourStarProgress.TITLE_AT === 27, '33 stars with existing title threshold');
+check(progress.maxStars === rooms.length * 3 && progress.stars === rooms.length * 3 && ctx.window.TourStarProgress.TITLE_AT === 27, 'all games with existing title threshold');
 const html = fs.readFileSync(path.join(root,'index.html'),'utf8');
 check(html.indexOf('js/melody-engine.js') < html.indexOf('js/game-melody.js') && html.indexOf('js/melody-audio.js') < html.indexOf('js/game-melody.js'), 'dependencies load before game');
 const manifest = JSON.parse(fs.readFileSync(path.join(root,'img/ASSET-SOURCES.json'),'utf8')).sources;

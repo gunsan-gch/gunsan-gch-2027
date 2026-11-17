@@ -32,7 +32,7 @@ window.TOUR_GAMES = window.TOUR_GAMES || {};
 window.tourGame = (() => {
   const GAMES = window.TOUR_GAMES;
   const STAMP_KEY = 'gch-tour-stamps';
-  const STAMP_ART = new Set(['bakery', 'typing', 'cafe', 'cashier', 'rain', 'ai', 'career', 'phishing', 'interview', 'stairs', 'melody']);
+  const STAMP_ART = new Set(['bakery', 'typing', 'cafe', 'cashier', 'rain', 'ai', 'career', 'phishing', 'interview', 'stairs', 'melody', 'curling', 'target', 'badminton']);
   function stampArt(id, className) {
     const seal = document.createElement('span');
     seal.className = className;
@@ -116,12 +116,23 @@ window.tourGame = (() => {
         done: result => finish(session, result),
         announce,
         reducedMotion,
+        switchGame: next => switchGame(session, next),
         close: () => dialog.close()
       }) || null;
     } catch (e) {
       body.textContent = '게임을 불러오지 못했어요. 창을 닫고 다시 열어 주세요.';
       console.error(e);
     }
+    return true;
+  }
+
+  // Switching sports follows the same close/cleanup lifecycle as a replay.
+  function switchGame(session, next) {
+    if (session !== current || session.transitioning || !GAMES[next]) return false;
+    session.transitioning = true;
+    const from = opener;
+    dialog.addEventListener('close', () => open(next, { name: GAMES[next].room || session.roomName }, from), { once: true });
+    dialog.close();
     return true;
   }
 
@@ -197,6 +208,12 @@ window.tourGame = (() => {
     back.addEventListener('click', () => dialog.close());
 
     actions.append(retry);
+    if (game.hub && GAMES[game.hub]) {
+      const choose = document.createElement('button');
+      choose.type = 'button'; choose.className = 'btn btn-primary'; choose.textContent = '다른 종목 도전';
+      choose.addEventListener('click', () => switchGame(session, game.hub));
+      actions.append(choose);
+    }
     if (game.cta) {
       const cta = document.createElement('a');
       cta.className = 'btn btn-primary';
@@ -254,7 +271,7 @@ window.tourGame = (() => {
     const wanted = new URLSearchParams(location.search).get('game');
     if (!wanted || !GAMES[wanted]) return;
     const rooms = Object.values(window.TOUR_SCENES || {}).flatMap(scene => scene.rooms || []);
-    open(wanted, rooms.find(r => r.game === wanted) || null, null);
+    open(wanted, rooms.find(r => r.game === wanted || r.games?.includes(wanted)) || null, null);
   };
   /* ---------- 도장판 (스탬프 투어): 게임이 있는 공간과 모은 도장을 한눈에 ---------- */
 
@@ -269,8 +286,9 @@ window.tourGame = (() => {
   function stampRooms() {
     const scenes = window.TOUR_SCENES || {};
     return (window.TOUR_ORDER || Object.keys(scenes)).flatMap(sceneId => (scenes[sceneId]?.rooms || [])
-      .filter(room => room.game && GAMES[room.game])
-      .map(room => ({ room, sceneId, floor: scenes[sceneId].name, game: GAMES[room.game] })));
+      .flatMap(room => (room.games || (room.game ? [room.game] : []))
+        .filter(id => GAMES[id] && !GAMES[id].isHub)
+        .map(id => ({ room: { ...room, game: id }, sceneId, floor: scenes[sceneId].name, game: GAMES[id] }))));
   }
 
   /** Highest stars across playable rooms; never accumulates repeat attempts. */

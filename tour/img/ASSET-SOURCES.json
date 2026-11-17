@@ -583,6 +583,118 @@
       "description": "민트빛 음표가 새겨진 금테 멜로디 완주 도장",
       "sha256": "b18b71dcf951855e4b512b644a15c3f07d2ab14b782763d2e6099463d2744a60",
       "generator": "tools/make_melody_game_art.mjs"
+    },
+    "gym-guide-sua.png": {
+      "output": "games/gym/guide-sua.png",
+      "kind": "game-art",
+      "description": "산호색 머리띠와 높은 올림머리, 민트 체육복으로 손을 흔드는 수아 선배",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "3b94edaf47f96d82e1a4d3331e7dbc569ed4d57672c46935532f02bf4009602a"
+    },
+    "gym-gym-hall.png": {
+      "output": "games/gym/gym-hall.png",
+      "kind": "game-art",
+      "description": "나무 바닥 위 컬링·원형 표적·배드민턴의 세 구역이 있는 체육관",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "87e53fca7a558cc19604fdb834607c7a3e6642d78d2462971cd975a543d2cc46"
+    },
+    "gym-badminton-court.png": {
+      "output": "games/gym/badminton-court.png",
+      "kind": "game-art",
+      "description": "중앙 높이 100의 네트와 넓은 선수 공간이 있는 민트 배드민턴 코트",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "2e32b738f6c8817388acdd1b6548244da1d95f7353b780134a42b42ba06820f9"
+    },
+    "gym-curling-rink.png": {
+      "output": "games/gym/curling-rink.png",
+      "kind": "game-art",
+      "description": "중심 160,64 반지름 45의 하우스와 160,210 출발점이 있는 나무 컬링 레인",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "6d2df07c8b0773d405cf800e8b8d9e98d91e6d08dd6a456d58a425bb395dc9ef"
+    },
+    "gym-target-board.png": {
+      "output": "games/gym/target-board.png",
+      "kind": "game-art",
+      "description": "중심 120,120 반지름 96의 민트·크림·코랄·금빛 원형 표적",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "322510aaf73215ae170722f6de3a8ba89b6ca81970871ae31ca13611fe07bfbd"
+    },
+    "gym-racket.png": {
+      "output": "games/gym/racket.png",
+      "kind": "game-art",
+      "description": "민트 테두리와 산호색 손잡이의 배드민턴 라켓",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "9aa7a89652e5137703869c21486564450b841eef48185a16e44f8335c588ee4c"
+    },
+    "gym-shuttle.png": {
+      "output": "games/gym/shuttle.png",
+      "kind": "game-art",
+      "description": "크림색 깃털과 금빛 코르크의 셔틀콕",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "54adbeb19b47685f3de148602ca9190375f325db73056f264e3c0aa0e51e6b62"
+    },
+    "gym-stone-coral.png": {
+      "output": "games/gym/stone-coral.png",
+      "kind": "game-art",
+      "description": "산호색 손잡이와 회색 몸체의 컬링 스톤",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "38b25eb5c45e3ac328cc7408cb163fd6eff2fb812baffb1fcd915587e052f376"
+    },
+    "gym-stone-mint.png": {
+      "output": "games/gym/stone-mint.png",
+      "kind": "game-art",
+      "description": "민트색 손잡이와 회색 몸체의 컬링 스톤",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "448d327c740fd5c498989a31296293194bb87faed1cd7115d90fe38cd7afe8bd"
+    },
+    "gym-trophy.png": {
+      "output": "games/gym/trophy.png",
+      "kind": "game-art",
+      "description": "세 종목의 메달과 민트 받침을 갖춘 금빛 체육관 완주 트로피",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "487f5f791dab19551d24910650e0287e1292fa836fc12a4451ce646c42a271dd"
+    },
+    "gym-icon-curling.png": {
+      "output": "games/gym/icon-curling.png",
+      "kind": "game-art",
+      "description": "curling 종목 픽셀 아이콘",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "49c18e888349c9549f6dbed68fb61f30f0c9b0913d31e4d9701cac91efe7eba5"
+    },
+    "gym-curling.png": {
+      "output": "games/stamps/curling.png",
+      "kind": "game-art",
+      "description": "curling 종목 금테 완주 도장",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "ad4fe2d945f8f0c4a2f13919d02a96aaea6f4231688bde8b188002ce1c291867"
+    },
+    "gym-icon-target.png": {
+      "output": "games/gym/icon-target.png",
+      "kind": "game-art",
+      "description": "target 종목 픽셀 아이콘",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "8b0cd7181dae0745a0d4d9eb436c67e3df81157a2ecfdae0b793abbf79fbfd4e"
+    },
+    "gym-target.png": {
+      "output": "games/stamps/target.png",
+      "kind": "game-art",
+      "description": "target 종목 금테 완주 도장",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "658a25a2a03b5b11e6bc0932ef4a4acbed497e0771ff4d8d6ef98e3fbb507eb2"
+    },
+    "gym-icon-badminton.png": {
+      "output": "games/gym/icon-badminton.png",
+      "kind": "game-art",
+      "description": "badminton 종목 픽셀 아이콘",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "48b1e2dfa6071ac8daee8560e06b01c76446e76fe708fbc2d8d8b886c4835eb0"
+    },
+    "gym-badminton.png": {
+      "output": "games/stamps/badminton.png",
+      "kind": "game-art",
+      "description": "badminton 종목 금테 완주 도장",
+      "generator": "tools/make_gym_game_art.mjs",
+      "sha256": "523f6aa6c8be6934c33b15e6e36e36308bc8a1469a5f51a45523dcab11b5736e"
     }
   }
 }
