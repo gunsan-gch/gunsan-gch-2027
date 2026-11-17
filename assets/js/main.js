@@ -1011,10 +1011,12 @@
       var w = scheduleWindow(list[i]);
       if (!w || now >= w.to) continue;
       var m = w.m;
+      var dd = seoulParts(w.from).dayIndex - seoulParts(now).dayIndex;
+      var dday = now >= w.from ? "접수 중" : dd > 0 ? "D-" + dd : "D-DAY";
       return {
-        href: "#admissions", big: now >= w.from ? "접수 중" : m[2] + "/" + m[3] + "(" + m[4] + ")",
+        href: "#admissions", big: dday, dday: dday,
         label: list[i].short || list[i].label,
-        small: "~" + m[5] + "/" + m[6] + "(" + m[7] + ")" + (m[8] ? " " + (+m[8]) + "시" : ""),
+        small: m[2] + "/" + m[3] + "~" + m[5] + "/" + m[6] + (m[8] ? " " + (+m[8]) + "시" : ""),
         item: list[i], from: w.from, to: w.to
       };
     }
@@ -1039,15 +1041,14 @@
         (iv.questionsNote ? '<p class="iv-note">' + esc(iv.questionsNote) + '</p>' : '') + '</details>' : '');
     box.hidden = false;
   })();
-  // 첫 화면 원서 안내 띠: 다음 원서접수에 원서 주소(formUrl)가 있으면 접수 마감 전까지 표시
+  // 첫 화면 원서 안내 띠: 다음 원서접수 D-day(접수 중) 표시, 원서 주소(formUrl)가 있으면 다운로드 버튼, 마감 후 다음 전형으로
   (function applyNote() {
     var box = $("apply-note"), ap = nextApplication();
-    if (!box || !ap || !has(ap.item.formUrl)) return;
-    var dd = seoulParts(ap.from).dayIndex - seoulParts(now).dayIndex;
-    var badge = now >= ap.from ? "접수 중" : (dd > 0 ? "D-" + dd : "D-DAY");
-    box.innerHTML = '<p class="an-text"><span class="an-title"><b class="an-badge">' + badge + '</b>' + esc(ap.item.label) + '</span>' +
+    if (!box || !ap) return;
+    box.innerHTML = '<p class="an-text"><span class="an-title"><b class="an-badge">' + ap.dday + '</b>' + esc(ap.item.label) + '</span>' +
       '<span class="an-date">' + esc(String(ap.item.value).replace(/^\d{4}\.\s*/, "")) + '</span></p>' +
-      formBtn(ap.item, "btn an-btn", "hero");
+      (has(ap.item.formUrl) ? formBtn(ap.item, "btn an-btn", "hero")
+        : '<a class="btn an-btn" href="#admissions">' + icon("info") + '<span>모집 인원·지원 안내</span></a>');
     box.hidden = false;
   })();
   (function heroHooks() {
