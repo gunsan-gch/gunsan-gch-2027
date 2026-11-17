@@ -1867,3 +1867,11 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 }
 .iv-group { margin: 10px 0 4px; font-size: .9rem; font-weight: 800; color: var(--teal-dark); }
 .iv-group:first-of-type { margin-top: 4px; }
+/* 1차 합격 카드에 최종 합격까지 세 단계가 있을 때: 좁은 휴대폰에서 간격·숫자 줄임 */
+@media (max-width: 420px) {
+  .senior-card.is-exam .senior-flow.has-final { gap: 6px; }
+  .senior-flow.has-final .senior-arrow { margin: 0; }
+  .senior-flow.has-final .senior-metric strong { font-size: 1.55rem; }
+  .senior-flow.has-final .senior-metric > span { font-size: .78rem; }
+  .senior-flow.has-final .senior-metric.is-final > span { padding: 2px 8px; }
+}
