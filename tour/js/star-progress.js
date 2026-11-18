@@ -7,6 +7,20 @@
     if (value > max) value = Math.round(value * max / 9); // former nine-star games
     return Math.max(0, Math.min(max, Math.floor(value)));
   }
+  const pointsOrNull = value => Number.isSafeInteger(value) && value >= 0 ? value : null;
+  function stampRecord(previous, stars, max, points, date) {
+    const earned = normalizeStars(stars, max);
+    const record = { ...previous };
+    if (!previous || earned > previous.stars) {
+      record.stars = earned;
+      record.at = date;
+    }
+    const pointsThisRun = pointsOrNull(points);
+    if (pointsThisRun !== null) {
+      record.bestScore = Math.max(pointsThisRun, pointsOrNull(previous?.bestScore) ?? 0);
+    }
+    return record;
+  }
   function summarize(stamps, entries) {
     const seen = new Set();
     const games = entries.filter(entry => {
@@ -27,5 +41,5 @@
       title: (migrated && saved.title === true) || progress.stars >= TITLE_AT };
   }
   const emptyWardrobe = () => ({ version: 2, unlocked: [], title: false });
-  window.TourStarProgress = { normalizeStars, summarize, wardrobe, emptyWardrobe, TITLE_AT, TITLE };
+  window.TourStarProgress = { normalizeStars, pointsOrNull, stampRecord, summarize, wardrobe, emptyWardrobe, TITLE_AT, TITLE };
 })();

@@ -14,6 +14,23 @@
     return { tier, r, x: clamp(x, r, width-r), y: clamp(y, r, height-r),
       vx: 0, vy: 0, supported: false, landed: false, danger: 0 };
   }
+  const orders = [1, 2, 1, 3, 2, 4];
+  const requested = world => orders[world.deliveries % orders.length];
+  const fee = tier => 3 * 2 ** tier;
+  function stock(world) {
+    // Ship the highest matching item first to free headroom.
+    return world.bodies.reduce((best, p) => p.tier === requested(world) && (p.landed || p.crafted)
+      && (!best || p.y < best.y) ? p : best, null);
+  }
+  function deliver(world) {
+    const item = stock(world);
+    if (!item) return null;
+    world.bodies.splice(world.bodies.indexOf(item), 1);
+    world.score += fee(item.tier);
+    world.deliveries++;
+    world.turn++;
+    return item;
+  }
   function walls(p) {
     if (p.x < p.r || p.x > width - p.r) {
       p.x = clamp(p.x, p.r, width - p.r);
@@ -36,6 +53,15 @@
     b.x += nx * overlap * (1 - share);
     b.y += ny * overlap * (1 - share);
     const speed = (b.vx-a.vx)*nx + (b.vy-a.vy)*ny;
+    if (speed < -65 && Math.abs(nx) < 0.20 && Math.abs(ny) > 0.9) {
+      // A direct impact on a round top slips to its nearer side.
+      const upper = ny > 0 ? a : b, lower = upper === a ? b : a;
+      if (!upper.landed) {
+        const offset = upper.x - lower.x;
+        const direction = Math.abs(offset) > 0.6 ? Math.sign(offset) : (upper.x <= width / 2 ? 1 : -1);
+        upper.vx += direction * Math.min(80, -speed * 0.19);
+      }
+    }
     if (speed < 0) {
       a.vx += nx * speed * share;
       a.vy += ny * speed * share;
@@ -72,8 +98,13 @@
             used.add(b);
             const product = piece(a.tier+1, (a.x+b.x)/2, (a.y+b.y)/2);
             products.push(product);
-            world.score += 2 ** product.tier;
-            onMerge(product);
+            product.crafted = true;
+            product.turn = world.turn;
+            const priorDepth = p => p.crafted && p.turn === product.turn ? p.depth : 0;
+            product.depth = 1 + Math.max(priorDepth(a), priorDepth(b));
+            const points = 2 ** product.tier * product.depth;
+            world.score += points;
+            onMerge(product, points);
             break;
           }
           const distance = Math.sqrt(d2);
@@ -103,7 +134,7 @@
     } catch { return new Set(); }
   }
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { piece, tick, stars, step, grace, line, width, height };
+    module.exports = { piece, tick, deliver, stock, requested, fee, stars, step, grace, line, width, height };
   }
   if (typeof window === 'undefined') return;
 
@@ -113,9 +144,9 @@
 
   function start(container, api) {
     container.innerHTML = `<section class="goods-game">
-      <div class="goods-guide"><img src="img/npcs/portraits/jiyoung.png" alt=""><div><strong>지영 선배</strong><p>같은 굿즈 두 개를 붙여 봐. 마지막 굿즈는 송현 선배 인형이야!</p></div></div>
-      <div class="goods-play"><div class="goods-hud"><span>합치기 점수 <b class="goods-score">0</b></span>
-      <span>다음 <img class="goods-next-art" alt=""><strong class="goods-next"></strong></span></div>
+      <div class="goods-guide"><img src="img/npcs/portraits/jiyoung.png" alt=""><div><strong>지영 선배</strong><p>같은 굿즈 두 개를 붙여 봐! 주문품은 납품해도, 남겨서 더 크게 합쳐도 돼.</p></div></div>
+      <div class="goods-play"><div class="goods-order"><img class="goods-order-art" alt=""><div><small>지영 선배의 주문</small><strong class="goods-order-name"></strong></div><button class="goods-ship" disabled>납품</button></div><div class="goods-hud"><span>점수 <b class="goods-score">0</b></span>
+      <small class="goods-best" hidden></small><span>다음 <img class="goods-next-art" alt=""><strong class="goods-next"></strong></span></div>
       <canvas class="goods-board" width="360" height="430" tabindex="0" aria-label="굿즈 상자. 좌우 방향키로 이동하고 스페이스바나 엔터로 놓아요."></canvas>
       <p class="goods-status" role="status"></p>
       <div class="goods-controls"><button class="goods-left" aria-label="왼쪽으로 이동">◀</button><button class="goods-drop">굿즈 놓기</button><button class="goods-right" aria-label="오른쪽으로 이동">▶</button></div>
@@ -127,16 +158,24 @@
       </section>`;
     const $ = name => container.querySelector('.goods-' + name);
     const board = $('board'), ctx = board.getContext('2d');
+    if (Number.isSafeInteger(api.bestScore) && api.bestScore >= 0) {
+      $('best').textContent = '내 최고 ' + api.bestScore + '점';
+      $('best').hidden = false;
+    }
     const controls = new AbortController();
     const on = (node, type, listener) => node.addEventListener(type, listener, {signal: controls.signal});
     const sprites = names.map((_, i) => { const img = new Image(); img.src = art(i); return img; });
     const known = readCatalogue();
-    const world = {bodies: [], score: 0, danger: 0};
+    const world = {bodies: [], score: 0, danger: 0, deliveries: 0, turn: 0};
     const roll = () => Math.floor(Math.random()*3);
     let current = 0, next = 0, x = width/2, highest = -1, cooldown = 0, falling = null;
     let frame = 0, last = null, accumulator = 0, pointer = null, gallery = false, paused = false, ended = false;
     let feedback = '배지 두 개를 같은 자리에 놓아 보세요.';
-    let warning = false;
+    let warning = false, receipt = null;
+    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    function mark(p, label) {
+      receipt = {label, x: p.x, y: p.y - p.r - 8, time: 1.25};
+    }
     function discover(t) {
       highest = Math.max(highest, t);
       if (known.has(t)) return;
@@ -147,6 +186,11 @@
       } catch { /* Storage may be disabled. Keep discoveries for this visit. */ }
     }
     function update() {
+      const tier = requested(world);
+      $('order-art').src = art(tier);
+      $('order-name').textContent = names[tier] + ' 1개';
+      $('ship').textContent = '납품 +' + fee(tier) + '점';
+      $('ship').disabled = !active() || !stock(world);
       $('score').textContent = world.score;
       $('next-art').src = art(next);
       $('next').textContent = names[next];
@@ -160,11 +204,12 @@
     function move(to) { x = clamp(to, radii[current], width-radii[current]); }
     function drop() {
       if (!ready()) return;
+      world.turn++;
       falling = piece(current, x, radii[current]+3);
       world.bodies.push(falling);
       discover(current);
       current = next;
-      next = roll();
+      next = world.turn === 1 ? 1 : roll();
       move(x);
       cooldown = 0.32;
       update();
@@ -196,7 +241,30 @@
         ctx.fillRect(Math.round(x), radii[current]*2+5, 1, height);
         drawPiece(current, x, radii[current]+3);
       }
-      for (const p of world.bodies) drawPiece(p.tier, p.x, p.y);
+      const orderItem = stock(world);
+      for (const p of world.bodies) {
+        if (p === orderItem) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r + 2, 0, 2*Math.PI);
+          ctx.strokeStyle = '#aa651c';
+          ctx.lineWidth = 3;
+          ctx.stroke();
+        }
+        drawPiece(p.tier, p.x, p.y);
+      }
+      if (receipt && receipt.time > 0) {
+        ctx.font = 'bold 13px sans-serif';
+        const w = receipt.label.length * 12 + 12;
+        const cx = clamp(receipt.x, w/2 + 2, width - w/2 - 2);
+        const lift = reducedMotion ? 0 : (1.25 - receipt.time) * 10;
+        const cy = clamp(receipt.y - lift, 20, height - 4);
+        ctx.fillStyle = '#355749';
+        ctx.fillRect(cx-w/2, cy-16, w, 21);
+        ctx.fillStyle = '#fff8dd';
+        ctx.textAlign = 'center';
+        ctx.fillText(receipt.label, cx, cy);
+        ctx.textAlign = 'left';
+      }
     }
     function stopFrames() {
       cancelAnimationFrame(frame);
@@ -214,8 +282,8 @@
       if (ended || (!overflow && !world.score)) return;
       cleanup();
       const extra = document.createElement('p');
-      extra.textContent = (overflow ? '상자 마감' : '제작 마감') + ' · ' + world.score + '점 · 최고 굿즈 ' + names[highest];
-      api.done({stars: stars(world.score), extra});
+      extra.textContent = (overflow ? '상자 마감' : '제작 마감') + ' · ' + world.score + '점 · 납품 ' + world.deliveries + '건 · 최고 굿즈 ' + names[highest];
+      api.done({stars: stars(world.score), points: world.score, extra});
     }
     function animate(time) {
       frame = 0;
@@ -224,9 +292,11 @@
       last = time;
       while (accumulator+1e-10 >= step) {
         const wasReady = ready(), before = world.score;
-        tick(world, p => {
+        if (receipt) receipt.time -= step;
+        tick(world, (p, points) => {
           discover(p.tier);
-          feedback = names[p.tier] + ' 완성! +' + 2 ** p.tier + '점';
+          mark(p, (p.depth > 1 ? p.depth + '연쇄 ' : '합체 ') + '+' + points);
+          feedback = (p.depth > 1 ? p.depth + '연쇄! ' : '') + names[p.tier] + ' 완성 +' + points + '점';
         });
         cooldown -= step;
         if (falling && (falling.landed || !world.bodies.includes(falling))) falling = null;
@@ -278,6 +348,7 @@
       $('pause').hidden = true;
       $('play').hidden = false;
       restartFrames();
+      update();
       board.focus();
     });
     on(board, 'keydown', e => {
@@ -291,6 +362,15 @@
     on($('left'), 'click', () => move(x-18));
     on($('right'), 'click', () => move(x+18));
     on($('drop'), 'click', drop);
+    on($('ship'), 'click', () => {
+      if (!active()) return;
+      const sold = deliver(world);
+      if (!sold) return;
+      mark(sold, '납품 +' + fee(sold.tier));
+      feedback = names[sold.tier] + ' 납품! +' + fee(sold.tier) + '점';
+      update();
+      draw();
+    });
     on($('collect'), 'click', () => finish(false));
     function showGallery(open) {
       gallery = open;
@@ -303,6 +383,7 @@
           : '<li><b aria-hidden="true">?</b><span>미발견</span></li>').join('');
       }
       restartFrames();
+      update();
       (open ? $('resume') : $('gallery-open')).focus();
     }
     on($('gallery-open'), 'click', () => showGallery(true));
