@@ -9,7 +9,7 @@ const entries=ids.map(id=>({id,maxStars:3}));
 const score=stamps=>rules.summarize(stamps,entries);
 const record=stars=>({stars,at:'2026-11-15'});
 let checks=0;function check(condition,message){assert(condition,message);checks++;}
-check(ids.length===14&&score({}).maxStars===42,'current fourteen games support every reward tier');
+check(ids.length===17&&score({}).maxStars===51,'17 reward games offer 51 stars');
 let fresh=rules.emptyWardrobe();
 check(rules.wardrobe(fresh,score({}),items).unlocked.length===0,'fresh visitor starts locked');
 let stamps={bakery:record(1)},first=rules.wardrobe(fresh,score(stamps),items);
@@ -19,7 +19,7 @@ check(JSON.stringify(same)===JSON.stringify(first),'repeating the same record ca
 stamps.bakery=record(3);
 let improved=rules.wardrobe(first,score(stamps),items);
 check(score(stamps).stars===3&&improved.unlocked.length===4,'one stamp improving 1 to 3 unlocks the next pair');
-for(let total=0;total<=42;total++){
+for(let total=0;total<=51;total++){
   const s=Object.fromEntries(ids.map((id,i)=>[id,record(Math.max(0,Math.min(3,total-i*3)))]));
   const w=rules.wardrobe(fresh,score(s),items);
   const expected=[1,3,5,7,9,11,13,15,17,19,21,24,27,30,33,36,39,42].filter(at=>at<=total).length*2;
@@ -34,10 +34,22 @@ for(let count=1;count<=9;count++){
   const reloaded=rules.wardrobe(JSON.parse(JSON.stringify(migrated)),score(s),items);
   check(JSON.stringify(reloaded)===JSON.stringify(migrated),`migration is idempotent at ${count} stamps`);
 }
-const freshNine=score(Object.fromEntries(ids.map(id=>[id,record(1)])));
+const freshNine=score(Object.fromEntries(ids.slice(0,9).map(id=>[id,record(1)])));
 check(!rules.wardrobe(fresh,freshNine,items).unlocked.includes('witch'),'new visitors do not get legacy stamp rewards');
+const originalIds=['bakery','typing','cafe','cashier','rain','melody','curling','target','badminton','ai','career','phishing','interview','stairs'];
+const oldStamps=Object.fromEntries(originalIds.map(id=>[id,record(3)]));
+const before=score(oldStamps);
+check(before.count===14&&before.stars===42&&before.maxStars===51,'all 14 original stamp records survive the expansion');
+const oldRewards=rules.wardrobe(fresh,before,items);
+check(oldRewards.unlocked.length===36&&oldRewards.title,'previously completed wardrobe remains complete at 42 stars');
+for(const [id,floor,name] of [['press','3','드림스페이스'],['logistics','4','전산회계2실'],['reconcile','4','전산회계3실']]){
+  const room=scope.window.TOUR_SCENES[floor].rooms.find(room=>room.name===name);
+  check(room?.game===id,'direct room entry for '+id);
+  const after=score({...oldStamps,[id]:record(3)});
+  check(after.count===15&&after.stars===45,'independent new stamp for '+id);
+}
 let max=rules.wardrobe(fresh,score(Object.fromEntries(ids.map(id=>[id,record(3)]))),items);
-check(max.unlocked.length===36&&max.title,'42-star collection complete');
+check(max.unlocked.length===36&&max.title,'51-star collection complete');
 check(rules.wardrobe(max,score({bakery:record(1)}),items).unlocked.length===36,'earned items are permanent until explicit reset');
 check(rules.wardrobe(rules.emptyWardrobe(),score({}),items).unlocked.length===0,'explicit reset clears items');
 check(!rules.wardrobe(rules.emptyWardrobe(),score({}),items).title,'explicit reset clears title');
@@ -51,4 +63,4 @@ const oldCollection={version:2,unlocked:items.filter(i=>i.at<=24).map(i=>i.id),t
 const upgraded=rules.wardrobe(oldCollection,{stars:33,count:11},items);
 check(upgraded.unlocked.length===30&&oldCollection.unlocked.every(id=>upgraded.unlocked.includes(id))&&upgraded.title,'existing 33-star player keeps old 24 items and gains six new items');
 check(!rules.wardrobe(oldCollection,{stars:24,count:8},items).unlocked.includes('trailcap'),'new rewards are not granted below threshold');
-console.log(JSON.stringify({checks,maximumStars:42,items:36,legacyMigration:'all 1–9 stamp counts',replay:'best record only',reset:'items and title cleared'}));
+console.log(JSON.stringify({checks,maximumStars:51,items:36,legacyMigration:'all 1–9 stamp counts',replay:'best record only',reset:'items and title cleared'}));

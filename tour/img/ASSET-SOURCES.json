@@ -742,6 +742,139 @@
       "generator": "tools/make_songhyeon_art.mjs",
       "description": "옆으로 묶은 머리와 말린 포스터가 보이는 송현 선배 대화 초상",
       "sha256": "5c7718e1b10d19b773a99bb97e182e570fce2a9a94d630663a6633655f12bad6"
+    },
+    "games/press/guide.png": {
+      "output": "games/press/guide.png",
+      "kind": "game-pixel-art",
+      "description": "민트 머리핀을 하고 카메라를 든 수빈 선배",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "f540cdd4bc2573f1829cafb09880dfa1f6a21b3d913e48904ddd344fc0da987a"
+    },
+    "games/press/gym.png": {
+      "output": "games/press/gym.png",
+      "kind": "game-pixel-art",
+      "description": "배드민턴 네트를 촬영하는 체육관",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "501548e0f6cbde92fd92dd9f5254e6d08878c287fad8139b45a8ca6781ac24f0"
+    },
+    "games/press/bakery.png": {
+      "output": "games/press/bakery.png",
+      "kind": "game-pixel-art",
+      "description": "빵이 나오는 조리제빵실 오븐",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "544f68c25b21001d4d248baacb0ea8992cd475c123561263b4214599745015fb"
+    },
+    "games/press/music.png": {
+      "output": "games/press/music.png",
+      "kind": "game-pixel-art",
+      "description": "조명과 커튼이 있는 음악실 무대",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "f3f65ffded47e96df13011bb0fc9d993f5d5430c24ed630270de076bae2a941f"
+    },
+    "games/logistics/guide.png": {
+      "output": "games/logistics/guide.png",
+      "kind": "game-pixel-art",
+      "description": "산호색 모자를 쓰고 소포를 든 다영 선배",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "3985ce32f5ff67aa795c7e77985adabc3344db11cf5e23cd145b4c90dd58059e"
+    },
+    "games/logistics/cart.png": {
+      "output": "games/logistics/cart.png",
+      "kind": "game-pixel-art",
+      "description": "물류반 배달 카트",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "f07ef00ece17bf9318ebec616e7aaf8d4a1dee618cba8ea021a3b26b0c0aaef6"
+    },
+    "games/logistics/cup.png": {
+      "output": "games/logistics/cup.png",
+      "kind": "game-pixel-art",
+      "description": "부스 주문용 컵",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "8e36b2cc2f9a897e1df4481fa0b5afb631ac70dcf782ce6268a723d76b258973"
+    },
+    "games/logistics/bread.png": {
+      "output": "games/logistics/bread.png",
+      "kind": "game-pixel-art",
+      "description": "부스 주문용 빵",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "32db79a7d457fa01a72dfb8a037e2b89f96ee45e8cf3bc2e5bbff04eb322c10b"
+    },
+    "games/logistics/drink.png": {
+      "output": "games/logistics/drink.png",
+      "kind": "game-pixel-art",
+      "description": "부스 주문용 음료",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "138d2212aeb5a06c0d4628c7088c4fe4fa206a367ede8cd5c88d9abe76e8a3cf"
+    },
+    "games/logistics/depot.png": {
+      "output": "games/logistics/depot.png",
+      "kind": "game-pixel-art",
+      "description": "선반에 상자를 보관하는 창고",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "47774ef2e00f66f89e94775b078d29ded74e37a1ea033656918f7591510a8c79"
+    },
+    "games/logistics/booth-a.png": {
+      "output": "games/logistics/booth-a.png",
+      "kind": "game-pixel-art",
+      "description": "뾰족한 노란 지붕의 A부스",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "bcdcceb2bf617c83b37f1bc43f3bc5f3a979e1286a694b9e8386a367b8361405"
+    },
+    "games/logistics/booth-b.png": {
+      "output": "games/logistics/booth-b.png",
+      "kind": "game-pixel-art",
+      "description": "깃발을 세운 청록색 B부스",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "352f80f9260262d081125637ac734c535119bff214c14c4cb7386163dd648689"
+    },
+    "games/logistics/crate.png": {
+      "output": "games/logistics/crate.png",
+      "kind": "game-pixel-art",
+      "description": "길을 막는 나무 상자",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "6d56b90bf646db49fb83337ab442dacaf0de9d11b52a0a077992fc5e5a9024a0"
+    },
+    "games/reconcile/guide.png": {
+      "output": "games/reconcile/guide.png",
+      "kind": "game-pixel-art",
+      "description": "안경을 쓰고 장부를 든 은령 선배",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "0011107240f6a4f2361d496c7688389cfa3c8d1fb73e39389ec825e9b6863800"
+    },
+    "games/reconcile/receipt.png": {
+      "output": "games/reconcile/receipt.png",
+      "kind": "game-pixel-art",
+      "description": "정산용 영수증",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "3a734d5a7aba09d7f9cfdee9d7aa4c2596b5344d78c3abd561361de7a0768e67"
+    },
+    "games/reconcile/terminal.png": {
+      "output": "games/reconcile/terminal.png",
+      "kind": "game-pixel-art",
+      "description": "정산용 결제 단말기",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "7f616d1a67d38826b00b6204daa57302f92baf5fb17ca573726804dbd102f8f0"
+    },
+    "games/stamps/press.png": {
+      "output": "games/stamps/press.png",
+      "kind": "game-pixel-art",
+      "description": "이음 취재반 카메라 도장",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "a5c169affa0830e2f865091336120b4a8ecb8c57014655a343b4848dce98549d"
+    },
+    "games/stamps/logistics.png": {
+      "output": "games/stamps/logistics.png",
+      "kind": "game-pixel-art",
+      "description": "이음 물류반 소포 도장",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "aba9594a49f04414c839d42b644784a258f4cad59e59be6cf5e6ed03a13bd5ca"
+    },
+    "games/stamps/reconcile.png": {
+      "output": "games/stamps/reconcile.png",
+      "kind": "game-pixel-art",
+      "description": "이음 정산실 장부 도장",
+      "generator": "tools/make_festival_art.mjs",
+      "sha256": "15b2703e98812a6f49780d06b62e701938d6ae3039bf483136c090bafc9403bf"
     }
   }
 }
