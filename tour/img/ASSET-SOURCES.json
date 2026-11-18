@@ -200,6 +200,27 @@
       "sha256": "d3c7eb66105c4f03a06d4cfbc084396eb38d20e6eb5461634c7d4f815b6dd968",
       "generator": "tools/make_bakery_game_art.mjs"
     },
+    "games/bakery/dough-rough.png": {
+      "output": "games/bakery/dough-rough.png",
+      "kind": "game",
+      "description": "거칠고 갈라진 치대기 전 반죽",
+      "sha256": "53e194fcd0148df62645b5dfbe6936476a2849fafaad3ee16c22e576088d2e5b",
+      "generator": "tools/make_bakery_game_art.mjs"
+    },
+    "games/bakery/dough-smooth.png": {
+      "output": "games/bakery/dough-smooth.png",
+      "kind": "game",
+      "description": "치대고 나서 매끈하게 뭉친 반죽",
+      "sha256": "4ad049f262e6be65708bdbde213a4a5f9467d696d978ee5a9c4002318193e433",
+      "generator": "tools/make_bakery_game_art.mjs"
+    },
+    "games/bakery/dough-slack.png": {
+      "output": "games/bakery/dough-slack.png",
+      "kind": "game",
+      "description": "힘이 빠져 납작하게 퍼진 반죽",
+      "sha256": "341159af25430654b464463372c946c3712f6ba4f41e64fad7e5ebc922fdaa2d",
+      "generator": "tools/make_bakery_game_art.mjs"
+    },
     "games/bakery/risen.png": {
       "output": "games/bakery/risen.png",
       "kind": "game",
