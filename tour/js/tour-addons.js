@@ -31,8 +31,8 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
   window.TourCostumes.draw(c,sprite,dir,frame,outfit);
 }
 
-  // 선배 캐릭터: 플레이어와 같은 32×40 걷기 시트 (tools/make_npc_sheets.py). 시트가 없으면 예전처럼 플레이어 그림으로.
-  const npcSheets={yuna:'img/npcs/sheets/arum.png?v=20261118',songhyeon:'img/npcs/sheets/songhyeon.png?v=20261118'};
+  // 선배 캐릭터: 플레이어와 같은 32×40 걷기 시트 (tools/make_npc_sheets.py). 시트가 없는 아름 선배는 플레이어 그림에 리본.
+  const npcSheets={songhyeon:'img/npcs/sheets/songhyeon.png?v=20261118'};
   const npcImages=Object.fromEntries(Object.entries(npcSheets).map(([id,src])=>{const im=new Image();im.onload=()=>paint();im.src=src;return [id,im];}));
   function drawNpc(c,id){const im=npcImages[id];if(im?.complete&&im.naturalWidth){c.clearRect(0,0,32,40);c.imageSmoothingEnabled=false;c.drawImage(im,32,0,32,40,0,0,32,40);}else if(spriteReady)drawAvatar(c,'down',1,{},id);}
   function paint(root=document){root.querySelectorAll('[data-addon-art]').forEach(c=>art(c.getContext('2d'),c.dataset.addonArt));root.querySelectorAll('[data-addon-npc]').forEach(c=>drawNpc(c.getContext('2d'),c.dataset.addonNpc));}

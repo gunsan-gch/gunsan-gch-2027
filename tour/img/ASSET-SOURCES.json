@@ -1023,13 +1023,6 @@
       "sha256": "9a08f420316b7c1deaf58b153aac8814e1487afd7dbd66f0959c7f9de4f13e28",
       "source": "녹원책방 업데이트용 제작 초상 시트, 투명 224×224 PNG"
     },
-    "npcs/sheets/arum.png": {
-      "output": "npcs/sheets/arum.png",
-      "kind": "npc",
-      "description": "아름 선배 지도 캐릭터 (밝은 밤색 긴 생머리·분홍 리본) — 플레이어 걷기 시트를 바탕으로 만든 32×40 걷기 시트",
-      "sha256": "4854ea66d364af4cd5795c15f4ad1827978934e77f6758317889617ee878964a",
-      "generator": "tools/make_npc_sheets.py"
-    },
     "npcs/sheets/songhyeon.png": {
       "output": "npcs/sheets/songhyeon.png",
       "kind": "npc",
