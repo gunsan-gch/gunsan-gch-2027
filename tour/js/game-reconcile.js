@@ -27,7 +27,7 @@
   const art = name => '<img alt="" src="img/games/reconcile/' + name + '.png">';
   function start(container, api) {
     let round = 0, misses = 0;
-    container.innerHTML = '<section class="reconcile"><div class="rc-guide">' + art('guide') +
+    container.innerHTML = '<section class="reconcile"><div class="rc-guide"><img src="img/npcs/portraits/eunryeong.png" alt="">' +
       '<div><b>은령 선배</b><p>예술제 장부마다 전표가 한 장씩 비었어. 짝을 맞춰 어떤 결제인지 찾아 줄래?</p></div></div>' +
       '<p>모의 결제와 전표에서 시각·부스·금액이 모두 같은 두 장을 고르세요. 장부 3권을 마치면 정산 완료!</p>' +
       '<p class="rc-rule">다시 대조한 횟수 · 0회 ★★★ / 1~2회 ★★ / 3회 이상 ★</p>' +

@@ -21,7 +21,7 @@
     let plan, map, pos, steps, items, finished = false;
     const $ = selector => container.querySelector(selector);
     container.innerHTML = `<section class="log-game" aria-label="예술제 물류반">
-      <div class="log-guide">${icon('guide')}<div><strong>물류반 · 다영 선배</strong><p>창고에서 물품을 눌러 실어 줘! 주문한 부스에 도착하면 물품을 건네줄게.</p></div></div>
+      <div class="log-guide"><img src="img/npcs/portraits/dayeong.png" alt=""><div><strong>물류반 · 다영 선배</strong><p>창고에서 물품을 눌러 실어 줘! 주문한 부스에 도착하면 물품을 건네줄게.</p></div></div>
       <div class="log-toolbar"><label>배달 지도 <select>${plans.map((p,i) => `<option value="${i}">${p.name}</option>`).join('')}</select></label><button type="button" data-reset>처음부터</button></div>
       <div class="log-paper"><div class="log-manifest"><b>부스 주문서</b><span class="log-count"></span></div><div class="log-orders"></div></div>
       <div class="log-map" role="img" tabindex="0"></div>

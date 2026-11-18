@@ -8,6 +8,7 @@
     {id:'breadbag',name:'바게트 소풍백',at:1,legacyAt:1,slot:'back',theme:'방과 후 피크닉'},
     {id:'flower',name:'데이지 머리핀',at:3,legacyAt:2,slot:'head',theme:'봄 소풍'},
     {id:'bowback',name:'사르르 리본',at:3,legacyAt:2,slot:'back',theme:'봄 소풍'},
+    {id:'bookcat',name:'책갈피 고양이 가방',at:3,slot:'back',theme:'책방지기'},
     {id:'cherry',name:'체리 머리핀',at:5,slot:'head',theme:'달콤한 소풍'},
     {id:'milkbag',name:'딸기우유 가방',at:5,slot:'back',theme:'달콤한 소풍'},
     {id:'bunny',name:'포근 토끼 모자',at:7,legacyAt:3,slot:'head',theme:'동물 친구'},
@@ -206,7 +207,7 @@
       if(!rear)tinyStar(r,side?(right?20:8):21,6);
     }
   }
-  const carriedColors={bag:'mintD',breadbag:'roseD',starbag:'goldD',milkbag:'roseD',bowback:'roseD',wings:'goldD',umbrella:'blueD',cloudpack:'mintD',pianobag:'purpleD',racketbag:'blueD',stonebag:'blueD',targetpack:'roseD',trophybag:'goldD'};
+  const carriedColors={bookcat:'mintD',bag:'mintD',breadbag:'roseD',starbag:'goldD',milkbag:'roseD',bowback:'roseD',wings:'goldD',umbrella:'blueD',cloudpack:'mintD',pianobag:'purpleD',racketbag:'blueD',stonebag:'blueD',targetpack:'roseD',trophybag:'goldD'};
   function back(c,id,dir,frame=1){
     const color=carriedColors[id];
     if(!color){backArt(c,id,dir,frame);return;}
@@ -227,7 +228,12 @@
   }
   // Profiles face right in the pattern and mirror around the sprite centre for left.
   // The inside edge overlaps the jacket, so the bag rests against the body at every step.
-  const sportsBags={
+  const patternedBags={
+    bookcat:{
+      // Clothbound spine, gilt cover stamp and a folded ginger cat over the page edge.
+      colors:{s:'mintD',v:'mint',o:'navy',p:'cream',g:'gold',c:'goldD',f:'yellow',e:'ink'},
+      profile:[7,20,['.c.c','.cfc','.cec','.cff','osppso','ovpgso','ovppso','ovppso','ovppso','ovppso','osppso','.oooo']],
+      rear:[8,20,['.........c...c','.........cc.cc','.........cfcfc','.........efefe','.sssssssscfffc','ospppppppccgcc','ossssssssssssso','osvvvvvvvvvvvso','osvvgvvggvvvgso','osvvvvggggvvvso','osvvvvvggvvvvso','osvvgvvvvvvvgso','ospppppppppppso','.ooooooooooooo']]},
     racketbag:{
       colors:{o:'navy',b:'blueD',c:'cream',n:'blue',g:'goldD',h:'yellow'},
       profile:[8,18,['..bb','.bcn','bcnnb','bcncb','bnncb','.bncb','.bnb','..bb','..bb','...g','...g','...hg','....g','....g']],
@@ -245,11 +251,13 @@
       profile:[7,20,['..ohhho','ooogggoh','o.ohggo','o.ohggo','.ooggo','..oggo','...oo','...og','...og','..oggo','.oggggo','.nnnnno']],
       rear:[8,20,['...ohhhhhho','ooooggggggoooo','o..ohgggggo..o','o..ohgrrggo..o','.o.oggrpggo.o','..oooggggooo','.....oggo','......oo','......og','.....oggo','....ohgggo','...onnnnnno']]}
   };
-  function sportsBag(r,id,dir){
-    const bag=sportsBags[id],side=dir==='left'||dir==='right';
+  function patternedBag(r,id,dir){
+    const bag=patternedBags[id],side=dir==='left'||dir==='right';
     const [x,y,rows]=side?bag.profile:bag.rear;
+    // From the front the book peeks past the right hip, with the cat above it.
+    const offset=id==='bookcat'&&dir==='down'?3:0;
     rows.forEach((row,dy)=>Array.from(row).forEach((mark,dx)=>{
-      if(mark!=='.')r(dir==='left'?31-x-dx:x+dx,y+dy,1,1,bag.colors[mark]);
+      if(mark!=='.')r(dir==='left'?31-x-dx:x+dx+offset,y+dy,1,1,bag.colors[mark]);
     }));
   }
   function backArt(c,id,dir,frame=1){
@@ -267,7 +275,17 @@
       if(side){r(bx+1,22,2,6,'purple');r(bx+3,22,1,6,'cream');r(bx+1,26,1,1,'gold');}
       else{r(10,21,12,3,'purple');r(10,25,12,4,'cream');for(let k=12;k<22;k+=2)r(k,25,1,3,'ink');r(11,26,1,2,'white');r(19,21,1,2,'gold');r(17,23,3,1,'yellow');}
     }
-    if(sportsBags[id])sportsBag(r,id,dir);
+    if(patternedBags[id])patternedBag(r,id,dir);
+    if(id==='bookcat'){
+      // The tail curls beyond the cover. Its tip flicks one horizontal pixel per step.
+      const edge=side?7:(front?26:23), outward=side?-1:1;
+      const tail=(offset,y,k)=>{
+        const tx=edge+outward*offset;
+        r(dir==='left'?31-tx:tx,y,1,1,k);
+      };
+      tail(0,29,'goldD');tail(1,29,'gold');tail(2,28,'gold');
+      tail(frame===1?2:3,27,'yellow');
+    }
     if(id==='milkbag'){
       if(side){const bx=right?6:22;r(bx+1,17,2,3,'roseD');r(bx,20,5,10,'roseD');r(bx+1,20,3,9,'pink');r(bx+2,22,1,5,'cream');r(right?11:20,20,1,9,'roseD');}
       else{r(12,16,7,2,'roseD');r(11,18,9,2,'roseD');r(10,20,11,10,'roseD');r(12,18,7,2,'pink');r(11,20,9,9,'cream');r(11,20,9,3,'pink');r(14,24,4,3,'rose');r(15,23,2,1,'mintD');r(15,25,1,1,'yellow');r(18,21,2,8,'pink');}
@@ -409,7 +427,7 @@
     }
     // The pack is behind the torso in front view. Two short webbing ends cross
     // the jacket shoulders, leaving its central tie and the face visible.
-    if(dir==='down'&&(sportsBags[equip.back]||equip.back==='cloudpack'||equip.back==='pianobag')){
+    if(dir==='down'&&(patternedBags[equip.back]||equip.back==='cloudpack'||equip.back==='pianobag')){
       const r=pen(c),strap=carriedColors[equip.back];
       r(11,21,1,3,strap);r(12,23,1,1,strap);
       r(20,21,1,3,strap);r(19,23,1,1,strap);

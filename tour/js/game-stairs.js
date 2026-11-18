@@ -1,5 +1,6 @@
 /* 꿈다락까지 올라라! — original school stair challenge. No borrowed game artwork/audio. */
 (() => {
+  const MINJU = 'img/npcs/portraits/minju.png';
   const IMG = 'img/games/stairs/';
   const R = window.TourStairsRules;
   const BEST_KEY = 'gch-tour-stairs-best';
@@ -11,7 +12,7 @@
     const images = {};
     container.innerHTML = `
       <section class="stairs-game" aria-label="꿈다락 계단 도전">
-        <div class="stairs-guide"><img src="${IMG}guide-minju.png" width="64" height="64" alt="민주 선배">
+        <div class="stairs-guide"><img src="${MINJU}" width="96" height="96" alt="민주 선배">
           <div><strong>꿈다락 길잡이 · 민주 선배</strong><p class="stairs-message">다음 계단을 보고, 한 칸씩 올라와!</p></div></div>
         <div class="stairs-hud"><span class="stairs-floor">1층 출발</span><strong><span class="stairs-score">0</span><small> / 80계단</small></strong><span class="stairs-best">최고 ${best}계단</span></div>
         <div class="stairs-energy"><progress max="6" value="6" aria-label="남은 시간"></progress><span class="stairs-time">준비됐나요?</span></div>
@@ -121,7 +122,7 @@
       }
       best=Math.max(best,s.steps);try{localStorage.setItem(BEST_KEY,String(best));}catch{}
       const extra=document.createElement('div');extra.className='stairs-summary';
-      const image=document.createElement('img');image.src=IMG+(s.reason==='goal'?'goal-attic':'guide-minju')+'.png';image.width=80;image.height=80;image.alt='';
+      const image=document.createElement('img');image.src=s.reason==='goal'?IMG+'goal-attic.png':MINJU;image.width=80;image.height=80;image.alt='';
       const title=document.createElement('h3');title.textContent=s.reason==='goal'?'꿈다락 도착! 민주 선배와 하이파이브!':s.reason==='time'?'잠깐 숨 고르고, 다시 도전!':'앗, 계단은 반대쪽이었어!';
       const score=document.createElement('p');score.textContent=`${s.steps}계단 · ${R.floor(s.steps)}층 / 내 최고 ${best}계단`;
       const tip=document.createElement('p');tip.textContent=s.reason==='goal'?'한 칸씩 쌓은 도전이 여기까지 왔어요.':s.steps<40?'40계단에 도착하면 별 2개!':'80계단 꿈다락에 도착하면 별 3개!';

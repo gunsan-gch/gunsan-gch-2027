@@ -28,12 +28,12 @@ function widthAt(data, yStart, yEnd) {
   const empty = createCanvas(sprite.width, sprite.height);
   const headIds = [null, ...art.items.filter(x => x.slot === 'head').map(x => x.id)];
   const backIds = [null, ...art.items.filter(x => x.slot === 'back').map(x => x.id)];
-  assert.equal(art.items.length, 36);
-  assert.equal(new Set(art.items.map(x => x.id)).size, 36);
+  assert.equal(art.items.length, 37);
+  assert.equal(new Set(art.items.map(x => x.id)).size, 37);
   for (const tier of [1,3,5,7,9,11,13,15,17,19,21,24,27,30,33,36,39,42]) {
     const pair = art.items.filter(x => x.at === tier);
-    assert.equal(pair.length, 2);
-    assert.deepEqual(Array.from(pair, x => x.slot).sort(), ['back', 'head']);
+    assert.equal(pair.length, tier===3?3:2);
+    assert.deepEqual(Array.from(pair, x => x.slot).sort(), tier===3?['back','back','head']:['back','head']);
   }
   let renders = 0, hairChecks = 0, faceChecks = 0;
   for (const [row, direction] of directions.entries()) for (let frame = 0; frame < 3; frame++) {
@@ -68,7 +68,7 @@ function widthAt(data, yStart, yEnd) {
         faceChecks++;
       }
     }
-    for (const back of ['balloon', 'wings', 'bag', 'breadbag', 'starbag', 'milkbag', 'umbrella', 'noteballoon', 'planet', 'cloudpack', 'pianobag', 'racketbag', 'stonebag', 'targetpack', 'trophybag']) {
+    for (const back of ['balloon', 'wings', 'bag', 'breadbag', 'starbag', 'milkbag', 'umbrella', 'noteballoon', 'planet', 'cloudpack', 'pianobag', 'bookcat', 'racketbag', 'stonebag', 'targetpack', 'trophybag']) {
       const front = render(empty, 'down', frame, { back });
       const side = render(empty, 'left', frame, { back });
       // Isolate balloon body from its connecting string; other profiles use all rows.
@@ -77,15 +77,27 @@ function widthAt(data, yStart, yEnd) {
     }
   }
   let bobChecks=0;
-  const carried=['bag','breadbag','starbag','milkbag','bowback','wings','umbrella','cloudpack','pianobag','racketbag','stonebag','targetpack','trophybag'];
+  const carried=['bag','breadbag','starbag','milkbag','bowback','wings','umbrella','cloudpack','pianobag','bookcat','racketbag','stonebag','targetpack','trophybag'];
   for(const back of carried)for(const direction of directions){
     const idle=render(empty,direction,1,{back});
     for(const [frame,dy]of [[0,-1],[1,0],[2,1]]){
       const moving=render(empty,direction,frame,{back});
+      const tipX=(walking)=>{
+        const reach=walking?3:2;
+        if(direction==='right')return 7-reach;
+        if(direction==='left')return 31-(7-reach);
+        return (direction==='down'?26:23)+reach;
+      };
       // Below the strap, every pixel must move exactly one source pixel, with
       // no horizontal drift, scaling or fractional filtering in any direction.
       for(let y=25;y<40;y++)for(let x=0;x<48;x++)for(let k=0;k<4;k++)
-        assert.equal(moving[((y+12)*48+x)*4+k],(idle[((y-dy+12)*48+x)*4+k]??0),`${back}/${direction}/${frame}: vertical bob`);
+        if(!(back==='bookcat'&&y===27+dy&&(x===8+tipX(false)||x===8+tipX(true))))
+          assert.equal(moving[((y+12)*48+x)*4+k],(idle[((y-dy+12)*48+x)*4+k]??0),`${back}/${direction}/${frame}: vertical bob`);
+      if(back==='bookcat'){
+        const tip=tipX(dy!==0);
+        const i=((27+dy+12)*48+tip+8)*4;
+        assert.deepEqual(Array.from(moving.slice(i,i+4)),[255,233,163,255], 'ginger tail tip moves one pixel with the stride');
+      }
       if(dy)assert.notDeepEqual(moving,idle,`${back}/${direction}: walking must animate`);
       if(direction!=='down'){
         const [x,y]=direction==='up'?[15,20]:[back==='umbrella'?(direction==='left'?20:11):(direction==='left'?19:12),21];
@@ -99,7 +111,7 @@ function widthAt(data, yStart, yEnd) {
   }
   // Beyond the short shoulder strap the depth of each new pack overlaps the
   // actual jacket, even at the extremes of the walk cycle.
-  for(const back of ['cloudpack','pianobag','racketbag','stonebag','targetpack','trophybag']){
+  for(const back of ['cloudpack','pianobag','bookcat','racketbag','stonebag','targetpack','trophybag']){
     for(const direction of ['left','right'])for(const frame of [0,1,2]){
       const plain=render(sprite,direction,frame,{}),pack=render(empty,direction,frame,{back});
       let overlap=0;
@@ -108,6 +120,15 @@ function widthAt(data, yStart, yEnd) {
         if(plain[alpha]&&pack[alpha])overlap++;
       }
       assert(overlap>=2,`${back}/${direction}/${frame}: bag floats behind jacket`);
+    }
+  }
+  for(let frame=0;frame<3;frame++){
+    const plain=render(sprite,'down',frame,{}),pack=render(sprite,'down',frame,{back:'bookcat'});
+    for(let y=0;y<40;y++)for(let x=0;x<32;x++){
+      const i=((y+12)*48+x+8)*4;
+      const shoulder=(x===11||x===20)&&y>=21&&y<=23||(x===12||x===19)&&y===23;
+      if(plain[i+3]&&!shoulder)
+        assert.deepEqual(pack.slice(i,i+4),plain.slice(i,i+4),'the jacket and face occlude the front-view bag');
     }
   }
   let capeChecks=0;
@@ -135,5 +156,5 @@ function widthAt(data, yStart, yEnd) {
     for(let y=0;y<52;y++)for(let x=0;x<48;x++)for(let k=0;k<4;k++)
       assert.equal(left[(y*48+x)*4+k],right[(y*48+47-x)*4+k],`cape: symmetric side placement ${frame}`);
   }
-  console.log(JSON.stringify({ renders, hairChecks, faceChecks, capeChecks, bobChecks, crownLeaks: 0, edgeClipping: 0, sideProfiles: '15 accessories × 3 frames', unlocks: '36 items at 18 best-star milestones' }));
+  console.log(JSON.stringify({ renders, hairChecks, faceChecks, capeChecks, bobChecks, crownLeaks: 0, edgeClipping: 0, sideProfiles: '16 accessories × 3 frames', unlocks: '37 items at 18 best-star milestones' }));
 })().catch(error => { console.error(error); process.exitCode = 1; });

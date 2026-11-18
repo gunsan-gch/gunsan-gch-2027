@@ -1,98 +1,99 @@
-// Original Songhyeon NPC. Run with node tour/tools/make_songhyeon_art.mjs
-import { mkdirSync } from 'node:fs';
+// Original Songhyeon map pose. The dialogue illustration has its own source.
+// Run with node tour/tools/make_songhyeon_art.mjs
 import { fileURLToPath } from 'node:url';
-import { canvas, put, save, scale } from './pixel.mjs';
+import { canvas, put, save } from './pixel.mjs';
 
 const out = fileURLToPath(new URL('../img/npcs/', import.meta.url));
-mkdirSync(out, { recursive: true });
+const sprite = canvas(32, 40);
 const colors = {
-  n:'#25344c', h:'#573a43', v:'#865854', l:'#b17a64',
-  s:'#ffd5b3', t:'#e9a888', p:'#ef9e99', w:'#fff9eb',
-  b:'#34496e', d:'#536989', m:'#57a69f', a:'#a5dfcf',
-  g:'#f3c769', r:'#c5655d', e:'#f4dca8'
+  k:'#19141d', n:'#281f29', h:'#382c32', v:'#514044', l:'#695153',
+  f:'#806361', t:'#df9c76', s:'#f4bd91', a:'#ffd2a4', e:'#fff0d0',
+  b:'#c98572', z:'#181520', j:'#282940', d:'#3d405c', u:'#535772',
+  w:'#eee6d7', m:'#21575c', g:'#3d8281', i:'#79a9a2', p:'#9b6767',
+  y:'#e8b266', o:'#b97f55', r:'#9b4d58', c:'#e3c9ae'
 };
-function draw(c, x, y, rows) {
-  rows.forEach((row, j) => [...row].forEach((key, i) => {
-    if (key !== '.') put(c, x + i, y + j, colors[key]);
-  }));
+function draw(x,y,rows){
+  for(const [dy,row] of rows.entries())for(const [dx,key] of [...row].entries()){
+    if(key!=='.')put(sprite,x+dx,y+dy,colors[key]);
+  }
 }
-
-// A long side ponytail tied high with a small brass cuff.
-const hairAndFace = [
-  '.......nnnnnn.......',
-  '.....nnhvvvvhnn.....',
-  '....nhhvllllvvhn....',
-  '..nnnhvvvhhhhvvhn...',
-  '.nhvgghhhvvhhhvhn...',
-  'nhvvgghhvvhhsshhn...',
-  'nhvhnhhvvhhsssshhn..',
-  'nhvhnhvvhtsssssshn..',
-  'nhvhnhhhtsssssnhsn..',
-  'nhvhnhhtsnsssssnstn.',
-  'nhvhntsssnsssssnstn.',
-  'nhvhnntssppssssppn..',
-  'nhvh..ntsssssrsssn..',
-  'nhhhn..ntssrrsssn...',
-  '.nhhn...ntsssssn....',
-  '.nhvn....nnttnn.....',
-  '..nhvn..............',
-  '...nhn..............',
-  '....n...............'
-];
-const uniform = [
-  '....nnntttnnn.....',
-  '..nnbwwsswwbbnn...',
-  '.nbbdwwwwwdbbdn...',
-  'nbbddbwmmwbbgdn...',
-  'nbbdnbbmmbbbbdn...',
-  'nbbdnbbmwbbndbn...',
-  '.nttnbbbwbbnttn...',
-  '..nnnbbbwbbnnn....',
-  '....ndddbddn......',
-  '....nbdbdbdbn.....',
-  '...nbbdbdbdbn.....',
-  '...nnnnnnnnnn.....',
-  '....nttn.nttn.....',
-  '....nwwn.nwwn.....',
-  '....nwwn.nwwn.....',
-  '...nbbbn.nbbbn....',
-  '..nnnnnn.nnnnnn...'
-];
-const tube = [
-  '..nnnn.', '.naaan.', '.nmmmn.', '.ngggn.', '.namnn.',
-  'nammn..', 'nammn..', 'nammn..', 'nammn..', 'ngggn..', '.nnn...'
-];
-const rolledPoster = [
-  '....nnnn', '...newwn', '...nwen.', '..nwwen.', '..nrrn..',
-  '.nrrgn..', '.nwen...', 'nwtsn...', 'ntssn...', '.nttn...', '..nn....'
-];
-
-const map = canvas(32, 40);
-draw(map, 7, 22, uniform);
-draw(map, 4, 26, tube);
-draw(map, 6, 6, hairAndFace);
-draw(map, 20, 20, rolledPoster);
-save(out, 'songhyeon-map.png', map);
-
-// The portrait uses its own bust composition so the paper and club pin stay legible.
-const portrait = canvas(32, 32);
-draw(portrait, 2, 18, [
-  '.........nntttnn...........',
-  '.......nnwwssswwnn.........',
-  '.....nnbbwwwswwwbbnn.......',
-  '....nbbdbbwwwwwbbdbbn......',
-  '...nbbddbbbwawbbbdgdbn.....',
-  '..nbbddnbbbmmmbbgwgdbn....',
-  '.nbbddnbbbbmambbbgdbbn....',
-  '.nbbdnbbbbbmambbbbbdbn....',
-  'nbbddnbbbbbmawbbbbndbn....',
-  'nbbdnbbbbbbmwwbbbbndbn....',
-  'nbbdnbbbbbbbwwbbbbndbn....',
-  'nbbdnbbbbbbbwwbbbbndbn....',
-  'nbbdnbbbbbbbwwbbbbndbn....',
-  'nnnnnbbbbbbbwwbbbbnnnn....'
+// Pleated skirt, slightly turned loafers and the short school blazer.
+draw(7,22,[
+  '......jtttjj.....',
+  '....jddwwwddj....',
+  '...jddjwmwjddj...',
+  '..jddujggwjduj...',
+  '..jddjdmwjdjdj...',
+  '..jddjjjwjdjuj...',
+  '..tasjjjyjjstj...',
+  '...tsjdddddjs....',
+  '.....jmdmgdmj....',
+  '....jgmggmggmj...',
+  '....jmgmmgmmgj...',
+  '.....ntsn.ntsn...',
+  '......as...as....',
+  '......cj...cj....',
+  '......dj...dj....',
+  '.....njj...jjn...',
+  '....nnhj...jhkn..'
 ]);
-draw(portrait, 4, 3, hairAndFace);
-draw(portrait, 0, 21, tube);
-draw(portrait, 23, 17, rolledPoster);
-save(out, 'songhyeon-portrait.png', scale(portrait, 2));
+// Tapered ponytail behind the left ear, with overlapping curled locks.
+draw(2,9,[
+  '....nnnn..',
+  '...nhvvyyn',
+  '..nhvlvoyn',
+  '..nhlvhhhn',
+  '.nhvhhnnn.',
+  '.nhvhhn...',
+  '.nhlhhn...',
+  '.nhvlvhn..',
+  '.nhhvlhn..',
+  '..nhhlvhn.',
+  '..nnhvlhn.',
+  '...nhhvhn.',
+  '....nhhvh.',
+  '.....nhhh.',
+  '.......hn.',
+  '......nh..'
+]);
+// Warm near-black fringe, lit from the upper left, and the broad cheek plane.
+draw(7,4,[
+  '.......nnnnn........',
+  '.....nnhhhhhnn......',
+  '....nhvvhhhhhhn.....',
+  '...nhvllvhvhhhhn....',
+  '..nhvlfvvhhhvvhhn...',
+  '.nhvvllvhhhvvvhhn...',
+  '.nhvlvvhhhvlvhvhhk..',
+  '.nhlvhhhvlvlhhhvhn..',
+  'nhvvhhvllvhhhnnhhhn.',
+  'nhvvhvvvhhhhtsnhhhn.',
+  'nhhvhvhhhhtsaashhhn.',
+  'nhhvhhnhtssaaaathhn.',
+  'nhhhhntsaaaaaaasthn.',
+  '.nhhhtsthaaaahtsshn.',
+  '.nhhtsstzaaaaztaahn.',
+  '..nhsstszaaaazsaatn.',
+  '..nhhttbsaasaasbtn..',
+  '...nnhstaaaaaaasn...',
+  '.....nntssaasstn....',
+  '........nttttn......'
+]);
+draw(6,10,['.oy','oy.','o..']);
+// Bent forearm reaches the poster, with fingers wrapped around the tube.
+draw(18,28,['.duj...', '.jjtsa.', '..tast.', '...tt..']);
+// Ivory poster rolled around a warm shaded core, tied with the club's ribbon.
+draw(19,21,[
+  '......noo.',
+  '.....oecen',
+  '.....owecn',
+  '....owecn.',
+  '....owecn.',
+  '...nrrcn..',
+  '...nrpyn..',
+  '..owecn...',
+  '..osatn...',
+  '..ntsn....',
+  '...nn.....'
+]);
+save(out, 'songhyeon-map.png', sprite);

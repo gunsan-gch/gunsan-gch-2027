@@ -3,7 +3,7 @@
 .log-game img{image-rendering:pixelated;object-fit:contain}
 .log-guide,.log-toolbar,.log-manifest,.log-controls,.log-cargo strong,.log-orders>div,.log-slots,.log-warehouse>div{display:flex;align-items:center;gap:.4rem}
 .log-guide{padding:6px 10px;background:#e6f5ee;border:2px solid #568476;border-radius:12px}
-.log-guide>img{width:54px;height:56px;flex:none}
+.log-guide>img{width:clamp(72px,20vw,96px);height:auto;flex:none;image-rendering:auto}
 .log-guide p,.log-notice,.log-rules{margin:3px 0}
 .log-toolbar,.log-manifest,.log-cargo strong{justify-content:space-between}
 .log-toolbar{padding:7px 0}
