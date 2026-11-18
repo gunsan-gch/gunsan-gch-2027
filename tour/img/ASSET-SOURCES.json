@@ -728,6 +728,20 @@
       "description": "badminton 종목 금테 완주 도장",
       "generator": "tools/make_gym_game_art.mjs",
       "sha256": "615e86f8aa0779ae8d5c38af12e09b1730f852d643fff870b96a464d8d0a859f"
+    },
+    "npcs/songhyeon-map.png": {
+      "output": "npcs/songhyeon-map.png",
+      "kind": "npc",
+      "generator": "tools/make_songhyeon_art.mjs",
+      "description": "포스터 통과 초대장을 든 송현 선배 지도 캐릭터",
+      "sha256": "35f1382971b256f77b86b202101bb3f4c1f0a89f2e53d7faaab4b5ad1d49bb1d"
+    },
+    "npcs/songhyeon-portrait.png": {
+      "output": "npcs/songhyeon-portrait.png",
+      "kind": "npc",
+      "generator": "tools/make_songhyeon_art.mjs",
+      "description": "옆으로 묶은 머리와 말린 포스터가 보이는 송현 선배 대화 초상",
+      "sha256": "5c7718e1b10d19b773a99bb97e182e570fce2a9a94d630663a6633655f12bad6"
     }
   }
 }

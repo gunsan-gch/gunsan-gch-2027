@@ -79,3 +79,6 @@
 @media(max-width:650px){.addon-star-progress{padding:12px}.addon-star-total>strong{font-size:22px}.addon-star-total>span{font-size:10px;max-width:150px}.addon-star-progress .addon-unlock-track{grid-template-columns:repeat(6,minmax(0,1fr))}.addon-next-reward{font-size:11px}.addon-practice ul{grid-template-columns:1fr}.addon-practice{padding:10px}.addon-practice summary{font-size:12px}}
 /* A tall fitting panel must not cover the collection controls on small screens. */
 @media(max-width:650px){.addon-avatar-preview{position:relative;top:auto}.addon-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}}
+
+.addon-point .songhyeon-sprite { display: block; width: 100%; height: auto; image-rendering: pixelated; pointer-events: none; }
+.addon-npc-talk .songhyeon-portrait { width: 100%; height: auto; image-rendering: pixelated; background: var(--green-soft); border-bottom: 4px solid var(--line-strong); }
