@@ -5,11 +5,19 @@
   /* ---------- 선생님이 고칠 수 있는 데이터 ---------- */
   // target은 목표 초, hideAfter는 히든 이벤트가 걸렸을 때 숫자를 가리기 시작하는 초입니다.
   const ROUNDS = [
-    { name: '반죽 치대기', target: 5.00, hideAfter: 3.0, tip: '반죽은 딱 알맞게 치대야 쫄깃해요.' },
-    { name: '발효', target: 7.00, hideAfter: 4.0, tip: '너무 오래 두면 반죽이 꺼져요.' },
-    { name: '굽기', target: 10.00, hideAfter: 5.0, tip: '오븐 앞을 떠나면 빵이 타요!' }
+    { name: '반죽 치대기', target: 5.00, hideAfter: 3.0, tip: '반죽은 딱 알맞게 치대야 쫄깃해요.',
+      ready: ['dough-rough', '아직 한 덩이로 뭉치지 않은 반죽'],
+      early: ['dough-rough', '반죽이 아직 거칠어요'], onTime: ['dough-smooth', '반죽이 매끈하게 뭉쳤어요'],
+      late: ['dough-slack', '너무 오래 치대 반죽이 늘어졌어요'] },
+    { name: '발효', target: 7.00, hideAfter: 4.0, tip: '너무 오래 두면 반죽이 꺼져요.',
+      ready: ['dough-smooth', '발효를 기다리는 반죽'],
+      early: ['dough', '반죽이 아직 덜 부풀었어요'], onTime: ['risen', '반죽이 봉긋하게 부풀었어요'],
+      late: ['dough-slack', '너무 오래 발효돼 반죽이 꺼졌어요'] },
+    { name: '굽기', target: 10.00, hideAfter: 5.0, tip: '오븐 앞을 떠나면 빵이 타요!',
+      ready: ['risen', '오븐에 넣을 부푼 반죽'],
+      early: ['bread-raw', '덜 익음'], late: ['bread-burnt', '탔어요'] }
   ];
-  // 오차(초)에 맞는 첫 줄을 씁니다. miss는 빠르면 덜 익음, 늦으면 탔어요.
+  // 오차(초)에 맞는 첫 줄을 씁니다. miss는 해당 단계의 빠름·늦음 결과를 보여 줍니다.
   const GRADES = [
     { within: 0.05, stars: 3, text: '완벽해요!', bread: 'perfect' },
     { within: 0.20, stars: 2, text: '좋아요', bread: 'good' },
@@ -61,6 +69,11 @@
     const button = $('.bakery-button');
     const say = text => { $('.bakery-status').textContent = text; };
 
+    function showBread([file, description]) {
+      bread.src = `${IMG}${file}.png?v=20261118-2`;
+      bread.alt = description;
+    }
+
     function clearClock() {
       cancelAnimationFrame(frame);
       clearTimeout(timer);
@@ -82,8 +95,7 @@
       $('.bakery-feedback').hidden = true;
       time.textContent = '0.00';
       time.classList.remove('bakery-hidden');
-      bread.src = IMG + (state.round === 1 ? 'risen.png' : 'dough.png') + '?v=20261118';
-      bread.alt = state.round === 1 ? '부푼 반죽' : '반죽 공';
+      showBread(round.ready);
       button.textContent = '시작' + KEY_HINT;
       button.focus({ preventScroll: true });
       say(`${round.name}. 목표 ${round.target.toFixed(2)}초.${state.hidden ? ' 히든 이벤트: 중간에 숫자가 가려져요.' : ''} 시작 버튼을 눌러요.`);
@@ -123,25 +135,25 @@
       const grade = GRADES.find(row => error <= row.within * 1000 + 1e-7);
       state.results.push({ target: round.target, elapsed, error, stars: grade.stars });
       const miss = grade.bread === 'miss';
-      const baked = miss ? (delta < 0 ? 'raw' : 'burnt') : grade.bread;
-      const label = miss ? (delta < 0 ? '덜 익음' : '탔어요') : grade.text;
+      const art = miss ? round[delta < 0 ? 'early' : 'late']
+        : round.onTime || [`bread-${grade.bread}`, '구운 빵'];
+      const feedback = miss || round.onTime ? `${grade.text} · ${art[1]}` : grade.text;
       const difference = error < 1e-7 ? '오차 0.00초 · 정확해요!' : `${seconds(error)}초 ${delta < 0 ? '빨랐어요' : '늦었어요'}`;
       time.textContent = `${seconds(elapsed)}초`;
       time.classList.remove('bakery-hidden');
       $('.bakery-error').textContent = difference;
-      $('.bakery-grade').textContent = miss ? `${grade.text} · ${label}` : grade.text;
+      $('.bakery-grade').textContent = feedback;
       $('.bakery-stars').textContent = '★'.repeat(grade.stars) + '☆'.repeat(3 - grade.stars);
       $('.bakery-stars').setAttribute('aria-label', `별 3개 중 ${grade.stars}개`);
       $('.bakery-feedback').hidden = false;
-      bread.src = `${IMG}bread-${baked}.png?v=20261118`;
-      bread.alt = miss ? label : `${label} · 구운 빵`;
+      showBread(art);
       if (!api.reducedMotion) {
         root.classList.add('bakery-picked');
         root.classList.toggle('bakery-miss', miss);
       }
       button.textContent = state.round === ROUNDS.length - 1 ? '결과 보기' : '다음 단계 →';
       button.focus({ preventScroll: true });
-      say(`${round.name} ${seconds(elapsed)}초. ${difference}. ${grade.text} ${miss ? label : ''}. 별 ${grade.stars}개.`);
+      say(`${round.name} ${seconds(elapsed)}초. ${difference}. ${feedback}. 별 ${grade.stars}개.`);
     }
 
     function next() {

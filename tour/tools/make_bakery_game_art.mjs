@@ -45,6 +45,21 @@ function sparkle(c, x, y) {
 const dough = loaf(15, flat, ['#f3ddba','#d6ac88','#fff2d6']);
 cut(dough, 14, 18, '#d7b592', '#fff2d6', 3);
 cut(dough, 20, 18, '#d7b592', '#fff2d6', 2);
+// 치대기 전의 갈라진 덩이, 탄력이 생긴 매끈한 공, 힘이 풀려 퍼진 반죽.
+const doughColors = ['#f5dfbc','#d2ac88','#fff2da'];
+const rough = loaf(13, [[9,13],[7,15],[6,17],[5,20],[4,24],[3,25],[3,26],
+  [4,27],[3,28],[3,28],[4,27],[6,25],[9,21]], doughColors);
+for (const [x,y] of [[10,15],[16,18],[7,21],[21,20]]) {
+  rect(rough,x,y,3,1,'#c19a79'); rect(rough,x+2,y+1,2,2,'#c19a79');
+}
+rect(rough,2,25,2,2,'#c19a79'); rect(rough,28,22,2,2,'#d2ac88');
+const smooth = loaf(11, [[13,18],[10,21],[9,22],[8,23],[7,24],[6,25],[6,25],
+  [6,25],[6,25],[6,25],[7,24],[7,24],[8,23],[10,21],[13,18]], doughColors);
+rect(smooth,10,15,3,2,'#fff2da'); rect(smooth,12,14,3,1,'#fff2da');
+const slack = loaf(17, [[7,12],[5,15],[3,22],[2,26],[2,28],[1,29],[2,29],
+  [4,28],[7,25],[12,21]], doughColors);
+rect(slack,7,20,5,1,'#c49f7f'); rect(slack,11,21,6,1,'#c49f7f');
+rect(slack,16,22,6,1,'#c49f7f');
 const risen = loaf(7, dome, ['#fae5bf','#dbb78f','#fff6e4']);
 for (const [x,y] of [[12,12],[19,14],[11,18],[23,17]]) {
   rect(risen,x,y,2,1,'#d3a981'); put(risen,x,y-1,'#fff6e4');
@@ -67,5 +82,5 @@ for (const [x,y] of [[8,17],[15,15],[20,20],[12,20]]) {
 for (const [x,y] of [[12,4],[20,6]]) {
   rect(burnt,x,y,2,3,'#8c8393'); rect(burnt,x+1,y+3,2,2,'#8c8393'); put(burnt,x+1,y+5,'#8c8393');
 }
-for (const [name, art] of Object.entries({dough, risen, 'bread-perfect': perfect, 'bread-good': good,
+for (const [name, art] of Object.entries({dough, risen, 'dough-rough': rough, 'dough-smooth': smooth, 'dough-slack': slack, 'bread-perfect': perfect, 'bread-good': good,
   'bread-okay': okay, 'bread-raw': raw, 'bread-burnt': burnt})) save(OUT, name + '.png', scale(art, 4));
