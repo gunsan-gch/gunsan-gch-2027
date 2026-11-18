@@ -1,7 +1,7 @@
 .reconcile { color: #232e3c; background: #f6f2e9; border: 2px solid #344958; padding: clamp(10px, 3vw, 22px); border-radius: 12px; }
 .reconcile h3, .reconcile h4, .reconcile p { margin: 0 0 .7rem; }
 .rc-guide { display: flex; align-items: center; gap: 14px; }
-.rc-guide img { width: clamp(60px, 17vw, 96px); height: auto; image-rendering: pixelated; }
+.rc-guide img { width: clamp(72px, 20vw, 104px); height: auto; image-rendering: auto; }
 .rc-rule, .rc-progress { font-weight: 700; font-size: .9rem; }
 .rc-note { padding: .6rem; background: #e6eee9; border-left: 4px solid #3c7366; }
 .rc-columns { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: clamp(6px, 2vw, 14px); }

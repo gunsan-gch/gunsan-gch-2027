@@ -732,16 +732,16 @@
     "npcs/songhyeon-map.png": {
       "output": "npcs/songhyeon-map.png",
       "kind": "npc",
-      "generator": "tools/make_songhyeon_art.mjs",
-      "description": "포스터 통과 초대장을 든 송현 선배 지도 캐릭터",
-      "sha256": "35f1382971b256f77b86b202101bb3f4c1f0a89f2e53d7faaab4b5ad1d49bb1d"
+      "description": "옆으로 묶은 머리와 초대 포스터를 든 송현의 지도 캐릭터",
+      "sha256": "fac4ea0482235d82f276c57718a53f07f95ec6955c17bc89bd4cfb19b445401a",
+      "generator": "tools/make_songhyeon_art.mjs"
     },
     "npcs/songhyeon-portrait.png": {
       "output": "npcs/songhyeon-portrait.png",
       "kind": "npc",
-      "generator": "tools/make_songhyeon_art.mjs",
       "description": "옆으로 묶은 머리와 말린 포스터가 보이는 송현 선배 대화 초상",
-      "sha256": "5c7718e1b10d19b773a99bb97e182e570fce2a9a94d630663a6633655f12bad6"
+      "sha256": "5c7718e1b10d19b773a99bb97e182e570fce2a9a94d630663a6633655f12bad6",
+      "source": "이전 버전의 대화 그림. 원본 생성기 3dbb7a3: tour/tools/make_songhyeon_art.mjs"
     },
     "games/press/guide.png": {
       "output": "games/press/guide.png",
@@ -875,6 +875,153 @@
       "description": "이음 정산실 장부 도장",
       "generator": "tools/make_festival_art.mjs",
       "sha256": "15b2703e98812a6f49780d06b62e701938d6ae3039bf483136c090bafc9403bf"
+    },
+    "games/bookshop/shelf.png": {
+      "output": "games/bookshop/shelf.png",
+      "kind": "game-pixel-art",
+      "description": "녹원책방 서가",
+      "sha256": "331a12f54df8ce77c1035681465829518ce636d94d43189bc32eb21023ee9f58",
+      "generator": "tools/make_bookshop_art.mjs"
+    },
+    "games/bookshop/tables.png": {
+      "output": "games/bookshop/tables.png",
+      "kind": "game-pixel-art",
+      "description": "녹원책방 열람 테이블과 회색 의자",
+      "sha256": "079340b7fbbee66a613678a59ff099588babce51f2088bdb8fc9087e172025c1",
+      "generator": "tools/make_bookshop_art.mjs"
+    },
+    "games/bookshop/counter.png": {
+      "output": "games/bookshop/counter.png",
+      "kind": "game-pixel-art",
+      "description": "녹원책방 사서대와 구형 조명",
+      "sha256": "cb221646edc5e409275af3f5e7e6251bf7e7075dc5368a7cff9b175541e77fe9",
+      "generator": "tools/make_bookshop_art.mjs"
+    },
+    "games/bookshop/cat-0.png": {
+      "output": "games/bookshop/cat-0.png",
+      "kind": "game-pixel-art",
+      "description": "치즈 고양이 책갈피 앉은 모습",
+      "sha256": "214fd59fa9e29c4720d20707080c7cb1b326ebcee1e5b0ce0ddb44e029a3cd84",
+      "generator": "tools/make_bookshop_art.mjs"
+    },
+    "games/bookshop/peek-0.png": {
+      "output": "games/bookshop/peek-0.png",
+      "kind": "game-pixel-art",
+      "description": "치즈 고양이 책 사이에서 보이는 부분",
+      "sha256": "ab4bbd1e6932cef4f41d616b558eef004c08a3036a9bc54bc0cc505412c02a06",
+      "generator": "tools/make_bookshop_art.mjs"
+    },
+    "games/bookshop/sleep-0.png": {
+      "output": "games/bookshop/sleep-0.png",
+      "kind": "game-pixel-art",
+      "description": "치즈 고양이 책 위에서 잠든 모습",
+      "sha256": "dbb66ef9065935c48ab3fbc0f794d3b59443c8f9bc7045eaaf8eb3319bd39499",
+      "generator": "tools/make_bookshop_art.mjs"
+    },
+    "games/bookshop/cat-1.png": {
+      "output": "games/bookshop/cat-1.png",
+      "kind": "game-pixel-art",
+      "description": "턱시도 고양이 책갈피 앉은 모습",
+      "sha256": "985c2deb66b898016239e685925b702581ebf2a90db9354ccbd943519d62d048",
+      "generator": "tools/make_bookshop_art.mjs"
+    },
+    "games/bookshop/peek-1.png": {
+      "output": "games/bookshop/peek-1.png",
+      "kind": "game-pixel-art",
+      "description": "턱시도 고양이 책 사이에서 보이는 부분",
+      "sha256": "79be9540455f1e003070881bd2f7fd4bb906bbb8e6e3b0b2db29c3f3a5dc0972",
+      "generator": "tools/make_bookshop_art.mjs"
+    },
+    "games/bookshop/sleep-1.png": {
+      "output": "games/bookshop/sleep-1.png",
+      "kind": "game-pixel-art",
+      "description": "턱시도 고양이 책 위에서 잠든 모습",
+      "sha256": "45516235708c396b358733460a17d9e9d06084878eb107824e6ce7b8667fb70a",
+      "generator": "tools/make_bookshop_art.mjs"
+    },
+    "games/bookshop/cat-2.png": {
+      "output": "games/bookshop/cat-2.png",
+      "kind": "game-pixel-art",
+      "description": "삼색 고양이 책갈피 앉은 모습",
+      "sha256": "14cf424b79b9d1b7e670db95298288155398d0b34160c9f66ea19f8448b34d83",
+      "generator": "tools/make_bookshop_art.mjs"
+    },
+    "games/bookshop/peek-2.png": {
+      "output": "games/bookshop/peek-2.png",
+      "kind": "game-pixel-art",
+      "description": "삼색 고양이 책 사이에서 보이는 부분",
+      "sha256": "76413ab2ee48a330a433a37afd3ed21907bc99ac354f492c50b182184eeab6fd",
+      "generator": "tools/make_bookshop_art.mjs"
+    },
+    "games/bookshop/sleep-2.png": {
+      "output": "games/bookshop/sleep-2.png",
+      "kind": "game-pixel-art",
+      "description": "삼색 고양이 책 위에서 잠든 모습",
+      "sha256": "b605d88558eb69bb4b4cc79d38a72a17b47b93d4830c9ec9d69654d7cc3b0656",
+      "generator": "tools/make_bookshop_art.mjs"
+    },
+    "games/stamps/bookshop.png": {
+      "output": "games/stamps/bookshop.png",
+      "kind": "game-pixel-art",
+      "description": "녹원책방 고양이 책갈피 도장",
+      "sha256": "45462977a8d58f0b9d1e9691484d55240b273bcc01a3e9d7617c6a16b816097b",
+      "generator": "tools/make_bookshop_art.mjs"
+    },
+    "npcs/portraits/songhyeon.png": {
+      "output": "npcs/portraits/songhyeon.png",
+      "kind": "npc",
+      "description": "송현 · 옆으로 묶은 머리와 두루마리 포스터",
+      "sha256": "8d5682e42e0a74b8db9a864166ab5e3836270f8e2599c2e225de5156ff21489c",
+      "source": "녹원책방 업데이트용 제작 초상 시트, 투명 224×224 PNG"
+    },
+    "npcs/portraits/minju.png": {
+      "output": "npcs/portraits/minju.png",
+      "kind": "npc",
+      "description": "민주 · 민트색 리본과 계단 모양 배지",
+      "sha256": "b9c245f623978a50554a5bbe8d3efb707055aa71ba06e84ca908c3eeace668b6",
+      "source": "녹원책방 업데이트용 제작 초상 시트, 투명 224×224 PNG"
+    },
+    "npcs/portraits/hyuna.png": {
+      "output": "npcs/portraits/hyuna.png",
+      "kind": "npc",
+      "description": "현아 · 짧은 머리와 지휘봉",
+      "sha256": "922857f42f823f5fc6e573a84b4e11d0acdcda2643dd302a6f6870fe2a0e3ac5",
+      "source": "녹원책방 업데이트용 제작 초상 시트, 투명 224×224 PNG"
+    },
+    "npcs/portraits/sua.png": {
+      "output": "npcs/portraits/sua.png",
+      "kind": "npc",
+      "description": "수아 · 산호색 헤어밴드와 셔틀콕",
+      "sha256": "abf0ebfd3947d16b410f3643179b39cbade2e7e3934cf60993ba7b907813eee5",
+      "source": "녹원책방 업데이트용 제작 초상 시트, 투명 224×224 PNG"
+    },
+    "npcs/portraits/subin.png": {
+      "output": "npcs/portraits/subin.png",
+      "kind": "npc",
+      "description": "수빈 · 민트색 머리핀과 카메라",
+      "sha256": "d82692c090a222f974070b9e26bb4af3130a4356daba0f688339a7fd4841f1be",
+      "source": "녹원책방 업데이트용 제작 초상 시트, 투명 224×224 PNG"
+    },
+    "npcs/portraits/dayeong.png": {
+      "output": "npcs/portraits/dayeong.png",
+      "kind": "npc",
+      "description": "다영 · 배달 모자와 작은 소포",
+      "sha256": "d01ab6d75a996bf0867085107b504013ac76e98144a51a5deab159cea878b9d8",
+      "source": "녹원책방 업데이트용 제작 초상 시트, 투명 224×224 PNG"
+    },
+    "npcs/portraits/eunryeong.png": {
+      "output": "npcs/portraits/eunryeong.png",
+      "kind": "npc",
+      "description": "은령 · 둥근 안경과 정산 장부",
+      "sha256": "0b688c2ebeffe859485d3ec5235c895840e89238636fcfe78f6a243861bd4cac",
+      "source": "녹원책방 업데이트용 제작 초상 시트, 투명 224×224 PNG"
+    },
+    "npcs/portraits/jaehee.png": {
+      "output": "npcs/portraits/jaehee.png",
+      "kind": "npc",
+      "description": "재희 · 자주색 머리핀과 고양이 책갈피가 꽂힌 책",
+      "sha256": "9a08f420316b7c1deaf58b153aac8814e1487afd7dbd66f0959c7f9de4f13e28",
+      "source": "녹원책방 업데이트용 제작 초상 시트, 투명 224×224 PNG"
     }
   }
 }

@@ -1,5 +1,6 @@
 /* 음악실 — 현아 선배의 멜로디 따라잡기. All five tunes are original short motifs. */
 (() => {
+  const HYUNA = 'img/npcs/portraits/hyuna.png';
   const R = window.TourMelodyRules, IMG = 'img/games/melody/';
   const LAST_KEY = 'gch-tour-melody-last';
   document.addEventListener('tour:stamps-reset', () => { try { sessionStorage.removeItem(LAST_KEY); } catch {} });
@@ -24,7 +25,7 @@
           <span class="melody-random">5곡 중 랜덤<br><small>${song.mood}</small></span>
         </div>
         <div class="melody-stage" aria-hidden="true">
-          <img class="melody-hyuna" src="${IMG}guide-hyuna.png" alt="" width="64" height="64">
+          <img class="melody-hyuna" src="${HYUNA}" alt="" width="64" height="64">
           <span class="melody-float-note"></span>
           <canvas class="melody-player" width="48" height="52"></canvas>
           <span class="melody-name">현아 선배</span><span class="melody-player-name">나</span>
@@ -148,7 +149,7 @@
       const s = engine.state; clearPlayback();
       if (s.practice) { render(); main.focus({preventScroll:true}); say('연습 성공! 실전 시작 버튼을 눌러요.'); return; }
       const extra = document.createElement('div'); extra.className = 'melody-summary';
-      const img = document.createElement('img'); img.src = IMG + (s.reason==='complete'?'trophy':'guide-hyuna') + '.png'; img.width = 96; img.height = 96; img.alt = '';
+      const img = document.createElement('img'); img.src = s.reason==='complete'?IMG+'trophy.png':HYUNA; img.width = 96; img.height = 96; img.alt = '';
       const heading = document.createElement('h3'); heading.textContent = s.reason==='complete'?'현아 선배와 멋진 합주 완성!':'좋아, 다음엔 더 길게 기억해 보자!';
       const detail = document.createElement('p'); detail.textContent = `「${song.title}」 · ${s.cleared} / 5단계 성공`;
       const next = document.createElement('p'); next.textContent = '다시 도전하면 다른 멜로디가 나와요.';

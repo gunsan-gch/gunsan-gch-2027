@@ -28,7 +28,7 @@
     const on = (node, event, handle) => node.addEventListener(event, handle, { signal: controller.signal });
     container.innerHTML = `
       <section class="press-app">
-        <header class="press-guide"><img src="${art}guide.png" alt=""><div><strong>수빈 선배 · 이음 취재반</strong><p></p></div></header>
+        <header class="press-guide"><img src="img/npcs/portraits/subin.png" alt=""><div><strong>수빈 선배 · 이음 취재반</strong><p></p></div></header>
         <div class="press-intro"><h3>오늘의 특집호, 네 사진으로!</h3><p>체육관, 조리제빵실, 음악실에서 사진을 한 장씩 찍고 1면에 실을 기사를 골라요.</p>
         <label><input type="checkbox" class="press-slow"> 직접 한 컷씩 넘기기 (움직임 줄이기)</label>
         <button type="button" class="btn btn-primary press-start">취재 시작</button></div>

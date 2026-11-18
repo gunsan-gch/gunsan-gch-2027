@@ -8,7 +8,7 @@
 .melody-random { font-size: 11px; text-align: right; margin-left: auto; line-height: 1.6; }
 .melody-random small { font-size: 10px; color: var(--muted); }
 .melody-stage { height: 152px; position: relative; overflow: hidden; border: 2px solid var(--navy); background: #edf3e7 url('../img/games/melody/stage.png?v=20261118') center / cover no-repeat; image-rendering: pixelated; }
-.melody-hyuna { position: absolute; bottom: 24px; left: calc(36% - 32px); width: 64px; height: 64px; image-rendering: pixelated; }
+.melody-hyuna { position: absolute; bottom: 24px; left: calc(36% - 48px); width: 96px; height: 96px; object-fit: contain; image-rendering: auto; }
 .melody-player { position: absolute; bottom: 12px; left: calc(64% - 48px); width: 96px; height: 104px; image-rendering: pixelated; }
 .melody-name, .melody-player-name { position: absolute; bottom: 4px; font-size: 10px; background: #fffbed; padding: 0 5px; border: 1px solid #c3cec1; transform: translateX(-50%); }
 .melody-name { left: 36%; }.melody-player-name { left: 64%; }
@@ -48,6 +48,7 @@
 .melody-audio-warning { margin: 0; font-size: 12px; color: #80452f; text-align: center; }
 .melody-summary { text-align: center; }
 .melody-summary img { image-rendering: pixelated; }
+.melody-summary img[src*="/portraits/"] { image-rendering: auto; }
 .melody-summary h3 { font-family: var(--font-title); font-size: 23px; margin: 4px 0; }
 .melody-summary p { margin: 4px 0; font-size: 14px; }
 @media(max-width: 760px) {
@@ -60,7 +61,7 @@
 @media(max-width: 599px) and (max-height: 700px) {
   .melody-game { gap: 6px; }
   .melody-stage { height: 102px; }
-  .melody-hyuna { width: 64px; height: 64px; left: calc(36% - 32px); bottom: 17px; }
+  .melody-hyuna { width: 76px; height: 76px; left: calc(36% - 38px); bottom: 17px; }
   .melody-player { width: 72px; height: 78px; left: calc(64% - 36px); bottom: 10px; }
   .melody-song img { width: 40px; height: 40px; }
   .melody-song h3 { font-size: 20px; }

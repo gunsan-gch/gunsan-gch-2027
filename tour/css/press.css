@@ -2,7 +2,7 @@
 .press-app,.press-paper {--press-ink:#172e37;--press-mint:#a1e5cc;color:var(--press-ink);line-height:1.45}
 .press-app [hidden] {display:none!important}
 .press-guide {display:flex;align-items:center;gap:.8rem;border:2px solid var(--press-ink);background:#ebf8ef;padding:.4rem .7rem;text-align:left}
-.press-guide img {width:clamp(48px,12vw,72px);aspect-ratio:1;object-fit:contain;image-rendering:pixelated}
+.press-guide img {width:clamp(72px,20vw,96px);aspect-ratio:1;object-fit:contain;image-rendering:auto}
 .press-guide strong,.press-slug b {font-size:.82rem;color:#155e52}
 .press-guide p,.press-app h3,.press-app p,.press-paper p {margin:0}
 .press-intro,.press-job,.press-edit {padding-top:.7rem}

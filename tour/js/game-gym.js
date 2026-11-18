@@ -1,5 +1,6 @@
 /* 수아 선배의 체육관 3종 챌린지 — school-event-inspired, original mini games. */
 (() => {
+  const SUA = 'img/npcs/portraits/sua.png';
   const IMG = 'img/games/gym/', R = window.TourGymRules;
   const IDS = ['curling', 'target', 'badminton'], KEY = 'gch-tour-gym-best-v1';
   const INFO = {
@@ -25,7 +26,7 @@
   function hub(container, api) {
     const stamps = window.tourGame?.stamps() || {}, count = IDS.filter(id => stamps[id]).length;
     container.innerHTML = `<section class="gym-hub" aria-label="체육관 종목 선택">
-      <div class="gym-guide"><img src="${IMG}guide-sua.png?v=20261118" width="56" height="56" alt="수아 선배"><div><strong>수아 선배의 체육관 3종 챌린지</strong><p>우리 체육관 미니게임 대회, 너도 함께해!</p></div></div>
+      <div class="gym-guide"><img src="${SUA}" width="56" height="56" alt="수아 선배"><div><strong>수아 선배의 체육관 3종 챌린지</strong><p>우리 체육관 미니게임 대회, 너도 함께해!</p></div></div>
       <div class="gym-panorama"><img src="${IMG}gym-hall.png?v=20261118" width="640" height="320" alt="컬링 스톤, 사격 표적, 배드민턴 코트가 있는 픽셀 체육관"><span>원하는 종목부터 자유롭게!</span></div>
       <div class="gym-events">${IDS.map(id => {
         const info = INFO[id], best = recordValue(id), saved = stamps[id];
@@ -42,7 +43,7 @@
     let engine = null, raf = 0, last = 0, disposed = false, ended = false, lastEvent = -1, drag = null, muted = false, previousX = 160;
     const audio = window.TourMelodyAudio?.create(), equip = outfit();
     container.innerHTML = `<section class="gym-game gym-${kind}" aria-label="${info.sport} 게임">
-      <div class="gym-guide"><img src="${IMG}guide-sua.png?v=20261118" width="48" height="48" alt="수아 선배"><div><strong>수아 선배와 ${info.sport}</strong><p>${info.intro}</p></div></div>
+      <div class="gym-guide"><img src="${SUA}" width="48" height="48" alt="수아 선배"><div><strong>수아 선배와 ${info.sport}</strong><p>${info.intro}</p></div></div>
       <div class="gym-hud"><strong class="gym-score">준비됐나요?</strong><span class="gym-round">${kind === 'badminton' ? `최고 ${best.score}득점` : `최고 ${best.score}점`}</span></div>
       <div class="gym-field"><canvas width="320" height="240" tabindex="0" role="img" aria-label="${info.sport} 경기장"></canvas><div class="gym-overlay" hidden></div></div>
       <p class="gym-message" role="status" aria-live="polite">${info.subtitle}</p>
@@ -54,8 +55,8 @@
     const $ = s => container.querySelector(s), field = $('.gym-field'), canvas = $('canvas'), ctx = canvas.getContext('2d'), overlay = $('.gym-overlay');
     const dressed = document.createElement('canvas'); dressed.width = 48; dressed.height = 52;
     const sprite = new Image(); sprite.src = 'img/walker.png'; sprite.onload = () => { if (!disposed) paint(0); };
-    for (const name of ['guide-sua', 'curling-rink', 'badminton-court', 'target-board', 'stone-coral', 'stone-mint', 'shuttle', 'racket']) {
-      const image = new Image(); images[name] = image; image.onload = () => { if (!disposed) paint(0); }; image.src = IMG + name + '.png?v=20261118';
+    for (const name of ['opponent', 'curling-rink', 'badminton-court', 'target-board', 'stone-coral', 'stone-mint', 'shuttle', 'racket']) {
+      const image = new Image(); images[name] = image; image.onload = () => { if (!disposed) paint(0); }; image.src = name === 'opponent' ? SUA : IMG + name + '.png?v=20261118';
     }
     function art(name, x, y, w, h) { const im = images[name]; if (im?.complete && im.naturalWidth) { ctx.drawImage(im, Math.round(x), Math.round(y), w, h); return true; } return false; }
     function player(x, y, dir = 'up', frame = 1) {
@@ -102,7 +103,14 @@
         if (s?.phase === 'incoming') { pixelRing(s.toX, 189, 14, '#284d56'); pixelRing(s.toX, 189, 12, '#ffe7a1');
           const x = Math.round(s.toX);
           ctx.fillStyle = '#284d56'; ctx.fillRect(x - 20, 188, 7, 3); ctx.fillRect(x + 14, 188, 7, 3); }
-        art('guide-sua', (s?.opponent || 160) - 16, 40, 32, 32);
+        // A portrait marker identifies the far-court opponent at the racket's position.
+        const opponentX = Math.round(s?.opponent || 160);
+        ctx.save();ctx.beginPath();ctx.arc(opponentX,51,20,0,2*Math.PI);ctx.clip();
+        ctx.fillStyle='#f8edce';ctx.fillRect(opponentX-20,31,40,40);
+        ctx.imageSmoothingEnabled=true;
+        art('opponent',opponentX-20,31,40,40);
+        ctx.restore();
+        ctx.beginPath();ctx.arc(opponentX,51,20,0,2*Math.PI);ctx.lineWidth=2;ctx.strokeStyle='#284d56';ctx.stroke();
         art('racket', (s?.opponent || 160) + 17, 49, 15, 20);
         player(px, 208, 'up', frame);
         art('racket', px + (s?.swing > 0 ? 18 : 12), s?.swing > 0 ? 160 : 177, 18, 24);

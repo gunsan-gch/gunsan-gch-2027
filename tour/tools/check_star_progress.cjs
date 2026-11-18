@@ -9,7 +9,7 @@ const entries=ids.map(id=>({id,maxStars:3}));
 const score=stamps=>rules.summarize(stamps,entries);
 const record=stars=>({stars,at:'2026-11-15'});
 let checks=0;function check(condition,message){assert(condition,message);checks++;}
-check(ids.length===17&&score({}).maxStars===51,'17 reward games offer 51 stars');
+check(ids.length===18&&score({}).maxStars===54,'18 reward games offer 54 stars');
 let fresh=rules.emptyWardrobe();
 check(rules.wardrobe(fresh,score({}),items).unlocked.length===0,'fresh visitor starts locked');
 let stamps={bakery:record(1)},first=rules.wardrobe(fresh,score(stamps),items);
@@ -18,11 +18,11 @@ let same=rules.wardrobe(first,score(stamps),items);
 check(JSON.stringify(same)===JSON.stringify(first),'repeating the same record cannot add rewards');
 stamps.bakery=record(3);
 let improved=rules.wardrobe(first,score(stamps),items);
-check(score(stamps).stars===3&&improved.unlocked.length===4,'one stamp improving 1 to 3 unlocks the next pair');
-for(let total=0;total<=51;total++){
+check(score(stamps).stars===3&&improved.unlocked.length===5,'one stamp improving 1 to 3 unlocks the next pair and bookcat');
+for(let total=0;total<=54;total++){
   const s=Object.fromEntries(ids.map((id,i)=>[id,record(Math.max(0,Math.min(3,total-i*3)))]));
   const w=rules.wardrobe(fresh,score(s),items);
-  const expected=[1,3,5,7,9,11,13,15,17,19,21,24,27,30,33,36,39,42].filter(at=>at<=total).length*2;
+  const expected=[1,3,5,7,9,11,13,15,17,19,21,24,27,30,33,36,39,42].filter(at=>at<=total).length*2+(total>=3?1:0);
   check(w.unlocked.length===expected,`boundary at ${total} stars`);
   check(w.title===(total>=27),`title boundary at ${total} stars`);
 }
@@ -39,9 +39,9 @@ check(!rules.wardrobe(fresh,freshNine,items).unlocked.includes('witch'),'new vis
 const originalIds=['bakery','typing','cafe','cashier','rain','melody','curling','target','badminton','ai','career','phishing','interview','stairs'];
 const oldStamps=Object.fromEntries(originalIds.map(id=>[id,record(3)]));
 const before=score(oldStamps);
-check(before.count===14&&before.stars===42&&before.maxStars===51,'all 14 original stamp records survive the expansion');
+check(before.count===14&&before.stars===42&&before.maxStars===54,'all 14 original stamp records survive the expansion');
 const oldRewards=rules.wardrobe(fresh,before,items);
-check(oldRewards.unlocked.length===36&&oldRewards.title,'previously completed wardrobe remains complete at 42 stars');
+check(oldRewards.unlocked.length===37&&oldRewards.title,'previously completed wardrobe remains complete at 42 stars');
 for(const [id,floor,name] of [['press','3','드림스페이스'],['logistics','4','전산회계2실'],['reconcile','4','전산회계3실']]){
   const room=scope.window.TOUR_SCENES[floor].rooms.find(room=>room.name===name);
   check(room?.game===id,'direct room entry for '+id);
@@ -49,8 +49,8 @@ for(const [id,floor,name] of [['press','3','드림스페이스'],['logistics','4
   check(after.count===15&&after.stars===45,'independent new stamp for '+id);
 }
 let max=rules.wardrobe(fresh,score(Object.fromEntries(ids.map(id=>[id,record(3)]))),items);
-check(max.unlocked.length===36&&max.title,'51-star collection complete');
-check(rules.wardrobe(max,score({bakery:record(1)}),items).unlocked.length===36,'earned items are permanent until explicit reset');
+check(max.unlocked.length===37&&max.title,'54-star collection complete');
+check(rules.wardrobe(max,score({bakery:record(1)}),items).unlocked.length===37,'earned items are permanent until explicit reset');
 check(rules.wardrobe(rules.emptyWardrobe(),score({}),items).unlocked.length===0,'explicit reset clears items');
 check(!rules.wardrobe(rules.emptyWardrobe(),score({}),items).title,'explicit reset clears title');
 check(score({bakery:record(9),typing:record(6),cafe:record(4),foreign:record(100)}).stars===6,'legacy nine-star scores normalize; unknown games do not count');
@@ -59,8 +59,12 @@ check(rules.normalizeStars(999)===3,'numeric records are capped');
 check(rules.summarize({bakery:record(3)},[entries[0],entries[0]]).stars===3,'duplicate rooms do not double count');
 const malformed=rules.wardrobe({version:2,unlocked:['not-real','ribbon','ribbon'],title:'true'},score({}),items);
 check(malformed.unlocked.length===1&&!malformed.title,'stored wardrobe IDs and title are sanitized');
-const oldCollection={version:2,unlocked:items.filter(i=>i.at<=24).map(i=>i.id),title:true};
+const oldCollection={version:2,unlocked:items.filter(i=>i.at<=24&&i.id!=='bookcat').map(i=>i.id),title:true};
 const upgraded=rules.wardrobe(oldCollection,{stars:33,count:11},items);
-check(upgraded.unlocked.length===30&&oldCollection.unlocked.every(id=>upgraded.unlocked.includes(id))&&upgraded.title,'existing 33-star player keeps old 24 items and gains six new items');
+check(upgraded.unlocked.length===31&&oldCollection.unlocked.every(id=>upgraded.unlocked.includes(id))&&upgraded.title,'existing 33-star player keeps old 24 items and gains seven new items');
 check(!rules.wardrobe(oldCollection,{stars:24,count:8},items).unlocked.includes('trailcap'),'new rewards are not granted below threshold');
-console.log(JSON.stringify({checks,maximumStars:51,items:36,legacyMigration:'all 1–9 stamp counts',replay:'best record only',reset:'items and title cleared'}));
+const lowScore=score({bookshop:record(2)});
+check(!rules.wardrobe(fresh,lowScore,items).unlocked.includes('bookcat'),'two bookshop stars leave bookcat locked');
+check(rules.wardrobe(fresh,score({bookshop:record(2),bakery:record(1)}),items).unlocked.includes('bookcat'),'another game may complete the three-star requirement');
+check(rules.wardrobe(fresh,score({bookshop:record(3)}),items).unlocked.includes('bookcat'),'a first three-star bookshop win unlocks bookcat');
+console.log(JSON.stringify({checks,maximumStars:54,items:37,legacyMigration:'all 1–9 stamp counts',replay:'best record only',reset:'items and title cleared'}));

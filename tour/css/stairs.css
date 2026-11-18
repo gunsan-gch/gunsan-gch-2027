@@ -2,7 +2,7 @@
 #game:has(.stairs-game), #game:has(.stairs-summary) { width: min(560px, 100% - 20px); }
 .stairs-game { max-width: 500px; margin: auto; color: var(--navy); }
 .stairs-guide { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.stairs-guide img { width: 52px; height: 52px; image-rendering: pixelated; flex: 0 0 auto; }
+.stairs-guide img { width: 88px; height: 88px; image-rendering: auto; object-fit: contain; flex: 0 0 auto; }
 .stairs-guide strong { font-size: 12px; color: var(--green); }
 .stairs-guide p { margin: 2px 0 0; font-size: 15px; font-weight: 700; line-height: 1.35; }
 .stairs-hud { display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 8px 10px; background: #14285a; color: #fffbed; }
@@ -42,6 +42,7 @@
 .stairs-note { font-size: 10px; color: var(--muted); text-align: center; margin: 6px 0 0; }
 .stairs-summary { text-align: center; }
 .stairs-summary img { image-rendering: pixelated; }
+.stairs-summary img[src*="/portraits/"] { image-rendering: auto; }
 .stairs-summary h3 { font-family: var(--font-title); font-size: 22px; margin: 4px 0; }
 .stairs-summary p { margin: 4px 0; }
 @media(max-width: 400px) {
