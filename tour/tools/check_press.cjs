@@ -46,7 +46,7 @@ class Element {
   }
   getContext() { return { fillRect() {} }; }
   toDataURL() { return 'data:image/png;base64,AA'; }
-  focus() {}
+  focus() { this.focused = true; }
   setAttribute(key, value) { this[key] = value; }
   addEventListener(name, handler, { signal }) {
     this.listeners[name] = () => { if (!signal.aborted) handler(); };
@@ -107,7 +107,10 @@ for (const manual of [true, false]) {
     const choices = find('.press-choices').children;
     assert.equal(choices.length, 3);
     const lead = steps;
+    body.scrollTop = 300;
     choices[lead].click();
+    assert.equal(body.scrollTop, 0);
+    assert.equal(result.extra.focused, true);
     assert.equal(result.stars, stars);
     const printed = result.extra.children.filter(node => node.tag === 'figure').map(snapshot);
     assert.deepEqual(printed, [shots[lead], ...shots.filter((_, index) => index !== lead)],

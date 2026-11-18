@@ -210,7 +210,10 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     const panel=document.createElement('section');panel.className='addon-unlock-result';panel.setAttribute('aria-label','새로 열린 꾸미기 아이템');
     panel.innerHTML=`<span class="eyebrow">★ ${score().stars} / ${score().maxStars} · 새 꾸미기 보상</span><h3>${unlocked.length?`새 아이템 ${unlocked.length}종이 열렸어요!`:'특별 칭호를 얻었어요!'}</h3>${title?`<p class="addon-star-title is-earned">✦ ${rules.TITLE}</p>`:''}<div class="addon-unlock-pair">${unlocked.map(r=>`<figure><canvas width="48" height="52" data-addon-reward="${r.id}" aria-hidden="true"></canvas><figcaption><small>${r.slot==='head'?'머리 장식':'등 소품'}</small><strong>${r.name}</strong></figcaption></figure>`).join('')}</div><button class="btn btn-primary" id="addon-reward-try">${unlocked.length?'바로 입어보기':'내 옷장 보기'}</button><p>옷장에서 조합해 보고, 마음에 들면 입어요.</p>`;
     const actions=game.querySelector('.game-result-actions');if(actions)actions.before(panel);else $('#game-body').append(panel);
-    requestAnimationFrame(()=>{if(game.open&&game.classList.contains('is-result')&&panel.isConnected)panel.scrollIntoView({block:'nearest',behavior:'instant'});});
+    // 발행한 신문은 첫 기사부터 읽고, 보상은 같은 결과 화면 아래에서 확인한다.
+    if (!game.querySelector('.press-paper')) {
+      requestAnimationFrame(()=>{if(game.open&&game.classList.contains('is-result')&&panel.isConnected)panel.scrollIntoView({block:'nearest',behavior:'instant'});});
+    }
     if(spriteReady)panel.querySelectorAll('[data-addon-reward]').forEach(c=>{const r=rewards.find(r=>r.id===c.dataset.addonReward);drawAvatar(c.getContext('2d'),r.slot==='back'?'up':'down',1,{[r.slot]:r.id});});
     panel.querySelector('#addon-reward-try').onclick=()=>{
       const preset={...state.equip};for(const r of unlocked)preset[r.slot]=r.id;
