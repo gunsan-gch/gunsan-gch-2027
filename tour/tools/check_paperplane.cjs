@@ -34,6 +34,7 @@ for (const i of variants) {
   assert.deepEqual(flight(75,i).marks.slice(0,2),flight(75).marks.slice(0,2));
   const idle=simulate('idle',100,60,i), wide=simulate('wide',0,60,i), precision=simulate('star',0,60,i);
   assert.equal(idle.rings,0); assert(idle.distance < 122); assert.equal(stars(score(idle)),1);
+  assert.equal(idle.energy,0,'an early landing leaves 0m on the glide meter');
   const recovered=simulate('recover',0,60,i);
   assert.equal(recovered.distance,288); assert.equal(recovered.rings,6);
   for (const run of [wide,precision]) {
