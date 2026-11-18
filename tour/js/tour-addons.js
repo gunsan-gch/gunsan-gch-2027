@@ -31,7 +31,11 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
   window.TourCostumes.draw(c,sprite,dir,frame,outfit);
 }
 
-  function paint(root=document){root.querySelectorAll('[data-addon-art]').forEach(c=>art(c.getContext('2d'),c.dataset.addonArt));if(spriteReady)root.querySelectorAll('[data-addon-npc]').forEach(c=>drawAvatar(c.getContext('2d'),'down',1,{},c.dataset.addonNpc));}
+  // 선배 캐릭터: 플레이어와 같은 32×40 걷기 시트 (tools/make_npc_sheets.py). 시트가 없으면 예전처럼 플레이어 그림으로.
+  const npcSheets={yuna:'img/npcs/sheets/arum.png?v=20261118',songhyeon:'img/npcs/sheets/songhyeon.png?v=20261118'};
+  const npcImages=Object.fromEntries(Object.entries(npcSheets).map(([id,src])=>{const im=new Image();im.onload=()=>paint();im.src=src;return [id,im];}));
+  function drawNpc(c,id){const im=npcImages[id];if(im?.complete&&im.naturalWidth){c.clearRect(0,0,32,40);c.imageSmoothingEnabled=false;c.drawImage(im,32,0,32,40,0,0,32,40);}else if(spriteReady)drawAvatar(c,'down',1,{},id);}
+  function paint(root=document){root.querySelectorAll('[data-addon-art]').forEach(c=>art(c.getContext('2d'),c.dataset.addonArt));root.querySelectorAll('[data-addon-npc]').forEach(c=>drawNpc(c.getContext('2d'),c.dataset.addonNpc));}
   const icon=id=>`<canvas width="32" height="32" data-addon-art="${id}" aria-hidden="true"></canvas>`;
   const portrait=id=>`<canvas width="32" height="40" data-addon-npc="${id}" aria-hidden="true"></canvas>`;
   const dialog=$('#festival-dialog'),body=$('#festival-body');
@@ -62,9 +66,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       button.dataset.addonPoint = id;
       button.setAttribute('aria-label', place.name + (place.npc ? ' 만나러 가기' : ' 찾으러 가기'));
       const alert = id === 'poster' ? state.started && !state.poster : !state.complete;
-      const figure = place.npc === 'songhyeon'
-        ? '<img class="songhyeon-sprite" src="img/npcs/songhyeon-map.png?v=20261118-portraits" width="32" height="40" alt="">'
-        : place.npc ? portrait(place.npc) : icon(id);
+      const figure = place.npc ? portrait(place.npc) : icon(id);
       button.innerHTML = figure + `<span class="addon-npc-name">${place.name}</span>` +
         (alert ? '<span class="addon-alert" aria-hidden="true">!</span>' : '');
       button.onclick = () => visit(id);

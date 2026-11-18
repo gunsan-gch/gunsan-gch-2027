@@ -55,6 +55,7 @@ tour/
   img/games/melody/        현아 선배·음악실·5곡 아이콘·트로피 그림
   tools/update_assets.py   새 원본 그림 중 바뀐 것만 골라 변환하는 도구
   tools/pixel.mjs          게임 픽셀아트 공통 도우미 (색·그리기·PNG 저장)
+  tools/make_npc_sheets.py  선배 지도·게임 캐릭터 시트 (플레이어 걷기 그림을 바탕으로 머리·소품·옷만 바꿈)
   tools/make_cafe_game_art.mjs  카페 게임 픽셀아트를 코드로 다시 그리는 도구 (Node.js)
   tools/make_ai_game_art.mjs    AI 광고 게임 픽셀아트 도구 (Node.js)
   img/games/interview/     AI 면접 게임 그림 (면접관 로봇 표정 4장)

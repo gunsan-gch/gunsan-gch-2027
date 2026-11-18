@@ -40,7 +40,7 @@
   }
   function start(kind, container, api) {
     const info = INFO[kind], best = recordValue(kind), images = {}, keys = new Set();
-    let engine = null, raf = 0, last = 0, disposed = false, ended = false, lastEvent = -1, drag = null, muted = false, previousX = 160;
+    let engine = null, raf = 0, last = 0, disposed = false, ended = false, lastEvent = -1, drag = null, muted = false, previousX = 160, previousOpp = 160;
     const audio = window.TourMelodyAudio?.create(), equip = outfit();
     container.innerHTML = `<section class="gym-game gym-${kind}" aria-label="${info.sport} 게임">
       <div class="gym-guide"><img src="${SUA}" width="48" height="48" alt="수아 선배"><div><strong>수아 선배와 ${info.sport}</strong><p>${info.intro}</p></div></div>
@@ -55,8 +55,8 @@
     const $ = s => container.querySelector(s), field = $('.gym-field'), canvas = $('canvas'), ctx = canvas.getContext('2d'), overlay = $('.gym-overlay');
     const dressed = document.createElement('canvas'); dressed.width = 48; dressed.height = 52;
     const sprite = new Image(); sprite.src = 'img/walker.png'; sprite.onload = () => { if (!disposed) paint(0); };
-    for (const name of ['opponent', 'curling-rink', 'badminton-court', 'target-board', 'stone-coral', 'stone-mint', 'shuttle', 'racket']) {
-      const image = new Image(); images[name] = image; image.onload = () => { if (!disposed) paint(0); }; image.src = name === 'opponent' ? SUA : IMG + name + '.png?v=20261118';
+    for (const name of ['sua-sheet', 'curling-rink', 'badminton-court', 'target-board', 'stone-coral', 'stone-mint', 'shuttle', 'racket']) {
+      const image = new Image(); images[name] = image; image.onload = () => { if (!disposed) paint(0); }; image.src = name === 'sua-sheet' ? 'img/npcs/sheets/sua.png?v=20261118' : IMG + name + '.png?v=20261118';
     }
     function art(name, x, y, w, h) { const im = images[name]; if (im?.complete && im.naturalWidth) { ctx.drawImage(im, Math.round(x), Math.round(y), w, h); return true; } return false; }
     function player(x, y, dir = 'up', frame = 1) {
@@ -103,15 +103,12 @@
         if (s?.phase === 'incoming') { pixelRing(s.toX, 189, 14, '#284d56'); pixelRing(s.toX, 189, 12, '#ffe7a1');
           const x = Math.round(s.toX);
           ctx.fillStyle = '#284d56'; ctx.fillRect(x - 20, 188, 7, 3); ctx.fillRect(x + 14, 188, 7, 3); }
-        // A portrait marker identifies the far-court opponent at the racket's position.
-        const opponentX = Math.round(s?.opponent || 160);
-        ctx.save();ctx.beginPath();ctx.arc(opponentX,51,20,0,2*Math.PI);ctx.clip();
-        ctx.fillStyle='#f8edce';ctx.fillRect(opponentX-20,31,40,40);
-        ctx.imageSmoothingEnabled=true;
-        art('opponent',opponentX-20,31,40,40);
-        ctx.restore();
-        ctx.beginPath();ctx.arc(opponentX,51,20,0,2*Math.PI);ctx.lineWidth=2;ctx.strokeStyle='#284d56';ctx.stroke();
-        art('racket', (s?.opponent || 160) + 17, 49, 15, 20);
+        // 건너편 코트의 수아 선배: 플레이어와 같은 크기의 전신 캐릭터 (움직일 때만 걷는 동작)
+        const opponentX = Math.round(s?.opponent || 160), oppMoving = Math.abs(opponentX - previousOpp) > .1; previousOpp = opponentX;
+        const oppFrame = oppMoving && !api.reducedMotion ? [0, 1, 2, 1][Math.floor(now / 120) % 4] : 1;
+        const sheet = images['sua-sheet'];
+        if (sheet?.complete && sheet.naturalWidth) { ctx.imageSmoothingEnabled = false; ctx.drawImage(sheet, oppFrame * 32, 0, 32, 40, opponentX - 16, 26, 32, 40); }
+        art('racket', opponentX + 11, 44, 15, 20);
         player(px, 208, 'up', frame);
         art('racket', px + (s?.swing > 0 ? 18 : 12), s?.swing > 0 ? 160 : 177, 18, 24);
         if (s && ['incoming', 'outgoing'].includes(s.phase)) {

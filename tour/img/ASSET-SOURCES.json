@@ -1022,6 +1022,27 @@
       "description": "재희 · 자주색 머리핀과 고양이 책갈피가 꽂힌 책",
       "sha256": "9a08f420316b7c1deaf58b153aac8814e1487afd7dbd66f0959c7f9de4f13e28",
       "source": "녹원책방 업데이트용 제작 초상 시트, 투명 224×224 PNG"
+    },
+    "npcs/sheets/arum.png": {
+      "output": "npcs/sheets/arum.png",
+      "kind": "npc",
+      "description": "아름 선배 지도 캐릭터 (밝은 밤색 긴 생머리·분홍 리본) — 플레이어 걷기 시트를 바탕으로 만든 32×40 걷기 시트",
+      "sha256": "4854ea66d364af4cd5795c15f4ad1827978934e77f6758317889617ee878964a",
+      "generator": "tools/make_npc_sheets.py"
+    },
+    "npcs/sheets/songhyeon.png": {
+      "output": "npcs/sheets/songhyeon.png",
+      "kind": "npc",
+      "description": "송현 선배 지도 캐릭터 (옆으로 묶은 머리·돌돌 만 포스터) — 플레이어 걷기 시트 바탕 32×40 걷기 시트",
+      "sha256": "69dfe3f7ec16d82351fa78c528ca5895442704c27891572cf8aa7bcccbb33c4a",
+      "generator": "tools/make_npc_sheets.py"
+    },
+    "npcs/sheets/sua.png": {
+      "output": "npcs/sheets/sua.png",
+      "kind": "npc",
+      "description": "수아 선배 게임 캐릭터 (올림머리·산호색 머리띠·민트 체육복) — 배드민턴 상대, 플레이어 걷기 시트 바탕",
+      "sha256": "c18f36b1629a126580458701fef2315725593161da5869bde47795620c4059f6",
+      "generator": "tools/make_npc_sheets.py"
     }
   }
 }

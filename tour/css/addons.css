@@ -80,6 +80,7 @@
 /* A tall fitting panel must not cover the collection controls on small screens. */
 @media(max-width:650px){.addon-avatar-preview{position:relative;top:auto}.addon-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}}
 
-.addon-point .songhyeon-sprite { display: block; width: 100%; height: auto; image-rendering: pixelated; pointer-events: none; }
+/* 선배는 플레이어(#scene-walker)와 같은 크기·발 위치로 서 있게 */
+.addon-point:not(.is-item) { width: max(26px, calc(var(--stage-w) * .054)); transform: translate(-50%, -87.5%); }
 .addon-npc-talk:has(.songhyeon-portrait) { grid-template-columns: clamp(80px,22vw,104px) minmax(0,1fr); }
 .addon-npc-talk .songhyeon-portrait { width: 100%; height: auto; image-rendering: auto; background: var(--green-soft); border-bottom: 4px solid var(--line-strong); }
