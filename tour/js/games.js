@@ -113,7 +113,11 @@ window.tourGame = (() => {
     document.body.classList.add('game-open');
     const session = current;
     try {
+      if (id === 'goods' || id === 'paperplane') {
+        session.audio = window.TourArcadeAudio?.mount(dialog, $('#game-sound'));
+      }
       current.cleanup = game.start(body, {
+        cue: session.audio?.cue,
         bestScore: window.TourStarProgress.pointsOrNull(readStamps()[id]?.bestScore),
         done: result => finish(session, result),
         announce,
@@ -153,6 +157,7 @@ window.tourGame = (() => {
 
   function renderResult(session, stars, max, best, extra, points, previousScore) {
     const { id, game } = session;
+    session.audio?.dispose();
     try { session.cleanup?.(); } catch (e) { /* 정리 중 오류는 무시 */ }
     session.cleanup = null;
     dialog.classList.add('is-result');
@@ -277,6 +282,7 @@ window.tourGame = (() => {
   dialog.addEventListener('close', () => {
     const session = current;
     current = null;
+    session?.audio?.dispose();
     try { session?.cleanup?.(); } catch (e) { /* 정리 중 오류는 무시 */ }
     body.replaceChildren();
     dialog.classList.remove('is-result');

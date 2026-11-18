@@ -127,6 +127,75 @@
       world.danger = Math.max(world.danger, p.danger);
     }
   }
+  // Each paper shelf tears when its displayed item merges. The new item
+  // inherits the shelf's sideways push and falls toward the next display.
+  const layouts = [
+    {title:'계단 진열대', first:0, goal:3, aim:102, hint:'배지 위를 눌러 놓기', shelves:[
+      [0,102,147,34], [1,115,233,41], [2,133,337,0], [4,283,302,0]]},
+    {title:'갈림길 진열대', first:0, goal:3, aim:180, hint:'에코백까지 이어지는 줄은?', shelves:[
+      [0,76,141,22], [1,84,242,0], [0,267,163,-60], [1,243,248,-75], [2,212,347,0]]},
+    {title:'엇갈린 진열대', first:1, goal:4, aim:165, hint:'쿠션까지 이어지는 틈을 찾아봐', shelves:[
+      [1,66,126,55], [2,89,229,0], [4,72,345,0], [1,216,143,95], [2,255,240,-100], [3,219,350,0],
+      [0,166,100,0], [0,317,147,0]]}
+  ];
+  function puzzleRound(index) {
+    const spec = layouts[index];
+    return {spec, index, phase:'aim', x:spec.aim, item:null, depth:0, pending:0, age:0, nudge:0, nudgeAt:0,
+      pause:0, shelves:spec.shelves.map(([tier,x,y,push]) => ({...piece(tier,x,y), push}))};
+  }
+  function toss(round) {
+    if (round.phase !== 'aim') return;
+    round.phase = 'fall';
+    round.item = piece(round.spec.first, round.x, radii[round.spec.first]+3);
+  }
+  function canNudge(round) {
+    return round.phase === 'fall' && !round.nudge && round.item.tier < round.spec.goal;
+  }
+  function nudge(round, direction) {
+    if (!canNudge(round) || Math.abs(direction) !== 1) return false;
+    round.item.vx = direction * 105;
+    round.nudge = direction;
+    round.nudgeAt = round.age;
+    return true;
+  }
+  function puzzleStep(round, onMerge) {
+    if (round.phase !== 'fall') return;
+    round.age += step;
+    if (round.age > 4.5) { round.phase = 'miss'; return; }
+    if (round.pause > 0) { round.pause -= step; return; }
+    const p = round.item;
+    if (p.tier === round.spec.goal) { round.phase = 'won'; return; }
+    p.vy += 650 * step;
+    p.x += p.vx * step;
+    p.y += p.vy * step;
+    walls(p);
+    for (const shelf of round.shelves) {
+      const dx = p.x - shelf.x, dy = p.y - shelf.y;
+      const d = Math.hypot(dx, dy), reach = p.r + shelf.r;
+      if (d > reach) continue;
+      if (p.tier === shelf.tier) {
+        round.shelves.splice(round.shelves.indexOf(shelf), 1);
+        const product = piece(p.tier+1, (p.x+shelf.x)/2, (p.y+shelf.y)/2);
+        product.vx = shelf.push + p.vx * .08;
+        round.item = product;
+        round.depth++;
+        round.pending += 2 ** product.tier * round.depth;
+        round.pause = .29;
+        onMerge(product);
+        return;
+      }
+      const nx = d ? dx/d : 1, ny = d ? dy/d : 0;
+      p.x += nx*(reach-d+.1);
+      p.y += ny*(reach-d+.1);
+      const inward = p.vx*nx + p.vy*ny;
+      if (inward < 0) {
+        p.vx -= 1.2 * inward * nx;
+        p.vy -= 1.2 * inward * ny;
+      }
+      if (Math.abs(nx) < .35 && ny < 0) p.vx += (dx >= 0 ? 1 : -1) * 18;
+    }
+    if (p.y >= height-p.r) round.phase = 'miss';
+  }
   function readCatalogue() {
     try {
       const saved = JSON.parse(localStorage.getItem(catalogueKey));
@@ -134,7 +203,7 @@
     } catch { return new Set(); }
   }
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { piece, tick, deliver, stock, requested, fee, stars, step, grace, line, width, height };
+    module.exports = { piece, tick, deliver, stock, requested, fee, stars, step, grace, line, width, height, puzzleRound, toss, nudge, puzzleStep };
   }
   if (typeof window === 'undefined') return;
 
@@ -144,15 +213,15 @@
 
   function start(container, api) {
     container.innerHTML = `<section class="goods-game">
-      <div class="goods-guide"><img src="img/npcs/portraits/jiyoung.png" alt=""><div><strong>지영 선배</strong><p>같은 굿즈 두 개를 붙여 봐! 주문품은 납품해도, 남겨서 더 크게 합쳐도 돼.</p></div></div>
-      <div class="goods-play"><div class="goods-order"><img class="goods-order-art" alt=""><div><small>지영 선배의 주문</small><strong class="goods-order-name"></strong></div><button class="goods-ship" disabled>납품</button></div><div class="goods-hud"><span>점수 <b class="goods-score">0</b></span>
-      <small class="goods-best" hidden></small><span>다음 <img class="goods-next-art" alt=""><strong class="goods-next"></strong></span></div>
+      <div class="goods-play"><div class="goods-modes"><button class="goods-puzzle-mode" aria-pressed="true">한 수 연쇄</button><button class="goods-free-mode" aria-pressed="false">자유 제작</button></div>
+      <div class="goods-brief"><div><small class="goods-chapter"></small><strong class="goods-title"></strong></div><span class="goods-recipe"></span></div><div class="goods-order"><img class="goods-order-art" alt=""><div><small>지영 선배의 주문</small><strong class="goods-order-name"></strong></div><button class="goods-ship" disabled>납품</button></div><div class="goods-hud"><span>점수 <b class="goods-score">0</b></span>
+      <small class="goods-best" hidden></small><span class="goods-preview">다음 <img class="goods-next-art" alt=""><strong class="goods-next"></strong></span></div>
       <canvas class="goods-board" width="360" height="430" tabindex="0" aria-label="굿즈 상자. 좌우 방향키로 이동하고 스페이스바나 엔터로 놓아요."></canvas>
       <p class="goods-status" role="status"></p>
       <div class="goods-controls"><button class="goods-left" aria-label="왼쪽으로 이동">◀</button><button class="goods-drop">굿즈 놓기</button><button class="goods-right" aria-label="오른쪽으로 이동">▶</button></div>
       <p class="goods-help">상자 위에서 좌우로 끌다가 손을 떼면 놓아요. 점선 위에 굿즈가 2초간 쌓이면 마감해요.</p>
       <div class="goods-actions"><button class="goods-gallery-open">굿즈 도감</button><button class="goods-collect" disabled>도장 받기</button></div>
-      <small>제작을 마치면 ★ · 32점 ★★ · 100점 ★★★</small></div>
+      <small class="goods-rules">제작을 마치면 ★ · 32점 ★★ · 100점 ★★★</small></div>
       <div class="goods-pause" hidden><p>잠시 멈췄어요.</p><button class="goods-continue">계속하기</button></div>
       <div class="goods-gallery" hidden><h3>이음 굿즈 도감</h3><p class="goods-count"></p><ol class="goods-list"></ol><button class="goods-resume">상자로 돌아가기</button></div>
       </section>`;
@@ -167,6 +236,9 @@
     const sprites = names.map((_, i) => { const img = new Image(); img.src = art(i); return img; });
     const known = readCatalogue();
     const world = {bodies: [], score: 0, danger: 0, deliveries: 0, turn: 0};
+    let puzzle = true, round = puzzleRound(0), bank = 0, cleared = 0;
+    const recipe = spec => names.slice(spec.first, spec.goal+1).map((name, i) =>
+      '<img src="' + art(spec.first+i) + '" alt="' + name + '">').join('<i aria-hidden="true">›</i>');
     const roll = () => Math.floor(Math.random()*3);
     let current = 0, next = 0, x = width/2, highest = -1, cooldown = 0, falling = null;
     let frame = 0, last = null, accumulator = 0, pointer = null, gallery = false, paused = false, ended = false;
@@ -177,7 +249,7 @@
       receipt = {label, x: p.x, y: p.y - p.r - 8, time: 1.25};
     }
     function discover(t) {
-      highest = Math.max(highest, t);
+      if (!puzzle) highest = Math.max(highest, t);
       if (known.has(t)) return;
       known.add(t);
       try {
@@ -186,6 +258,34 @@
       } catch { /* Storage may be disabled. Keep discoveries for this visit. */ }
     }
     function update() {
+      $('free-mode').setAttribute('aria-pressed', String(!puzzle));
+      $('puzzle-mode').setAttribute('aria-pressed', String(puzzle));
+      $('order').hidden = puzzle;
+      $('brief').hidden = !puzzle;
+      $('rules').hidden = puzzle;
+      $('preview').hidden = puzzle;
+      board.setAttribute('data-mode', puzzle ? 'puzzle' : 'free');
+      $('collect').textContent = puzzle ? '기록 남기기' : '도장 받기';
+      $('help').textContent = puzzle ? '상자를 탭해서 놓기 · 방향키로 조준 후 엔터' : '같은 굿즈 두 개를 붙여요. 주문품은 납품하거나 남겨 둘 수 있어요.';
+      const flying = puzzle && round.phase === 'fall';
+      $('left').textContent = flying ? '◀ 톡' : '◀';
+      $('right').textContent = flying ? '톡 ▶' : '▶';
+      $('left').setAttribute('aria-label', flying ? '왼쪽으로 톡 밀기' : '왼쪽으로 이동');
+      $('right').setAttribute('aria-label', flying ? '오른쪽으로 톡 밀기' : '오른쪽으로 이동');
+      if (puzzle) {
+        $('help').textContent = '탭해서 놓기 · 떨어지는 동안 ◀ ▶로 한 번 밀기';
+        $('chapter').textContent = '한 수 연쇄  ' + (round.index+1) + ' / ' + layouts.length;
+        $('title').textContent = round.spec.title;
+        $('recipe').innerHTML = recipe(round.spec);
+        $('score').textContent = bank;
+        $('collect').disabled = !cleared;
+        $('left').disabled = $('right').disabled = round.phase !== 'aim' && !canNudge(round);
+        $('drop').textContent = ({aim:names[round.spec.first]+' 놓기',fall:round.nudge ? '밀기 사용함' : '한 번 밀기',miss:'다시 조준',won:cleared === layouts.length ? '기록 남기기' : '다음 진열대'})[round.phase];
+        $('drop').disabled = round.phase === 'fall';
+        $('status').textContent = ({aim:round.spec.hint,fall:round.depth ? round.depth+'연쇄 · '+names[round.item.tier] : '투하!',miss:round.depth ? round.depth+'연쇄에서 멈췄어. 다른 줄을 노려 봐!' : '합체할 짝을 놓쳤어. 같은 굿즈를 노려 봐!',won:round.depth+'연쇄! '+names[round.spec.goal]+' 완성 · +'+round.pending+'점'})[round.phase];
+        return;
+      }
+      $('left').disabled = $('right').disabled = false;
       const tier = requested(world);
       $('order-art').src = art(tier);
       $('order-name').textContent = names[tier] + ' 1개';
@@ -200,10 +300,22 @@
       $('status').textContent = warning ? '마감 임박! 점선 위 굿즈를 합쳐 보세요.' : feedback;
     }
     function active() { return !ended && !gallery && !paused && !document.hidden; }
-    function ready() { return active() && cooldown <= 0 && !falling; }
-    function move(to) { x = clamp(to, radii[current], width-radii[current]); }
+    function ready() { return active() && (puzzle ? round.phase === 'aim' : cooldown <= 0 && !falling); }
+    function move(to) {
+      if (puzzle) {
+        const r = radii[round.spec.first];
+        round.x = clamp(to,r,width-r);
+      } else x = clamp(to, radii[current], width-radii[current]);
+    }
     function drop() {
       if (!ready()) return;
+      if (puzzle) {
+        toss(round);
+        discover(round.spec.first);
+        update();
+        board.focus();
+        return;
+      }
       world.turn++;
       falling = piece(current, x, radii[current]+3);
       world.bodies.push(falling);
@@ -225,9 +337,58 @@
       ctx.stroke();
       if (img.complete && img.naturalWidth) ctx.drawImage(img, Math.round(px-r), Math.round(py-r), 2*r, 2*r);
     }
+    function drawPuzzle() {
+      const {spec, shelves, item, phase} = round;
+      for (const shelf of shelves) {
+        const y = shelf.y + shelf.r, w = shelf.r*2 + 12;
+        ctx.fillStyle = '#825843';
+        ctx.fillRect(shelf.x-w/2,y,w,6);
+        ctx.fillStyle = '#ddb17a';
+        ctx.fillRect(shelf.x-w/2,y,w,2);
+        ctx.fillStyle = '#825843';
+        ctx.beginPath();
+        ctx.moveTo(shelf.x-6,y+6); ctx.lineTo(shelf.x+5,y+6); ctx.lineTo(shelf.x-6,y+14); ctx.fill();
+        if (shelf.push) {
+          const direction = Math.sign(shelf.push);
+          ctx.fillStyle = '#fff5d7';
+          ctx.beginPath(); ctx.moveTo(shelf.x-3*direction,y);
+          ctx.lineTo(shelf.x+4*direction,y+3); ctx.lineTo(shelf.x-3*direction,y+6); ctx.fill();
+        }
+        drawPiece(shelf.tier,shelf.x,shelf.y);
+      }
+      if (phase === 'aim') {
+        const r = radii[spec.first];
+        let stop = height-r;
+        for (const shelf of shelves) {
+          const dx = round.x-shelf.x, reach = shelf.r+r;
+          if (Math.abs(dx)<reach) stop=Math.min(stop,shelf.y-Math.sqrt(reach*reach-dx*dx));
+        }
+        ctx.strokeStyle = '#487a68'; ctx.lineWidth = 2;
+        ctx.setLineDash([4,6]); ctx.beginPath(); ctx.moveTo(round.x,2*r+4); ctx.lineTo(round.x,stop); ctx.stroke(); ctx.setLineDash([]);
+        ctx.beginPath(); ctx.arc(round.x,stop,r,0,2*Math.PI); ctx.stroke();
+        drawPiece(spec.first,round.x,r+3);
+      } else if (item) {
+        if (round.nudge && round.age - round.nudgeAt < .38) {
+          ctx.fillStyle='#865025'; ctx.textAlign='center'; ctx.font='bold 15px sans-serif';
+          ctx.fillText(round.nudge < 0 ? '◀ 톡!' : '톡! ▶', clamp(item.x,23,width-23),item.y+item.r+17);
+          ctx.textAlign='left';
+        }
+        drawPiece(item.tier,item.x,item.y);
+        if (round.depth && (round.pause > 0 || phase === 'won')) {
+          const lift = reducedMotion ? 0 : 8*(1-clamp(round.pause/.29,0,1));
+          ctx.strokeStyle='#bd7438'; ctx.lineWidth=2;
+          ctx.beginPath(); ctx.arc(item.x,item.y,item.r+3+lift,0,2*Math.PI); ctx.stroke();
+          ctx.font='bold 14px sans-serif'; ctx.textAlign='center';
+          const labelX = clamp(item.x,56,width-56);
+          ctx.fillStyle='#295c4b'; ctx.fillRect(labelX-44,item.y-item.r-30,88,23);
+          ctx.fillStyle='#fff7dc'; ctx.fillText(round.depth+'연쇄!',labelX,item.y-item.r-13); ctx.textAlign='left';
+        }
+      }
+    }
     function draw() {
       ctx.clearRect(0, 0, width, height);
       ctx.imageSmoothingEnabled = false;
+      if (puzzle) { drawPuzzle(); return; }
       ctx.setLineDash([5, 5]);
       ctx.strokeStyle = warning ? '#a12c39' : '#a76759';
       ctx.beginPath();
@@ -279,9 +440,14 @@
       stopFrames();
     }
     function finish(overflow) {
-      if (ended || (!overflow && !world.score)) return;
+      if (ended || (puzzle ? !cleared : !overflow && !world.score)) return;
       cleanup();
       const extra = document.createElement('p');
+      if (puzzle) {
+        extra.textContent = '한 수 연쇄 · 진열대 ' + cleared + '개 완성 · ' + bank + '점';
+        api.done({stars:cleared, points:bank, extra});
+        return;
+      }
       extra.textContent = (overflow ? '상자 마감' : '제작 마감') + ' · ' + world.score + '점 · 납품 ' + world.deliveries + '건 · 최고 굿즈 ' + names[highest];
       api.done({stars: stars(world.score), points: world.score, extra});
     }
@@ -291,10 +457,29 @@
       accumulator += last === null ? 0 : Math.min((time-last)/1000, 0.1);
       last = time;
       while (accumulator+1e-10 >= step) {
+        if (puzzle) {
+          const before = round.phase;
+          puzzleStep(round, product => {
+            discover(product.tier);
+            api.cue?.('merge', round.depth);
+            update();
+          });
+          if (round.phase !== before) {
+            if (round.phase === 'won') {
+              bank += round.pending;
+              cleared++;
+              api.cue?.('clear');
+            }
+            update();
+          }
+          accumulator -= step;
+          continue;
+        }
         const wasReady = ready(), before = world.score;
         if (receipt) receipt.time -= step;
         tick(world, (p, points) => {
           discover(p.tier);
+          api.cue?.('merge', p.depth);
           mark(p, (p.depth > 1 ? p.depth + '연쇄 ' : '합체 ') + '+' + points);
           feedback = (p.depth > 1 ? p.depth + '연쇄! ' : '') + names[p.tier] + ' 완성 +' + points + '점';
         });
@@ -351,19 +536,56 @@
       update();
       board.focus();
     });
-    on(board, 'keydown', e => {
+    function steer(direction, repeat) {
       if (!active()) return;
-      if (e.key === 'ArrowLeft') move(x-18);
-      else if (e.key === 'ArrowRight') move(x+18);
-      else if (e.key === ' ' || e.key === 'Enter') { if (!e.repeat) drop(); }
-      else return;
+      if (puzzle && round.phase === 'fall') {
+        if (!repeat && nudge(round,direction)) {
+          update();
+          draw();
+        }
+      } else if (!puzzle || round.phase === 'aim') {
+        move((puzzle ? round.x : x) + 18*direction);
+      }
+    }
+    function keyboardSteer(e) {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return false;
+      steer(e.key === 'ArrowLeft' ? -1 : 1,e.repeat);
       e.preventDefault();
+      return true;
+    }
+    on(board, 'keydown', e => {
+      if (!active() || keyboardSteer(e)) return;
+      if (e.key === ' ' || e.key === 'Enter') {
+        if (!e.repeat) act();
+        e.preventDefault();
+      }
     });
-    on($('left'), 'click', () => move(x-18));
-    on($('right'), 'click', () => move(x+18));
-    on($('drop'), 'click', drop);
+    on($('controls'), 'keydown', keyboardSteer);
+    on($('left'), 'click', () => steer(-1,false));
+    on($('right'), 'click', () => steer(1,false));
+    function act() {
+      if (!active()) return;
+      if (puzzle && ['won','miss'].includes(round.phase)) {
+        if (round.phase === 'won' && cleared === layouts.length) { finish(false); return; }
+        round = puzzleRound(round.phase === 'won' ? cleared : round.index);
+        update();
+        draw();
+        board.focus();
+      } else drop();
+    }
+    on($('drop'), 'click', act);
+    function switchMode(toPuzzle) {
+      if (!active() || puzzle === toPuzzle) return;
+      puzzle = toPuzzle;
+      pointer = null;
+      update();
+      draw();
+    }
+    on($('free-mode'), 'click', () => switchMode(false));
+    on($('puzzle-mode'), 'click', () => switchMode(true));
     on($('ship'), 'click', () => {
       if (!active()) return;
+      if (puzzle) return;
       const sold = deliver(world);
       if (!sold) return;
       mark(sold, '납품 +' + fee(sold.tier));

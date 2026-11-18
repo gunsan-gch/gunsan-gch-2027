@@ -1288,6 +1288,27 @@
       "sha256": "647b33a58def7603b1e8b69c4b4a1081798d8a4ee5aef28d2d3428e84614f9ed",
       "description": "종이비행기 · 운동장 점수판",
       "generator": "tools/make_flight_art.mjs"
+    },
+    "games/goods/workshop.png": {
+      "output": "games/goods/workshop.png",
+      "kind": "game-pixel-art",
+      "sha256": "a5e5c575d471df5a52596b658f681355f107fb1263e77a5440a01e3314cc2faf",
+      "description": "굿즈 진열대 공방의 타공판과 도구 배경",
+      "generator": "tools/make_flight_art.mjs"
+    },
+    "games/paperplane/roll-strip.png": {
+      "output": "games/paperplane/roll-strip.png",
+      "kind": "game-pixel-art",
+      "sha256": "8011fc0addc634243e64a7d007c892ab2aacf73418f475a81444738b3b2c9c05",
+      "description": "종이비행기 배면 회전 4프레임 시트",
+      "generator": "tools/make_flight_art.mjs"
+    },
+    "games/paperplane/ribbon.png": {
+      "output": "games/paperplane/ribbon.png",
+      "kind": "game-pixel-art",
+      "sha256": "45b66d3107f149c6eec0ce182ff17a6a832c2e9856014948d5efb65cb338c3ae",
+      "description": "틈을 두고 이어 그리는 깃발 리본",
+      "generator": "tools/make_flight_art.mjs"
     }
   }
 }

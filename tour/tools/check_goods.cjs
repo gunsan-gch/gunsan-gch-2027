@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-const {piece, tick, deliver, stock, requested, fee, width, height, step, grace, line, stars} = require('../js/game-goods.js');
+const {puzzleRound, toss, nudge, puzzleStep, piece, tick, deliver, stock, requested, fee, width, height, step, grace, line, stars} = require('../js/game-goods.js');
 const mass = world => world.bodies.reduce((sum, p) => sum + 2 ** p.tier, 0);
 const advanceWorld = (world, count) => {
   for (let i = 0; i < count; i++) tick(world, () => {});
@@ -66,17 +66,18 @@ class Element {
     const entry = this.events.get(type);
     if (entry && !entry.signal?.aborted) entry.callback({preventDefault() {}, ...detail});
   }
+  setAttribute(key, value) { this[key] = value; }
   getContext() { return new Proxy({}, {get: () => () => {}}); }
   getBoundingClientRect() { return {left: 10, width: 360}; }
   setPointerCapture(id) { this.pointer = id; }
   focus() { this.focused = true; }
 }
-function session(fps, store = new Map(), random = () => 0, bestScore) {
+function session(fps, store = new Map(), random = () => 0, bestScore, usePuzzle = false) {
   const body = new Element(), document = new Element(), window = new Element();
   window.TOUR_GAMES = {};
   document.createElement = () => new Element();
   let id = 0, time = 0;
-  const frames = new Map(), results = [];
+  const frames = new Map(), results = [], cues = [];
   const math = Object.create(Math);
   math.random = random;
   vm.runInNewContext(source, {
@@ -87,7 +88,7 @@ function session(fps, store = new Map(), random = () => 0, bestScore) {
   });
   const game = window.TOUR_GAMES.goods;
   assert.equal(game.maxStars, 3);
-  let cleanup = game.start(body, {bestScore, done(result) { results.push(result); cleanup(); }});
+  let cleanup = game.start(body, {bestScore, cue: (...args) => cues.push([time,...args]), done(result) { results.push(result); cleanup(); }});
   function advance(count) {
     for (let i = 0; i < count; i++) {
       time += 1000 / fps;
@@ -97,7 +98,8 @@ function session(fps, store = new Map(), random = () => 0, bestScore) {
     }
   }
   const $ = name => body.querySelector('.goods-' + name);
-  return {$, advance, cleanup, results, frames, document, window};
+  if (!usePuzzle) $('free-mode').emit('click');
+  return {$, advance, cleanup, results, frames, document, window, cues};
 }
 const key = 'gch-tour-goods-catalogue';
 for (const fps of [30,60,120]) {
@@ -275,4 +277,90 @@ for (const target of [2,32,100]) {
   assert.equal(s.$('best').hidden, false);
   s.cleanup();
 }
-console.log('Goods passed: chain depth and points, early keep/sell choice, delivery stock, physics, overflow, controls, stars, catalogue, suspension and cleanup.');
+for (const fps of [30,60,120]) {
+  const s = session(fps,new Map(),undefined,null,true);
+  const {$,advance} = s;
+  function play(x) {
+    const pt = {pointerId:1,button:0,clientX:x+10};
+    $('board').emit('pointerdown',pt);
+    $('board').emit('pointerup',pt);
+    advance(fps*5);
+  }
+  assert.equal($('puzzle-mode')['aria-pressed'],'true');
+  const scores = [34,68,136];
+  for (const [i, [miss, win]] of [[282,102],[76,267],[110,216]].entries()) {
+    play(miss);
+    assert.equal($('drop').textContent,'다시 조준');
+    assert.equal(Number($('score').textContent),scores[i-1] || 0);
+    $('drop').emit('click');
+    const history = s.cues.length;
+    play(win);
+    const landed = s.cues.slice(history);
+    assert.deepEqual(landed.map(e=>e.slice(1)),[['merge',1],['merge',2],['merge',3],['clear']]);
+    assert.ok(landed[1][0]-landed[0][0]>=275 && landed[2][0]-landed[1][0]>=275);
+    assert.equal(Number($('score').textContent),scores[i]);
+    assert.equal($('collect').disabled,false);
+    $('free-mode').emit('click');
+    assert.equal(Number($('score').textContent),0);
+    $('puzzle-mode').emit('click');
+    assert.equal(Number($('score').textContent),scores[i]);
+    $('drop').emit('click');
+  }
+  assert.equal(s.results.length,1);
+  assert.equal(s.results[0].points,136);
+  assert.equal(s.results[0].stars,3);
+}
+{
+  const s = session(60,new Map(),undefined,null,true);
+  s.$('board').emit('keydown',{key:'Enter'});
+  s.advance(240);
+  s.$('collect').emit('click');
+  assert.equal(s.results.length,1);
+  assert.equal(s.results[0].points,34);
+  assert.equal(s.results[0].stars,1);
+}
+{
+  const r = puzzleRound(0);
+  toss(r);
+  while (!r.depth) puzzleStep(r,()=>{});
+  const initialX = r.item.x;
+  assert.ok(r.pause > .25);
+  assert.equal(nudge(r,1),true);
+  assert.equal(nudge(r,-1),false);
+  while (r.pause > 0) puzzleStep(r,()=>{});
+  assert.equal(r.item.x,initialX,'a tap during the merge pause changes velocity only');
+  puzzleStep(r,()=>{});
+  assert.ok(r.item.x > initialX);
+}
+for (const input of ['keyboard','touch']) {
+  const s = session(60,new Map(),undefined,null,true);
+  const {$,advance} = s;
+  const board = $('board');
+  board.emit('keydown',{key:'Enter'});
+  advance(180);
+  $('drop').emit('click');
+  const position = {button:0,pointerId:1,clientX:240}; // 230 / 360 in board coordinates
+  function launch() {
+    board.emit('pointerdown',position);
+    board.emit('pointerup',position);
+  }
+  launch();
+  advance(300);
+  assert.equal($('drop').textContent,'다시 조준');
+  assert.equal(Number($('score').textContent),34);
+  $('drop').emit('click');
+  launch();
+  advance(18);
+  board.emit('keydown',{key:'ArrowLeft',repeat:true});
+  assert.equal($('right').disabled,false);
+  if (input === 'keyboard') board.emit('keydown',{key:'ArrowRight',repeat:false});
+  else $('right').emit('click');
+  assert.equal($('left').disabled,true);
+  assert.equal($('drop').textContent,'밀기 사용함');
+  board.emit('keydown',{key:'ArrowLeft',repeat:false});
+  advance(200);
+  assert.equal($('drop').textContent,'다음 진열대');
+  assert.equal(Number($('score').textContent),68);
+  s.cleanup();
+}
+console.log('Goods passed: all three puzzles, losses/retries, early banking, mode switching, chain depth and points, early keep/sell choice, delivery stock, physics, overflow, controls, stars, catalogue, suspension and cleanup.');
