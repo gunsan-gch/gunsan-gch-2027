@@ -37,11 +37,123 @@ function table(c,x,y,w,h){const mid=x+Math.floor(w/2);rect(c,mid-3,y+h-1,6,17,sl
 function tablesScene(){const c=room();smallShelf(c,2,30,82,52);windowBay(c,88,28,144,44);smallShelf(c,239,27,79,54);for(const x of [26,61,206,253])chair(c,x,89);table(c,1,88,130,27);table(c,183,83,132,28);openBook(c,58,96,27);stack(c,216,96,24,2);plant(c,277,90);chair(c,8,115);chair(c,107,111);chair(c,279,109);chair(c,108,130);chair(c,190,130);table(c,66,126,191,39);openBook(c,145,140,34);stack(c,96,144,24,2);line(c,195,145,205,139,rose);chair(c,219,166);return c;}
 function counterScene(){const c=room();windowBay(c,8,28,84,46);smallShelf(c,185,38,130,41);lamp(c,120,12,7);lamp(c,145,18,9);lamp(c,171,12,6);poly(c,[[0,87],[289,87],[320,103],[320,176],[0,176]],wood);poly(c,[[0,89],[285,89],[320,104],[320,111],[0,111]],ink);poly(c,[[0,84],[285,84],[320,100],[320,106],[0,106]],light);rect(c,0,109,320,4,paper);rect(c,0,114,320,5,gold);for(let x=3;x<320;x+=9){rect(c,x,122,2,54,honey);rect(c,x+2,122,1,54,'#a46950');}stack(c,36,99,43,4);box(c,104,54,58,37,slate,ink);box(c,107,56,52,31,'#a4c0bc',deep);poly(c,[[108,57],[135,57],[112,85],[108,85]],'#c6d5c6');rect(c,128,90,9,7,deep);rect(c,118,96,30,3,slate);poly(c,[[155,94],[185,94],[192,101],[152,101]],deep);for(let j=0;j<2;j++)for(let i=0;i<7;i++)rect(c,157+i*4,96+j*2,2,1,wall);box(c,227,85,47,17,sea,deep);rect(c,225,84,50,4,slate);for(let i=230;i<272;i+=6)rect(c,i,91,3,6,'#345963');plant(c,294,87);return c;}
 output('bookshop/shelf',shelfScene());output('bookshop/tables',tablesScene());output('bookshop/counter',counterScene());
-const coats=[['#cf874d','#824d42','#ffe0a4'],['#454859','#272d40','#ede5d4'],['#efdbb5','#ac6b51','#fff0d1']];
-function ears(c,x,y,type){const [fur]=coats[type];for(const [dx,flip] of [[0,0],[10,1]]){poly(c,[[x+dx,y+7],[x+dx+flip*6,y],[x+dx+7,y+7]],ink);poly(c,[[x+dx+1,y+6],[x+dx+1+flip*4,y+2],[x+dx+6,y+6]],fur);put(c,x+dx+2+flip*2,y+4,rose);}}
-function head(c,x,y,type,sleep){const [fur,mark,bib]=coats[type];ears(c,x,y,type);oval(c,x-1,y+4,19,12,ink);oval(c,x,y+4,17,11,fur);if(type===2){oval(c,x+10,y+4,6,5,slate);oval(c,x+1,y+4,5,5,mark);}else if(type===0){for(const k of [4,8,12])rect(c,x+k,y+4,2,3,mark);}oval(c,x+4,y+9,10,5,bib);for(const k of [3,11]){rect(c,x+k,y+8,3,sleep?1:2,ink);if(sleep)put(c,x+k+1,y+9,ink);}rect(c,x+8,y+10,2,1,rose);put(c,x+9,y+11,mark);}
-function cat(type,sleep){const c=canvas(36,28),[fur,mark,bib]=coats[type];if(sleep){oval(c,2,8,32,19,ink);oval(c,3,9,30,17,fur);for(let i=0;i<3;i++)oval(c,19+i*3,10+i,3,6,mark);head(c,3,10,type,true);oval(c,15,21,16,5,mark);oval(c,13,22,8,4,bib);}else{oval(c,24,10,8,16,ink);oval(c,25,11,6,13,mark);oval(c,8,9,19,18,ink);oval(c,9,10,17,16,fur);oval(c,12,16,9,10,bib);head(c,7,1,type,false);oval(c,8,23,8,4,bib);oval(c,20,23,7,4,bib);}return c;}
-function peek(type){const c=canvas(16,16),[fur,mark,bib]=coats[type];if(type===0){poly(c,[[1,15],[2,10],[7,9],[10,6],[10,2],[12,0],[15,2],[15,6],[12,11],[7,14]],ink);poly(c,[[2,14],[3,11],[8,10],[11,7],[11,2],[13,1],[14,3],[14,6],[11,10],[7,13]],fur);rect(c,10,6,4,2,mark);rect(c,6,10,2,3,mark);}else{poly(c,[[0,14],[1,2],[6,6],[10,6],[15,1],[15,13],[9,15]],ink);poly(c,[[1,13],[2,4],[6,7],[10,7],[14,4],[14,12],[9,14]],fur);rect(c,3,6,2,2,rose);rect(c,12,6,2,2,rose);if(type===2)rect(c,9,7,4,4,mark);for(const x of [4,11])put(c,x,10,ink);poly(c,[[5,11],[10,11],[8,14]],bib);put(c,8,11,rose);}return c;}
+// Three bookmark cats, drawn pixel by pixel from letter grids.
+// O outline · F fur · L light fur · M marking · T tail ring · P inner ear · E eye · W eye light · N nose · Z closed eye
+const coats=[
+  {O:'#3b2a2c',F:'#e7a05a',L:'#ffe9c4',M:'#b6633a',T:'#b6633a',P:'#f0a39c',E:'#2c2230',W:'#ffffff',N:'#e27c84',Z:'#5c3a30',K:'#f7c58a'},
+  {O:'#1b1b26',F:'#43465c',L:'#f6f1e6',M:'#43465c',T:'#2e3044',P:'#e59aa1',E:'#f3c64f',W:'#1b1b26',N:'#e27c84',Z:'#1b1b26',K:'#5a5e78'},
+  {O:'#3b2a2c',F:'#fff4e2',L:'#fffbf3',M:'#d98a4e',T:'#3f3a46',P:'#f0a39c',E:'#2c2230',W:'#ffffff',N:'#e27c84',Z:'#5c3a30',K:'#ffffff'}
+];
+function grid(c,x,y,rows,pal,{under=false}={}){rows.forEach((row,dy)=>[...row].forEach((k,dx)=>{if(k==='.')return;const px=x+dx,py=y+dy;if(under&&c.data[(py*c.w+px)*4+3])return;put(c,px,py,pal[k]);}));}
+// Patches: the same outline, with some fur cells recoloured by coat.
+function patch(c,pal,cells){for(const [x,y,w,h,k] of cells)for(let j=0;j<h;j++)for(let i=0;i<w;i++){const p=(y+j)*c.w+x+i,d=c.data.slice(p*4,p*4+3);const hx='#'+Buffer.from(d).toString('hex');if(c.data[p*4+3]&&hx===pal.F)put(c,x+i,y+j,pal[k]);}}
+const SIT_HEAD=[
+  '..OO............OO..',
+  '.OFFO..........OFFO.',
+  '.OFPFO........OFPFO.',
+  '.OFPPFOOOOOOOOFPPFO.',
+  'OFFPFFFFMMMFFFFFPFFO',
+  'OFFFFFFFFMFFFFFFFFFO',
+  'OFFFFFFFFFFFFFFFFFFO',
+  'OFFOOWFFFFFFFFOOWFFO',
+  'OFFOEEFFFFFFFFOEEFFO',
+  'OFFFFFFFFLLFFFFFFFFO',
+  'OKKFFFFFLNNLFFFFFKKO',
+  '.OLLFFFFLLOLLFFFFLLO',
+  '..OOLLLLLOLOLLLLOO..',
+  '....OOOOOOOOOOOO....'];
+const SIT_BODY=[
+  '...OFFFFFFFFFFFFFFO...',
+  '..OFFFFFLLLLLLFFFFFO..',
+  '.OFFFFLLLLLLLLLLFFFFO.',
+  '.OFFFLLLLLLLLLLLLFFFO.',
+  'OFFFFLLLLLLLLLLLLFFFFO',
+  'OFFFFLLLLLLLLLLLLFFFFO',
+  'OFFFFFLLLLLLLLLLFFFFFO',
+  'OFFFFFFLLLLLLLLFFFFFFO',
+  'OFFFFFFFFFFFFFFFFFFFFO',
+  'OFFFOLLLLOFFOLLLLOFFFO',
+  '.OOOOLLLLOOOOLLLLOOOO.',
+  '.....OOOO....OOOO.....'];
+const SIT_TAIL=[
+  '..OO..',
+  '.OTFO.',
+  '.OFTO.',
+  '..OFTO',
+  '..OTFO',
+  '..OFTO',
+  '..OTFO',
+  '.OFTFO',
+  'OFTFO.',
+  'FTFO..',
+  'FFO...'];
+function cat(type,sleep){
+  const c=canvas(36,28),pal=coats[type];
+  if(sleep)return sleepCat(c,pal,type);
+  grid(c,26,9,SIT_TAIL,pal);
+  grid(c,7,14,SIT_BODY,pal);
+  grid(c,8,1,SIT_HEAD,pal);
+  if(type===0)patch(c,pal,[[10,5,2,1,'M'],[24,5,2,1,'M'],[8,16,3,1,'M'],[25,16,3,1,'M'],[8,19,3,1,'M'],[25,19,3,1,'M'],[8,22,4,1,'M'],[24,22,4,1,'M']]);
+  if(type===2)patch(c,pal,[[9,1,5,4,'M'],[9,5,3,2,'M'],[22,1,5,3,'T'],[24,4,3,2,'T'],[22,15,5,2,'M'],[23,17,5,2,'M'],[25,19,3,2,'M'],[8,19,2,2,'T'],[8,21,3,2,'T']]);
+  return c;
+}
+const SLEEP=[
+  '....OO....OO..........................',
+  '...OPFO..OFPO.......OOOOOOOOO.........',
+  '...OPFFOOFFPO....OOOFFFFFFFFFOOO......',
+  '..OFFFFMMFFFFO.OOFFFFFFFFFFFFFFFOO....',
+  '..OFFFFFMFFFFFOFFFFFFFFFFFFFFFFFFFO...',
+  '.OFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFO..',
+  '.OFZZFFFFFFZZFFFFFFFFFFFFFFFFFFFFFFO..',
+  '.OKFFFFLNLFFFKFFFFFFFFFFFFFFFFFFFFFFO.',
+  '.OLLFFLLOLLFFLLFFFFFFFFFFFFFFFFFFFFFO.',
+  '..OLLLLLLLLLLLOFFFFFFFFFFFFFFFFFFFFFO.',
+  '...OOLLLLLLLOOFFFFFFFFFFFFFFFFFFFFFO..',
+  '....OTTFTTFTTFTTFTTFTTFTFFFFFFFFFFO...',
+  '...OTFTTFTTFTTFTTFTTFTTOOFFFFFFOOO....',
+  '....OOOOOOOOOOOOOOOOOOO..OOOOOO.......'];
+function sleepCat(c,pal,type){
+  grid(c,0,12,SLEEP,pal);
+  if(type===0)patch(c,pal,[[19,14,1,3,'M'],[23,13,1,4,'M'],[27,13,1,4,'M'],[31,15,1,3,'M'],[20,19,1,2,'M'],[25,19,1,3,'M'],[30,19,1,2,'M']]);
+  if(type===1)patch(c,pal,[]);
+  if(type===2)patch(c,pal,[[3,12,4,4,'M'],[20,14,6,3,'M'],[22,17,5,2,'M'],[29,16,4,2,'T'],[30,18,3,3,'T'],[16,18,3,2,'T']]);
+  return c;
+}
+const PEEK_HEAD=[
+  '.OO.........OO..',
+  'OPFO.......OFPO.',
+  'OPPFOOOOOOOFPPO.',
+  'OFFFFFMMFFFFFFFO',
+  'OFFFFFFMFFFFFFFO',
+  'OFOWFFFFFFFOWFFO',
+  'OFOEFFFFFFFOEFFO',
+  'OKFFFFLNNLFFFFKO',
+  'OLLFFFLOOLFFFLLO',
+  'OOOOOOOOOOOOOOOO'];
+const PEEK_TAIL=[
+  '.........OO.....',
+  '........OTFO....',
+  '........OFTO....',
+  '.........OTFO...',
+  '.........OFTO...',
+  '........OTFTO...',
+  '.......OFTFO....',
+  '......OTFTO.....',
+  '.....OFTFO......',
+  '....OTFTO.......',
+  '...OFTFO........',
+  '..OTFTO.........',
+  '.OFTFO..........',
+  'OTFTO...........',
+  'OFTO............',
+  'OOO.............'];
+function peek(type){
+  const c=canvas(16,16),pal=coats[type];
+  if(type===0){grid(c,0,0,PEEK_TAIL,pal);return c;}
+  grid(c,0,6,PEEK_HEAD,pal);
+  if(type===2)patch(c,pal,[[1,6,5,4,'M'],[10,6,5,3,'T']]);
+  return c;
+}
 for(let type=0;type<3;type++){output('bookshop/cat-'+type,cat(type,false));output('bookshop/sleep-'+type,cat(type,true));output('bookshop/peek-'+type,peek(type));}
-function stamp(){const c=canvas(40,40);oval(c,1,1,38,38,ink);oval(c,2,2,36,36,honey);oval(c,4,4,32,32,paper);oval(c,6,6,28,28,sea);const catHead=cat(0,false);for(let y=0;y<16;y++)for(let x=0;x<27;x++){const i=(y*catHead.w+x)*4;if(catHead.data[i+3])put(c,x+4,y+7,'#'+Buffer.from(catHead.data.slice(i,i+3)).toString('hex'));}openBook(c,9,23,24);return c;}
+function stamp(){const c=canvas(40,40);oval(c,1,1,38,38,ink);oval(c,2,2,36,36,honey);oval(c,4,4,32,32,paper);oval(c,6,6,28,28,sea);const catHead=cat(0,false);for(let y=0;y<15;y++)for(let x=8;x<28;x++){const i=(y*catHead.w+x)*4;if(catHead.data[i+3])put(c,x+2,y+6,'#'+Buffer.from(catHead.data.slice(i,i+3)).toString('hex'));}openBook(c,9,23,24);return c;}
 output('stamps/bookshop',stamp());

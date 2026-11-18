@@ -900,71 +900,71 @@
     "games/bookshop/cat-0.png": {
       "output": "games/bookshop/cat-0.png",
       "kind": "game-pixel-art",
-      "description": "치즈 고양이 책갈피 앉은 모습",
-      "sha256": "214fd59fa9e29c4720d20707080c7cb1b326ebcee1e5b0ce0ddb44e029a3cd84",
+      "description": "치즈 고양이 책갈피 앉은 모습 (2026-11-18 새로 그림)",
+      "sha256": "eb2452d28ab0618ed4bd1023051c6c3f96e6a5d44e457142b8ad7593b85039b3",
       "generator": "tools/make_bookshop_art.mjs"
     },
     "games/bookshop/peek-0.png": {
       "output": "games/bookshop/peek-0.png",
       "kind": "game-pixel-art",
-      "description": "치즈 고양이 책 사이에서 보이는 부분",
-      "sha256": "ab4bbd1e6932cef4f41d616b558eef004c08a3036a9bc54bc0cc505412c02a06",
+      "description": "치즈 고양이 책 사이에서 보이는 부분 (2026-11-18 새로 그림)",
+      "sha256": "f935a679970ec016bfc8e39cc84c8179e095f556ae1ca1fe728558bb7b0acc8f",
       "generator": "tools/make_bookshop_art.mjs"
     },
     "games/bookshop/sleep-0.png": {
       "output": "games/bookshop/sleep-0.png",
       "kind": "game-pixel-art",
-      "description": "치즈 고양이 책 위에서 잠든 모습",
-      "sha256": "dbb66ef9065935c48ab3fbc0f794d3b59443c8f9bc7045eaaf8eb3319bd39499",
+      "description": "치즈 고양이 책 위에서 잠든 모습 (2026-11-18 새로 그림)",
+      "sha256": "116c910ab9330df115b52fa563c50a0f91270ef8bf8ca8c1d10c706b57376c16",
       "generator": "tools/make_bookshop_art.mjs"
     },
     "games/bookshop/cat-1.png": {
       "output": "games/bookshop/cat-1.png",
       "kind": "game-pixel-art",
-      "description": "턱시도 고양이 책갈피 앉은 모습",
-      "sha256": "985c2deb66b898016239e685925b702581ebf2a90db9354ccbd943519d62d048",
+      "description": "턱시도 고양이 책갈피 앉은 모습 (2026-11-18 새로 그림)",
+      "sha256": "faf614746c03db8843e44a6c7a00eed8758e12b01158b47b9a63328cd03128bc",
       "generator": "tools/make_bookshop_art.mjs"
     },
     "games/bookshop/peek-1.png": {
       "output": "games/bookshop/peek-1.png",
       "kind": "game-pixel-art",
-      "description": "턱시도 고양이 책 사이에서 보이는 부분",
-      "sha256": "79be9540455f1e003070881bd2f7fd4bb906bbb8e6e3b0b2db29c3f3a5dc0972",
+      "description": "턱시도 고양이 책 사이에서 보이는 부분 (2026-11-18 새로 그림)",
+      "sha256": "8c8fdda5f62e2781378cbaa111ffa27b9b1cafb1eb3d6ae854b221abf2273133",
       "generator": "tools/make_bookshop_art.mjs"
     },
     "games/bookshop/sleep-1.png": {
       "output": "games/bookshop/sleep-1.png",
       "kind": "game-pixel-art",
-      "description": "턱시도 고양이 책 위에서 잠든 모습",
-      "sha256": "45516235708c396b358733460a17d9e9d06084878eb107824e6ce7b8667fb70a",
+      "description": "턱시도 고양이 책 위에서 잠든 모습 (2026-11-18 새로 그림)",
+      "sha256": "0dddab911d95452470fc23ae6bcabaa47085284365fe6822815a022829db885a",
       "generator": "tools/make_bookshop_art.mjs"
     },
     "games/bookshop/cat-2.png": {
       "output": "games/bookshop/cat-2.png",
       "kind": "game-pixel-art",
-      "description": "삼색 고양이 책갈피 앉은 모습",
-      "sha256": "14cf424b79b9d1b7e670db95298288155398d0b34160c9f66ea19f8448b34d83",
+      "description": "삼색 고양이 책갈피 앉은 모습 (2026-11-18 새로 그림)",
+      "sha256": "9ca270fb28206cb5c3798479748e1f5e0b334daa2d1cd6d2b0040802fa74c9da",
       "generator": "tools/make_bookshop_art.mjs"
     },
     "games/bookshop/peek-2.png": {
       "output": "games/bookshop/peek-2.png",
       "kind": "game-pixel-art",
-      "description": "삼색 고양이 책 사이에서 보이는 부분",
-      "sha256": "76413ab2ee48a330a433a37afd3ed21907bc99ac354f492c50b182184eeab6fd",
+      "description": "삼색 고양이 책 사이에서 보이는 부분 (2026-11-18 새로 그림)",
+      "sha256": "5777138a074caf72f47d6e1dad9636e5d9e828eca32e05bd2618251c22e4adfa",
       "generator": "tools/make_bookshop_art.mjs"
     },
     "games/bookshop/sleep-2.png": {
       "output": "games/bookshop/sleep-2.png",
       "kind": "game-pixel-art",
-      "description": "삼색 고양이 책 위에서 잠든 모습",
-      "sha256": "b605d88558eb69bb4b4cc79d38a72a17b47b93d4830c9ec9d69654d7cc3b0656",
+      "description": "삼색 고양이 책 위에서 잠든 모습 (2026-11-18 새로 그림)",
+      "sha256": "386f9db36ca5d59587d373c22a466298b179e94f8ddabb1d3a4dc200e215a0e4",
       "generator": "tools/make_bookshop_art.mjs"
     },
     "games/stamps/bookshop.png": {
       "output": "games/stamps/bookshop.png",
       "kind": "game-pixel-art",
       "description": "녹원책방 고양이 책갈피 도장",
-      "sha256": "45462977a8d58f0b9d1e9691484d55240b273bcc01a3e9d7617c6a16b816097b",
+      "sha256": "89564dcb501c3dba3b8d5a67229fc5a26b814ed7c82aa6f7ce1ac05f63d5a219",
       "generator": "tools/make_bookshop_art.mjs"
     },
     "npcs/portraits/songhyeon.png": {

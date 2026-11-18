@@ -1,6 +1,6 @@
 /* 도서실 종이 고양이 책갈피 찾기 */
 (() => {
-  const art = name => 'img/games/bookshop/' + name + '.png';
+  const art = name => 'img/games/bookshop/' + name + '.png?v=20261118c';
   const scenes = [
     { name: '책장', image: 'shelf', cat: '첫째', spots: [
       [19,31,'왼쪽 위 책등','위쪽','제목들이 나란히 선 곳'], [64,56,'가운데 칸의 책 더미','가운데 높이','책들이 낮은 계단처럼 포개진 곳'],
