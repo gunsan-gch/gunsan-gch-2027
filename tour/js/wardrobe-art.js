@@ -225,51 +225,49 @@
       pixelLine(r,from,21,to,22+bob,color);
     }
   }
+  // Profiles face right in the pattern and mirror around the sprite centre for left.
+  // The inside edge overlaps the jacket, so the bag rests against the body at every step.
+  const sportsBags={
+    racketbag:{
+      colors:{o:'navy',b:'blueD',c:'cream',n:'blue',g:'goldD',h:'yellow'},
+      profile:[8,18,['..bb','.bcn','bcnnb','bcncb','bnncb','.bncb','.bnb','..bb','..bb','...g','...g','...hg','....g','....g']],
+      rear:[10,18,['......bbb','....bbcnnb','...bcncncnb','..bncncncnb','.bcncncncnb','.bncncncnb','.bcncncnb','..bbncbb','...bbbb','...bb','..gg','..hg','.gg','.hg','gg']]},
+    stonebag:{
+      colors:{o:'navy',b:'blueD',c:'cream',n:'blue',p:'roseD',h:'pink'},
+      profile:[7,20,['...ppp','...php','....pp','..bbbb','.bnnnnb','bccccnnb','bnnnnnnb','.bnnnnb','..oooo']],
+      rear:[7,20,['.....pppppp','.....phhhpp','.....p...pp','...bbbbbbbbbb','..bnnnnnnnnnnb','.bcccccccnnnnnb','bnnnnnnnnnnnnnnb','bnnnnnnnnnnbbbnb','.bbnnnnnnnnnnbb','...oooooooooo']]},
+    targetpack:{
+      colors:{o:'roseD',c:'cream',b:'blueD',r:'rose',g:'gold',h:'yellow'},
+      profile:[8,20,['...ooo','..occo','.ocbco','.ocbco','ocgbco','ocgbco','.ocbco','.ocbco','..occo','...ooo']],
+      rear:[9,19,['....oooooo','..ooccccccoo','.occcbbbbccco','.ocbbrrrrbbco','ocbbrggggrbbco','ocbrgghhggrbco','ocbrgghhggrbco','ocbbrggggrbbco','.ocbbrrrrbbco','.occcbbbbccco','..ooccccccoo','....oooooo']]},
+    trophybag:{
+      colors:{o:'goldD',g:'gold',h:'yellow',r:'roseD',p:'pink',n:'navy'},
+      profile:[7,20,['..ohhho','ooogggoh','o.ohggo','o.ohggo','.ooggo','..oggo','...oo','...og','...og','..oggo','.oggggo','.nnnnno']],
+      rear:[8,20,['...ohhhhhho','ooooggggggoooo','o..ohgggggo..o','o..ohgrrggo..o','.o.oggrpggo.o','..oooggggooo','.....oggo','......oo','......og','.....oggo','....ohgggo','...onnnnnno']]}
+  };
+  function sportsBag(r,id,dir){
+    const bag=sportsBags[id],side=dir==='left'||dir==='right';
+    const [x,y,rows]=side?bag.profile:bag.rear;
+    rows.forEach((row,dy)=>Array.from(row).forEach((mark,dx)=>{
+      if(mark!=='.')r(dir==='left'?31-x-dx:x+dx,y+dy,1,1,bag.colors[mark]);
+    }));
+  }
   function backArt(c,id,dir,frame=1){
     const r=pen(c),rear=dir==='up',front=dir==='down',side=!rear&&!front,right=dir==='right',x=side?(right?5:21):10;
     if(id==='cloudpack'){
-      const bx=side?(right?5:22):9,w=side?5:14;
+      const bx=side?(right?8:19):9,w=side?5:14;
       r(bx+1,18,w-2,2,'mintD');r(bx,20,w,11,'mintD');r(bx+1,20,w-2,10,'mint');
       r(bx,20,w,2,'goldD');r(bx+1,20,w-2,1,'gold');r(bx+1,29,w-2,1,'cream');
       if(side){r(bx+1,24,3,4,'blueD');r(bx+2,25,1,2,'white');}
       else{r(12,23,3,2,'white');r(16,22,3,3,'white');r(11,25,10,3,'blueD');r(12,24,8,3,'white');r(13,26,6,1,'cream');r(8,23,2,5,'blueD');r(23,23,2,5,'blueD');}
     }
     if(id==='pianobag'){
-      const bx=side?(right?5:22):9,w=side?5:14;
+      const bx=side?(right?8:19):9,w=side?5:14;
       r(bx+1,19,w-2,1,'purpleD');r(bx,20,w,10,'ink');r(bx+1,21,w-2,8,'purpleD');
       if(side){r(bx+1,22,2,6,'purple');r(bx+3,22,1,6,'cream');r(bx+1,26,1,1,'gold');}
       else{r(10,21,12,3,'purple');r(10,25,12,4,'cream');for(let k=12;k<22;k+=2)r(k,25,1,3,'ink');r(11,26,1,2,'white');r(19,21,1,2,'gold');r(17,23,3,1,'yellow');}
     }
-    if(id==='racketbag'){
-      const bx=side?(right?6:22):11,w=side?4:10;
-      r(bx+1,15,w-2,1,'blueD');r(bx,16,w,9,'blueD');r(bx+1,16,w-2,8,'cream');
-      if(!side){for(let k=bx+2;k<bx+w-1;k+=2)r(k,17,1,6,'blue');for(let y=18;y<24;y+=2)r(bx+1,y,w-2,1,'blue');}
-      else r(bx+1,17,1,6,'blue');
-      r(bx,24,w,3,'navy');r(bx+1,24,w-2,2,'blue');
-      const cx=bx+Math.floor(w/2)-1;r(cx,27,2,6,'goldD');r(cx,28,1,4,'gold');r(cx,30,2,1,'cream');
-      if(!side){r(10,25,2,5,'roseD');r(11,26,1,2,'pink');}
-    }
-    if(id==='stonebag'){
-      const bx=side?(right?5:22):8,w=side?5:16;
-      r(bx+1,23,w-2,1,'navy');r(bx,24,w,6,'navy');r(bx+1,24,w-2,5,'blue');r(bx+1,29,w-2,1,'blueD');r(bx+1,25,w-2,1,'cream');
-      const hw=side?3:8,hx=bx+Math.floor((w-hw)/2);
-      r(hx,20,hw,2,'roseD');r(hx,22,2,2,'roseD');r(hx+hw-2,22,2,2,'roseD');r(hx+1,20,hw-2,1,'pink');
-      if(!side){r(10,27,3,1,'white');r(20,27,2,1,'blueD');}
-    }
-    if(id==='targetpack'){
-      const bx=side?(right?5:22):9,w=side?5:14;
-      r(bx+2,19,w-4,1,'roseD');r(bx+1,20,w-2,1,'roseD');r(bx,21,w,8,'roseD');r(bx+1,29,w-2,1,'roseD');
-      r(bx+1,21,w-2,8,'cream');
-      if(side){r(bx+2,22,1,6,'blue');r(bx+1,24,1,2,'gold');}
-      else{r(12,21,8,8,'blueD');r(11,23,10,4,'blueD');r(13,22,6,6,'rose');r(12,24,8,2,'rose');r(14,23,4,4,'gold');r(15,24,2,2,'yellow');}
-    }
-    if(id==='trophybag'){
-      const bx=side?(right?6:22):11,w=side?4:10;
-      r(bx,20,w,6,'goldD');r(bx+1,21,w-2,5,'gold');r(bx+1,21,1,3,'yellow');r(bx+1,26,w-2,1,'goldD');
-      const cx=bx+Math.floor(w/2)-1;r(cx,27,2,3,'goldD');r(cx,27,1,2,'yellow');r(bx,30,w,2,'goldD');r(bx+1,30,w-2,1,'gold');
-      if(side){r(bx-1,21,1,4,'goldD');r(bx-2,21,1,3,'gold');}
-      else{r(8,20,3,1,'goldD');r(8,21,1,4,'goldD');r(9,24,3,2,'goldD');r(21,20,3,1,'goldD');r(23,21,1,4,'goldD');r(20,24,3,2,'goldD');r(14,22,4,3,'roseD');r(15,22,2,2,'pink');r(12,31,7,1,'navy');}
-    }
+    if(sportsBags[id])sportsBag(r,id,dir);
     if(id==='milkbag'){
       if(side){const bx=right?6:22;r(bx+1,17,2,3,'roseD');r(bx,20,5,10,'roseD');r(bx+1,20,3,9,'pink');r(bx+2,22,1,5,'cream');r(right?11:20,20,1,9,'roseD');}
       else{r(12,16,7,2,'roseD');r(11,18,9,2,'roseD');r(10,20,11,10,'roseD');r(12,18,7,2,'pink');r(11,20,9,9,'cream');r(11,20,9,3,'pink');r(14,24,4,3,'rose');r(15,23,2,1,'mintD');r(15,25,1,1,'yellow');r(18,21,2,8,'pink');}
@@ -408,6 +406,13 @@
       back(c,equip.back,dir,frame);
       // Backpacks and capes sit under the hair, including in side views.
       c.drawImage(base,0,0,32,20,0,0,32,20);
+    }
+    // The pack is behind the torso in front view. Two short webbing ends cross
+    // the jacket shoulders, leaving its central tie and the face visible.
+    if(dir==='down'&&(sportsBags[equip.back]||equip.back==='cloudpack'||equip.back==='pianobag')){
+      const r=pen(c),strap=carriedColors[equip.back];
+      r(11,21,1,3,strap);r(12,23,1,1,strap);
+      r(20,21,1,3,strap);r(19,23,1,1,strap);
     }
     // A small neck fastening joins the cloth to the uniform, below the face.
     if(equip.back==='cape'){const r=pen(c);if(dir==='down'){r(12,21,3,1,'roseD');r(18,21,2,1,'roseD');r(15,22,3,1,'rose');r(16,21,1,2,'gold');}else if(capeSide){r(dir==='left'?18:12,21,2,1,'roseD');r(dir==='left'?18:13,22,1,1,'gold');}}

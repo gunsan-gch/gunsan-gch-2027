@@ -97,6 +97,19 @@ function widthAt(data, yStart, yEnd) {
     }
     assert.deepEqual(render(empty,direction,1,{back}),idle,`${back}/${direction}: stopping restores rest pose`);
   }
+  // Beyond the short shoulder strap the depth of each new pack overlaps the
+  // actual jacket, even at the extremes of the walk cycle.
+  for(const back of ['cloudpack','pianobag','racketbag','stonebag','targetpack','trophybag']){
+    for(const direction of ['left','right'])for(const frame of [0,1,2]){
+      const plain=render(sprite,direction,frame,{}),pack=render(empty,direction,frame,{back});
+      let overlap=0;
+      for(let y=23;y<=26;y++)for(let x=0;x<32;x++){
+        const alpha=((y+12)*48+x+8)*4+3;
+        if(plain[alpha]&&pack[alpha])overlap++;
+      }
+      assert(overlap>=2,`${back}/${direction}/${frame}: bag floats behind jacket`);
+    }
+  }
   let capeChecks=0;
   for (const direction of directions) {
     const overlays=[0,1,2].map(frame=>render(empty,direction,frame,{back:'cape'}));

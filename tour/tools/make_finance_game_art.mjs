@@ -23,11 +23,16 @@ function detective() {
   rect(c, 11, 12, 2, 3, P.N); rect(c, 19, 12, 2, 3, P.N);
   put(c, 11, 12, P.W); put(c, 19, 12, P.W);
   rect(c, 9, 15, 3, 1, P.P); rect(c, 20, 15, 3, 1, P.P); rect(c, 15, 17, 3, 1, P.R);
-  // 돋보기는 오른손 위에 겹쳐 그립니다.
-  box(c, 23, 22, 4, 6, '#f8d7b5');
-  rect(c, 25, 20, 3, 7, P.N);
-  box(c, 20, 12, 10, 10, P.B); box(c, 22, 14, 6, 6, P.I);
-  rect(c, 23, 15, 2, 1, P.W); rect(c, 27, 21, 3, 6, P.N);
+  // 둥근 렌즈를 눈 위에 겹치고 손잡이를 대각선으로 내려 쥔 손에 연결합니다.
+  for (let i = 0; i < 7; i++) rect(c, 22 + i, 19 + i, 3, 3, P.N);
+  for (let i = 1; i < 6; i++) put(c, 23 + i, 20 + i, P.T);
+  box(c, 24, 22, 5, 4, '#f8d7b5');
+  for (let y = -6; y <= 6; y++) for (let x = -6; x <= 6; x++) {
+    const r = Math.hypot(x, y);
+    if (r <= 6) put(c, 21 + x, 14 + y, r > 4.8 ? P.N : r > 3.8 ? P.B : P.L);
+  }
+  rect(c, 20, 13, 3, 4, P.N); put(c, 20, 13, P.W);
+  rect(c, 18, 11, 2, 1, P.W); put(c, 17, 12, P.W);
   return c;
 }
 
@@ -70,19 +75,36 @@ function rice(c) {
   box(c, 6, 9, 4, 5, P.G);
 }
 
+// 상품의 접힌 포장, 기울어진 선, 둥근 가장자리를 16칸 격자에 직접 찍습니다.
+function sprite(c, rows) {
+  rows.forEach((row, y) => [...row].forEach((ch, x) => put(c, x, y, P[ch])));
+}
+
 function milk(c) {
-  box(c, 4, 4, 8, 10, '#a9746e'); box(c, 5, 1, 6, 4, P.M);
-  box(c, 5, 7, 6, 5, P.M); rect(c, 7, 8, 2, 3, P.K);
+  sprite(c, [
+    '.....NNNNNN.....','.....NMMMMN.....','....NTTTTNNN....','...NTMMMNKTN....',
+    '...NNNNNNKKN....','...NKKKKNKTN....','...NKTTKNKTN....','...NTMMTNKTN....',
+    '...NTMKTNKTN....','...NTKKMNKTN....','...NKTTKNKTN....','...NKKKKNKTN....',
+    '...NTTTTNKKN....','...NNNNNNNNN....'
+  ]);
 }
 
 function noodle(c) {
-  box(c, 3, 5, 10, 9, P.P); box(c, 2, 4, 12, 3, P.M);
-  rect(c, 5, 9, 6, 2, P.Y); rect(c, 6, 1, 1, 2, P.A); rect(c, 9, 0, 1, 3, P.A);
+  sprite(c, [
+    '..........N..N..','.........NT.NT..','........NT.NT...','...NNNNNTNNTNN..',
+    '..NTYYTTYYTTTTN.','..NNNNNNNNNNNNN.','...NPRRRRRRPPN..','...NPRYYRRYYRN..',
+    '....NRMMYYMRN...','....NRRMMRRRN...','....NPRRRRRPN...','.....NMMMMMN....',
+    '.....NTTTTTN....','......NNNNN.....'
+  ]);
 }
 
 function bread(c) {
-  box(c, 1, 5, 14, 7, P.T); box(c, 3, 6, 10, 4, '#ca7865');
-  for (let x = 4; x < 13; x += 3) rect(c, x, 7, 1, 2, P.Y);
+  sprite(c, [
+    '................','................','..........NNN...','........NNMTTN..',
+    '......NNMMTTTTN.','....NNMMTTNNKTN.','...NMMTTNKRYKTN.','..NMTTNKRYRRKTN.',
+    '.NMTNKRYRRKTTN..','.NTNKRYRKTTTN...','.NTNRRKTTTNN....','.NTTKTTTNN......',
+    '..NTTTNN........','...NNN..........'
+  ]);
 }
 
 function jelly(c) {
@@ -106,8 +128,12 @@ function ice(c) {
 }
 
 function pen(c) {
-  box(c, 6, 1, 4, 11, P.A); rect(c, 7, 2, 1, 8, P.W);
-  box(c, 9, 2, 2, 5, P.B); rect(c, 7, 12, 2, 2, P.N); put(c, 7, 14, P.N);
+  sprite(c, [
+    '...........NN...','..........NBBN..','.........NBLLBN.','........NBLLNNN.',
+    '.......NBLLN.N..','......NBLLN.N...','.....NBLLN......','....NBLLN.......',
+    '...NBLLN........','...NNLN.........','..NTTN..........','..NTN...........',
+    '.NNN............','.N..............'
+  ]);
 }
 
 function sandwich(c) {

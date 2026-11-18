@@ -20,7 +20,7 @@
       <section class="melody-game" aria-label="현아 선배의 멜로디 따라잡기">
         <div class="melody-song">
           <img src="${IMG}song-${song.id}.png" alt="" width="48" height="48">
-          <div><span>현아 선배가 고른 오늘의 곡</span><h3>${song.title}</h3></div>
+          <div><span class="melody-caption">현아 선배가 고른 오늘의 곡</span><h3>${song.title}</h3></div>
           <span class="melody-random">5곡 중 랜덤<br><small>${song.mood}</small></span>
         </div>
         <div class="melody-stage" aria-hidden="true">
@@ -63,7 +63,9 @@
     }
     function lights() {
       pads.forEach((pad, i) => pad.classList.toggle('is-lit', i === activeNote));
-      $('.melody-float-note').textContent = activeNote >= 0 ? R.NOTES[activeNote].name : '';
+      const cue = $('.melody-float-note');
+      cue.className = activeNote < 0 ? 'melody-float-note' : `melody-float-note melody-pad-${activeNote}`;
+      cue.textContent = activeNote >= 0 ? R.NOTES[activeNote].name : '';
       $('.melody-stage').classList.toggle('is-playing', activeNote >= 0 && !api.reducedMotion);
       [...$('.melody-sequence').children].forEach((cell, i) => cell.classList.toggle('is-current', i === activeSlot));
     }
@@ -134,6 +136,11 @@
     }
     function begin(practice = false) {
       clearPlayback(); engine = R.create(song.id, { practice });
+      $('.melody-caption').textContent = practice ? '현아 선배와 손풀기' : '현아 선배가 고른 오늘의 곡';
+      $('.melody-song img').hidden = practice;
+      $('.melody-random').hidden = practice;
+      $('.melody-rewards').hidden = practice;
+      $('.melody-help').textContent = practice ? '세 음을 따라 치면 실전을 시작할 수 있어요.' : '3음 → 4음 → 5음 → 6음 → 8음 · 시간 제한 없어요.';
       if (!practice) { try { sessionStorage.setItem(LAST_KEY, song.id); } catch {} }
       engine.listen(); perform();
     }

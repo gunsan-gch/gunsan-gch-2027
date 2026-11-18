@@ -31,7 +31,7 @@
     const sprite = new Image(); sprite.src = 'img/walker.png'; sprite.onload = () => { if (!disposed) paint(performance.now()); };
     for (const name of ['tile-step','goal-attic','star-token', ...[1,2,3,4,5].map(i => `floor-${i}`)]) {
       const image = new Image(); images[name] = image;
-      image.onload = () => { if (!disposed) paint(performance.now()); }; image.src = IMG + name + '.png';
+      image.onload = () => { if (!disposed) paint(performance.now()); }; image.src = IMG + name + '.png' + (name === 'floor-4' || name === 'tile-step' ? '?v=20261118' : '');
     }
     // Same wardrobe renderer and current outfit as the map. A snapshot per attempt avoids changing mid-hop.
     let outfit = {};
@@ -47,7 +47,13 @@
       const s = engine?.state || { path: R.makePath(() => .7), steps: 0, facing: 1, phase: 'ready', goal: R.GOAL };
       const floor = R.floor(s.steps);
       ctx.imageSmoothingEnabled = false; ctx.fillStyle = '#edf5eb'; ctx.fillRect(0,0,320,320);
-      drawImage(`floor-${floor}`,-80,0,480,320);
+      // Keep both furnished edges at 2×; omit two strips of empty middle wall.
+      const backdrop = images[`floor-${floor}`];
+      if (backdrop?.complete && backdrop.naturalWidth) {
+        ctx.drawImage(backdrop, 0, 0, 64, 160, 0, 0, 128, 320);
+        ctx.drawImage(backdrop, 104, 0, 32, 160, 128, 0, 64, 320);
+        ctx.drawImage(backdrop, 176, 0, 64, 160, 192, 0, 128, 320);
+      }
       const t = api.reducedMotion ? 1 : Math.min(1, (now - hopAt) / 130);
       const moving = t < 1 && s.phase === 'running';
       const visualStep = moving ? previousStep + t : s.steps;
