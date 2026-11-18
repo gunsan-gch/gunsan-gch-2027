@@ -40,7 +40,7 @@ window.tourGame = (() => {
     if (!STAMP_ART.has(id)) { seal.textContent = '★'; return seal; }
     const img = document.createElement('img');
     img.width = 48; img.height = 48; img.alt = '';
-    img.src = `img/games/stamps/${id}.png`;
+    img.src = `img/games/stamps/${id}.png?v=20261118`;
     img.addEventListener('error', () => { seal.textContent = '★'; }, { once: true });
     seal.append(img);
     return seal;

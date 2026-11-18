@@ -196,44 +196,51 @@
     "games/bakery/dough.png": {
       "output": "games/bakery/dough.png",
       "kind": "game",
-      "description": "빵 굽기 게임 반죽 공 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
-      "sha256": "651b6a62c650f2bc9288d9f1a775f8a0664dba1c92c12963852811a726473959"
+      "description": "밀가루가 묻은 납작한 반죽",
+      "sha256": "d3c7eb66105c4f03a06d4cfbc084396eb38d20e6eb5461634c7d4f815b6dd968",
+      "generator": "tools/make_bakery_game_art.mjs"
     },
     "games/bakery/risen.png": {
       "output": "games/bakery/risen.png",
       "kind": "game",
-      "description": "빵 굽기 게임 부푼 반죽 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
-      "sha256": "e29b147a295ee9b3e0c8840abc682a3f369d573841fed3224a27d4683221fa5e"
+      "description": "기포가 보이고 둥글게 부푼 반죽",
+      "sha256": "395288e35ce9ed4455ebe792e2bec12322cfdb3af013f6da9f0f4a0a8eba7e56",
+      "generator": "tools/make_bakery_game_art.mjs"
     },
     "games/bakery/bread-perfect.png": {
       "output": "games/bakery/bread-perfect.png",
       "kind": "game",
-      "description": "빵 굽기 게임 노릇한 빵 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
-      "sha256": "d651d9bdc2dd9f414aa7931bac0126d149216291ac78755c138e85fd248caf2c"
+      "description": "세 줄 칼집과 반짝임이 보이는 노릇한 빵",
+      "sha256": "63d20284fa2eb6fb490ead12633d2938a1bc74236af95e8286ae3a0418dfc98a",
+      "generator": "tools/make_bakery_game_art.mjs"
     },
     "games/bakery/bread-good.png": {
       "output": "games/bakery/bread-good.png",
       "kind": "game",
-      "description": "빵 굽기 게임 조금 연한 빵 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
-      "sha256": "a2c60acef37115ea2430dd71b282944d670eab035faae32468360ff46a86171b"
+      "description": "칼집 두 줄이 벌어진 잘 익은 빵",
+      "sha256": "8ff3cebbcf585fdc1ab2a2f02132d431daaea2ba9ef9d0e7e333c7b7a4ed23e4",
+      "generator": "tools/make_bakery_game_art.mjs"
     },
     "games/bakery/bread-okay.png": {
       "output": "games/bakery/bread-okay.png",
       "kind": "game",
-      "description": "빵 굽기 게임 한쪽만 연한 빵 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
-      "sha256": "14af8d7ddd57b5ab1065bbda623b85797c3bb35d70b439214b33372518e2c716"
+      "description": "한쪽이 눌리고 부분적으로 구운 빵",
+      "sha256": "f2fadcf325b92159525aea98b5f5ddd1dc5b05322309ca665f4ef1f9ee672991",
+      "generator": "tools/make_bakery_game_art.mjs"
     },
     "games/bakery/bread-raw.png": {
       "output": "games/bakery/bread-raw.png",
       "kind": "game",
-      "description": "빵 굽기 게임 덜 익은 빵 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
-      "sha256": "62d6a33098949ef07145eed9c4ebcf2d87b283d29a618be867474adabb11e24e"
+      "description": "부풀지 않은 창백한 빵",
+      "sha256": "04c2142fa560728eda990bcc7d3fadab2f571bbf251eaa49518e1ae98ec32aa1",
+      "generator": "tools/make_bakery_game_art.mjs"
     },
     "games/bakery/bread-burnt.png": {
       "output": "games/bakery/bread-burnt.png",
       "kind": "game",
-      "description": "빵 굽기 게임 탄 빵 (128×128, tour/tools/make_bakery_game_art.mjs 로 그린 픽셀아트(2026-11-15))",
-      "sha256": "0bce492eeb97cdb5aff6704ff3c45890773f0066665d34fde328fa39181cfc2c"
+      "description": "검은 탄 자국과 연기가 나는 빵",
+      "sha256": "4f6e809422d79eedb2a95c9821aec45cd49778ea16c7d8325295e63bd7d1ce0e",
+      "generator": "tools/make_bakery_game_art.mjs"
     },
     "games/finance/bill-1000.png": {
       "output": "games/finance/bill-1000.png",
@@ -268,14 +275,16 @@
     "games/finance/detective.png": {
       "output": "games/finance/detective.png",
       "kind": "game",
-      "description": "금융 게임 detective.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
-      "sha256": "37d6b69039e86588aac2508e15cc83a4f65db46cc3c1fb7d80782250376b7dee"
+      "description": "둥근 돋보기 너머로 눈이 보이는 교복 탐정",
+      "sha256": "c4324ca1d42c1d2bd58ec4a7a7deb56612306b59e06721036475a60a5ffc0371",
+      "generator": "tools/make_finance_game_art.mjs"
     },
     "games/finance/goods-bread.png": {
       "output": "games/finance/goods-bread.png",
       "kind": "game",
-      "description": "금융 게임 goods-bread.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
-      "sha256": "3d08becc4932b4a851dd48fbf2e71571d74d066daa672b22ef3785d1b0caa6dc"
+      "description": "사선 포장에 든 소시지빵",
+      "sha256": "e329c96bdc2d093a7c900decc643be0d0e32d7527a56c782dc8b94efe2ae702c",
+      "generator": "tools/make_finance_game_art.mjs"
     },
     "games/finance/goods-ice.png": {
       "output": "games/finance/goods-ice.png",
@@ -292,20 +301,23 @@
     "games/finance/goods-milk.png": {
       "output": "games/finance/goods-milk.png",
       "kind": "game",
-      "description": "금융 게임 goods-milk.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
-      "sha256": "d723e08529fd30e41269b0a8ac7c6e66f6fa1ef578dc764bd5606d3377d7faa1"
+      "description": "접힌 입구가 있는 종이팩 초코우유",
+      "sha256": "2f3e80191c28eb38a79c9b54bc57f3dca7ac1e2080ffe120c2068846ea481f4c",
+      "generator": "tools/make_finance_game_art.mjs"
     },
     "games/finance/goods-noodle.png": {
       "output": "games/finance/goods-noodle.png",
       "kind": "game",
-      "description": "금융 게임 goods-noodle.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
-      "sha256": "845e3ce34b675ee58116989f99e68b8b19c14d6cca245734c4a298d6cd19d75d"
+      "description": "뚜껑이 열린 컵라면",
+      "sha256": "2e6c69cbd391b59767f03602f8946659bab4967c346703587ad2453e183c4f62",
+      "generator": "tools/make_finance_game_art.mjs"
     },
     "games/finance/goods-pen.png": {
       "output": "games/finance/goods-pen.png",
       "kind": "game",
-      "description": "금융 게임 goods-pen.png — tour/tools/make_finance_game_art.mjs로 그린 투명 배경 픽셀아트 (2026-11-15)",
-      "sha256": "e2736878d8bb1f7d6b126aa84d0f873c44afdfabe4d49304ef389d528166c05c"
+      "description": "클립과 펜촉이 있는 파란 볼펜",
+      "sha256": "10b076fb0714e00a3aebad3fe65af91cd567553701e5a796e3d676095e6e5c37",
+      "generator": "tools/make_finance_game_art.mjs"
     },
     "games/finance/goods-rice.png": {
       "output": "games/finance/goods-rice.png",
@@ -454,8 +466,8 @@
     "games/stairs/tile-step.png": {
       "output": "games/stairs/tile-step.png",
       "kind": "game-pixel-art",
-      "description": "민트 장식과 밝은 발판의 계단 타일",
-      "sha256": "7134865348a1e6c76c87a5b2417796565583a41ad8cb57f80838daed8b1935f8",
+      "description": "민트색 금속 받침과 자작나무 디딤판이 있는 계단 타일",
+      "sha256": "379dc3d51e2fe2d32ee31b2662c927f160b7d5dac49ea3f56b5898d6873be8bf",
       "generator": "tools/make_stairs_game_art.mjs"
     },
     "games/stairs/floor-1.png": {
@@ -483,7 +495,7 @@
       "output": "games/stairs/floor-4.png",
       "kind": "game-pixel-art",
       "description": "4층 배경 — 연보라빛 책과 지구본",
-      "sha256": "c41a6f415e3fb46ae4bafbc77b3374f1f9d256eb9b2f8a43d7e13e4151a1a0cc",
+      "sha256": "3b3634bccc2de07e30306ea451e9e0e231109d97ef7cf9419d4432b7446806d3",
       "generator": "tools/make_stairs_game_art.mjs"
     },
     "games/stairs/floor-5.png": {
@@ -532,7 +544,7 @@
       "output": "games/melody/stage.png",
       "kind": "game-pixel-art",
       "description": "민트 커튼과 창문, 피아노·스피커가 있는 차분한 음악실 공연 공간",
-      "sha256": "ba388fcbbb21314f9cdb715e3d4a5bcf9ac97dc34d386fa7419e1369ce655220",
+      "sha256": "45f36e0dea405c3b6e3c0ed7077ad8faf9d67be56af8954f6328f9dd1bf89841",
       "generator": "tools/make_melody_game_art.mjs"
     },
     "games/melody/trophy.png": {
@@ -596,56 +608,56 @@
       "kind": "game-art",
       "description": "나무 바닥 위 컬링·원형 표적·배드민턴의 세 구역이 있는 체육관",
       "generator": "tools/make_gym_game_art.mjs",
-      "sha256": "87e53fca7a558cc19604fdb834607c7a3e6642d78d2462971cd975a543d2cc46"
+      "sha256": "caff9d8b07460085e1e64d7867143377f18f8b9d9667820e2349192b4edcdbd9"
     },
     "gym-badminton-court.png": {
       "output": "games/gym/badminton-court.png",
       "kind": "game-art",
       "description": "중앙 높이 100의 네트와 넓은 선수 공간이 있는 민트 배드민턴 코트",
       "generator": "tools/make_gym_game_art.mjs",
-      "sha256": "2e32b738f6c8817388acdd1b6548244da1d95f7353b780134a42b42ba06820f9"
+      "sha256": "2ad3cf5722aa4bf590a319cbdccce3b513944c1743ed89ca6e7cc87be9ffb0a1"
     },
     "gym-curling-rink.png": {
       "output": "games/gym/curling-rink.png",
       "kind": "game-art",
       "description": "중심 160,64 반지름 45의 하우스와 160,210 출발점이 있는 나무 컬링 레인",
       "generator": "tools/make_gym_game_art.mjs",
-      "sha256": "6d2df07c8b0773d405cf800e8b8d9e98d91e6d08dd6a456d58a425bb395dc9ef"
+      "sha256": "b2a79f98cd73bcae89ee3ac7bbcc647e489402a2a96e7107ab4c6c6dc246f7b5"
     },
     "gym-target-board.png": {
       "output": "games/gym/target-board.png",
       "kind": "game-art",
-      "description": "중심 120,120 반지름 96의 민트·크림·코랄·금빛 원형 표적",
+      "description": "체육관 창과 보호 매트 앞, 중심 160,120 반지름 96의 원형 타이밍 보드",
       "generator": "tools/make_gym_game_art.mjs",
-      "sha256": "322510aaf73215ae170722f6de3a8ba89b6ca81970871ae31ca13611fe07bfbd"
+      "sha256": "8f7e644c0b8dc4f617648721947a866623a2f4f7b55278a7b4ecaee883864bcd"
     },
     "gym-racket.png": {
       "output": "games/gym/racket.png",
       "kind": "game-art",
       "description": "민트 테두리와 산호색 손잡이의 배드민턴 라켓",
       "generator": "tools/make_gym_game_art.mjs",
-      "sha256": "9aa7a89652e5137703869c21486564450b841eef48185a16e44f8335c588ee4c"
+      "sha256": "018ebb5291dc47cf7c799dc31010b36c3343221a7b4fa2792572f149bd8ea72a"
     },
     "gym-shuttle.png": {
       "output": "games/gym/shuttle.png",
       "kind": "game-art",
       "description": "크림색 깃털과 금빛 코르크의 셔틀콕",
       "generator": "tools/make_gym_game_art.mjs",
-      "sha256": "54adbeb19b47685f3de148602ca9190375f325db73056f264e3c0aa0e51e6b62"
+      "sha256": "d07fd97e6f7f4db2bfbcd5faaab7a380a1bd1b83f398b7bbf5fb974f573a4b7c"
     },
     "gym-stone-coral.png": {
       "output": "games/gym/stone-coral.png",
       "kind": "game-art",
       "description": "산호색 손잡이와 회색 몸체의 컬링 스톤",
       "generator": "tools/make_gym_game_art.mjs",
-      "sha256": "38b25eb5c45e3ac328cc7408cb163fd6eff2fb812baffb1fcd915587e052f376"
+      "sha256": "a69c23b21cfd607a25e3f445e67cc78cd8b7293e5cea175ec5cdbbb0ea524c55"
     },
     "gym-stone-mint.png": {
       "output": "games/gym/stone-mint.png",
       "kind": "game-art",
       "description": "민트색 손잡이와 회색 몸체의 컬링 스톤",
       "generator": "tools/make_gym_game_art.mjs",
-      "sha256": "448d327c740fd5c498989a31296293194bb87faed1cd7115d90fe38cd7afe8bd"
+      "sha256": "b60f6c61e2f9ec2816de36d9e75019c90080eba47c8c35ea484452b853f062c6"
     },
     "gym-trophy.png": {
       "output": "games/gym/trophy.png",
@@ -659,14 +671,14 @@
       "kind": "game-art",
       "description": "curling 종목 픽셀 아이콘",
       "generator": "tools/make_gym_game_art.mjs",
-      "sha256": "49c18e888349c9549f6dbed68fb61f30f0c9b0913d31e4d9701cac91efe7eba5"
+      "sha256": "e77d65c3abb70de47a86664fe11b0d035321038467f2f81ad9264faddc6cc364"
     },
     "gym-curling.png": {
       "output": "games/stamps/curling.png",
       "kind": "game-art",
       "description": "curling 종목 금테 완주 도장",
       "generator": "tools/make_gym_game_art.mjs",
-      "sha256": "ad4fe2d945f8f0c4a2f13919d02a96aaea6f4231688bde8b188002ce1c291867"
+      "sha256": "27afaf412473aa41612416e3b58e05a7f30080c637cf74c32c94461bdfc2a4fc"
     },
     "gym-icon-target.png": {
       "output": "games/gym/icon-target.png",
@@ -687,14 +699,14 @@
       "kind": "game-art",
       "description": "badminton 종목 픽셀 아이콘",
       "generator": "tools/make_gym_game_art.mjs",
-      "sha256": "48b1e2dfa6071ac8daee8560e06b01c76446e76fe708fbc2d8d8b886c4835eb0"
+      "sha256": "3f7767f3aed718a87b84fb593d7af5a8da515090314c86f19fbb9165b9236f05"
     },
     "gym-badminton.png": {
       "output": "games/stamps/badminton.png",
       "kind": "game-art",
       "description": "badminton 종목 금테 완주 도장",
       "generator": "tools/make_gym_game_art.mjs",
-      "sha256": "523f6aa6c8be6934c33b15e6e36e36308bc8a1469a5f51a45523dcab11b5736e"
+      "sha256": "615e86f8aa0779ae8d5c38af12e09b1730f852d643fff870b96a464d8d0a859f"
     }
   }
 }

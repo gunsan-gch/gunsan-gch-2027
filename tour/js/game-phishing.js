@@ -113,7 +113,7 @@
     let frame = 0, moneyFrame = 0, timer = 0;
     container.innerHTML = `
       <div class="phishing-intro">
-        <img class="phishing-detective" src="img/games/finance/detective.png" width="128" height="128" alt="돋보기를 든 교복 탐정">
+        <img class="phishing-detective" src="img/games/finance/detective.png?v=20261118" width="128" height="128" alt="돋보기를 든 교복 탐정">
         <h3>용돈 30,000원을 지켜라!</h3>
         <ul><li>8통의 문자를 8초 안에 진짜 / 사기로 가려요.</li>
           <li>사기를 찾았다면 수상한 단서도 눌러요.</li>

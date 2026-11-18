@@ -7,12 +7,15 @@
 .melody-song div>span { font-size: 11px; color: var(--green); font-weight: 700; }
 .melody-random { font-size: 11px; text-align: right; margin-left: auto; line-height: 1.6; }
 .melody-random small { font-size: 10px; color: var(--muted); }
-.melody-stage { height: 152px; position: relative; overflow: hidden; border: 2px solid var(--navy); background: #edf3e7 url('../img/games/melody/stage.png') center / cover no-repeat; image-rendering: pixelated; }
+.melody-stage { height: 152px; position: relative; overflow: hidden; border: 2px solid var(--navy); background: #edf3e7 url('../img/games/melody/stage.png?v=20261118') center / cover no-repeat; image-rendering: pixelated; }
 .melody-hyuna { position: absolute; bottom: 24px; left: calc(36% - 32px); width: 64px; height: 64px; image-rendering: pixelated; }
 .melody-player { position: absolute; bottom: 12px; left: calc(64% - 48px); width: 96px; height: 104px; image-rendering: pixelated; }
 .melody-name, .melody-player-name { position: absolute; bottom: 4px; font-size: 10px; background: #fffbed; padding: 0 5px; border: 1px solid #c3cec1; transform: translateX(-50%); }
 .melody-name { left: 36%; }.melody-player-name { left: 64%; }
-.melody-float-note { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); font-family: var(--font-title); color: #486d63; font-size: 26px; }
+.melody-float-note { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); font-family: var(--font-title); color: var(--navy); font-size: 20px; line-height: 1.1; }
+.melody-float-note:not(:empty) { z-index: 1; padding: 3px 7px 3px 21px; border: 2px solid var(--navy); background: var(--key-colour); box-shadow: 0 2px 0 var(--key-dark); }
+.melody-float-note:not(:empty)::before { content: ''; position: absolute; left: 5px; top: 13px; width: 6px; height: 4px; background: currentColor; box-shadow: 2px -2px 0 currentColor; }
+.melody-float-note:not(:empty)::after { content: ''; position: absolute; left: 11px; top: 5px; width: 3px; height: 10px; background: currentColor; }
 .melody-stage.is-playing .melody-hyuna { transform: translateY(-2px); }
 .melody-hud { display: flex; gap: 8px; align-items: center; background: var(--navy); color: #fffbed; padding: 6px 8px; font-size: 12px; }
 .melody-lives { color: #ffc4c6; margin-left: auto; white-space: nowrap; font-size: 13px; }

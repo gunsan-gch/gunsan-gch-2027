@@ -82,7 +82,7 @@
       $('.bakery-feedback').hidden = true;
       time.textContent = '0.00';
       time.classList.remove('bakery-hidden');
-      bread.src = IMG + (state.round === 1 ? 'risen.png' : 'dough.png');
+      bread.src = IMG + (state.round === 1 ? 'risen.png' : 'dough.png') + '?v=20261118';
       bread.alt = state.round === 1 ? '부푼 반죽' : '반죽 공';
       button.textContent = '시작' + KEY_HINT;
       button.focus({ preventScroll: true });
@@ -133,7 +133,7 @@
       $('.bakery-stars').textContent = '★'.repeat(grade.stars) + '☆'.repeat(3 - grade.stars);
       $('.bakery-stars').setAttribute('aria-label', `별 3개 중 ${grade.stars}개`);
       $('.bakery-feedback').hidden = false;
-      bread.src = `${IMG}bread-${baked}.png`;
+      bread.src = `${IMG}bread-${baked}.png?v=20261118`;
       bread.alt = miss ? label : `${label} · 구운 빵`;
       if (!api.reducedMotion) {
         root.classList.add('bakery-picked');

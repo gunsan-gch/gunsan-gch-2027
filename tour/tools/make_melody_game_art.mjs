@@ -114,15 +114,23 @@ function stage() {
   // Small warm ceiling lights, a quiet acoustic-panel band.
   for (const x of [48, 78, 108]) { rect(c, x, 5, 1, 3, trim); rect(c, x - 3, 8, 7, 2, P.cream); }
   for (const x of [44, 54, 104, 114]) { rect(c, x, 17, 5, 16, '#e1e9de'); rect(c, x + 1, 18, 1, 14, '#d5dfd4'); }
-  // Upright piano is anchored to the left, with a tiny empty score rest.
-  box(c, 6, 35, 36, 17, instrument, shade); rect(c, 8, 36, 32, 2, '#9cacbc');
-  rect(c, 10, 33, 28, 2, instrument); box(c, 19, 31, 10, 6, '#edf0e2', shade);
-  rect(c, 23, 32, 1, 4, '#c5cfbd');
-  box(c, 5, 43, 38, 6, '#e9e9db', shade);
-  for (let x = 8; x < 41; x += 3) rect(c, x, 44, 1, 4, '#bac2c4');
-  for (const x of [9, 12, 18, 21, 24, 30, 33, 39]) rect(c, x, 44, 1, 2, instrument);
-  rect(c, 8, 50, 3, 6, instrument); rect(c, 37, 50, 3, 6, instrument);
-  rect(c, 18, 53, 15, 2, shade); rect(c, 19, 55, 2, 3, shade); rect(c, 30, 55, 2, 3, shade);
+  // A walnut upright: raised open book, brass hinges, keyboard and separate stool.
+  const pianoEdge = '#685764', walnut = '#976f69', veneer = '#b98c79';
+  rect(c, 5, 32, 39, 21, pianoEdge); rect(c, 7, 33, 35, 17, walnut);
+  rect(c, 4, 31, 41, 2, pianoEdge); rect(c, 5, 31, 39, 1, veneer);
+  for (const x of [9, 27]) {
+    box(c, x, 35, 12, 7, veneer, pianoEdge); rect(c, x + 2, 37, 8, 3, walnut);
+  }
+  box(c, 17, 33, 15, 8, P.woodLight, pianoEdge);
+  rect(c, 18, 32, 6, 7, P.cream); rect(c, 25, 33, 6, 6, '#eee3cc');
+  put(c, 23, 33, P.woodLight); rect(c, 24, 34, 1, 5, '#c8b79c');
+  box(c, 3, 42, 42, 7, P.cream, pianoEdge);
+  for (let x = 7; x < 42; x += 3) rect(c, x, 43, 1, 5, '#c5b9af');
+  for (const x of [7,10,16,19,22,28,31,37,40]) rect(c, x, 43, 2, 3, P.ink);
+  rect(c, 5, 49, 38, 2, veneer); rect(c, 7, 52, 3, 5, pianoEdge);
+  rect(c, 39, 52, 3, 5, pianoEdge); rect(c, 18, 53, 16, 1, pianoEdge);
+  box(c, 17, 54, 18, 4, '#718782', pianoEdge);
+  rect(c, 19, 58, 2, 3, pianoEdge); rect(c, 31, 58, 2, 3, pianoEdge);
   // Speaker cabinet, small monitor, and empty music stand at the right.
   box(c, 139, 38, 14, 20, '#8b9caa', shade); rect(c, 141, 40, 10, 16, '#a8b7bc');
   rect(c, 144, 41, 4, 4, '#7f919e'); rect(c, 143, 48, 6, 6, '#7f919e');

@@ -25,13 +25,13 @@
   function hub(container, api) {
     const stamps = window.tourGame?.stamps() || {}, count = IDS.filter(id => stamps[id]).length;
     container.innerHTML = `<section class="gym-hub" aria-label="체육관 종목 선택">
-      <div class="gym-guide"><img src="${IMG}guide-sua.png" width="56" height="56" alt="수아 선배"><div><strong>수아 선배의 체육관 3종 챌린지</strong><p>우리 체육관 미니게임 대회, 너도 함께해!</p></div></div>
-      <div class="gym-panorama"><img src="${IMG}gym-hall.png" width="640" height="320" alt="컬링 스톤, 사격 표적, 배드민턴 코트가 있는 픽셀 체육관"><span>원하는 종목부터 자유롭게!</span></div>
+      <div class="gym-guide"><img src="${IMG}guide-sua.png?v=20261118" width="56" height="56" alt="수아 선배"><div><strong>수아 선배의 체육관 3종 챌린지</strong><p>우리 체육관 미니게임 대회, 너도 함께해!</p></div></div>
+      <div class="gym-panorama"><img src="${IMG}gym-hall.png?v=20261118" width="640" height="320" alt="컬링 스톤, 사격 표적, 배드민턴 코트가 있는 픽셀 체육관"><span>원하는 종목부터 자유롭게!</span></div>
       <div class="gym-events">${IDS.map(id => {
         const info = INFO[id], best = recordValue(id), saved = stamps[id];
-        return `<button type="button" class="gym-event" data-sport="${id}"><img src="${IMG}icon-${id}.png" width="48" height="48" alt=""><span><strong>${info.sport}</strong><small>${info.subtitle}</small></span><span class="gym-event-record">${saved ? '★'.repeat(saved.stars) + '☆'.repeat(3 - saved.stars) : '아직 도전 전'}<small>${saved ? (id === 'badminton' ? `최고 ${best.score}득점 · ${best.rally}랠리` : `최고 ${best.score}점`) : '연습부터 시작해도 좋아요'}</small></span></button>`;
+        return `<button type="button" class="gym-event" data-sport="${id}"><img src="${IMG}icon-${id}.png?v=20261118" width="48" height="48" alt=""><span><strong>${info.sport}</strong><small>${info.subtitle}</small></span><span class="gym-event-record">${saved ? '★'.repeat(saved.stars) + '☆'.repeat(3 - saved.stars) : '아직 도전 전'}<small>${saved ? (id === 'badminton' ? `최고 ${best.score}득점 · ${best.rally}랠리` : `최고 ${best.score}점`) : '연습부터 시작해도 좋아요'}</small></span></button>`;
       }).join('')}</div>
-      <div class="gym-trophy ${count === 3 ? 'is-earned' : ''}"><img src="${IMG}trophy.png" width="56" height="56" alt=""><div><strong>${count === 3 ? '체육관 3종 완주 트로피 획득!' : `3종 완주 트로피 · ${count} / 3`}</strong><p>${count === 3 ? '세 종목 모두 도전했어요. 다음에는 최고 기록에 도전!' : '실전 세 종목을 끝까지 마치면 트로피를 받아요.'}</p></div></div>
+      <div class="gym-trophy ${count === 3 ? 'is-earned' : ''}"><img src="${IMG}trophy.png?v=20261118" width="56" height="56" alt=""><div><strong>${count === 3 ? '체육관 3종 완주 트로피 획득!' : `3종 완주 트로피 · ${count} / 3`}</strong><p>${count === 3 ? '세 종목 모두 도전했어요. 다음에는 최고 기록에 도전!' : '실전 세 종목을 끝까지 마치면 트로피를 받아요.'}</p></div></div>
       <p class="gym-note">종목별 최고 별 3개씩 · 연습은 기록과 별에 영향을 주지 않아요.</p></section>`;
     function click(e) { const id = e.target.closest('[data-sport]')?.dataset.sport; if (IDS.includes(id)) api.switchGame(id); }
     container.addEventListener('click', click); container.querySelector('[data-sport]').focus({ preventScroll: true });
@@ -42,7 +42,7 @@
     let engine = null, raf = 0, last = 0, disposed = false, ended = false, lastEvent = -1, drag = null, muted = false, previousX = 160;
     const audio = window.TourMelodyAudio?.create(), equip = outfit();
     container.innerHTML = `<section class="gym-game gym-${kind}" aria-label="${info.sport} 게임">
-      <div class="gym-guide"><img src="${IMG}guide-sua.png" width="48" height="48" alt="수아 선배"><div><strong>수아 선배와 ${info.sport}</strong><p>${info.intro}</p></div></div>
+      <div class="gym-guide"><img src="${IMG}guide-sua.png?v=20261118" width="48" height="48" alt="수아 선배"><div><strong>수아 선배와 ${info.sport}</strong><p>${info.intro}</p></div></div>
       <div class="gym-hud"><strong class="gym-score">준비됐나요?</strong><span class="gym-round">${kind === 'badminton' ? `최고 ${best.score}득점` : `최고 ${best.score}점`}</span></div>
       <div class="gym-field"><canvas width="320" height="240" tabindex="0" role="img" aria-label="${info.sport} 경기장"></canvas><div class="gym-overlay" hidden></div></div>
       <p class="gym-message" role="status" aria-live="polite">${info.subtitle}</p>
@@ -55,7 +55,7 @@
     const dressed = document.createElement('canvas'); dressed.width = 48; dressed.height = 52;
     const sprite = new Image(); sprite.src = 'img/walker.png'; sprite.onload = () => { if (!disposed) paint(0); };
     for (const name of ['guide-sua', 'curling-rink', 'badminton-court', 'target-board', 'stone-coral', 'stone-mint', 'shuttle', 'racket']) {
-      const image = new Image(); images[name] = image; image.onload = () => { if (!disposed) paint(0); }; image.src = IMG + name + '.png';
+      const image = new Image(); images[name] = image; image.onload = () => { if (!disposed) paint(0); }; image.src = IMG + name + '.png?v=20261118';
     }
     function art(name, x, y, w, h) { const im = images[name]; if (im?.complete && im.naturalWidth) { ctx.drawImage(im, Math.round(x), Math.round(y), w, h); return true; } return false; }
     function player(x, y, dir = 'up', frame = 1) {
@@ -78,15 +78,14 @@
         for (const stone of s?.stones || []) art('stone-' + stone.owner, stone.x - 12, stone.y - 12, 24, 24);
         if (!s || s.phase === 'aim') {
           const launchX = s?.launchX ?? 100;
-          ctx.fillStyle = '#f3d78d'; ctx.fillRect(launchX - 16, 200, 32, 28);
+          pixelRing(launchX, 214, 14, '#9c7958');
           art('stone-coral', launchX - 12, 202, 24, 24);
           const a = (s?.angle || 0) * Math.PI / 180, power = s?.power || 0;
           if (power > 0) { ctx.fillStyle = '#14285a'; for (let d = 18; d < 35 + power * .6; d += 9) ctx.fillRect(Math.round(launchX + Math.sin(a) * d) - 1, Math.round(210 - Math.cos(a) * d), 3, 3); }
         }
         player(Math.max(48, (s?.launchX ?? 100) - 43), 233, 'up');
       } else if (kind === 'target') {
-        ctx.fillStyle = '#e9ead5'; ctx.fillRect(0, 0, 320, 240); ctx.fillStyle = '#b9c4aa'; ctx.fillRect(14, 8, 292, 224);
-        art('target-board', 40, 0, 240, 240);
+        art('target-board', 0, 0, 320, 240);
         for (const [i, shot] of (s?.shots || []).entries()) {
           const x = Math.round(shot.x), y = Math.round(shot.y); ctx.fillStyle = '#14285a'; ctx.fillRect(x - 3, y - 3, 7, 7); ctx.fillStyle = '#fff6e6'; ctx.fillRect(x - 1, y - 1, 3, 3);
           if (i === s.shots.length - 1) pixelRing(x, y, 8, '#e85d75');
@@ -100,7 +99,9 @@
       } else {
         art('badminton-court', 0, 0, 320, 240);
         const px = s?.player || 160, moving = Math.abs(px - previousX) > .1, frame = moving && !api.reducedMotion ? (Math.floor(now / 120) % 4 === 0 ? 0 : Math.floor(now / 120) % 4 === 2 ? 2 : 1) : 1; previousX = px;
-        if (s?.phase === 'incoming') { ctx.fillStyle = '#ffe7a1'; ctx.fillRect(Math.round(s.toX) - 17, 188, 34, 4); pixelRing(s.toX, 189, 13, '#fff6e6'); }
+        if (s?.phase === 'incoming') { pixelRing(s.toX, 189, 14, '#284d56'); pixelRing(s.toX, 189, 12, '#ffe7a1');
+          const x = Math.round(s.toX);
+          ctx.fillStyle = '#284d56'; ctx.fillRect(x - 20, 188, 7, 3); ctx.fillRect(x + 14, 188, 7, 3); }
         art('guide-sua', (s?.opponent || 160) - 16, 40, 32, 32);
         art('racket', (s?.opponent || 160) + 17, 49, 15, 20);
         player(px, 208, 'up', frame);
@@ -158,7 +159,7 @@
       const title = kind === 'badminton' ? (s.mine >= 5 ? '승리! 수아 선배와 하이파이브!' : '좋은 경기였어! 다시 한 판?') : kind === 'curling' ? '마지막 스톤까지 도착!' : '다섯 발, 집중력 도전 완료!';
       const score = kind === 'badminton' ? `${s.mine} : ${s.theirs} · 최고 ${s.bestRally}랠리 · 스매시 ${s.smashes}회` : `${s.score}점 · 내 최고 ${record.score}점`;
       const completed = IDS.every(id => id === kind || window.tourGame?.stamps()[id]);
-      extra.innerHTML = `<img src="${IMG}${completed ? 'trophy' : 'icon-' + kind}.png" width="80" height="80" alt=""><h3>${title}</h3><p>${score}</p>${kind === 'curling' ? `<p>내 스톤 최종 점수: ${s.stones.filter(v => v.owner === 'coral').map(v => R.curlingPoints(v.x, v.y)).join(' + ')}</p>` : ''}${kind === 'target' ? `<p>명중 점수: ${s.shots.map(v => v.base + (v.bonus ? '+1' : '')).join(' / ')}</p>` : ''}${completed ? '<strong class="gym-complete-note">체육관 3종 완주 트로피 획득!</strong>' : '<p>다른 종목에도 도전해서 3종 완주 트로피를 모아 봐!</p>'}`;
+      extra.innerHTML = `<img src="${IMG}${completed ? 'trophy' : 'icon-' + kind}.png?v=20261118" width="80" height="80" alt=""><h3>${title}</h3><p>${score}</p>${kind === 'curling' ? `<p>내 스톤 최종 점수: ${s.stones.filter(v => v.owner === 'coral').map(v => R.curlingPoints(v.x, v.y)).join(' + ')}</p>` : ''}${kind === 'target' ? `<p>명중 점수: ${s.shots.map(v => v.base + (v.bonus ? '+1' : '')).join(' / ')}</p>` : ''}${completed ? '<strong class="gym-complete-note">체육관 3종 완주 트로피 획득!</strong>' : '<p>다른 종목에도 도전해서 3종 완주 트로피를 모아 봐!</p>'}`;
       api.done({ stars: R.stars(kind, s), extra });
     }
     function tick(now) {

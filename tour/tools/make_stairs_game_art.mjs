@@ -113,13 +113,20 @@ function backdrop(floor) {
   } else if (floor === 4) {
     wall(c, '#f6f3fc', '#c6bedc', '#e9e2f2');
     window(c, 8, 12, P.cream); window(c, 91, 12, P.cream);
-    books(c, 9, 61, [P.violet, P.mintDark, P.P]); shelf(c, 6, 61, 21);
+    // A reading alcove: the globe rests above its own cabinet, clear of the books.
+    box(c, 5, 52, 21, 13, P.woodLight, P.woodDark);
+    rect(c, 7, 54, 17, 9, '#ad8d81');
+    for (const [x, h, color] of [[8, 6, P.mint], [12, 8, P.violet], [16, 5, P.P], [20, 7, P.L]]) {
+      rect(c, x, 62 - h, 3, h, color); rect(c, x, 60, 3, 1, P.cream);
+    }
+    rect(c, 4, 51, 23, 2, P.woodDark);
+    rect(c, 10, 49, 11, 2, P.woodDark); rect(c, 14, 45, 3, 4, P.woodDark);
+    rect(c, 11, 34, 8, 13, P.blueShadow); rect(c, 8, 37, 14, 7, P.blueShadow);
+    rect(c, 10, 36, 10, 9, P.B); rect(c, 12, 35, 6, 11, P.B);
+    rect(c, 10, 37, 5, 3, P.mintDark); rect(c, 13, 40, 4, 4, P.mintDark);
+    rect(c, 17, 37, 3, 2, P.mint); rect(c, 11, 36, 3, 1, P.cream);
+    rect(c, 21, 36, 1, 8, P.gold); rect(c, 18, 44, 3, 2, P.gold);
     books(c, 96, 61, [P.B, P.P, P.violet]); shelf(c, 93, 61, 21);
-    // Quiet reading floor's small globe.
-    rect(c, 14, 46, 4, 1, P.woodDark); rect(c, 12, 47, 8, 6, P.B);
-    rect(c, 14, 46, 4, 8, P.B); rect(c, 13, 49, 4, 2, P.mint);
-    rect(c, 16, 51, 3, 2, P.mint); rect(c, 15, 54, 2, 3, P.woodDark);
-    rect(c, 12, 56, 8, 1, P.woodDark);
     sparkle(c, 60, 10, P.violet);
   } else {
     // Attic eaves frame a calm cream center; stars decorate the side rafters.
@@ -141,12 +148,15 @@ function backdrop(floor) {
 
 function step() {
   const c = canvas(24, 12);
-  rect(c, 1, 2, 22, 7, P.N); rect(c, 2, 1, 20, 9, P.N);
-  rect(c, 2, 2, 20, 3, P.cream); rect(c, 1, 3, 22, 2, P.cream);
-  rect(c, 2, 5, 20, 4, P.B); rect(c, 2, 5, 20, 1, '#b5daed');
-  rect(c, 3, 7, 18, 2, P.blueShadow); rect(c, 3, 3, 16, 1, P.W);
-  // Mint inset and bolts make the climbable lip legible at small scale.
-  rect(c, 8, 6, 8, 2, P.mint); put(c, 4, 6, P.cream); put(c, 19, 6, P.cream);
+  // A broad birch tread with a shadow under its lip and twin riveted brackets.
+  rect(c, 2, 1, 20, 7, P.N); rect(c, 0, 3, 24, 5, P.N);
+  rect(c, 2, 2, 20, 3, P.woodLight); rect(c, 1, 4, 22, 1, P.cream);
+  rect(c, 4, 2, 8, 1, P.cream); rect(c, 15, 3, 5, 1, P.wood);
+  rect(c, 1, 5, 22, 2, P.wood); rect(c, 2, 6, 20, 1, '#ba8566');
+  for (const x of [3, 16]) {
+    rect(c, x, 8, 5, 2, P.N); rect(c, x + 1, 10, 3, 1, P.N);
+    rect(c, x + 1, 8, 3, 1, P.mintDark); put(c, x + 2, 8, P.cream);
+  }
   return scale(c, 2);
 }
 function minju() {
@@ -237,7 +247,7 @@ function stamp() {
   return c;
 }
 
-output('stairs', 'tile-step.png', step(), '민트 장식과 밝은 발판의 계단 타일');
+output('stairs', 'tile-step.png', step(), '민트색 금속 받침과 자작나무 디딤판이 있는 계단 타일');
 const themes = ['민트빛 화분과 정원 창문', '하늘빛 컴퓨터 교실 장식', '복숭아빛 미술 작품과 꽃', '연보라빛 책과 지구본', '포근한 나무 서까래와 책, 별 모빌'];
 for (let i = 1; i <= 5; i++) output('stairs', `floor-${i}.png`, backdrop(i), `${i}층 배경 — ${themes[i - 1]}`);
 output('stairs', 'guide-minju.png', minju(), '민트 리본 포니테일과 남색 교복을 입은 민주 선배');

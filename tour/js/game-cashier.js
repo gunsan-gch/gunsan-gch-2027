@@ -51,7 +51,7 @@
     const img = document.createElement('img');
     img.alt = ''; img.width = size; img.height = size;
     img.addEventListener('error', () => img.replaceWith(el('span', 'cashier-emoji', emoji)), { once: true });
-    img.src = src;
+    img.src = src + '?v=20261118';
     return img;
   }
 

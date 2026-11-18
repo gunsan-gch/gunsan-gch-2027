@@ -46,10 +46,28 @@ function wood(c) {
     for(let x=(y%40 ? 26:66);x<c.w;x+=80) rect(c,x,y,1,20,P.woodLine);
   }
 }
+// Glazed clerestory, slatted benches and folded team towels sit outside the lanes.
+function windows(c,y,h) {
+  rect(c,0,y,c.w,h,'#adbdad');
+  for(let x=5;x<c.w;x+=40) {
+    box(c,x,y+1,34,h-3,'#a3c8c4','#698989');
+    rect(c,x+2,y+2,29,2,'#eaf3df');
+    rect(c,x+15,y+2,2,h-5,'#e0ebd7');
+    rect(c,x+1,y+h-4,32,1,'#709b9b');
+  }
+  rect(c,0,y+h-2,c.w,2,'#526b66');
+}
+function bench(c,x,y) {
+  rect(c,x+2,y+2,13,43,'#bd936c');
+  for(const dy of [4,31]) rect(c,x-1,y+dy,15,3,'#536266');
+  box(c,x,y,12,39,'#cd8c58','#785c50');
+  rect(c,x+2,y+1,2,36,'#efbe82'); rect(c,x+6,y+1,1,37,'#a57151');
+  rect(c,x-1,y+7,11,9,P.mintPale); rect(c,x-1,y+12,11,2,P.coral);
+}
 function house(c,x,y,r) {
   disc(c,x,y,r,P.N); disc(c,x,y,r-2,P.mintDark);
-  disc(c,x,y,Math.floor(r*.72),P.cream); disc(c,x,y,Math.floor(r*.46),P.coral);
-  disc(c,x,y,Math.floor(r*.18),P.cream);
+  disc(c,x,y,Math.round(r*32/45),P.cream); disc(c,x,y,Math.round(r*20/45),P.coral);
+  disc(c,x,y,Math.round(r*.18),P.cream);
 }
 function target(c,x,y,r) {
   const edge=r<24 ? 1:2;
@@ -57,38 +75,37 @@ function target(c,x,y,r) {
   disc(c,x,y,Math.floor(r*.76),P.N); disc(c,x,y,Math.floor(r*.76)-edge,P.cream);
   disc(c,x,y,Math.floor(r*.53),P.N); disc(c,x,y,Math.floor(r*.53)-edge,P.coral);
   disc(c,x,y,Math.floor(r*.29),P.N); disc(c,x,y,Math.floor(r*.29)-edge,P.goldLight);
-  if(r>=24) disc(c,x,y,Math.max(2,Math.floor(r*.08)),P.N);
+  if(r>=24) disc(c,x,y,Math.max(2,Math.round(r*.08)),P.N);
+}
+function spriteRows(rows,palette) {
+  const c=canvas(rows[0].length,rows.length);
+  rows.forEach((row,y)=>Array.from(row).forEach((ch,x)=>put(c,x,y,palette[ch])));
+  return c;
 }
 function stone(color) {
-  const c=canvas(12,12);
-  ellipse(c,6,7,5,4,P.N); ellipse(c,6,6,5,4,P.N);
-  ellipse(c,6,6,4,3,P.S); rect(c,3,7,7,2,P.D);
-  ellipse(c,6,5,4,3,color); rect(c,3,4,2,1,P.cream);
-  box(c,4,2,5,4,P.N,P.N); rect(c,5,3,3,1,P.cream);
-  rect(c,5,4,1,2,color); rect(c,8,4,1,2,color);
-  return scale(c,2);
+  const palette = { ...P, C:color, H: color === P.coral ? '#ffd0ab' : '#d5fff0' };
+  return scale(spriteRows([
+    '............','....NNNNN...','...NHHHCNN..','...NN..NCN..',
+    '..NNCCCCNNN.','.NHHCCCCCCN.','NCCCCCCCCCCN','NSSSSSSSSSDN',
+    'NSSWSWSSDDDN','.NDDDDDDDDN.','..NNNNNNNN..','............'
+  ],palette),2);
 }
 function racket() {
-  const c=canvas(12,16);
-  ellipse(c,6,5,5,5,P.N); ellipse(c,6,5,4,4,P.mintDark); ellipse(c,6,5,3,3,P.cream);
-  for(const x of [5,7]) rect(c,x,3,1,5,P.mint);
-  for(const y of [4,6]) rect(c,4,y,5,1,P.mint);
-  rect(c,5,10,3,2,P.N); rect(c,6,10,1,2,P.mintDark);
-  rect(c,5,12,3,4,P.N); rect(c,6,12,1,3,P.coral);
-  return scale(c,2);
+  return scale(spriteRows([
+    '......NNNN..','....NNGGGGN.','...NGWWGWGN.','...NWGWGWGWN',
+    '..NGWWGWWGWN','..NWGGWGGGWN','..NGWWGWWGN.','..NGGWGWGN..',
+    '...NWWWGN...','...NGGNN....','...NNN......','...NDN......',
+    '..NCN.......','..NHN.......','.NCN........','.NN.........'
+  ],{ ...P,G:'#78bca7',C:P.coral,H:P.coralLight }),2);
 }
 function shuttle() {
-  const c=canvas(16,16);
-  // Five separate, stepped feathers converge on a navy-banded cork.
-  for(let y=2;y<=10;y++) {
-    const left=2+Math.floor((y-2)/3), right=13-Math.floor((y-2)/3);
-    rect(c,left,y,right-left+1,1,P.N);
-    if(y>2) rect(c,left+1,y,right-left-1,1,P.cream);
-  }
-  for(const x of [4,7,10]) rect(c,x,3,1,4,P.mint);
-  rect(c,6,7,1,3,P.mintDark); rect(c,9,7,1,3,P.mintDark);
-  rect(c,5,10,6,2,P.N); rect(c,6,12,4,2,P.gold); rect(c,7,14,2,1,P.N);
-  return c;
+  return spriteRows([
+    '................','..NN...NN.......','.NWWN.NWWN.NN...',
+    '.NWWNNWWNNNWWN..','..NWWNWWNNWWN...','..NWWNWGNWWN....',
+    '...NGNWGNGWN....','...NGNWGNGN.....','....NWWGGGN.....',
+    '....NNWWGNN.....','.....NNNNN......','.....NHHHN......',
+    '.....NHOON......','......NON.......','.......N........','................'
+  ],{...P,G:'#92c6b4',H:'#ffdc93'});
 }
 function sua() {
   const c=canvas(32,32);
@@ -117,7 +134,7 @@ function sua() {
 }
 function hall() {
   const c=canvas(320,160); wood(c);
-  rect(c,0,0,320,14,P.mintDark); rect(c,0,2,320,8,P.mint); rect(c,0,14,320,2,P.N);
+  windows(c,0,15);
   rect(c,0,154,320,6,P.woodDark);
   // Left: a clear wooden curling lane and its three rings.
   box(c,14,26,88,110,P.wood,P.cream); house(c,58,53,23);
@@ -144,7 +161,9 @@ function hall() {
 }
 function badmintonCourt() {
   const c=canvas(320,240); wood(c);
-  box(c,32,14,256,214,P.mintDark,P.N); rect(c,36,18,248,206,P.mint);
+  windows(c,0,11); bench(c,8,52); bench(c,299,157);
+  box(c,32,14,256,214,'#356e68',P.N); rect(c,36,18,248,206,'#69a79a');
+  for(const y of [26,74,130,202]) rect(c,46,y,228,y===74?28:12,'#71ac9d');
   // Main lines are 2px wide. Opponent area y=50, player y=145..205 clear.
   frame(c,46,26,228,190,P.cream); frame(c,47,27,226,188,P.cream);
   rect(c,60,26,2,190,P.cream); rect(c,258,26,2,190,P.cream);
@@ -153,7 +172,7 @@ function badmintonCourt() {
   rect(c,46,202,228,2,P.cream); rect(c,46,36,228,2,P.cream);
   // The net's top band is centered at y=100, its mesh stays above play area.
   rect(c,35,98,250,4,P.N); rect(c,37,99,246,2,P.cream);
-  rect(c,38,103,244,11,P.N);
+  rect(c,38,103,244,11,'#437772');
   for(let x=40;x<282;x+=6) rect(c,x,103,1,11,P.mintPale);
   rect(c,38,106,244,1,P.mintPale); rect(c,38,111,244,1,P.mintPale);
   box(c,32,96,6,22,P.woodLight,P.N); box(c,282,96,6,22,P.woodLight,P.N);
@@ -163,6 +182,9 @@ function badmintonCourt() {
 function curlingRink() {
   const c=canvas(320,240); wood(c);
   // Warm wood mini-curling lane, boundaries x=34 and x=286.
+  windows(c,0,10); bench(c,8,58); bench(c,298,154);
+  rect(c,36,12,249,216,'#f6ddb0');
+  for(let x=50;x<283;x+=22) rect(c,x,16,1,209,'#eed2a4');
   rect(c,33,12,3,216,P.N); rect(c,285,12,3,216,P.N);
   rect(c,36,12,2,216,P.cream); rect(c,283,12,2,216,P.cream);
   rect(c,38,14,245,2,P.cream); rect(c,38,225,245,2,P.cream);
@@ -172,10 +194,31 @@ function curlingRink() {
   // Launch alignment mark is beneath the moving stone's starting center.
   rect(c,149,210,23,2,P.N); rect(c,159,201,2,20,P.N);
   rect(c,150,211,21,1,P.cream);
-  for(const x of [14,299]) { rect(c,x,32,6,40,P.woodDark); rect(c,x+1,34,4,36,P.wood); }
+  for(const y of [19,64,109,145,194,223]) { rect(c,29,y,4,2,P.ink); rect(c,288,y,4,2,P.ink); }
   return c;
 }
-function board() { const c=canvas(240,240); target(c,120,120,96); return c; }
+function board() {
+  const c=canvas(320,240);
+  wood(c);
+  rect(c,0,0,320,173,'#dce6d5'); windows(c,0,29);
+  for(let x=0;x<320;x+=32) {
+    box(c,x,124,32,49,'#80aa9e','#73998e');
+    rect(c,x+2,126,28,1,'#99b8a9');
+  }
+  rect(c,0,172,320,4,'#657d72');
+  // The low stand and shadow ground the circular board in the gym.
+  ellipse(c,162,227,90,5,'#d3ae87');
+  for(const x of [105,207]) {
+    box(c,x,183,8,42,'#ae805f','#6c6459');
+    box(c,x-7,222,22,5,P.wood,'#6c6459');
+  }
+  disc(c,161,122,99,'#536d69'); disc(c,160,120,98,'#f6deb2');
+  target(c,160,120,96);
+  for(const [x,y] of [[160,26],[66,120],[254,120],[160,214]]) {
+    disc(c,x,y,2,'#558c82'); put(c,x,y-1,P.mintPale);
+  }
+  return c;
+}
 function emblem(kind) {
   const c=canvas(24,24);
   if(kind==='curling') {
@@ -222,7 +265,7 @@ output('gym','guide-sua.png',sua(),'산호색 머리띠와 높은 올림머리, 
 output('gym','gym-hall.png',hall(),'나무 바닥 위 컬링·원형 표적·배드민턴의 세 구역이 있는 체육관');
 output('gym','badminton-court.png',badmintonCourt(),'중앙 높이 100의 네트와 넓은 선수 공간이 있는 민트 배드민턴 코트');
 output('gym','curling-rink.png',curlingRink(),'중심 160,64 반지름 45의 하우스와 160,210 출발점이 있는 나무 컬링 레인');
-output('gym','target-board.png',board(),'중심 120,120 반지름 96의 민트·크림·코랄·금빛 원형 표적');
+output('gym','target-board.png',board(),'체육관 창과 보호 매트 앞, 중심 160,120 반지름 96의 원형 타이밍 보드');
 output('gym','racket.png',racket(),'민트 테두리와 산호색 손잡이의 배드민턴 라켓');
 output('gym','shuttle.png',shuttle(),'크림색 깃털과 금빛 코르크의 셔틀콕');
 output('gym','stone-coral.png',stone(P.coral),'산호색 손잡이와 회색 몸체의 컬링 스톤');
