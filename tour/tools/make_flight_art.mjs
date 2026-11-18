@@ -226,3 +226,77 @@ function playground() {
 for(const [name, art] of [['star-ring',starRing()],['schoolyard',schoolyard()],['garden',garden()],['playground',playground()]]) {
   write('paperplane',name,art);
 }
+
+// Keep the keel aligned across all four cel poses so a roll stays in its lane.
+function rollStrip() {
+  const sheet = canvas(192,64);
+  const frames = [plane()];
+  for(const pose of ['bank','edge','belly']) {
+    const c = canvas(24,32);
+    if(pose === 'bank') {
+      polygon(c,[[12,2],[20,24],[15,23],[13,29],[10,23],[4,25]],navy);
+      polygon(c,[[12,5],[13,21],[6,23]],'#fffdf0');
+      polygon(c,[[12,6],[18,22],[15,21]],'#9cc8c1');
+      polygon(c,[[12,7],[15,21],[13,26]],jade);
+    } else if(pose === 'edge') {
+      polygon(c,[[12,2],[16,24],[14,23],[12,29],[10,24],[9,25]],navy);
+      polygon(c,[[12,6],[12,22],[10,23]],cream);
+      polygon(c,[[12,7],[15,22],[13,21],[12,26]],jade);
+    } else {
+      polygon(c,[[12,2],[22,25],[15,23],[12,29],[9,23],[2,25]],navy);
+      polygon(c,[[12,5],[11,20],[4,23]],'#8dbab9');
+      polygon(c,[[12,5],[20,23],[13,20]],'#b8d4c9');
+      polygon(c,[[12,6],[14,21],[12,26],[10,21]],'#e4ead7');
+      polygon(c,[[6,20],[10,18],[10,20],[5,22]],jade);
+      polygon(c,[[14,18],[18,20],[19,22],[14,20]],jade);
+    }
+    frames.push(scale(c,2));
+  }
+  frames.forEach((cel,index) => {
+    for(let y=0;y<64;y++) {
+      const start = y*48*4;
+      sheet.data.set(cel.data.subarray(start,start+48*4),(y*192+index*48)*4);
+    }
+  });
+  return sheet;
+}
+function ribbon() {
+  const c = canvas(32,12);
+  // The taut top cord reaches both tile boundaries. The chevron pennants hang below.
+  rect(c,0,1,32,3,'#67495c');
+  rect(c,0,2,32,1,'#f9d894');
+  for(const x of [0,16]) {
+    polygon(c,[[x+1,3],[x+15,3],[x+8,12]],'#67495c');
+    polygon(c,[[x+3,3],[x+13,3],[x+8,10]],x?'#eaaa68':'#d98b90');
+    polygon(c,[[x+5,4],[x+8,6],[x+11,4],[x+8,8]],cream);
+  }
+  return scale(c,2);
+}
+write('paperplane','roll-strip',rollStrip());
+write('paperplane','ribbon',ribbon());
+
+// The canvas game paints its movable shelf and merchandise over this quiet wall.
+function workshop() {
+  const c = canvas(180,215);
+  rect(c,0,0,180,215,'#faf3dc');
+  for(const left of [0,167]) {
+    rect(c,left,0,13,215,'#e0dfc6');
+    rect(c,left+(left?0:11),0,2,215,'#ebe7d0');
+    // Subtle mounting holes in the edge strips of the workshop pegboard.
+    for(let y=4;y<215;y+=8) for(const dx of [2,7]) put(c,left+dx,y,'#bdc7ad');
+  }
+  // Coiled ribbon spools on the left pegboard, with short hanging ends.
+  for(const [x,y,col] of [[5,28,'#c79485'],[7,109,'#8aac9e']]) {
+    rect(c,x,y+3,2,10,col);rect(c,x+1,y+12,3,2,col);
+    disc(c,x,y,5,5,'#aa9981');disc(c,x,y,4,4,'#e8cd9f');
+    disc(c,x,y,3,3,col);disc(c,x,y,1,1,'#726e68');
+  }
+  // A vertical measuring rule and a clipped swatch card stay outside the play lane.
+  box(c,173,39,6,48,'#e8cea0','#b6a186');
+  for(let y=43;y<84;y+=3) rect(c,174,y,(y-43)%9?1:3,1,'#a28d73');
+  box(c,169,142,10,17,'#f4e9cc','#b8ad91');
+  rect(c,172,141,4,3,'#88a59b');
+  for(const [i,col] of ['#c99c91','#b6c6b0','#d7b780'].entries()) rect(c,171,146+i*4,6,3,col);
+  return scale(c,2);
+}
+write('goods','workshop',workshop());

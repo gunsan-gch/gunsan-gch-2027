@@ -24,3 +24,10 @@
   .pp-game{gap:4px}.pp-guide img{width:38px;height:38px}
   .pp-guide p,.pp-note,.pp-hud{font-size:.8rem}
 }
+.pp-steering{grid-template-columns:minmax(56px,1fr) minmax(94px,1.35fr) minmax(56px,1fr) 44px;gap:4px}
+.pp-game .pp-steering button{padding:5px 3px}
+.pp-game .pp-steering .pp-roll{background:#722947;border:2px solid #511b30;color:#fff8df;box-shadow:inset 0 -3px #511b30}
+.pp-game .pp-roll[data-state="now"]{background:#ffda79;color:#38251a;border-color:#57382c}
+.pp-game .pp-roll[data-state="rolling"]{box-shadow:inset 0 3px #511b30;background:#813355}
+.pp-game .pp-roll[data-state="charging"]{background:#62565b}
+.pp-cue{position:absolute;top:6px;left:50%;transform:translateX(-50%);background:#422438;color:#fff4ce;border:2px solid #fff2c0;border-radius:4px;padding:3px 8px;white-space:nowrap;font-size:.85rem;font-weight:800;pointer-events:none}

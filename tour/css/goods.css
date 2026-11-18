@@ -77,3 +77,13 @@
 .goods-order strong { font-size: .94rem; }
 .goods-order .goods-ship { background: #85471d; color: #fff; border-color: #79401a; min-width: 83px; }
 .goods-order .goods-ship:disabled { background: #efe0c3; opacity: 1; color: #655847; border-color: #c4ad88; }
+.goods-modes { display: flex; gap: 3px; width: min(100%, 360px); }
+.goods-modes button { flex: 1; }
+.goods-modes button[aria-pressed="true"] { background: #315a4c; color: #fff8df; }
+.goods-brief { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 5px; width: min(100%, 360px); border-bottom: 2px solid #d0af82; padding: 2px 3px 5px; }
+.goods-brief > div { display: grid; }
+.goods-brief strong { font-size: 1rem; }
+.goods-recipe { display: flex; align-items: center; gap: 2px; }
+.goods-recipe img { width: clamp(18px, 5.6vw, 27px); height: auto; image-rendering: pixelated; }
+.goods-recipe i { font-style: normal; color: #89623d; }
+.goods-board[data-mode="puzzle"] { background: #fbf3df url('../img/games/goods/workshop.png') center / 100% 100% no-repeat; image-rendering: pixelated; }
