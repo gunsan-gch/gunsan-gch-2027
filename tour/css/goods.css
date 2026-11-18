@@ -1,0 +1,73 @@
+.goods-game {
+  width: min(100%, 530px);
+  margin: auto;
+  color: #293e37;
+  font-family: inherit;
+}
+.goods-game [hidden] { display: none !important; }
+.goods-guide {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: #edf3df;
+  border: 1px solid #bdcaa9;
+  border-radius: 8px;
+}
+.goods-guide img { width: 80px; height: 80px; flex: none; object-fit: contain; image-rendering: auto; }
+.goods-guide strong { font-size: .87rem; }
+.goods-guide p, .goods-help, .goods-gallery p { margin: 2px 0; font-size: .86rem; line-height: 1.45; }
+.goods-play { display: grid; justify-items: center; gap: 5px; }
+.goods-hud {
+  width: min(100%, 360px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 0 1px;
+  font-size: .85rem;
+}
+.goods-hud span { display: flex; gap: 6px; align-items: center; }
+.goods-score { font-size: 1.2rem; font-variant-numeric: tabular-nums; }
+.goods-next-art { height: 28px; width: 28px; object-fit: contain; image-rendering: pixelated; }
+.goods-board {
+  box-sizing: content-box;
+  display: block;
+  width: min(calc(100% - 8px), 360px, 43dvh);
+  height: auto;
+  aspect-ratio: 360 / 430;
+  touch-action: none;
+  cursor: crosshair;
+  border: 3px solid #31584e;
+  border-bottom-width: 7px;
+  border-radius: 5px 5px 11px 11px;
+  background-color: #fff9ea;
+  background-image: linear-gradient(#d9cfac40 1px, transparent 1px), linear-gradient(90deg, #d9cfac40 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+.goods-status { margin: 1px 0; min-height: 1.25em; color: #70451b; font-size: .86rem; font-weight: 700; }
+.goods-controls, .goods-actions { display: flex; gap: 6px; justify-content: center; }
+.goods-game button {
+  min-height: 44px; padding: 5px 13px; border-radius: 6px;
+  border: 1px solid #849e8c; background: #fffdf3; color: #254d40; font: inherit;
+  font-size: .88rem; font-weight: 700; cursor: pointer;
+}
+.goods-controls button { min-width: 44px; }
+.goods-game .goods-drop, .goods-game .goods-resume { min-width: 120px; background: #305a4b; color: #fff; }
+.goods-game button:disabled { opacity: .55; cursor: default; }
+.goods-game :focus-visible { outline: 3px solid #2674a8; outline-offset: 2px; }
+.goods-help { text-align: center; color: #455c53; }
+.goods-play small { color: #51645a; font-size: .76rem; }
+.goods-gallery { text-align: center; padding: 10px 0; }
+.goods-gallery h3 { margin: 2px 0; }
+.goods-list { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin: 12px 0; padding: 0; }
+.goods-list li { display: grid; justify-items: center; align-content: center; gap: 3px; min-height: 74px; background: #f6f3e5; border-radius: 6px; font-size: .78rem; }
+.goods-list img, .goods-list b { width: 42px; height: 42px; object-fit: contain; image-rendering: pixelated; }
+.goods-list b { display: grid; place-items: center; font-size: 1.6rem; color: #8b8e78; }
+@media (prefers-reduced-motion: no-preference) {
+  .goods-game button:active:enabled { transform: translateY(1px); }
+}
+.goods-pause { padding: 30px 0; text-align: center; }
+@media (max-width: 600px) {
+  .goods-board { width: min(calc(100% - 8px), 360px, 36dvh); }
+}

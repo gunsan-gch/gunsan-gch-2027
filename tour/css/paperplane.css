@@ -1,0 +1,19 @@
+.pp-game,.pp-result{color:#253d36}
+.pp-game{max-width:540px;margin:auto;display:grid;gap:6px}
+.pp-game [hidden]{display:none!important}
+.pp-guide,.pp-hud,.pp-energy,.pp-deck,.pp-steering{display:flex;align-items:center;gap:8px}
+.pp-guide{background:#edf5df;border:2px solid #587665;border-radius:8px;padding:4px 8px}
+.pp-guide img{width:80px;height:80px;flex:none;object-fit:contain}
+.pp-guide p,.pp-game p,.pp-result p{margin:0;font-size:.88rem}
+.pp-hud{justify-content:space-between;font-weight:700;font-size:.88rem}
+.pp-field{position:relative;margin:auto;width:min(100%,360px,50vh);border:2px solid #476355;background:#8fb67a}
+.pp-field canvas{display:block;width:100%;height:auto;touch-action:none;image-rendering:pixelated;cursor:grab}
+.pp-overlay{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:8px;background:#223d32bb;color:white}
+.pp-energy{justify-content:space-between;font-size:.85rem}.pp-energy label{display:flex;align-items:center;gap:8px;flex:1}.pp-energy meter{flex:1}
+.pp-deck label{flex:1;font-weight:700;font-size:.9rem}.pp-deck input{display:block;width:100%;min-height:44px;accent-color:#2f6b50}
+.pp-game button,.pp-game summary{font:inherit;font-weight:700;min-height:44px;min-width:44px;cursor:pointer}
+.pp-game button:not(.btn){border:1px solid #536f62;border-radius:5px;background:#f2f7e9;color:#264635;padding:5px 12px}
+.pp-steering{justify-content:center}.pp-steering button{touch-action:none;user-select:none}
+.pp-game summary{display:list-item;align-content:center;font-size:.85rem}.pp-game details p{margin:3px 0}
+.pp-game :focus-visible{outline:3px solid #125e94;outline-offset:2px}
+.pp-result{padding:10px;background:#edf5df;border-radius:6px}.pp-result h3{margin:0 0 5px}.pp-result p+p{margin-top:4px}
