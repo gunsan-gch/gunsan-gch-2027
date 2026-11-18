@@ -65,7 +65,8 @@
     f.distance = Math.min(FINISH,before+speed*dt);
     if (FINISH-f.distance < 1e-8) f.distance=FINISH;
     crossings(f,before,f.distance,x0,f.x);
-    f.finished = f.energy < 1e-8 || f.distance === FINISH;
+    if (f.energy < 1e-8) f.energy = 0;
+    f.finished = f.energy === 0 || f.distance === FINISH;
   }
   function score(f) { return f.points + f.landing; }
   function stars(total) { return total >= 155 ? 3 : total >= 60 ? 2 : 1; }
