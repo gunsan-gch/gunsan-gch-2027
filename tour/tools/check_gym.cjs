@@ -68,14 +68,14 @@ const scene=ctx.window.TOUR_SCENES['3'],gym=scene.rooms.find(r=>r.name==='체육
 check(gym.game==='gym'&&gym.games.join(',')==='curling,target,badminton','one gym hub, three sport entries');
 check(JSON.stringify(gym.anchor)==='[16.5,25]'&&JSON.stringify(gym.rect)==='[2,4,14,67]','school map geometry unchanged');
 const roomEntries=Object.values(ctx.window.TOUR_SCENES).flatMap(s=>s.rooms).flatMap(r=>(r.games||(r.game?[r.game]:[])).map(id=>({id,maxStars:3})));
-check(roomEntries.length===18&&new Set(roomEntries.map(e=>e.id)).size===18,'18 unique reward-bearing games');
-const oldStamps=Object.fromEntries(roomEntries.filter(e=>![...gym.games,'press','logistics','reconcile','bookshop'].includes(e.id)).map(e=>[e.id,{stars:3}]));
+check(roomEntries.length===20&&new Set(roomEntries.map(e=>e.id)).size===20,'20 unique reward-bearing games');
+const oldStamps=Object.fromEntries(roomEntries.filter(e=>![...gym.games,'press','logistics','reconcile','bookshop','tea','booths'].includes(e.id)).map(e=>[e.id,{stars:3}]));
 const upgraded=ctx.window.TourStarProgress.summarize(oldStamps,roomEntries);
-check(upgraded.stars===33&&upgraded.maxStars===54&&upgraded.count===11,'existing 33 stars preserved, new sports start empty');
+check(upgraded.stars===33&&upgraded.maxStars===60&&upgraded.count===11,'existing 33 stars preserved, new sports start empty');
 // Exercise the actual games.js progress mapper, not a duplicate implementation.
 ctx.document={readyState:'loading',addEventListener(){},querySelector(){return null;},getElementById(id){return id==='game'?{querySelector(){return {addEventListener(){}};},addEventListener(){}}:null;}};
 ctx.localStorage={getItem:()=>JSON.stringify(oldStamps)};ctx.matchMedia=()=>({matches:false});ctx.window.TOUR_GAMES=Object.fromEntries([...roomEntries.map(e=>[e.id,{maxStars:3}]),['gym',{isHub:true}]]);
-load('js/games.js');const actual=ctx.window.tourGame.progress();check(actual.games.length===18&&actual.stars===33&&actual.maxStars===54,'real game framework counts sports and excludes hub');
+load('js/games.js');const actual=ctx.window.tourGame.progress();check(actual.games.length===20&&actual.stars===33&&actual.maxStars===60,'real game framework counts sports and excludes hub');
 check(ctx.window.TourStarProgress.TITLE_AT===27,'existing wardrobe title unchanged');
 const assets=Object.values(JSON.parse(fs.readFileSync(path.join(root,'img/ASSET-SOURCES.json'),'utf8')).sources).filter(a=>a.generator==='tools/make_gym_game_art.mjs');
 check(assets.length===16,'16 original documented assets');for(const a of assets)check(crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'img',a.output))).digest('hex')===a.sha256,'asset fingerprint '+a.output);

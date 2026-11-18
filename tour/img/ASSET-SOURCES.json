@@ -1036,6 +1036,104 @@
       "description": "수아 선배 게임 캐릭터 (올림머리·산호색 머리띠·민트 체육복) — 배드민턴 상대, 플레이어 걷기 시트 바탕",
       "sha256": "c18f36b1629a126580458701fef2315725593161da5869bde47795620c4059f6",
       "generator": "tools/make_npc_sheets.py"
+    },
+    "games/tea/room.png": {
+      "output": "games/tea/room.png",
+      "kind": "game-pixel-art",
+      "description": "예절실 사진을 참고해 그린 다탁과 병풍",
+      "sha256": "437df99a51908a53a2758c135716b1b67ff3e8fe90ba1f5a3649472774f0edd2",
+      "generator": "tools/make_fifth_floor_game_art.mjs"
+    },
+    "games/tea/pot.png": {
+      "output": "games/tea/pot.png",
+      "kind": "game-pixel-art",
+      "description": "오른쪽 주둥이의 청자 다관",
+      "sha256": "6bca7b53501932c2494c0151c12a5bf8d4b01e174251e22c75fec0bb962ffeed",
+      "generator": "tools/make_fifth_floor_game_art.mjs"
+    },
+    "games/tea/cup-0.png": {
+      "output": "games/tea/cup-0.png",
+      "kind": "game-pixel-art",
+      "description": "청자잔",
+      "sha256": "fcacf528e55e3d3dceb50169d7bd0335d0f87bf254668d4c8380ab9a5095eed5",
+      "generator": "tools/make_fifth_floor_game_art.mjs"
+    },
+    "games/tea/cup-1.png": {
+      "output": "games/tea/cup-1.png",
+      "kind": "game-pixel-art",
+      "description": "살구빛 잔",
+      "sha256": "fe01eeb910bec9ff3b4cd8cd6ce12486c0e316753240b61e3152225837992706",
+      "generator": "tools/make_fifth_floor_game_art.mjs"
+    },
+    "games/tea/cup-2.png": {
+      "output": "games/tea/cup-2.png",
+      "kind": "game-pixel-art",
+      "description": "연보라 잔",
+      "sha256": "7c48a61f621a5a874f3481b9e845d516c0f1fb0ba7695bf5df9948aa62ab7aa6",
+      "generator": "tools/make_fifth_floor_game_art.mjs"
+    },
+    "games/booths/food.png": {
+      "output": "games/booths/food.png",
+      "kind": "game-pixel-art",
+      "description": "녹원예술제 먹거리 부스",
+      "sha256": "aedcdc21d61dd5c779f1de0ff2699baaba40dad4137441fdf6a730cdf89a6fc0",
+      "generator": "tools/make_fifth_floor_game_art.mjs"
+    },
+    "games/booths/craft.png": {
+      "output": "games/booths/craft.png",
+      "kind": "game-pixel-art",
+      "description": "공예 부스",
+      "sha256": "7bfa63ce78270f6cb3bdab990722fbf89926f904ac5620cb407b05220a11ace9",
+      "generator": "tools/make_fifth_floor_game_art.mjs"
+    },
+    "games/booths/photo.png": {
+      "output": "games/booths/photo.png",
+      "kind": "game-pixel-art",
+      "description": "사진 부스",
+      "sha256": "2028e312abae9c91722031c5404cac287461ca6618811c3df8b4da153aeadfff",
+      "generator": "tools/make_fifth_floor_game_art.mjs"
+    },
+    "games/booths/stage.png": {
+      "output": "games/booths/stage.png",
+      "kind": "game-pixel-art",
+      "description": "예술제 무대",
+      "sha256": "3c469b29ca88e8965b91d56503afbabbabe7dc93a3ca958efee9c37775f000b1",
+      "generator": "tools/make_fifth_floor_game_art.mjs"
+    },
+    "games/booths/gate.png": {
+      "output": "games/booths/gate.png",
+      "kind": "game-pixel-art",
+      "description": "예술제 입구",
+      "sha256": "56ec537371d1d5a92972ae3d5f08d38772fd421d5fa2cf118b6d48a280e76a8e",
+      "generator": "tools/make_fifth_floor_game_art.mjs"
+    },
+    "games/stamps/tea.png": {
+      "output": "games/stamps/tea.png",
+      "kind": "game-pixel-art",
+      "description": "예절실 찻잔 도장",
+      "sha256": "694b4d967c651cf21d62b947ee67be900c9f8c0cab8bbe3de35e79c4be10685d",
+      "generator": "tools/make_fifth_floor_game_art.mjs"
+    },
+    "games/stamps/booths.png": {
+      "output": "games/stamps/booths.png",
+      "kind": "game-pixel-art",
+      "description": "녹원예술제 부스 도장",
+      "sha256": "50ace61cb8176f8b02a94315770f715aaaa88f8e12333313d1981ca575d3ed21",
+      "generator": "tools/make_fifth_floor_game_art.mjs"
+    },
+    "npcs/portraits/juni.png": {
+      "output": "npcs/portraits/juni.png",
+      "kind": "npc",
+      "description": "준이 · 꽃 장식과 찻잔",
+      "sha256": "7c0e1fed7f598de57ea6ae1210d82e99d30eb51a686e2f3535cade952e9bf65c",
+      "source": "5층 게임용 제작 초상 시트, 투명 224×224 PNG"
+    },
+    "npcs/portraits/jeongwon.png": {
+      "output": "npcs/portraits/jeongwon.png",
+      "kind": "npc",
+      "description": "정원 · 머리핀과 부스 배치도",
+      "sha256": "85a7ff1d4fb8c3ad5fae937073f1607cadf5d54bd2f60d2cf77e911702b4aa5a",
+      "source": "5층 게임용 제작 초상 시트, 투명 224×224 PNG"
     }
   }
 }

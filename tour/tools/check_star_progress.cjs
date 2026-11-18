@@ -9,7 +9,7 @@ const entries=ids.map(id=>({id,maxStars:3}));
 const score=stamps=>rules.summarize(stamps,entries);
 const record=stars=>({stars,at:'2026-11-15'});
 let checks=0;function check(condition,message){assert(condition,message);checks++;}
-check(ids.length===18&&score({}).maxStars===54,'18 reward games offer 54 stars');
+check(ids.length===20&&score({}).maxStars===60,'20 reward games offer 60 stars');
 let fresh=rules.emptyWardrobe();
 check(rules.wardrobe(fresh,score({}),items).unlocked.length===0,'fresh visitor starts locked');
 let stamps={bakery:record(1)},first=rules.wardrobe(fresh,score(stamps),items);
@@ -19,7 +19,7 @@ check(JSON.stringify(same)===JSON.stringify(first),'repeating the same record ca
 stamps.bakery=record(3);
 let improved=rules.wardrobe(first,score(stamps),items);
 check(score(stamps).stars===3&&improved.unlocked.length===5,'one stamp improving 1 to 3 unlocks the next pair and bookcat');
-for(let total=0;total<=54;total++){
+for(let total=0;total<=60;total++){
   const s=Object.fromEntries(ids.map((id,i)=>[id,record(Math.max(0,Math.min(3,total-i*3)))]));
   const w=rules.wardrobe(fresh,score(s),items);
   const expected=[1,3,5,7,9,11,13,15,17,19,21,24,27,30,33,36,39,42].filter(at=>at<=total).length*2+(total>=3?1:0);
@@ -39,17 +39,19 @@ check(!rules.wardrobe(fresh,freshNine,items).unlocked.includes('witch'),'new vis
 const originalIds=['bakery','typing','cafe','cashier','rain','melody','curling','target','badminton','ai','career','phishing','interview','stairs'];
 const oldStamps=Object.fromEntries(originalIds.map(id=>[id,record(3)]));
 const before=score(oldStamps);
-check(before.count===14&&before.stars===42&&before.maxStars===54,'all 14 original stamp records survive the expansion');
+check(before.count===14&&before.stars===42&&before.maxStars===60,'all 14 original stamp records survive the expansion');
 const oldRewards=rules.wardrobe(fresh,before,items);
 check(oldRewards.unlocked.length===37&&oldRewards.title,'previously completed wardrobe remains complete at 42 stars');
-for(const [id,floor,name] of [['press','3','드림스페이스'],['logistics','4','전산회계2실'],['reconcile','4','전산회계3실']]){
+for(const [id,floor,name] of [['press','3','드림스페이스'],['logistics','4','전산회계2실'],['reconcile','4','전산회계3실'],['tea','5','예절실'],['booths','5','학생회 회의실']]){
   const room=scope.window.TOUR_SCENES[floor].rooms.find(room=>room.name===name);
   check(room?.game===id,'direct room entry for '+id);
   const after=score({...oldStamps,[id]:record(3)});
   check(after.count===15&&after.stars===45,'independent new stamp for '+id);
 }
+const lastRelease=Object.fromEntries(ids.filter(id=>id!=='tea'&&id!=='booths').map(id=>[id,record(3)]));
+check(score(lastRelease).count===18&&score(lastRelease).stars===54,'previous 18 stamps and 54 stars survive');
 let max=rules.wardrobe(fresh,score(Object.fromEntries(ids.map(id=>[id,record(3)]))),items);
-check(max.unlocked.length===37&&max.title,'54-star collection complete');
+check(max.unlocked.length===37&&max.title,'60-star collection complete');
 check(rules.wardrobe(max,score({bakery:record(1)}),items).unlocked.length===37,'earned items are permanent until explicit reset');
 check(rules.wardrobe(rules.emptyWardrobe(),score({}),items).unlocked.length===0,'explicit reset clears items');
 check(!rules.wardrobe(rules.emptyWardrobe(),score({}),items).title,'explicit reset clears title');
@@ -67,4 +69,4 @@ const lowScore=score({bookshop:record(2)});
 check(!rules.wardrobe(fresh,lowScore,items).unlocked.includes('bookcat'),'two bookshop stars leave bookcat locked');
 check(rules.wardrobe(fresh,score({bookshop:record(2),bakery:record(1)}),items).unlocked.includes('bookcat'),'another game may complete the three-star requirement');
 check(rules.wardrobe(fresh,score({bookshop:record(3)}),items).unlocked.includes('bookcat'),'a first three-star bookshop win unlocks bookcat');
-console.log(JSON.stringify({checks,maximumStars:54,items:37,legacyMigration:'all 1–9 stamp counts',replay:'best record only',reset:'items and title cleared'}));
+console.log(JSON.stringify({checks,maximumStars:60,items:37,legacyMigration:'all 1–9 stamp counts',replay:'best record only',reset:'items and title cleared'}));
