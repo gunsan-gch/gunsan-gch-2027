@@ -98,6 +98,8 @@
     function publish(lead) {
       const paper = document.createElement('article');
       paper.className = 'press-paper';
+      paper.tabIndex = -1;
+      paper.setAttribute('aria-label', '녹원예술제 신문');
       paper.innerHTML = '<header><span>군산여상 이음 취재반 · 예술제 특별판</span><h3>녹원예술제 신문</h3><p>사진·편집　나도 학교 기자</p></header>';
       [lead,...photos.filter(p => p !== lead)].forEach((p,i) => {
         const story = document.createElement('figure');
@@ -109,6 +111,8 @@
       });
       const total = photos.reduce((sum,p) => sum+p.points,0);
       api.done({ stars: total >= 8 ? 3 : total >= 5 ? 2 : 1, hints: 0, extra: paper });
+      paper.focus({ preventScroll: true });
+      container.scrollTop = 0;
     }
     on($('.press-start'),'click',() => { manual = still.checked; begin(); });
     on(step,'click',() => { if (playing && manual) draw([0,0.25,0.5,0.75,1][++stepIndex % 5]); });
