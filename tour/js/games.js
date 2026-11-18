@@ -17,6 +17,7 @@
    start()는 container 안에 화면을 만들고, 다 끝나면 api.done({ stars, hints })를 부릅니다.
    api.done({ stars, hints, extra })의 extra는 별 줄 위에 넣을 DOM 요소입니다 (선택).
    api.announce(text)는 화면 읽기 프로그램용 안내, api.reducedMotion은 '움직임 줄이기' 설정 여부입니다.
+   점수 경쟁 게임은 api.bestScore로 이전 최고점을 읽고, 완료할 때 points에 이번 점수를 전달합니다.
    돌려준 함수(cleanup)는 창을 닫을 때 불려 타이머 등을 정리합니다 (없어도 됨).
 
    공간 데이터(tour-data.js)에 game: 'cafe' 를 적으면 그 공간의 상세 창에 버튼이 생기고,
@@ -76,13 +77,13 @@ window.tourGame = (() => {
   }
 
   /** 최고 별 수만 남김. 돌려주는 값은 저장된(=최고) 기록 */
-  function saveStamp(id, stars, max) {
+  function saveStamp(id, stars, max, points) {
     const stamps = readStamps();
-    const best = stamps[id];
-    stars = window.TourStarProgress.normalizeStars(stars, max || 3);
-    if (!best || stars > (best.stars || 0)) stamps[id] = { stars, at: today() };
+    const previous = stamps[id];
+    const previousScore = window.TourStarProgress.pointsOrNull(previous?.bestScore);
+    stamps[id] = window.TourStarProgress.stampRecord(previous, stars, max || 3, points, today());
     try { localStorage.setItem(STAMP_KEY, JSON.stringify(stamps)); } catch (e) { /* 저장 못 해도 게임은 계속 */ }
-    return stamps[id];
+    return { best: stamps[id], previousScore };
   }
 
   /* ---------- 화면 읽기 프로그램 안내 ---------- */
@@ -113,6 +114,7 @@ window.tourGame = (() => {
     const session = current;
     try {
       current.cleanup = game.start(body, {
+        bestScore: window.TourStarProgress.pointsOrNull(readStamps()[id]?.bestScore),
         done: result => finish(session, result),
         announce,
         reducedMotion,
@@ -138,18 +140,18 @@ window.tourGame = (() => {
 
   /* ---------- 끝: 결과 화면 ---------- */
 
-  function finish(session, { stars = 0, hints = 0, extra = null } = {}) {
+  function finish(session, { stars = 0, hints = 0, extra = null, points } = {}) {
     if (session !== current || session.finished) return;
     session.finished = true;
     const { id, game } = session;
     const max = game.maxStars || stars;
     tourTrack('tour_game_complete', { game_id: id, stars, hints }, ['TourGame', game.naver + 'Done']);
-    const best = saveStamp(id, stars, max);
-    renderResult(session, stars, max, best, extra);
+    const { best, previousScore } = saveStamp(id, stars, max, points);
+    renderResult(session, stars, max, best, extra, window.TourStarProgress.pointsOrNull(points), previousScore);
     document.dispatchEvent(new CustomEvent('tour:game-result', { detail: { id } }));
   }
 
-  function renderResult(session, stars, max, best, extra) {
+  function renderResult(session, stars, max, best, extra, points, previousScore) {
     const { id, game } = session;
     try { session.cleanup?.(); } catch (e) { /* 정리 중 오류는 무시 */ }
     session.cleanup = null;
@@ -179,6 +181,14 @@ window.tourGame = (() => {
     message.textContent = game.message || '';
 
     if (extra) box.append(extra);
+    if (points !== null) {
+      const record = document.createElement('p');
+      record.className = 'game-result-best';
+      record.textContent = previousScore !== null && points > previousScore
+        ? `최고 기록 경신! ${points}점 · 지난 기록보다 ${points - previousScore}점 더 얻었어요.`
+        : `내 최고 ${best.bestScore}점`;
+      box.append(record);
+    }
     box.append(starRow, score, stamp, message);
     if (best && best.stars > stars) {
       const note = document.createElement('p');

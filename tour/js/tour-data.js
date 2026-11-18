@@ -51,7 +51,7 @@ window.TOUR_SCENES = {
       { name: '학교 전경 보기', at: [38, 58], w: 10, anchor: [42.5, 58], status: '실제 사진', note: '드론 사진', photos: ['img/drone.jpg', 'img/drone-2.jpg', 'img/drone-3.jpg', 'img/drone-4.jpg'], spot: true,
         desc: '드론으로 하늘에서 찍은 우리 학교 전경입니다.' },
       { name: '잔디마당', game: 'paperplane', at: [67, 62], w: 12, anchor: [67, 68],
-        desc: '윤희 선배와 종이비행기를 날려 보세요. 바람을 읽고 금빛 고리를 지나 잔디마당에 착륙하는 체험이에요.' },
+        desc: '윤희 선배와 종이비행기를 날려 보세요. 넓은 고리와 작은 별고리 중 하나를 골라 지나며 운동장 착륙 표적을 노려요.' },
       { name: '1층', door: '중앙현관으로 1층 들어가기', at: [54.3, 22.5], w: 4, anchor: [54.2, 32.2] },
       { name: '2층', door: '바깥 계단으로 2층 올라가기', at: [35.3, 23], w: 4, anchor: [35.3, 29.4] }
     ]
@@ -106,7 +106,8 @@ window.TOUR_SCENES = {
       { name: '식생활 교육관', at: [13.5, 47.5], w: 20, anchor: [6, 26], rect: [2, 30, 22, 35],
         photos: ['img/rooms/dining-1.jpg', 'img/rooms/dining-2.jpg', 'img/rooms/dining-3.jpg'],
         desc: '학생들이 함께 점심을 먹는 급식 공간입니다.' },
-      { name: '창업동아리 지원센터', game: 'goods', at: [6, 84], w: 7, anchor: [6.1, 72] },
+      { name: '창업동아리 지원센터', game: 'goods', at: [6, 84], w: 7, anchor: [6.1, 72],
+        desc: '지영 선배의 이음 굿즈 공방이에요. 같은 굿즈를 합쳐 주문을 채우거나 아름·송현 선배 인형까지 만들어 보세요.' },
       { name: '교장실', quiet: true, at: [32, 84], w: 9, anchor: [31.4, 72] },
       { name: '행정실', quiet: true, at: [46, 84], w: 11, anchor: [45.2, 72] },
       { name: '중앙현관', quiet: true, at: [63, 84], w: 12, anchor: [63, 84] },

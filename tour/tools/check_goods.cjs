@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-const {piece, tick, width, height, step, grace, line, stars} = require('../js/game-goods.js');
+const {piece, tick, deliver, stock, requested, fee, width, height, step, grace, line, stars} = require('../js/game-goods.js');
 const mass = world => world.bodies.reduce((sum, p) => sum + 2 ** p.tier, 0);
 const advanceWorld = (world, count) => {
   for (let i = 0; i < count; i++) tick(world, () => {});
@@ -16,7 +16,8 @@ const advanceWorld = (world, count) => {
   advanceWorld(world, 480);
   assert.equal(world.bodies.length, 1);
   assert.equal(mass(world), 4);
-  assert.equal(world.score, 8);
+  assert.equal(world.score, 12);
+  assert.equal(world.bodies[0].depth, 2);
 }
 {
   const world = {bodies: [piece(6,100,300), piece(6,112,300)], score: 0};
@@ -70,7 +71,7 @@ class Element {
   setPointerCapture(id) { this.pointer = id; }
   focus() { this.focused = true; }
 }
-function session(fps, store = new Map(), random = () => 0) {
+function session(fps, store = new Map(), random = () => 0, bestScore) {
   const body = new Element(), document = new Element(), window = new Element();
   window.TOUR_GAMES = {};
   document.createElement = () => new Element();
@@ -86,7 +87,7 @@ function session(fps, store = new Map(), random = () => 0) {
   });
   const game = window.TOUR_GAMES.goods;
   assert.equal(game.maxStars, 3);
-  let cleanup = game.start(body, {done(result) { results.push(result); cleanup(); }});
+  let cleanup = game.start(body, {bestScore, done(result) { results.push(result); cleanup(); }});
   function advance(count) {
     for (let i = 0; i < count; i++) {
       time += 1000 / fps;
@@ -141,27 +142,30 @@ for (const fps of [30,60,120]) {
   assert.equal($('drop').disabled, true, 'hidden time does not move an object');
   advance(fps);
   board.emit('keydown', {key:' '});
-  const earned = [];
   advance(fps*2);
-  for (let count=2; count<=32; count++) {
-    assert.equal($('drop').disabled, false);
-    earned.push(Number($('score').textContent));
-    if (count < 32) { $('drop').emit('click'); advance(fps*2); }
-  }
-  assert.equal(earned[0], 2);
-  assert.equal(earned[14], 64);
-  assert.equal(earned[30], 160);
-  assert.deepEqual(JSON.parse(store.get(key)), [0,1,2,3,4,5]);
+  assert.equal(Number($('score').textContent), 2);
+  assert.equal($('ship').disabled, false);
+  assert.match($('order-name').textContent, /키링/);
+  $('ship').emit('click');
+  assert.equal(Number($('score').textContent), 8);
+  assert.match($('order-name').textContent, /파우치/);
+  $('ship').emit('click');
+  assert.equal(Number($('score').textContent), 8, 'cannot sell an absent item twice');
+  $('drop').emit('click');
+  advance(fps*2);
+  assert.equal(Number($('score').textContent), 8, 'sold keyring no longer merges with the next drop');
+  assert.deepEqual(JSON.parse(store.get(key)), [0,1]);
   $('collect').emit('click');
   assert.equal(s.results.length, 1);
-  assert.equal(s.results[0].stars, 3);
-  assert.match(s.results[0].extra.textContent, /아름 선배 인형/);
+  assert.equal(s.results[0].stars, 1);
+  assert.equal(s.results[0].points, 8);
+  assert.match(s.results[0].extra.textContent, /납품 1건/);
   assert.equal(s.frames.size, 0);
   $('collect').emit('click');
   assert.equal(s.results.length, 1);
   const replay = session(fps, store);
   replay.$('gallery-open').emit('click');
-  assert.equal(replay.$('count').textContent, '발견한 굿즈 6 / 7');
+  assert.equal(replay.$('count').textContent, '발견한 굿즈 2 / 7');
   replay.$('resume').emit('click');
   replay.cleanup();
   assert.equal(replay.frames.size, 0);
@@ -176,13 +180,13 @@ for (const fps of [30,60,120]) {
   s.$('gallery-open').emit('click');
   assert.equal(s.$('count').textContent, '발견한 굿즈 1 / 7');
   s.$('resume').emit('click');
-  for (let i=0; i<32 && !s.results.length; i++) {
+  for (let i = 0; i < 3; i++) {
     s.$('drop').emit('click');
     s.advance(120);
   }
-  assert.equal(s.results.length, 1);
-  assert.match(s.results[0].extra.textContent, /상자 마감/);
-  assert.equal(s.frames.size, 0);
+  assert.equal(Number(s.$('score').textContent), 6, 'keeping the keyring makes a pouch on drop three');
+  assert.equal(s.$('ship').disabled, true);
+  s.cleanup();
 }
 // Real controls and mixed tiers. Aim at one of three columns by the current product.
 for (const target of [2,32,100]) {
@@ -208,14 +212,67 @@ for (const target of [2,32,100]) {
   console.log(target + '-point goal: ' + drops + ' mixed drops, ' + drops*2 + ' simulated seconds.');
 }
 {
-  const store = new Map();
-  const s = session(30, store);
-  for (let i = 0; i < 64; i++) {
+  const base = piece(3, 180, height-34), upper = piece(1, 180, 25);
+  const w = {score: 0, bodies: [base, upper]};
+  advanceWorld(w, 600);
+  assert.ok(Math.abs(upper.x-base.x) > 50, 'mixed tower rolls off a single round support');
+  assert.equal(upper.y, height-upper.r);
+  const lone = piece(1, 70, 20);
+  advanceWorld({score: 0, bodies: [lone]}, 400);
+  assert.equal(lone.x, 70, 'empty-floor aim stays exact');
+}
+{
+  const lower = piece(1, 50, 410), higher = piece(1, 250, 235);
+  lower.landed = higher.landed = true;
+  const w = {score: 0, bodies: [lower, higher], deliveries: 0, turn: 1};
+  assert.equal(stock(w), higher);
+  assert.equal(deliver(w), higher);
+  assert.deepEqual(w.bodies, [lower]);
+  assert.equal(requested(w), 2);
+  assert.equal(w.score, fee(1));
+  assert.equal(deliver(w), null);
+  const falling = piece(2, 100, 25);
+  w.bodies.push(falling);
+  assert.equal(stock(w), null);
+}
+{
+  const store = new Map(), s = session(30, store, () => .99);
+  for (let i = 0; i < 40 && !JSON.parse(store.get(key) || '[]').includes(6); i++) {
     s.$('drop').emit('click');
-    s.advance(60);
+    s.advance(45);
   }
   assert.deepEqual(JSON.parse(store.get(key)), [0,1,2,3,4,5,6]);
   s.$('collect').emit('click');
   assert.match(s.results[0].extra.textContent, /송현 선배 인형/);
 }
-console.log('Goods passed: merge mass, final tier, real overflow/grace, 30/60/120 FPS, controls, stars, catalogue recovery, persistence, suspension and replay cleanup.');
+{
+  const old = piece(1, 150, 410), incoming = piece(1, 150, 400);
+  Object.assign(old, {crafted: true, turn: 2, depth: 3});
+  incoming.turn = 8;
+  const w = {score: 0, turn: 8, bodies: [old, incoming]};
+  tick(w, (product, points) => {
+    assert.equal(product.depth, 1, 'a later drop starts a fresh chain');
+    assert.equal(points, 4);
+  });
+  assert.equal(w.score, 4);
+}
+{
+  // A keyring physically separates two old badges until the player ships it.
+  const bottom = piece(0, 180, 416), support = piece(1, 180, 383), top = piece(0, 180, 350);
+  support.landed = true;
+  Object.assign(top, {crafted: true, turn: 4, depth: 2});
+  const w = {bodies: [bottom, support, top], turn: 4, score: 0, deliveries: 0};
+  assert.equal(deliver(w), support);
+  assert.equal(w.turn, 5);
+  const merges = [];
+  for (let i = 0; i < 100; i++) tick(w, (product, points) => merges.push([product.turn, product.depth, points]));
+  assert.deepEqual(merges, [[5, 1, 2]], 'removing the support starts a fresh chain for old stock');
+  assert.equal(w.score, 8);
+}
+{
+  const s = session(60, new Map(), () => 0, 42);
+  assert.equal(s.$('best').textContent, '내 최고 42점');
+  assert.equal(s.$('best').hidden, false);
+  s.cleanup();
+}
+console.log('Goods passed: chain depth and points, early keep/sell choice, delivery stock, physics, overflow, controls, stars, catalogue, suspension and cleanup.');

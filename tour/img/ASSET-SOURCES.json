@@ -1260,6 +1260,34 @@
       "sha256": "8c047ae849bfacc3f47c4a485b5d84a75c6d85372409a4736649455ca5fb467b",
       "description": "윤희 · 종이비행기",
       "source": "ImageGen. 기존 선배 초상화와 교복을 참고한 독립 캐릭터, 또렷한 윤곽과 투명 배경. 224×224 PNG."
+    },
+    "games/paperplane/star-ring.png": {
+      "output": "games/paperplane/star-ring.png",
+      "kind": "game-pixel-art",
+      "sha256": "175bce2f0c243345a34a36e290510b34018d9ec42f0330cc8d8992ae21ff01a5",
+      "description": "종이비행기 · 정밀 경로용 별고리",
+      "generator": "tools/make_flight_art.mjs"
+    },
+    "games/paperplane/schoolyard.png": {
+      "output": "games/paperplane/schoolyard.png",
+      "kind": "game-pixel-art",
+      "sha256": "679fede25bdf51ebeb84e8d32890559da6369a29053bbe623227a0a47e2f034c",
+      "description": "종이비행기 · 정문 시계",
+      "generator": "tools/make_flight_art.mjs"
+    },
+    "games/paperplane/garden.png": {
+      "output": "games/paperplane/garden.png",
+      "kind": "game-pixel-art",
+      "sha256": "bbd6bd8a61f4ce397e34bdf789b219bf7c3d7ecf2517fa7670a467e4da080e4a",
+      "description": "종이비행기 · 교정 화단",
+      "generator": "tools/make_flight_art.mjs"
+    },
+    "games/paperplane/playground.png": {
+      "output": "games/paperplane/playground.png",
+      "kind": "game-pixel-art",
+      "sha256": "647b33a58def7603b1e8b69c4b4a1081798d8a4ee5aef28d2d3428e84614f9ed",
+      "description": "종이비행기 · 운동장 점수판",
+      "generator": "tools/make_flight_art.mjs"
     }
   }
 }

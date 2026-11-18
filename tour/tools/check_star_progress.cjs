@@ -60,6 +60,20 @@ check(!rules.wardrobe(rules.emptyWardrobe(),score({}),items).title,'explicit res
 check(score({bakery:record(9),typing:record(6),cafe:record(4),foreign:record(100)}).stars===6,'legacy nine-star scores normalize; unknown games do not count');
 for(const value of [null,'3',NaN,Infinity,-1])check(rules.normalizeStars(value)===0,'invalid record contributes zero');
 check(rules.normalizeStars(999)===3,'numeric records are capped');
+const original={stars:3,at:'2026-11-17'};
+const scored=rules.stampRecord(original,1,3,8,'2026-11-18');
+check(scored.stars===3&&scored.at===original.at&&scored.bestScore===8,'first points record preserves a legacy three-star stamp and date');
+check(original.bestScore===undefined,'scoring does not mutate an existing stamp');
+check(rules.stampRecord(scored,2,3,7,'2026-11-19').bestScore===8,'a lower run keeps the high score');
+check(rules.stampRecord(scored,3,3,36,'2026-11-19').bestScore===36,'higher points count even at the same stars');
+const zeros=rules.stampRecord(null,1,3,0,'2026-11-18');
+check(zeros.bestScore===0&&zeros.stars===1,'zero is a real score for a completed flight');
+const raised=rules.stampRecord(zeros,2,3,65,'2026-11-19');
+check(raised.stars===2&&raised.at==='2026-11-19'&&raised.bestScore===65,'improved stars and points are recorded together');
+for(const value of [undefined,null,'40',-2,Infinity,1.5]){
+  check(rules.stampRecord(raised,1,3,value,'2026-11-20').bestScore===65,'an absent or invalid score preserves the record');
+  check(!('bestScore' in rules.stampRecord(null,2,3,value,'2026-11-20')),'games without points keep their existing record format');
+}
 check(rules.summarize({bakery:record(3)},[entries[0],entries[0]]).stars===3,'duplicate rooms do not double count');
 const malformed=rules.wardrobe({version:2,unlocked:['not-real','ribbon','ribbon'],title:'true'},score({}),items);
 check(malformed.unlocked.length===1&&!malformed.title,'stored wardrobe IDs and title are sanitized');

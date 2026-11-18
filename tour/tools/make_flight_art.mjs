@@ -163,3 +163,66 @@ function stamps() {
 for(const [name,art] of [['course',course()],['plane-neutral',plane()],['plane-left',plane(-1)],['plane-right',plane(1)],['ring',ring()],['thermal',thermal()],['landing',landing()]])
   write('paperplane',name,art);
 stamps();
+
+// Cut the opening after painting the bevel so the field shows through every point.
+function starRing() {
+  const c = canvas(32,32);
+  function star(surface, outer, inner, dy, color) {
+    const points = Array.from({length:10}, (_,i) => {
+      const angle = Math.PI * (i/5 - .5), r = i%2 ? inner : outer;
+      return [16+r*Math.cos(angle),16+dy+r*Math.sin(angle)];
+    });
+    polygon(surface,points,color);
+  }
+  star(c,16,9,1,'#654356');
+  star(c,15,8.5,0,'#dd8875');
+  star(c,14,8,-.5,'#fff2bd');
+  star(c,11.8,6.8,0,'#ba695c');
+  const opening = canvas(32,32);
+  star(opening,10,6,0,cream);
+  for(let i=3;i<c.data.length;i+=4) if(opening.data[i]) c.data[i]=0;
+  return scale(c,2);
+}
+function schoolyard() {
+  const c = canvas(32,32);
+  const stone = '#c19b7f', tile = '#688481';
+  box(c,3,26,26,3,stone,'#79685a');
+  for(const x of [4,24]) {
+    box(c,x,12,4,15,'#d69e82','#845e55');
+    for(const y of [16,20,24]) rect(c,x+1,y,2,1,cream);
+  }
+  box(c,6,8,20,5,'#c18a72','#845e55');
+  polygon(c,[[2,10],[7,5],[25,5],[30,10]],tile);
+  rect(c,2,10,28,2,'#435a5b');
+  disc(c,16,9,5,5,'#435a5b'); disc(c,16,9,4,4,cream);
+  rect(c,16,6,1,4,navy); rect(c,16,9,3,1,navy);
+  return scale(c,2);
+}
+function garden() {
+  const c = canvas(32,32);
+  box(c,2,21,28,8,'#bc8068','#815e55');
+  for(const x of [5,11,17,23]) rect(c,x,25,3,1,'#d59b7d');
+  for(const [x,y,col] of [[7,14,'#f0ac99'],[16,9,'#f5d384'],[25,14,'#d6b6db']]) {
+    rect(c,x,y+3,2,22-y,'#4c7853');
+    rect(c,x-4,y+5,4,2,'#679258'); rect(c,x+2,y+4,3,2,'#719c5c');
+    disc(c,x,y,4,4,'#926f66');
+    for(const [dx,dy] of [[0,-2],[-2,0],[2,0],[0,2]]) disc(c,x+dx,y+dy,2,2,col);
+    rect(c,x-1,y-1,3,3,'#a37a43'); put(c,x-1,y-1,cream);
+  }
+  rect(c,2,21,28,2,'#dec09b');
+  return scale(c,2);
+}
+function playground() {
+  const c = canvas(32,32);
+  for(const x of [7,23]) box(c,x,19,3,10,'#b1aba1','#616f66');
+  box(c,2,7,28,16,'#53716c','#394e50');
+  rect(c,3,8,26,2,'#9ba987');rect(c,15,11,1,10,'#829485');
+  // Scoreboard numerals 0–1 are readable in the native 32-pixel grid.
+  box(c,7,12,5,8,'#53716c',cream);
+  rect(c,21,12,2,8,'#ffd18a'); rect(c,20,13,2,1,'#ffd18a');rect(c,19,19,6,1,'#ffd18a');
+  rect(c,3,5,1,4,navy);polygon(c,[[4,3],[12,4],[4,7]],coral);
+  return scale(c,2);
+}
+for(const [name, art] of [['star-ring',starRing()],['schoolyard',schoolyard()],['garden',garden()],['playground',playground()]]) {
+  write('paperplane',name,art);
+}
