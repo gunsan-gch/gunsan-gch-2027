@@ -1,0 +1,38 @@
+/* 수빈의 사진부 — 청록색 뷰파인더, 크림색 예술제 신문 */
+.press-app,.press-paper {--press-ink:#172e37;--press-mint:#a1e5cc;color:var(--press-ink);line-height:1.45}
+.press-app [hidden] {display:none!important}
+.press-guide {display:flex;align-items:center;gap:.8rem;border:2px solid var(--press-ink);background:#ebf8ef;padding:.4rem .7rem;text-align:left}
+.press-guide img {width:clamp(48px,12vw,72px);aspect-ratio:1;object-fit:contain;image-rendering:pixelated}
+.press-guide strong,.press-slug b {font-size:.82rem;color:#155e52}
+.press-guide p,.press-app h3,.press-app p,.press-paper p {margin:0}
+.press-intro,.press-job,.press-edit {padding-top:.7rem}
+.press-intro {display:grid;gap:.8rem}
+.press-intro label {display:flex;align-items:center;gap:.45rem;font-size:.9rem}
+.press-intro input {width:1.2rem;height:1.2rem;accent-color:#176c60}
+.press-slug,.press-controls {display:flex;align-items:center;justify-content:space-between;gap:.45rem}
+.press-slug {font-size:.8rem}
+.press-job h3,.press-edit h3 {margin:.18rem 0 .55rem;font-size:1.15rem}
+.press-view {position:relative;overflow:hidden;border:4px solid var(--press-ink);border-radius:5px;background:#40545a}
+.press-frame {position:relative;overflow:hidden;width:100%;aspect-ratio:2/1;background:#43545b}
+.press-back {width:100%;height:100%;display:block;object-fit:cover;image-rendering:pixelated}
+.press-subject {position:absolute;width:11%;height:auto;image-rendering:pixelated;filter:drop-shadow(1px 2px 0 #14232366)}
+.press-focus {position:absolute;inset:26% 32% 18%;pointer-events:none;border:2px dashed #fff;box-shadow:0 0 0 1px #243c44}
+.press-ready .press-focus {border:3px solid #fff;outline:2px solid #234137}
+.press-status {padding:.4rem 0;font-weight:bold;text-align:center;min-height:1.6em}
+.press-controls {justify-content:center}
+.press-controls button,.press-intro button {min-height:44px}
+.press-choices {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem}
+.press-choices button {padding:.25rem;border:2px solid var(--press-ink);background:#fff7dc;font:inherit;font-size:.85rem;font-weight:bold;color:var(--press-ink);cursor:pointer}
+.press-choices .press-frame {margin-bottom:.35rem}
+.press-app button:focus-visible,.press-app input:focus-visible {outline:3px solid #096a92;outline-offset:2px}
+.press-paper {box-sizing:border-box;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem .65rem;padding:.7rem;border:2px solid var(--press-ink);background:#fff7df;text-align:left;width:100%}
+.press-paper header,.press-paper figure:first-of-type {grid-column:1/-1}
+.press-paper header {padding:.26rem 0;text-align:center;border-top:3px double var(--press-ink);border-bottom:3px double var(--press-ink)}
+.press-paper header span,.press-paper header p,.press-paper small {display:block;font-size:.72rem}
+.press-paper h3 {font-family:serif;font-size:clamp(1.25rem,5vw,1.85rem);margin:0}
+.press-paper figure {margin:0;min-width:0}
+.press-paper figure:first-of-type {display:grid;align-items:center;grid-template-columns:1.5fr 1fr;gap:.6rem;border-bottom:1px solid #8c8c78;padding-bottom:.45rem}
+.press-paper figcaption {line-height:1.3}
+.press-paper small {margin:.23rem 0;color:#39554d}
+.press-paper strong {display:block;font-size:.9rem}
+.press-paper figure:first-of-type strong {font-size:1.1rem}

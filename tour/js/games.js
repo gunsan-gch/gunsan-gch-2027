@@ -32,7 +32,7 @@ window.TOUR_GAMES = window.TOUR_GAMES || {};
 window.tourGame = (() => {
   const GAMES = window.TOUR_GAMES;
   const STAMP_KEY = 'gch-tour-stamps';
-  const STAMP_ART = new Set(['bakery', 'typing', 'cafe', 'cashier', 'rain', 'ai', 'career', 'phishing', 'interview', 'stairs', 'melody', 'curling', 'target', 'badminton']);
+  const STAMP_ART = new Set(['bakery', 'typing', 'cafe', 'cashier', 'rain', 'ai', 'career', 'phishing', 'interview', 'stairs', 'melody', 'curling', 'target', 'badminton', 'press', 'logistics', 'reconcile']);
   function stampArt(id, className) {
     const seal = document.createElement('span');
     seal.className = className;
@@ -208,6 +208,18 @@ window.tourGame = (() => {
     back.addEventListener('click', () => dialog.close());
 
     actions.append(retry);
+    if (game.nextGame && GAMES[game.nextGame]) {
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.className = 'btn';
+      next.textContent = '다음 체험 · ' + GAMES[game.nextGame].title;
+      next.addEventListener('click', () => {
+        const from = opener;
+        dialog.addEventListener('close', () => practice(game.nextGame, from), { once: true });
+        dialog.close();
+      });
+      actions.append(next);
+    }
     if (game.hub && GAMES[game.hub]) {
       const choose = document.createElement('button');
       choose.type = 'button'; choose.className = 'btn btn-primary'; choose.textContent = '다른 종목 도전';

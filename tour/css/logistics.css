@@ -1,0 +1,46 @@
+.log-game{--ink:#233e4b;--teal:#11635b;color:var(--ink);max-width:450px;margin:auto;font-size:14px;line-height:1.35;text-align:left}
+.log-game *{box-sizing:border-box}
+.log-game img{image-rendering:pixelated;object-fit:contain}
+.log-guide,.log-toolbar,.log-manifest,.log-controls,.log-cargo strong,.log-orders>div,.log-slots,.log-warehouse>div{display:flex;align-items:center;gap:.4rem}
+.log-guide{padding:6px 10px;background:#e6f5ee;border:2px solid #568476;border-radius:12px}
+.log-guide>img{width:54px;height:56px;flex:none}
+.log-guide p,.log-notice,.log-rules{margin:3px 0}
+.log-toolbar,.log-manifest,.log-cargo strong{justify-content:space-between}
+.log-toolbar{padding:7px 0}
+.log-game button,.log-game select{font:inherit;color:inherit;cursor:pointer}
+.log-toolbar button,.log-toolbar select{background:white;border:1px solid #7b8d90;border-radius:7px;padding:5px}
+.log-paper{background:#fff7d9;border:1px solid #b6a56f;border-left:5px solid #cf9443;border-radius:6px;padding:5px 9px}
+.log-manifest{margin-bottom:4px}
+.log-count{font-weight:700;font-size:.86em}
+.log-orders{display:flex;gap:4px 10px;flex-wrap:wrap}
+.log-orders>div{gap:3px}
+.log-orders span{display:inline-flex;align-items:center;font-size:.87em}
+.log-orders img{width:20px;height:20px}
+.log-delivered{text-decoration:line-through;color:#306548}
+.log-map{margin:8px auto;display:grid;grid-template-columns:repeat(5,1fr);width:min(100%,325px);padding:3px;border:2px solid #384f59;border-radius:7px;background:#899d98;overflow:hidden}
+.log-cell{position:relative;aspect-ratio:1.28;background:#e7e8d7;box-shadow:inset 1px 1px #c8ccbe;color:#253b3e;isolation:isolate}
+.log-cell::before{content:"";position:absolute;inset:0 1px 9px;background:var(--facility,none) center top/contain no-repeat;image-rendering:pixelated}
+.log-cell span:not(:empty){position:absolute;right:2px;bottom:2px;padding:1px 3px;background:#fffbee;border:1px solid #76827c;border-radius:3px;font-size:10px;font-weight:800;line-height:1.05;z-index:2}
+.log-tile-A{--facility:url('../img/games/logistics/booth-a.png');background-color:#f9e3c2}
+.log-tile-B{--facility:url('../img/games/logistics/booth-b.png');background-color:#dceaf0}
+.log-tile-W{--facility:url('../img/games/logistics/depot.png');background-color:#d3e9d9}
+.log-tile-wall{--facility:url('../img/games/logistics/crate.png');background-color:#bdc6bb}
+.log-cell.log-here{box-shadow:inset 0 0 0 2px #32736a}
+.log-here::after{content:"";position:absolute;inset:3%;background:url('../img/games/logistics/cart.png') center/contain no-repeat;image-rendering:pixelated}
+.log-here:not(.log-tile-path)::after{inset:auto auto 0 1px;width:46%;height:53%}
+.log-controls{justify-content:center;gap:12px}
+.log-pad{display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(2,44px);gap:3px}
+.log-pad button,.log-warehouse button{font-weight:800;background:#f7fbf8;border:1px solid #7d9892;border-bottom:3px solid #51776d;border-radius:7px;touch-action:manipulation}
+.log-pad button{font-size:22px;line-height:1}
+.log-pad .log-up{grid-column:2}.log-pad .log-left{grid-column:1}
+.log-game button:active:enabled{transform:translateY(1px);background:#d9eee5}
+.log-cargo{min-width:112px;border:2px solid #558d81;border-radius:8px;padding:6px;background:#e7f4ec}
+.log-slots{margin-top:4px}
+.log-slots span{width:44px;min-height:44px;display:grid;place-items:center;background:white;border:1px dashed #789587;border-radius:5px;font-size:12px}
+.log-slots img{width:25px;height:25px}
+.log-warehouse{margin-top:8px}.log-warehouse>strong{display:block;margin-bottom:3px}
+.log-warehouse button{flex:1;display:grid;grid-template-columns:auto auto;align-items:center;justify-content:center;gap:0 4px;padding:4px;min-height:45px}
+.log-warehouse img{width:23px;height:23px}.log-warehouse small{grid-column:1/-1}
+.log-game button:disabled{cursor:default;background:#e9ece8;color:#58685e;border-color:#b0bdb5}
+.log-notice{color:var(--teal);font-weight:700;min-height:1.35em}.log-rules{font-size:12px}
+.log-game :focus-visible{outline:3px solid #1960ac;outline-offset:2px}

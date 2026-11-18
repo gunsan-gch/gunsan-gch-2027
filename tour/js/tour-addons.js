@@ -44,7 +44,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
   dialog.addEventListener('click',e=>{if(e.target!==dialog)return;const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)close()});
   const locations = {
     yuna: { floor: 'outdoor', p: [59, 51], approach: [56, 50], name: '아름 선배', npc: 'yuna' },
-    ribbon: { floor: '1', p: [44.3, 22], name: '축제 리본' },
+    ribbon: { floor: '1', p: [44.3, 22], name: '예술제 리본' },
     poster: { floor: '3', p: [54, 25], approach: [51, 25], name: '송현 선배', npc: 'songhyeon' }
   };
   async function visit(id){close();const p=locations[id];const ticket=++questTicket;const reached=await host.go(p.floor,p.approach||p.p,p.name);if(reached&&ticket===questTicket)talk(id);}
@@ -88,38 +88,47 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     $('#wardrobe-open').textContent='👕 내 옷장';$('#festival-open').textContent=state.complete?'✦ 미션 완료':state.started?`✦ 탐험 미션 ${['ribbon','bread','poster'].filter(k=>state[k]).length}/3`:'✦ 탐험 미션';paintPlayer();points();return {items:unlocked,title};
   }
   function quest(){sync(false);if(state.complete){completeView();return;}
-    if(!state.started){show('quest','녹원축제 준비 대작전',`<div class="addon-npc-talk">${portrait('yuna')}<div><h3>학교 한 바퀴, 축제 준비도 같이!</h3><p>잔디마당의 아름 선배가 준비팀을 찾고 있어요. 리본, 빵, 포스터를 챙기며 학교를 둘러볼까요?</p></div></div><div class="addon-inventory">${icon('ribbon')+icon('bread')+icon('poster')}</div><p class="addon-rule">빵은 기존 <b>「n.00초 빵 굽기」</b>를 끝내면 준비돼요. 준비물 수집과 미션 완료는 도장 개수를 늘리지 않아요.</p><div class="addon-actions"><button class="btn btn-primary" id="addon-meet">아름 선배 만나기</button></div>`);$('#addon-meet').onclick=()=>visit('yuna');return;}
+    if(!state.started){show('quest','녹원예술제 준비 대작전',`<div class="addon-npc-talk">${portrait('yuna')}<div><h3>학교 한 바퀴, 예술제 준비도 같이!</h3><p>잔디마당의 아름 선배가 준비팀을 찾고 있어요. 리본, 빵, 포스터를 챙기며 학교를 둘러볼까요?</p></div></div><div class="addon-inventory">${icon('ribbon')+icon('bread')+icon('poster')}</div><p class="addon-rule">빵은 기존 <b>「n.00초 빵 굽기」</b>를 끝내면 준비돼요. 준비물 수집과 미션 완료는 도장 개수를 늘리지 않아요.</p><div class="addon-actions"><button class="btn btn-primary" id="addon-meet">아름 선배 만나기</button></div>`);$('#addon-meet').onclick=()=>visit('yuna');return;}
     const ready=state.ribbon&&state.bread&&state.poster;
-    show('quest','녹원축제 준비 대작전',`<p class="addon-lead">${ready?'준비물을 모두 챙겼어요. 잔디마당의 아름 선배에게 돌아가요!':'준비물을 찾고, 평소처럼 기존 게임도 즐겨 보세요.'}</p><ul class="addon-tasks">${[{id:'ribbon',name:'축제 리본',where:'1층 · 정보처리실 앞'},{id:'bread',name:'갓 구운 빵',where:'1층 · 조리제빵실의 기존 게임 완료'},{id:'poster',name:'초대 포스터',where:'3층 · 드림스페이스 앞 송현 선배'}].map(x=>`<li class="${state[x.id]?'is-got':''}">${icon(x.id)}<div class="addon-task-copy"><strong>${x.name}</strong><small>${state[x.id]?'✓ 가방에 챙겼어요':x.where}</small></div><button class="btn" data-addon-task="${x.id}" ${state[x.id]?'disabled':''}>${state[x.id]?'준비됨':x.id==='bread'?'게임으로':'찾아가기'}</button></li>`).join('')}</ul><p class="addon-small">도장은 체험 게임에서 그대로 모아요. 이 미션에서는 준비물만 챙겨요.</p><div class="addon-actions"><button class="btn" id="addon-quest-reset">미션 다시하기</button>${ready?'<button class="btn btn-primary" id="addon-deliver-go">선배에게 전달하러 가기</button>':''}</div>`);
+    show('quest','녹원예술제 준비 대작전',`<p class="addon-lead">${ready?'준비물을 모두 챙겼어요. 잔디마당의 아름 선배에게 돌아가요!':'준비물을 찾고, 평소처럼 기존 게임도 즐겨 보세요.'}</p><ul class="addon-tasks">${[{id:'ribbon',name:'예술제 리본',where:'1층 · 정보처리실 앞'},{id:'bread',name:'갓 구운 빵',where:'1층 · 조리제빵실의 기존 게임 완료'},{id:'poster',name:'초대 포스터',where:'3층 · 드림스페이스 앞 송현 선배'}].map(x=>`<li class="${state[x.id]?'is-got':''}">${icon(x.id)}<div class="addon-task-copy"><strong>${x.name}</strong><small>${state[x.id]?'✓ 가방에 챙겼어요':x.where}</small></div><button class="btn" data-addon-task="${x.id}" ${state[x.id]?'disabled':''}>${state[x.id]?'준비됨':x.id==='bread'?'게임으로':'찾아가기'}</button></li>`).join('')}</ul><p class="addon-small">도장은 체험 게임에서 그대로 모아요. 이 미션에서는 준비물만 챙겨요.</p><div class="addon-actions"><button class="btn" id="addon-quest-reset">미션 다시하기</button>${state.poster ? pressAction : ''}${ready?'<button class="btn btn-primary" id="addon-deliver-go">선배에게 전달하러 가기</button>':''}</div>`);
     $$('[data-addon-task]').forEach(b=>b.onclick=()=>{if(b.dataset.addonTask==='bread'){close();host.room('조리제빵실',$('#festival-open'));}else visit(b.dataset.addonTask)});
-    $('#addon-quest-reset').onclick=resetQuest;if(ready)$('#addon-deliver-go').onclick=()=>visit('yuna');
+    bindPress();$('#addon-quest-reset').onclick=resetQuest;if(ready)$('#addon-deliver-go').onclick=()=>visit('yuna');
   }
   function talk(id){
     if (id === 'poster') { talkSonghyeon(); return; }
     if(id==='yuna'){
     if(state.complete){completeView();return;}
-    if(!state.started){show('talk','우리 축제, 같이 준비할래?',`<div class="addon-npc-talk">${portrait('yuna')}<div><p>리본, 갓 구운 빵, 초대 포스터가 필요해. 학교를 돌아보면서 세 가지를 챙겨 와 줄래?</p><p>리본은 1층 정보처리실 앞에, 포스터는 3층 드림스페이스 앞에서 송현 선배가 그리고 있어. 만나면 내가 보냈다고 해 줘! 빵은 조리제빵실의 빵 굽기 게임을 끝내면 준비할 수 있어!</p></div></div><div class="addon-actions"><button class="btn btn-primary" id="addon-start">좋아, 같이 준비하자!</button></div>`,'축제 준비부 · 아름 선배');$('#addon-start').onclick=()=>{state.started=true;save();sync(false);quest();};return;}
-    if(state.ribbon&&state.bread&&state.poster){show('talk','와, 준비물을 전부 챙겨 왔네!',`<div class="addon-npc-talk">${portrait('yuna')}<div><p>송현이가 그린 초대 포스터네! 리본은 게시판에 달고, 빵은 옆 테이블에 놓자.</p><p>우리 준비팀으로 함께해 줘서 고마워.</p></div></div><div class="addon-inventory">${icon('ribbon')+icon('bread')+icon('poster')}</div><div class="addon-actions"><button class="btn btn-primary" id="addon-finish">준비물 전달하기</button></div>`,'축제 준비부 · 아름 선배');$('#addon-finish').onclick=()=>{state.complete=true;save();sync(false);completeView()};return;}
+    if(!state.started){show('talk','우리 예술제, 같이 준비할래?',`<div class="addon-npc-talk">${portrait('yuna')}<div><p>리본, 갓 구운 빵, 초대 포스터가 필요해. 학교를 돌아보면서 세 가지를 챙겨 와 줄래?</p><p>리본은 1층 정보처리실 앞에, 포스터는 3층 드림스페이스 앞에서 송현 선배가 그리고 있어. 만나면 내가 보냈다고 해 줘! 빵은 조리제빵실의 빵 굽기 게임을 끝내면 준비할 수 있어!</p></div></div><div class="addon-actions"><button class="btn btn-primary" id="addon-start">좋아, 같이 준비하자!</button></div>`,'예술제 준비부 · 아름 선배');$('#addon-start').onclick=()=>{state.started=true;save();sync(false);quest();};return;}
+    if(state.ribbon&&state.bread&&state.poster){show('talk','와, 준비물을 전부 챙겨 왔네!',`<div class="addon-npc-talk">${portrait('yuna')}<div><p>송현이가 그린 초대 포스터네! 리본은 게시판에 달고, 빵은 옆 테이블에 놓자.</p><p>우리 준비팀으로 함께해 줘서 고마워.</p></div></div><div class="addon-inventory">${icon('ribbon')+icon('bread')+icon('poster')}</div><div class="addon-actions"><button class="btn btn-primary" id="addon-finish">준비물 전달하기</button></div>`,'예술제 준비부 · 아름 선배');$('#addon-finish').onclick=()=>{state.complete=true;save();sync(false);completeView()};return;}
     quest();return;
   }
   if(!state.started){quest();return;}if(state[id]){toast('이미 챙긴 준비물이에요.');return;}
-  if(id==='ribbon'){show('collect','축제 리본을 찾았어요!',`<div class="addon-inventory">${icon('ribbon')}</div><p>친구들이 만든 리본이에요. 축제 부스를 알록달록하게 꾸밀 수 있겠어요!</p><div class="addon-actions"><button class="btn btn-primary" id="addon-collect">리본을 가방에 넣기</button></div>`);$('#addon-collect').onclick=()=>collect('ribbon');}
+  if(id==='ribbon'){show('collect','예술제 리본을 찾았어요!',`<div class="addon-inventory">${icon('ribbon')}</div><p>친구들이 만든 리본이에요. 예술제 부스를 알록달록하게 꾸밀 수 있겠어요!</p><div class="addon-actions"><button class="btn btn-primary" id="addon-collect">리본을 가방에 넣기</button></div>`);$('#addon-collect').onclick=()=>collect('ribbon');}
+  }
+  const pressAction = '<button type="button" class="btn" id="addon-press">수빈 선배와 예술제 취재하기</button>';
+  function bindPress() {
+    const button = $('#addon-press');
+    if (!button) return;
+    button.onclick = () => {
+      dialog.addEventListener('close', () => window.tourGame.practice('press', $('#festival-open')), {once: true});
+      close();
+    };
   }
   function talkSonghyeon() {
     let title, line, action, next;
     if (!state.started) {
       title = '포스터 색을 고르는 중이야';
-      line = '안녕, 난 이음의 송현이야. 녹원축제 초대 포스터를 그리고 있어. 잔디마당에 있는 아름 선배가 준비팀을 찾던데, 같이 해 볼래?';
+      line = '안녕, 난 이음의 송현이야. 녹원예술제 초대 포스터를 그리고 있어. 잔디마당에 있는 아름 선배가 준비팀을 찾던데, 같이 해 볼래?';
       action = '잔디마당의 아름 선배 만나기';
       next = () => visit('yuna');
     } else if (!state.poster) {
       title = '아름 선배가 보냈구나!';
-      line = '마침 마지막 별을 다 그렸어. 여기, 잉크도 다 말랐어! 초대 포스터를 챙겨서 아름 선배에게 전해 줘.';
+      line = '마지막 별까지 다 그렸어. 아름 선배에게 전해 줄래? 드림스페이스에 있는 수빈이는 예술제 신문에 실을 사진을 찍는대.';
       action = '초대 포스터 받기';
       next = () => collect('poster');
     } else if (state.complete) {
       title = '우리 포스터, 잘 보이더라!';
-      line = '아름 선배랑 게시판에 붙여 놨어. 네가 가져다준 덕분이야. 축제 때 보자!';
+      line = '아름 선배랑 게시판에 붙여 놨어. 네가 가져다준 덕분이야. 수빈이가 예술제 신문을 만든대. 같이 사진 찍으러 갈래?';
       action = '다시 둘러보기';
       next = close;
     } else if (state.ribbon && state.bread) {
@@ -129,19 +138,20 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       next = () => visit('yuna');
     } else {
       title = '초대 포스터는 네 가방에 있어';
-      line = state.ribbon ? '리본도 찾았네. 1층 조리제빵실에서 축제 빵을 구워 볼래?'
+      line = state.ribbon ? '리본도 찾았네. 1층 조리제빵실에서 예술제 빵을 구워 볼래?'
         : state.bread ? '빵 냄새가 좋다! 이제 1층 정보처리실 앞 리본을 찾으면 돼.'
-        : '1층 정보처리실 앞에는 리본이, 조리제빵실에는 축제 빵이 있어. 챙긴 뒤에 아름 선배에게 가자!';
+        : '1층 정보처리실 앞에는 리본이, 조리제빵실에는 예술제 빵이 있어. 챙긴 뒤에 아름 선배에게 가자!';
       action = '준비물 확인하기';
       next = quest;
     }
     show('talk', title, `<div class="addon-npc-talk"><img class="songhyeon-portrait" src="img/npcs/songhyeon-portrait.png" width="64" height="64" alt=""><p>${line}</p></div>
-      <div class="addon-actions"><button class="btn btn-primary" id="addon-songhyeon-next">${action}</button></div>`, '홍보동아리 이음 · 송현 선배');
+      <div class="addon-actions"><button class="btn btn-primary" id="addon-songhyeon-next">${action}</button>${state.poster ? pressAction : ''}</div>`, '홍보동아리 이음 · 송현 선배');
     $('#addon-songhyeon-next').onclick = next;
+    bindPress();
   }
   function collect(id){state[id]=true;save();sync(false);quest();toast('가방에 챙겼어요! 남은 준비물도 찾아보세요.');}
-  function completeView(){show('complete','축제 준비 완료!',`<div class="addon-end">${icon('seal')}<h3>녹원축제 준비팀</h3><p>네가 함께해서 더 즐거운 축제!</p></div><p>준비물 3개를 모두 전달했어요. 이제 학교를 더 둘러보거나, 체험 게임에서 별을 모아 꾸미기 보상을 열어 보세요.</p><p class="addon-rule">현재 도장 <b>${score().count} / ${score().games.length}</b>개 · 별 <b>${score().stars} / ${score().maxStars}</b>개. 미션 완료로 도장·별 점수는 바뀌지 않아요.</p><div class="addon-actions"><button class="btn" id="addon-quest-reset">미션 다시하기</button><button class="btn btn-primary" id="addon-open-closet">내 옷장</button></div>`);$('#addon-quest-reset').onclick=resetQuest;$('#addon-open-closet').onclick=()=>wardrobe();}
-  function resetQuest(){show('reset','탐험 미션만 다시 할까요?',`<p>모은 준비물과 축제 준비 완료 표시를 지워요. 기존 게임의 도장·별 기록과 착용한 소품은 유지돼요.</p><div class="addon-actions"><button class="btn btn-primary" id="addon-reset-no">이어서 하기</button><button class="btn" id="addon-reset-yes">미션 다시 시작</button></div>`);$('#addon-reset-no').onclick=quest;$('#addon-reset-yes').onclick=()=>{const {equip,wardrobe}=state;state=clean();state.equip=equip;state.wardrobe=wardrobe;save();sync(false);quest();};$('#addon-reset-no').focus();}
+  function completeView(){show('complete','예술제 준비 완료!',`<div class="addon-end">${icon('seal')}<h3>녹원예술제 준비팀</h3><p>네가 함께해서 더 즐거운 예술제!</p></div><p>준비물 3개를 모두 전달했어요. 이제 학교를 더 둘러보거나, 체험 게임에서 별을 모아 꾸미기 보상을 열어 보세요.</p><p class="addon-rule">현재 도장 <b>${score().count} / ${score().games.length}</b>개 · 별 <b>${score().stars} / ${score().maxStars}</b>개. 미션 완료로 도장·별 점수는 바뀌지 않아요.</p><div class="addon-actions"><button class="btn" id="addon-quest-reset">미션 다시하기</button>${pressAction}<button class="btn btn-primary" id="addon-open-closet">내 옷장</button></div>`);$('#addon-quest-reset').onclick=resetQuest;$('#addon-open-closet').onclick=()=>wardrobe();bindPress();}
+  function resetQuest(){show('reset','탐험 미션만 다시 할까요?',`<p>모은 준비물과 예술제 준비 완료 표시를 지워요. 기존 게임의 도장·별 기록과 착용한 소품은 유지돼요.</p><div class="addon-actions"><button class="btn btn-primary" id="addon-reset-no">이어서 하기</button><button class="btn" id="addon-reset-yes">미션 다시 시작</button></div>`);$('#addon-reset-no').onclick=quest;$('#addon-reset-yes').onclick=()=>{const {equip,wardrobe}=state;state=clean();state.equip=equip;state.wardrobe=wardrobe;save();sync(false);quest();};$('#addon-reset-no').focus();}
   function wardrobe(keepPreview=false,preset=null){
     sync(false);
     if(!keepPreview){previewEquip={...state.equip,...(preset||{})};previewWalking=false;}
