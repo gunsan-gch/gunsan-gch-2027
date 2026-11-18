@@ -1134,6 +1134,132 @@
       "description": "정원 · 머리핀과 부스 배치도",
       "sha256": "85a7ff1d4fb8c3ad5fae937073f1607cadf5d54bd2f60d2cf77e911702b4aa5a",
       "source": "5층 게임용 제작 초상 시트, 투명 224×224 PNG"
+    },
+    "games/goods/goods-5.png": {
+      "output": "games/goods/goods-5.png",
+      "kind": "game-pixel-art",
+      "sha256": "19b88cda6e0734991096c02e1e2c909e6f712ad0f22f0eff96033be90e2b5278",
+      "description": "이음 굿즈 · 아름 선배 인형",
+      "source": "ImageGen 4×2 투명 굿즈 시트. 작은 픽셀 덩어리와 남색 외곽선, 글자 없는 배지·키링·파우치·가방·쿠션·인형. 영역별 분리 후 최근접 128×128 PNG."
+    },
+    "games/goods/goods-0.png": {
+      "output": "games/goods/goods-0.png",
+      "kind": "game-pixel-art",
+      "sha256": "8ea2d8346b2ab4af4fe8c51da600c1fe2c4d34f88b05063895f438aa96f2badc",
+      "description": "이음 굿즈 · 배지",
+      "source": "ImageGen 4×2 투명 굿즈 시트. 작은 픽셀 덩어리와 남색 외곽선, 글자 없는 배지·키링·파우치·가방·쿠션·인형. 영역별 분리 후 최근접 128×128 PNG."
+    },
+    "games/goods/goods-1.png": {
+      "output": "games/goods/goods-1.png",
+      "kind": "game-pixel-art",
+      "sha256": "45990432fc529db13b54767be8620415b50c3a0e8d416379cdec95cacf08197a",
+      "description": "이음 굿즈 · 아크릴 키링",
+      "source": "ImageGen 4×2 투명 굿즈 시트. 작은 픽셀 덩어리와 남색 외곽선, 글자 없는 배지·키링·파우치·가방·쿠션·인형. 영역별 분리 후 최근접 128×128 PNG."
+    },
+    "games/goods/goods-3.png": {
+      "output": "games/goods/goods-3.png",
+      "kind": "game-pixel-art",
+      "sha256": "f3c325a64b82ea0319368e412e0432bbebc26a152f5015f8cedff900ab5dba46",
+      "description": "이음 굿즈 · 에코백",
+      "source": "ImageGen 4×2 투명 굿즈 시트. 작은 픽셀 덩어리와 남색 외곽선, 글자 없는 배지·키링·파우치·가방·쿠션·인형. 영역별 분리 후 최근접 128×128 PNG."
+    },
+    "games/goods/goods-4.png": {
+      "output": "games/goods/goods-4.png",
+      "kind": "game-pixel-art",
+      "sha256": "00caf45598ce059b325f90e05b51b5758e57d6b2cb840fbf9600c1760e5c8eec",
+      "description": "이음 굿즈 · 쿠션",
+      "source": "ImageGen 4×2 투명 굿즈 시트. 작은 픽셀 덩어리와 남색 외곽선, 글자 없는 배지·키링·파우치·가방·쿠션·인형. 영역별 분리 후 최근접 128×128 PNG."
+    },
+    "games/goods/goods-6.png": {
+      "output": "games/goods/goods-6.png",
+      "kind": "game-pixel-art",
+      "sha256": "2b25bdbc6ca4edf72f94fc4a3871de6a90015047ae9826bf7c7d98ac533691dd",
+      "description": "이음 굿즈 · 송현 선배 인형",
+      "source": "ImageGen 4×2 투명 굿즈 시트. 작은 픽셀 덩어리와 남색 외곽선, 글자 없는 배지·키링·파우치·가방·쿠션·인형. 영역별 분리 후 최근접 128×128 PNG."
+    },
+    "games/goods/goods-2.png": {
+      "output": "games/goods/goods-2.png",
+      "kind": "game-pixel-art",
+      "sha256": "59a8052cea7819ede1d1dce66f580b37a6bf0b47e3a5da20f98ed6ff9cfe132f",
+      "description": "이음 굿즈 · 파우치",
+      "source": "ImageGen 4×2 투명 굿즈 시트. 작은 픽셀 덩어리와 남색 외곽선, 글자 없는 배지·키링·파우치·가방·쿠션·인형. 영역별 분리 후 최근접 128×128 PNG."
+    },
+    "games/paperplane/plane-neutral.png": {
+      "output": "games/paperplane/plane-neutral.png",
+      "kind": "game-pixel-art",
+      "sha256": "8ea0a9c99dc88b34cd27363e9f6cc872d2a18159be19a42826a4b4cf4ddbd554",
+      "description": "종이비행기 코스 및 원본 픽셀 스프라이트",
+      "generator": "tools/make_flight_art.mjs"
+    },
+    "games/paperplane/thermal.png": {
+      "output": "games/paperplane/thermal.png",
+      "kind": "game-pixel-art",
+      "sha256": "33b2a7db95d1898f78b40a284e6d97f5e34e79f3a370654e836f932e5b70a45d",
+      "description": "종이비행기 코스 및 원본 픽셀 스프라이트",
+      "generator": "tools/make_flight_art.mjs"
+    },
+    "games/paperplane/landing.png": {
+      "output": "games/paperplane/landing.png",
+      "kind": "game-pixel-art",
+      "sha256": "f9318b0103d1f5797435ffef01c2c0423e2eb97826f986638d5acf92a50bb91a",
+      "description": "종이비행기 코스 및 원본 픽셀 스프라이트",
+      "generator": "tools/make_flight_art.mjs"
+    },
+    "games/paperplane/ring.png": {
+      "output": "games/paperplane/ring.png",
+      "kind": "game-pixel-art",
+      "sha256": "f1283c37e402816a964032a2fc8f70730c418623d72b1e96854838aab9681bd0",
+      "description": "종이비행기 코스 및 원본 픽셀 스프라이트",
+      "generator": "tools/make_flight_art.mjs"
+    },
+    "games/paperplane/course.png": {
+      "output": "games/paperplane/course.png",
+      "kind": "game-pixel-art",
+      "sha256": "38f3c5354aef43d23268ad3534e3ee8bddc8525aa2c6df5ad54663218c5295ec",
+      "description": "종이비행기 코스 및 원본 픽셀 스프라이트",
+      "generator": "tools/make_flight_art.mjs"
+    },
+    "games/paperplane/plane-left.png": {
+      "output": "games/paperplane/plane-left.png",
+      "kind": "game-pixel-art",
+      "sha256": "50da0842595c7a7661bf458a4ca5c10ca324f6ed384c003edddeae72359e1e54",
+      "description": "종이비행기 코스 및 원본 픽셀 스프라이트",
+      "generator": "tools/make_flight_art.mjs"
+    },
+    "games/paperplane/plane-right.png": {
+      "output": "games/paperplane/plane-right.png",
+      "kind": "game-pixel-art",
+      "sha256": "fb0b0589db5dcca6077ab8b3f72cdd1718a2bfc2d862e54eea3daa184ec92735",
+      "description": "종이비행기 코스 및 원본 픽셀 스프라이트",
+      "generator": "tools/make_flight_art.mjs"
+    },
+    "games/stamps/goods.png": {
+      "output": "games/stamps/goods.png",
+      "kind": "game-pixel-art",
+      "sha256": "a3438b41798001c106fbc09b6d6cd20a0f5dbe0af584196dcfaebccff8086fdc",
+      "description": "신규 체험 도장",
+      "generator": "tools/make_flight_art.mjs"
+    },
+    "games/stamps/paperplane.png": {
+      "output": "games/stamps/paperplane.png",
+      "kind": "game-pixel-art",
+      "sha256": "ef2a85f92a6531ce43d57b1fcb52777333cfc3ffc4da4ea792fc55e63cec4f5f",
+      "description": "신규 체험 도장",
+      "generator": "tools/make_flight_art.mjs"
+    },
+    "npcs/portraits/jiyoung.png": {
+      "output": "npcs/portraits/jiyoung.png",
+      "kind": "npc",
+      "sha256": "87b02718b1cc44ec1220938432c926a0af5f62abf85bc1a300fd52f5a043d81e",
+      "description": "지영 · 굿즈 가방",
+      "source": "ImageGen. 기존 선배 초상화와 교복을 참고한 독립 캐릭터, 또렷한 윤곽과 투명 배경. 224×224 PNG."
+    },
+    "npcs/portraits/yunhee.png": {
+      "output": "npcs/portraits/yunhee.png",
+      "kind": "npc",
+      "sha256": "8c047ae849bfacc3f47c4a485b5d84a75c6d85372409a4736649455ca5fb467b",
+      "description": "윤희 · 종이비행기",
+      "source": "ImageGen. 기존 선배 초상화와 교복을 참고한 독립 캐릭터, 또렷한 윤곽과 투명 배경. 224×224 PNG."
     }
   }
 }
