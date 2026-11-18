@@ -157,23 +157,6 @@ def make(npc):
 
 # ---------- 선배별 ----------
 
-def arum(f, d, col, c):
-    """아름: 밝은 밤색 긴 생머리 + 큰 분홍 리본"""
-    if d == "down":
-        stamp(f, 5, 18, LONG_SIDE, c, under=True)
-        stamp(f, 24, 18, mirror(LONG_SIDE), c, under=True)
-        stamp(f, 19, 2, BOW, c)
-    elif d == "up":
-        stamp(f, 8, 19, LONG_BACK, c)
-        stamp(f, 5, 2, BOW, c)
-    elif d == "right":
-        stamp(f, 6, 17, LONG_SIDE + ['.##'], c, under=True)
-        stamp(f, 7, 2, BOW, c)
-    else:
-        stamp(f, 22, 17, mirror(LONG_SIDE + ['.##']), c, under=True)
-        stamp(f, 17, 2, BOW, c)
-
-
 def songhyeon(f, d, col, c):
     """송현: 왼쪽으로 묶은 머리 + 돌돌 만 초대 포스터"""
     if d == "down":
@@ -197,8 +180,6 @@ def sua(f, d, col, c):
 
 
 NPCS = {
-    "arum": dict(hair=hexc("#8a5a3c"), decorate=arum,
-                 colors={"p": hexc("#f28aa5"), "P": hexc("#c2546b")}),
     "songhyeon": dict(hair=hexc("#36302f"), decorate=songhyeon,
                       colors={"r": hexc("#e2766f"), "c": hexc("#fbefd4")}),
     "sua": dict(hair=hexc("#2e2427"), decorate=sua,
