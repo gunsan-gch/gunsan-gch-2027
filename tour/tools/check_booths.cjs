@@ -1,107 +1,145 @@
-const assert = require('node:assert/strict');
-const {boards,pieces,offsets,inspect,route,cellsFor} = require('../js/game-booths.js');
+﻿const assert = require('node:assert/strict');
+const path = require('node:path');
+const { pathToFileURL } = require('node:url');
+const { levels, makeMap, grade, reward } = require('../js/game-booths.js');
 
-// Search with an independent rotation transform, collision map and flood fill.
-function orientations(type) {
-  let cells=pieces[type].shape;
-  const seen=new Map();
-  for(let turn=0;turn<4;turn++) {
-    cells=cells.slice().sort((a,b)=>a[1]-b[1]||a[0]-b[0]);
-    const [ax,ay]=cells[0], shape=cells.map(([x,y])=>[x-ax,y-ay]);
-    if(!seen.has(JSON.stringify(shape))) seen.set(JSON.stringify(shape),{turn,shape});
-    cells=cells.map(([x,y])=>[-y,x]);
-  }
-  return [...seen.values()];
+function seeded(seed) {
+  return () => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return seed / 2 ** 32;
+  };
 }
-function walk(map,occupied) {
-  const y=map.findIndex(row=>row.includes('G')), start=[map[y].indexOf('G'),y];
-  const todo=[start], seen=new Set([String(start)]);
-  while(todo.length) {
-    const [x,y]=todo.pop();
-    if(map[y][x]==='S') return true;
-    for(const [nx,ny] of [[x+1,y],[x-1,y],[x,y+1],[x,y-1]]) {
-      const key=[nx,ny].join();
-      if(!map[ny]?.[nx]||map[ny][nx]==='#'||occupied.has(key)||seen.has(key)) continue;
-      seen.add(key); todo.push([nx,ny]);
-    }
-  }
-  return false;
-}
-function solve(b,id=0,taken=new Set(),moves=[]) {
-  if(id===b.pieces.length) return moves;
-  for(const {turn,shape} of orientations(b.pieces[id])) {
-    for(let y=0;y<b.map.length;y++) for(let x=0;x<b.map[y].length;x++) {
-      const points=shape.map(([dx,dy])=>[x+dx,y+dy]);
-      if(points.some(([x,y])=>b.map[y]?.[x]!=='.'||taken.has([x,y].join()))) continue;
-      const next=new Set([...taken,...points.map(String)]);
-      if(!walk(b.map,next)) continue;
-      const solved=solve(b,id+1,next,[...moves,{x,y,turn}]); if(solved) return solved;
-    }
-  }
-}
-for(const b of boards) {
-  const solution=solve(b); assert.ok(solution,b.name);
-  const placed=b.pieces.map(()=>null);
-  solution.forEach((p,i)=>{assert.equal(inspect(b,placed,i,p),''); placed[i]=p;});
-  const path=route(b,placed),w=b.map[0].length;
-  assert.ok(path.length>1); assert.equal(b.map[Math.floor(path[0]/w)][path[0]%w],'G');
-  assert.equal(b.map[Math.floor(path.at(-1)/w)][path.at(-1)%w],'S');
-  const used=new Set(placed.flatMap((p,i)=>cellsFor(b,i,p).map(String)));
-  path.forEach((v,i)=>{const x=v%w,y=Math.floor(v/w); assert.ok(!used.has([x,y].join())&&b.map[y][x]!=='#'); if(i) assert.equal(Math.abs(x-path[i-1]%w)+Math.abs(y-Math.floor(path[i-1]/w)),1);});
-  console.log(b.name,JSON.stringify(solution));
-}
-const blocked={x:3,y:1,turn:0};
-assert.equal(walk(boards[0].map,new Set(['3,1','3,2','4,2'])),false);
-assert.match(inspect(boards[0],[null,null],1,blocked),/길이 막혀/);
-assert.match(inspect(boards[0],[{x:0,y:0,turn:0},null],1,{x:0,y:0,turn:0}),/겹쳐/);
-assert.ok(offsets('photo',2).some(([x])=>x<0));
-assert.match(inspect({map:['....','G..S','....'],pieces:['photo']},[null],0,{x:0,y:0,turn:2}),/밖으로/);
 
-// Drive the registered game callbacks using the same selectors as the UI.
-const fs=require('node:fs'), vm=require('node:vm'), path=require('node:path');
-const sandbox={window:{TOUR_GAMES:{}},AbortController};
-vm.runInNewContext(fs.readFileSync(path.resolve(__dirname,'../js/game-booths.js'),'utf8'),sandbox);
-for(const target of [1,2,3]) {
-  const controls=new Map(), listeners=new Map();
-  function control(selector) {
-    if(!controls.has(selector)) {
-      const field=selector.match(/data-(piece|cell|act)="([^"]+)"/);
-      const el={dataset:field?{[field[1]]:field[2]}:{},focus(){},style:{setProperty(){}},closest(){return this;}};
-      controls.set(selector,el);
-    }
-    return controls.get(selector);
+function checkRules() {
+  assert.deepEqual(levels.map(level => level.size), [4, 4, 5]);
+  assert.deepEqual(levels.map(level => level.booths.length), [3, 5, 6]);
+  let points = 0;
+  for (const level of levels) {
+    const map = makeMap(level, seeded(19));
+    assert.deepEqual(map, makeMap(level, seeded(19)));
+    assert.notDeepEqual(map, makeMap(level, seeded(98765)));
+    assert.equal(map.length, level.size ** 2);
+    assert.deepEqual(map.filter(Boolean).sort(), [...level.booths].sort());
+    points += grade(map, map.slice());
+
+    // 빈칸에 옮긴 경우와 서로 다른 두 부스를 맞바꾼 경우를 구별한다.
+    const wrong = map.slice();
+    const first = wrong.indexOf('food'), second = wrong.indexOf('craft');
+    [wrong[first], wrong[second]] = [wrong[second], wrong[first]];
+    assert.equal(grade(map, wrong), level.booths.length - 2);
+    wrong[wrong.indexOf(null)] = wrong[first];
+    wrong[first] = null;
+    assert.equal(grade(map, wrong), level.booths.length - 2);
   }
-  const container={querySelector:control,addEventListener(type,fn,{signal}){
-    listeners.set(type,fn); signal.addEventListener('abort',()=>listeners.delete(type));
-  }};
-  const finished=[];
-  const stop=sandbox.window.TOUR_GAMES.booths.start(container,{done:r=>finished.push(r.stars)});
-  const button=(field,value)=>control('[data-'+field+'="'+value+'"]');
-  const click=(field,value)=>listeners.get('click')({target:button(field,value)});
-  const key=(cell,key)=>listeners.get('keydown')({target:button('cell',cell),key,preventDefault(){}});
-  assert.equal(button('act','finish').hidden,true);
-  click('act','finish'); assert.deepEqual(finished,[]);
-  click('cell',0); click('act','place'); click('piece',0); click('act','remove');
-  assert.match(control('.bo-title span').textContent,/배치 0/);
-  click('act','undo'); assert.match(control('.bo-title span').textContent,/배치 1/);
-  key(0,'ArrowRight'); click('act','place'); // Reposition the first booth.
-  click('piece',1); click('cell',1); assert.equal(button('act','place').disabled,true);
-  click('act','reset'); assert.match(control('.bo-title span').textContent,/배치 0/);
-  click('piece',1); click('cell',8); assert.match(control('.bo-status').textContent,/길이 막혀/);
-  key(8,'r'); click('act','reset');
-  for(let i=0;i<target;i++) {
-    const board=boards[i];
-    solve(board).forEach(({x,y,turn})=>{
-      for(let n=0;n<turn;n++)click('act','rotate');
-      click('cell',y*board.map[0].length+x);
-      assert.equal(button('act','place').disabled,false);
-      click('act','place');
-    });
-    assert.match(control('.bo-grid').innerHTML,/bo-route/);
-    assert.equal(button('act','finish').hidden,false);
-    if(i<target-1)click('act','next');
-  }
-  click('act','finish');click('act','finish');
-  assert.deepEqual(finished,[target]); stop(); assert.equal(listeners.size,0);
+  assert.equal(points, 14);
+  assert.equal(reward(points, false), 3);
+  assert.equal(reward(points, true), 2);
+  assert.equal(reward(10, false), 2);
+  assert.equal(reward(9, false), 1);
+  assert.equal(reward(0, true), 1);
+  console.log('무작위 배치, 중복 부스, 오답 채점, 별 기준 통과');
 }
-console.log('Unit and game callback checks passed for 1, 2 and 3 stars.');
+
+// --browser 옵션은 실제 투어 창에서 터치, 타이머, 결과와 도장 저장까지 검사한다.
+async function play(browser, mode, width) {
+  const page = await browser.newPage({
+    viewport: { width, height: width === 320 ? 568 : 844 }, hasTouch: true,
+    reducedMotion: mode === 'hint' ? 'reduce' : 'no-preference'
+  });
+  try {
+    const errors = [];
+    page.on('pageerror', error => errors.push(error.message));
+    const url = process.env.BOOTHS_URL || pathToFileURL(path.resolve(__dirname, '../index.html')).href + '?game=booths';
+    await page.goto(url);
+    const action = key => page.locator(`.bo-game [data-act="${key}"]`);
+    const cell = i => page.locator(`.bo-grid [data-cell="${i}"]`);
+    const card = type => page.locator(`.bo-tray [data-type="${type}"]`);
+    await action('start').waitFor();
+    await page.clock.install({ time: new Date('2030-01-01T00:00:00Z') });
+    await page.clock.pauseAt(new Date('2030-01-01T00:01:00Z'));
+    await action('start').tap();
+    for (const [index, level] of levels.entries()) {
+      const cells = page.locator('.bo-grid .bo-cell');
+      const answer = await cells.evaluateAll(nodes => nodes.map(node =>
+        node.querySelector('img')?.src.split('/').pop().split('.')[0] || null));
+      assert.equal(answer.length, level.size ** 2);
+      assert.deepEqual(answer.filter(Boolean).sort(), [...level.booths].sort());
+      await page.clock.fastForward(2999);
+      assert.ok(await page.locator('.bo-time').isVisible());
+      await page.clock.fastForward(1);
+      assert.equal(await page.locator('.bo-grid img').count(), 0);
+      assert.ok(await action('check').isDisabled());
+      const fits = await page.locator('#game-body').evaluate(body => {
+        const buttons = [...body.querySelectorAll('button')].filter(b => b.offsetWidth);
+        return body.scrollWidth <= body.clientWidth && buttons.every(b => b.offsetWidth >= 44 && b.offsetHeight >= 44);
+      });
+      assert.ok(fits, '지도와 버튼이 휴대폰 너비와 터치 크기에 맞아야 한다');
+
+      const first = answer.findIndex(Boolean);
+      await card(answer[first]).tap();
+      await cell(first).tap();
+      await cell(first).tap();
+      assert.equal(await page.locator('.bo-grid img').count(), 0);
+      if (mode === 'hint' && index === 0) {
+        await cell(first).tap();
+        await action('hint').tap();
+        await page.clock.fastForward(1499);
+        assert.equal(await page.locator('.bo-grid img').count(), level.booths.length);
+        await page.clock.fastForward(1);
+        assert.equal(await page.locator('.bo-grid img').count(), 1);
+        await cell(first).tap();
+      }
+      if (mode === 'hint') assert.ok(await action('hint').isDisabled());
+
+      const empty = answer.flatMap((type, i) => type ? [] : [i]);
+      for (const [i, type] of answer.entries()) {
+        if (!type) continue;
+        await card(type).tap();
+        await cell(mode === 'wrong' ? empty.shift() : i).tap();
+      }
+      await action('check').tap();
+      if (mode === 'wrong') {
+        assert.equal(await page.locator('.bo-cross').count(), level.booths.length);
+        assert.equal(await page.locator('.bo-answer').count(), level.booths.length);
+        assert.deepEqual(await cells.allTextContents(), answer.map((type, i) =>
+          type ? ({ food: '분식', craft: '공예', photo: '사진', stage: '무대' })[type] :
+            empty.includes(i) ? '' : '×'));
+      } else {
+        assert.match(await page.locator('.bo-guide').innerText(), /완벽!/);
+      }
+      await page.clock.fastForward(3000);
+      assert.ok(await page.locator('.bo-grid').isHidden());
+      await action('next').tap();
+    }
+    const stars = { perfect: 3, hint: 2, wrong: 1 }[mode];
+    const points = mode === 'wrong' ? 0 : 14;
+    assert.equal(await page.locator('.game-result-score').innerText(), `총 별 ${stars} / 3`);
+    assert.match(await page.locator('.game-result').innerText(), new RegExp(`부스 ${points} / 14개 정답`));
+    if (mode === 'hint') assert.match(await page.locator('.game-result').innerText(), /다시 보기 사용 \(최대 별 2개\)/);
+    const stamp = await page.evaluate(() => JSON.parse(localStorage.getItem('gch-tour-stamps')).booths);
+    assert.equal(stamp.stars, stars);
+    assert.equal(stamp.bestScore, points);
+    assert.deepEqual(errors, []);
+    console.log(`${width}px 터치 · ${mode} · 별 ${stars}개 / ${points}점 도장 저장 통과`);
+  } finally {
+    await page.close();
+  }
+}
+
+async function checkBrowser() {
+  const { chromium } = require('playwright');
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH });
+  try {
+    for (const [mode, width] of [['perfect', 390], ['hint', 320], ['wrong', 360]]) {
+      await play(browser, mode, width);
+    }
+  } finally {
+    await browser.close();
+  }
+}
+
+checkRules();
+if (process.argv.includes('--browser')) checkBrowser().catch(error => {
+  console.error(error);
+  process.exitCode = 1;
+});

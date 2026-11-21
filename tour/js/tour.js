@@ -373,8 +373,8 @@
         button.append(sub);
       }
       // 체험 게임·수업 실습 공간 꼬리표 (같은 도장 아이콘)
-      const tag = room.game ? '체험 게임' : room.practice ? '수업 실습' : '';
-      if (tag) button.append(Object.assign(document.createElement('small'), { className: 'scene-card-game', innerHTML: `<img class="ui-icon" src="img/ui/stamp.png" width="20" height="20" alt="" aria-hidden="true"> ${tag}` }));
+      const tag = room.game ? '🎮 체험 게임' : room.practice ? '📖 수업 실습' : '';
+      if (tag) button.append(Object.assign(document.createElement('small'), { className: 'scene-card-game', textContent: tag }));
       cards.append(button);
     }
     facilities.hidden = !facilities.children.length;

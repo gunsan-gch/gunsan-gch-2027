@@ -18,7 +18,8 @@ function renderRoomLabels(stage, scene, onSelect) {
     if (room.status === '개편 예정') el.classList.add('is-planned');
     if (room.spot) el.classList.add('is-spot');
     if (room.door) el.classList.add('is-door');
-    if (room.game || room.practice) el.classList.add('has-game');   // 체험 게임·수업 실습이 있는 공간 — 이름표 위에 도장 아이콘 표시 (tour.css)
+    if (room.game) el.classList.add('has-game');   // 체험 게임 공간 🎮
+    if (room.practice) el.classList.add('has-practice');   // 수업 실습 페이지 공간 📖 — 이름표 위에 도장 아이콘 표시 (tour.css)
     el.style.left = room.at[0] + '%';
     el.style.top = room.at[1] + '%';
     el.style.setProperty('--label-w', room.w + '%');

@@ -1906,3 +1906,4 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 
 /* 투어 안내의 장식용 픽셀 아이콘. */
 .ui-icon { display: inline-block; width: 20px; height: 20px; vertical-align: middle; image-rendering: pixelated; }
+.ui-emoji { display: inline-block; font-size: 1.05em; line-height: 1; vertical-align: -0.1em; }

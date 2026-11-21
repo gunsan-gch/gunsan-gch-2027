@@ -1,74 +1,104 @@
-/* 원본 그림은 작은 화면 1배, 넓은 화면 2배로 맞춘다. */
+﻿/* 지도와 카드가 좁은 휴대폰에서도 한 줄에 들어가게 한다. */
 .bo-game {
-  --ink: var(--navy, #263b46);
-  --teal: #176a69;
-  --tile: 44px;
-  --art-width: 40px;
-  --art-height: 36px;
-  color-scheme: only light;
-  color: var(--ink);
-  max-width: 560px;
-  margin: auto;
+  --grass: #ecf3df;
+  --green: #28614c;
   display: grid;
-  gap: 8px;
+  gap: 10px;
+  max-width: 440px;
+  margin: auto;
+  color: var(--navy);
   font-size: 14px;
 }
-.bo-game * { box-sizing: border-box; }
+.bo-game *, .bo-game *::after { box-sizing: border-box; }
 .bo-game [hidden] { display: none !important; }
-.bo-game p, .bo-title h3 { margin: 0; }
- .bo-help, .bo-key, .bo-status, .bo-game small { font-size: 12px; line-height: 1.45; }
-.bo-title { display: flex; justify-content: space-between; align-items: center; gap: 4px; }
-.bo-title h3 { font-size: 16px; }
-.bo-title span { font-size: 12px; font-weight: 700; color: var(--teal); white-space: nowrap; }
-.bo-game button { font-family: inherit; cursor: pointer; min-height: 44px; min-width: 44px; touch-action: manipulation; }
-.bo-game button:focus-visible { outline: 3px solid #154bb7; outline-offset: 2px; z-index: 3; }
-.bo-tray { display: flex; gap: 4px; }
-.bo-tray button { flex: 1; min-width: 44px; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; align-items: center; gap: 2px; border-bottom-width: 3px; padding: 4px 2px; font-size: 12px; font-weight: 700; }
-.bo-tray img { width: 40px; height: 36px; image-rendering: pixelated; }
-.bo-mini { grid-column: 1 / -1; display: grid; grid-auto-rows: 7px; grid-auto-columns: 7px; gap: 1px; justify-content: center; min-height: 15px; }
-.bo-mini i { background: var(--piece); border: 1px solid var(--outline); position: relative; }
-.bo-origin::after { content: ''; position: absolute; inset: 1px; background: var(--ink); }
-.bo-food { --piece: #ffc980; --outline: #965518; }
-.bo-craft { --piece: #a3dfc9; --outline: #38755d; }
-.bo-photo { --piece: #d3c0ed; --outline: #705188; }
-.bo-grid { display: grid; grid-template-columns: repeat(var(--cols), var(--tile)); gap: 2px; padding: 4px; background: #a6b5a2; border: 2px solid #526d60; border-radius: 4px; width: max-content; justify-self: center; box-shadow: 0 3px 0 #788f7b; }
-.bo-grid .bo-cell {
-  position: relative;
-  width: var(--tile);
-  height: var(--tile);
-  border: 1px solid var(--outline, #bdc9b9);
-  border-radius: 2px;
-  background-color: var(--piece, #eff1e3);
-  background-image: linear-gradient(#718b6814 1px, transparent 1px), linear-gradient(90deg, #718b6814 1px, transparent 1px);
-  background-size: 11px 11px;
-  box-shadow: inset 1px 1px 0 #fff9, inset -1px -2px 0 #64785822;
-  padding: 0;
+.bo-game .senior-card { grid-area: auto; }
+.bo-game button {
+  min-width: 44px;
+  min-height: 44px;
+  font: inherit;
+  touch-action: manipulation;
+}
+.bo-game button:focus-visible { outline: 3px solid #1858a3; outline-offset: 1px; z-index: 1; }
+.bo-intro, .bo-round { display: grid; gap: 8px; min-width: 0; }
+.bo-samples, .bo-tray, .bo-actions { display: flex; gap: 5px; }
+.bo-samples {
+  justify-content: space-around;
+  padding: 14px 4px;
+  border: 2px solid #a3b995;
+  border-radius: 4px;
+  background: var(--grass);
+}
+.bo-samples > div, .bo-tray .btn, .bo-cell {
   display: grid;
-  place-items: center;
+  justify-items: center;
+  align-content: center;
+  gap: 1px;
   font-size: 12px;
   font-weight: 700;
+  line-height: 1.15;
 }
-.bo-cell img, .bo-cell img:only-child { width: var(--art-width); height: var(--art-height); object-fit: contain; image-rendering: pixelated; }
-.bo-cell small { position: absolute; bottom: -1px; padding: 0 2px; background: #fffdf0e8; font-size: 12px; line-height: 1.15; }
-.bo-grid .bo-flower { background: repeating-linear-gradient(135deg, #dae6ce 0 5px, #cdddbe 5px 8px); color: #476d49; }
-.bo-cell b { position: absolute; inset: 1px; border: 2px dashed #146657; background: #2da78440; color: #0f4942; display: grid; place-items: center; font-size: 18px; }
-.bo-bad b { background: repeating-linear-gradient(45deg, #c8363645 0 4px, #fff2 4px 9px); border-color: #a43434; color: #762929; }
-.bo-grid .bo-route { background-color: #d5edee; color: #187073; border-color: #81b3b2; }
-.bo-key { text-align: center; color: #526353; }
-.bo-status { padding: 6px 8px; border-left: 3px solid var(--teal); background: #eff6ee; }
-.bo-actions { display: grid; grid-template-columns: repeat(5, minmax(44px, 1fr)); gap: 4px; }
-.bo-actions .btn { padding: 6px 2px; font-size: 12px; white-space: nowrap; }
-.bo-actions button:active:enabled { transform: translateY(1px); }
-.bo-end { display: flex; gap: 6px; flex-wrap: wrap; }
-.bo-end .btn { font-size: 14px; }
-.bo-end:empty { display: none; }
-@media (min-width: 600px) and (min-height: 501px) {
-  .bo-game { --tile: 84px; --art-width: 80px; --art-height: 72px; }
+.bo-samples img, .bo-tray img, .bo-cell img {
+  display: block;
+  width: 40px;
+  height: 36px;
+  object-fit: contain;
+  image-rendering: pixelated;
 }
-@media (max-height: 500px) and (min-width: 600px) {
-  .bo-game { max-width: 860px; grid-template-columns: 290px minmax(0, 1fr); align-items: start; }
- .bo-title, .bo-tray, .bo-help, .bo-status, .bo-actions, .bo-end, .bo-game > small { grid-column: 2; }
-.senior-card { grid-column: 2;}
-  .bo-grid { grid-column: 1; grid-row: 1 / 7; }
-  .bo-key { grid-column: 1; }
+.bo-heading { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.bo-heading h3 { margin: 0; font-size: 16px; }
+.bo-count { font-size: 13px; font-weight: 700; color: var(--green); }
+.bo-time { width: 100%; height: 8px; border: none; border-radius: 2px; background: #d8e5d0; }
+.bo-time::-webkit-progress-bar { background: #d8e5d0; }
+.bo-time::-webkit-progress-value { background: var(--green); }
+.bo-time::-moz-progress-bar { background: var(--green); }
+.bo-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(44px, 1fr));
+  gap: 2px;
+  width: min(100%, calc(var(--cols) * 60px + 16px));
+  justify-self: center;
+  padding: 4px;
+  border: 2px solid #738b6b;
+  border-radius: 5px;
+  background: #a9bd9b;
+}
+.bo-grid .bo-cell {
+  position: relative;
+  aspect-ratio: 1;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid #c7d4b9;
+  border-radius: 2px;
+  background: var(--grass);
+  color: var(--navy);
+}
+.bo-grid button { cursor: pointer; }
+.bo-grid .bo-filled { background: #fffcee; }
+.bo-grid .bo-answer { border: 2px solid var(--green); }
+.bo-cell img { width: 100%; height: clamp(26px, 7.8vw, 36px); }
+.bo-cross {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  padding: 0 3px;
+  border-radius: 2px;
+  border: 1px solid #ae2433;
+  background: #fff1ee;
+  color: #ae2433;
+  font: bold 16px/1 sans-serif;
+}
+.bo-tray .btn { flex: 1; padding: 4px 2px; }
+.bo-tray img { height: 27px; }
+.bo-actions .btn {
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  flex: 1;
+  padding: 6px 3px;
+  font-size: 14px;
+}
+.bo-actions small { display: block; font-size: 12px; }
+@media (max-height: 700px) {
+  .bo-grid { max-width: calc(var(--cols) * 48px + 16px); }
+  .bo-cell img { height: 28px; }
 }

@@ -33,6 +33,9 @@ window.TOUR_GAMES = window.TOUR_GAMES || {};
 /* 장식 아이콘과 소리 버튼의 공통 화면 부품. */
 window.TourUI = {
   icon(name) {
+    // 게임 표시는 픽셀 그림 대신 🎮 이모지 (사용자 선택)
+    const EMOJI = { stamp: '🎮', practice: '📖' };
+    if (EMOJI[name]) return Object.assign(document.createElement('span'), { className: 'ui-emoji', textContent: EMOJI[name], ariaHidden: 'true' });
     const img = document.createElement('img');
     img.className = 'ui-icon'; img.src = 'img/ui/' + name + '.png';
     img.width = 20; img.height = 20; img.alt = ''; img.setAttribute('aria-hidden', 'true');
