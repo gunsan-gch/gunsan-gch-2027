@@ -9,6 +9,8 @@ window.TourBoardData = {
     title: '📅 이달의 학교 행사',
     url: 'https://school.jbedu.kr/gunsan-gch/M010401/index.do',
     link: '홈페이지 학사일정',
+    // 게시판에서 뺄 일정 (이름에 이 글자가 들어가면 숨김)
+    skip: ['토요휴업일'],
     rows: [
       ['5일', '동아리 체험 (예시)'],
       ['14일', '예술제 작품 전시 (예시)'],

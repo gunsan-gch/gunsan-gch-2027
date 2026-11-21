@@ -281,7 +281,6 @@
 .board-slot li + li { margin-top: 5px; }
 .board-dates b { color: #24665a; }
 .board-slot:last-child { grid-column: 1 / -1; }
-.board-updated:not(:empty) { display: block; margin-top: 8px; color: #525d61; }
 .board-slot .btn { display: inline-flex; align-items: center; min-height: 44px; }
 .board-posters, .board-tray { display: flex; flex-wrap: wrap; gap: 8px; }
 .board-posters figure { margin: 0; text-align: center; }

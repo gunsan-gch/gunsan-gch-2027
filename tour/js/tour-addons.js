@@ -385,7 +385,10 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
   }
 
   function upcomingEvents(events, today) {
-    const sorted = [...events].sort((a, b) => a.date.localeCompare(b.date));
+    // 토요휴업일처럼 게시판에 굳이 안 써도 되는 일정은 빼기 (board-data.js events.skip)
+    const skip = boardData.events.skip || [];
+    const sorted = events.filter(e => !skip.some(word => e.name.includes(word)))
+      .sort((a, b) => a.date.localeCompare(b.date));
     const remaining = sorted.filter(event => event.date >= today);
     return eventList(mergeEventDays(remaining.length ? remaining : sorted).slice(0, 4));
   }
@@ -409,11 +412,9 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       const feed = await response.json();
       const today = koreanDate.format(new Date());
       const current = feed.months[today.slice(0, 7)];
-      const [, month, day] = koreanDate.format(new Date(feed.updatedAt)).split('-').map(Number);
       return {
         events: upcomingEvents(current.events, today),
-        meals: lunchMenu(feed.months, today),
-        stamp: `학교 홈페이지 · ${month}월 ${day}일 갱신`
+        meals: lunchMenu(feed.months, today)
       };
     } catch {
       return null;
@@ -427,15 +428,13 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       const key = slot.dataset.feedSlot;
       slot.innerHTML = feed ? feed[key] : key === 'events'
         ? eventList(boardData.events.rows) : `<p>${escapeText(boardData.meals.fallback)}</p>`;
-      if (feed) slot.parentElement.querySelector('.board-updated').textContent = feed.stamp;
     }
   }
 
   function slotContent(key) {
     const data = boardData[key];
     if (key === 'events' || key === 'meals') return `<div data-feed-slot="${key}"><p>불러오는 중…</p></div>
-      <a class="btn" href="${escapeText(data.url)}" target="_blank" rel="noopener">${escapeText(data.link)}</a>
-      <small class="board-updated"></small>`;
+      <a class="btn" href="${escapeText(data.url)}" target="_blank" rel="noopener">${escapeText(data.link)}</a>`;
     if (key === 'posters') return `<div class="board-posters">${data.images.map(image =>
       // full 이 있으면 누르면 큰 포스터를 새 창으로
       `<figure class="${image.photo ? 'is-photo' : ''}">${image.full

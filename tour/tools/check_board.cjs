@@ -28,7 +28,8 @@ async function checkFeed(page) {
   assert.deepEqual(await page.locator('[data-feed-slot="meals"] li').allTextContents(), menu.slice(0, 6));
   assert.deepEqual(await page.locator('.board-dates li').allTextContents(),
     [23, 24, 25, 26].map(day => day + '일 ' + day + '일 행사'));
-  assert.equal(await page.getByText('학교 홈페이지 · 11월 21일 갱신').count(), 2);
+  // 갱신 날짜 문구는 표시하지 않음
+  assert.equal(await page.getByText(/갱신/).count(), 0);
   for (const name of ['홈페이지 학사일정', '이달의 식단']) {
     assert.equal(await page.getByRole('link', { name }).getAttribute('target'), '_blank');
   }
