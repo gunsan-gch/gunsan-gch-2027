@@ -29,10 +29,10 @@
       <div class="gym-guide"><img src="${SUA}" width="56" height="56" alt="수아 선배"><div><strong>수아 선배의 체육관 3종 챌린지</strong><p>우리 체육관 미니게임 대회, 너도 함께해!</p></div></div>
       <div class="gym-panorama"><img src="${IMG}gym-hall.png?v=20261118" width="640" height="320" alt="컬링 스톤, 사격 표적, 배드민턴 코트가 있는 픽셀 체육관"><span>원하는 종목부터 자유롭게!</span></div>
       <div class="gym-events">${IDS.map(id => {
-        const info = INFO[id], best = recordValue(id), saved = stamps[id];
-        return `<button type="button" class="gym-event" data-sport="${id}"><img src="${IMG}icon-${id}.png?v=20261118" width="48" height="48" alt=""><span><strong>${info.sport}</strong><small>${info.subtitle}</small></span><span class="gym-event-record">${saved ? '★'.repeat(saved.stars) + '☆'.repeat(3 - saved.stars) : '아직 도전 전'}<small>${saved ? (id === 'badminton' ? `최고 ${best.score}득점 · ${best.rally}랠리` : `최고 ${best.score}점`) : '연습부터 시작해도 좋아요'}</small></span></button>`;
+        const info = INFO[id], saved = stamps[id];
+        return `<button type="button" class="gym-event" data-sport="${id}"><img src="${IMG}icon-${id}.png?v=20261118" width="48" height="48" alt=""><strong>${info.sport}</strong><span class="gym-event-record ${saved ? 'is-earned' : ''}">${saved ? '★'.repeat(saved.stars) + '☆'.repeat(3 - saved.stars) : '도전 전'}</span></button>`;
       }).join('')}</div>
-      <div class="gym-trophy ${count === 3 ? 'is-earned' : ''}"><img src="${IMG}trophy.png?v=20261118" width="56" height="56" alt=""><div><strong>${count === 3 ? '체육관 3종 완주 트로피 획득!' : `3종 완주 트로피 · ${count} / 3`}</strong><p>${count === 3 ? '세 종목 모두 도전했어요. 다음에는 최고 기록에 도전!' : '실전 세 종목을 끝까지 마치면 트로피를 받아요.'}</p></div></div>
+      <div class="gym-trophy ${count === 3 ? 'is-earned' : ''}"><img src="${IMG}trophy.png?v=20261118" width="56" height="56" alt=""><div><strong>${count === 3 ? '3종 완주 트로피 획득!' : `3종 완주 트로피 · ${count} / 3`}</strong><p>${count === 3 ? '다음은 최고 기록에 도전!' : '실전 3종 완주하면 획득'}</p></div></div>
       <p class="gym-note">종목별 최고 별 3개씩 · 연습은 기록과 별에 영향을 주지 않아요.</p></section>`;
     function click(e) { const id = e.target.closest('[data-sport]')?.dataset.sport; if (IDS.includes(id)) api.switchGame(id); }
     container.addEventListener('click', click); container.querySelector('[data-sport]').focus({ preventScroll: true });

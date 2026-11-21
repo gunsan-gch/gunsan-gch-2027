@@ -41,6 +41,16 @@ body.game-open { overflow: hidden; }
 .game-result-text { margin: 0; max-width: 480px; font-size: 15px; }
 .game-result-best { margin: 0; font-size: 13px; color: var(--muted); }
 .game-result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 10px; width: 100%; }
+.game-result-actions .btn { min-height: 44px; font-size: 14px; }
+
+/* 첫 화면에서 도장과 재시도를 함께 확인합니다. */
+@media (max-width: 760px) {
+  .game-result { gap: 8px; padding: 4px 0; }
+  .game-stamp { max-width: 100%; margin: 2px 0; padding: 8px 12px; font-size: 16px; }
+  .game-result-text { font-size: 14px; line-height: 1.5; }
+  .game-result-actions { margin-top: 4px; }
+  .game-result-actions .btn { flex: 1 1 auto; padding: 9px 12px; }
+}
 
 /* ---------- 카페 게임 ---------- */
 
@@ -673,23 +683,37 @@ body.game-open { overflow: hidden; }
 .tour-position .stamp-open { font-weight: 700; border-color: var(--navy); background: #fff; }
 .tour-position .stamp-open.is-complete { background: var(--green); border-color: var(--green); color: #fff; }
 #stamps-close { flex-shrink: 0; width: 44px; height: 44px; border: 0; background: none; font-size: 20px; }
-.stamp-summary { margin: 0 0 12px; font-weight: 700; color: var(--navy); }
-.stamp-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+#stamps { width: min(620px, 100% - 24px); overflow: hidden; }
+#stamps[open] { display: flex; flex-direction: column; }
+#stamps .game-head { flex: none; }
+.stamp-summary { margin: 0 0 8px; font-size: 15px; font-weight: 700; color: var(--navy); white-space: nowrap; }
+#stamps-progress { display: block; appearance: none; width: 100%; height: 5px; border: 0; margin-bottom: 18px; background: var(--line); color: var(--green); }
+#stamps-progress::-webkit-progress-bar { background: var(--line); }
+#stamps-progress::-webkit-progress-value { background: var(--green); }
+#stamps-progress::-moz-progress-bar { background: var(--green); }
+.stamp-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+.stamp-floor h3 { margin: 0 0 8px; font-size: 14px; color: var(--green); }
+.stamp-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.stamp-grid > li { display: flex; min-width: 0; }
 .stamp-item {
-  display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 10px; align-items: center;
-  padding: 8px 10px; background: var(--paper); border: 1px solid var(--line-strong);
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  width: 100%; min-height: 114px; padding: 8px 3px;
+  background: var(--paper); border: 1px solid var(--line);
+  color: var(--navy); font: inherit; cursor: pointer; text-align: center;
 }
+.stamp-item:hover { border-color: var(--green); background: var(--green-soft); }
+.stamp-item strong { font-size: 12px; font-weight: 600; line-height: 1.4; overflow-wrap: anywhere; }
 .stamp-seal {
-  display: grid; place-items: center; width: 48px; height: 48px;
+  display: grid; place-items: center; width: 52px; height: 52px; flex: none;
+  border: 1px dashed var(--line-strong); border-radius: 50%;
   color: var(--muted); font-weight: 700;
 }
-.stamp-item:not(.is-got) .stamp-seal img { filter: grayscale(1); opacity: .45; }
-.stamp-item.is-got { border-color: var(--navy); }
-.stamp-item.is-got .stamp-state { color: var(--navy); font-weight: 700; }
-.stamp-info strong { display: block; font-size: 15px; line-height: 1.3; color: var(--navy); }
-.stamp-info small { display: block; font-size: 12px; color: var(--muted); }
-.stamp-stars { font-size: 13px; letter-spacing: 1px; color: #e0a21e; }
-.stamp-item .btn { min-width: 60px; padding: 8px 12px; }
+.stamp-item:not(.is-got) .stamp-seal img { filter: grayscale(1); opacity: .25; }
+.stamp-item.is-got { border-color: var(--line-strong); background: #fff; }
+.stamp-item.is-got .stamp-seal { border-color: transparent; }
+.stamp-stars { margin-top: auto; font-size: 13px; letter-spacing: 1px; color: var(--orange); }
+.stamp-item:not(.is-got) .stamp-stars { color: var(--muted); }
+.stamp-done[hidden] { display: none; }
 .stamp-done { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .stamp-done .btn { flex: 1 1 auto; }
 .stamp-reset-area { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line-strong); }

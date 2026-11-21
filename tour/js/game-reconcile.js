@@ -37,7 +37,8 @@
     function openLedger() {
       const { entries, missing, name } = ledgers[round];
       let selected = null, matched = 0, reported = false;
-      panel.innerHTML = '<h3 tabindex="-1">장부 ' + (round + 1) + ' / 3 · ' + name + '</h3>' +
+      panel.innerHTML = '<div class="rc-guide rc-guide-mini"><img src="img/npcs/portraits/eunryeong.png" alt=""><b>은령 선배 · 같은 두 장을 찾아줘!</b></div>' +
+        '<h3 tabindex="-1">장부 ' + (round + 1) + ' / 3 · ' + name + '</h3>' +
         '<p class="rc-progress"></p><p class="rc-note" role="status"></p><div class="rc-columns">' +
         '<section><h4>' + art('terminal') + '결제 내역</h4><div class="rc-pay"></div></section>' +
         '<section><h4>' + art('receipt') + '받은 전표</h4><div class="rc-slip"></div></section></div>';
@@ -69,13 +70,13 @@
           if (selected) selected.tile.setAttribute('aria-pressed', 'false');
           selected = { tile, index, side };
           tile.setAttribute('aria-pressed', 'true');
-          note.textContent = describe(entry) + ' 선택. ' + (side === 'pay' ? '짝이 되는 전표' : '짝이 되는 결제') + '를 고르세요.';
+          note.textContent = side === 'pay' ? '같은 시각·부스·금액의 전표 선택' : '같은 시각·부스·금액의 결제 선택';
           return;
         }
         if (index !== selected.index) {
           misses++;
           const fields = ['시각', '부스', '금액'].filter((_, i) => entry[i] !== entries[selected.index][i]);
-          note.textContent = fields.join('·') + ' 항목이 달라요. 선택한 첫 카드의 짝을 다시 찾아보세요.';
+          note.textContent = fields.join('·') + ' 불일치 · 첫 카드의 짝을 다시 찾아요.';
           return;
         }
         for (const button of [selected.tile, tile]) {
@@ -83,21 +84,20 @@
           button.querySelector('small').textContent = '✓ 대조 완료';
         }
         selected = null; matched++; update();
-        note.textContent = matched === 3 ? '전표가 모두 맞았어요. 전표가 없는 결제 한 건을 골라 신고하세요.' :
-          describe(entry) + ' 대조 완료. 다음 짝을 고르세요.';
+        note.textContent = matched === 3 ? '전표 없는 결제 한 건 선택' : '대조 완료 · 다음 짝 선택';
         payments.querySelector('button:enabled').focus();
       }
       function addTile(index, side) {
         const entry = entries[index], tile = document.createElement('button');
         tile.type = 'button'; tile.className = 'rc-tile'; tile.setAttribute('aria-pressed', 'false');
-        tile.innerHTML = '<span>' + entry[0] + '</span><b>' + entry[1] + '</b><strong>' + amount(entry) +
+        tile.innerHTML = art(side === 'pay' ? 'terminal' : 'receipt') + '<span>' + entry[0] + '</span><b>' + entry[1] + '</b><strong>' + amount(entry) +
           '</strong><small>' + (side === 'pay' ? '결제' : '전표') + '</small>';
         tile.onclick = () => pick(tile, index, side);
         (side === 'pay' ? payments : slips).append(tile);
       }
       entries.forEach((_, index) => addTile(index, 'pay'));
       shuffle(entries.map((_, i) => i).filter(i => i !== missing)).forEach(i => addTile(i, 'slip'));
-      update(); note.textContent = '시각·부스·금액이 모두 같은 결제와 전표를 하나씩 고르세요.';
+      update(); note.textContent = '시각·부스·금액이 같은 두 장 선택';
       panel.querySelector('h3').focus();
     }
   }

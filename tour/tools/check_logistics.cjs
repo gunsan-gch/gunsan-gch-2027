@@ -8,14 +8,15 @@ function node(name) {
   if (nodes.has(name)) return nodes.get(name);
   const handlers = new Map();
   const item = name.match(/^\[data-item="(\d+)"\]$/);
+  const plan = name.match(/^\[data-plan="(\d+)"\]$/);
   const el = {
-    handlers, value: '0', dataset: item ? {item:item[1]} : {},
+    handlers, dataset: item ? {item:item[1]} : plan ? {plan:plan[1]} : {},
     classList: { add(){}, remove(){} },
     querySelector: n => node(name+'/'+n),
     addEventListener: (n,f) => handlers.set(n,f),
     removeEventListener: n => handlers.delete(n),
     hasAttribute: n => n === 'data-reset' && name === '[data-reset]' || n === 'data-item' && !!item,
-    closest: () => el, focus(){}, remove(){}, setAttribute(){}, insertAdjacentHTML(){}
+    closest: () => el, focus(){}, remove(){}, setAttribute(key,value){this[key]=value;}, insertAdjacentHTML(){}
   };
   nodes.set(name,el);
   return el;
@@ -32,8 +33,9 @@ for(let plan=0;plan<3;plan++) for(const [extra,stars] of [[0,3],[2,2],[6,1]]) {
   const cleanup = env.window.TOUR_GAMES.logistics.start(root,{done:r => {assert.equal(result,undefined);result=r;}});
   const click = target => root.handlers.get('click')({target});
   const key = k => root.handlers.get('keydown')({key:k,target:{closest:()=>null},preventDefault(){},stopPropagation(){}});
-  node('select').value = String(plan);
-  node('select').handlers.get('change')();
+  click(node('[data-plan="'+plan+'"]'));
+  for(let i=0;i<3;i++) assert.equal(node('[data-plan="'+i+'"]')['aria-pressed'],String(i===plan));
+  assert.equal((node('.log-slots').innerHTML.match(/class="log-empty"/g)||[]).length,2);
   const cells = Array.from(node('.log-map').innerHTML.matchAll(/<span>([^<]*)<\/span>/g),m=>m[1]);
   const orders = node('.log-orders').innerHTML.split('</div>').filter(Boolean);
   const destinations = labels.map(label => cells.indexOf(orders.find(s=>s.includes(label)).match(/([AB]부스)/)[1]));

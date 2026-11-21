@@ -37,3 +37,25 @@
 .bk-result h3{font-size:1.12rem}.bk-result p{font-size:.88rem}
 @media(prefers-reduced-motion:reduce){.bk-hop{animation:none}}
 .bk-viewport{touch-action:pan-x pan-y}
+/* 번호가 있는 책갈피 받침과 돋보기 조작 묶음. */
+.bk-game, .bk-result { color-scheme: only light; }
+.bk-guide img { width: 48px; height: 48px; }
+.bk-guide p { font-size: 12px; }
+.bk-game button { min-width: 44px; min-height: 44px; font-size: 14px; }
+.bk-tools { gap: 4px; }
+.bk-zoom { gap: 3px; padding: 3px; background: #e9d6af; border: 1px solid var(--bk-line); border-bottom-width: 3px; border-radius: 4px; }
+.bk-zoom .btn, .bk-tools .bk-hint { padding: 4px 8px; border: 2px solid var(--navy, #392e39); border-radius: 3px; color: var(--navy, #392e39); background: #fffaf0; font-size: 12px; box-shadow: 0 2px 0 #b5a080; }
+.bk-zoom .bk-reset { min-width: 58px; font-variant-numeric: tabular-nums; }
+.bk-zoom .bk-plus, .bk-zoom .bk-minus { font-size: 20px; }
+.bk-loupe { position: relative; width: 14px; height: 14px; border: 3px solid var(--bk-ink); margin: 0 8px 3px 5px; box-sizing: border-box; flex: none; }
+.bk-loupe::after { content: ''; position: absolute; width: 7px; height: 4px; background: var(--bk-ink); right: -7px; bottom: -5px; transform: rotate(45deg); }
+.bk-tray { gap: 12px; padding: 8px; background: linear-gradient(#fbf0d4, #ecd8af); }
+.bk-tray span { width: 64px; height: 48px; border: 1px solid #b59a6e; border-bottom: 3px solid #90704c; }
+.bk-tray .is-empty { border: 1px dashed #90704c; border-bottom: 3px solid #90704c; background: #fff8e580; }
+.bk-tray i { font-size: 14px; font-style: normal; font-weight: 700; }
+.bk-rules { font-size: 12px; }
+@media (max-height: 500px) and (min-width: 600px) {
+  .bk-game { max-width: 880px; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: start; }
+  .bk-guide, .bk-heading, .bk-tools, .bk-details, .bk-status, .bk-tray, .bk-next, .bk-rules { grid-column: 2; }
+  .bk-viewport { grid-column: 1; grid-row: 1 / 6; }
+}

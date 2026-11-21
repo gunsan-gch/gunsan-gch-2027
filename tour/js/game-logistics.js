@@ -18,26 +18,28 @@
   const icon = id => '<img src="' + art + id + '.png" alt="" draggable="false">';
 
   function start(container, api) {
-    let plan, map, pos, steps, items, finished = false;
+    let plan, map, pos, steps, items, selectedPlan = 0, finished = false;
     const $ = selector => container.querySelector(selector);
     container.innerHTML = `<section class="log-game" aria-label="예술제 물류반">
       <div class="log-guide"><img src="img/npcs/portraits/dayeong.png" alt=""><div><strong>물류반 · 다영 선배</strong><p>창고에서 물품을 눌러 실어 줘! 주문한 부스에 도착하면 물품을 건네줄게.</p></div></div>
-      <div class="log-toolbar"><label>배달 지도 <select>${plans.map((p,i) => `<option value="${i}">${p.name}</option>`).join('')}</select></label><button type="button" data-reset>처음부터</button></div>
+      <div class="log-toolbar"><strong>배달 지도</strong><button type="button" class="btn" data-reset>처음부터</button></div>
+      <div class="log-plans" role="group" aria-label="배달 지도 선택">${plans.map((p,i) => `<button type="button" class="btn" data-plan="${i}" aria-pressed="${i === 0}">${p.name}</button>`).join('')}</div>
       <div class="log-paper"><div class="log-manifest"><b>부스 주문서</b><span class="log-count"></span></div><div class="log-orders"></div></div>
       <div class="log-map" role="img" tabindex="0"></div>
       <div class="log-controls"><div class="log-pad" aria-label="카트 방향">${Object.entries(directions).map(([key, [, , arrow, label]]) => `<button type="button" class="log-${key}" data-move="${key}" aria-label="${label} 한 칸 이동">${arrow}</button>`).join('')}</div><div class="log-cargo"><strong>카트 <span></span></strong><div class="log-slots"></div></div></div>
       <div class="log-warehouse"><strong>창고 재고</strong><div>${goods.map((g,i) => `<button type="button" data-item="${i}">${icon(g.id)}<b>${g.name}</b><small></small></button>`).join('')}</div></div>
       <p class="log-notice" role="status" aria-live="polite"></p>
-      <p class="log-rules"></p>
+      <div class="log-rules" aria-label="별 기준"></div>
     </section>`;
     function reset() {
-      plan = plans[Number($('select').value)];
+      plan = plans[selectedPlan];
+      plans.forEach((_,i) => $('[data-plan="'+i+'"]').setAttribute('aria-pressed', String(i === selectedPlan)));
       map = plan.rows.join('');
       pos = map.indexOf('W');
       steps = 0;
       items = goods.map(() => 'stock');
       $('.log-map').innerHTML = Array.from(map, (tile,i) => `<div class="log-cell log-tile-${tile === '#' ? 'wall' : tile === '.' ? 'path' : tile}" aria-hidden="true" data-cell="${i}"><span>${tile === '.' ? '' : station[tile]}</span></div>`).join('');
-      $('.log-rules').textContent = `방향 버튼 또는 키보드 화살표로 이동 · 장비 칸은 우회해요. ★★★ ${plan.best}칸 이내 · ★★ ${plan.best+4}칸 이내 · ★ 배달 완료`;
+      $('.log-rules').innerHTML = `<span>★★★ ${plan.best}수 이내</span><span>★★ ${plan.best+4}수 이내</span><span>★ 완료</span>`;
       draw('창고에 도착했어. 아래 재고에서 실을 물품을 골라 줘.');
     }
     function draw(note) {
@@ -45,7 +47,7 @@
       $('.log-count').textContent = `배달 ${items.filter(x => x === 'done').length}/3 · 이동 ${steps}칸`;
       $('.log-orders').innerHTML = ['A','B'].map(booth => `<div><b>${station[booth]}</b> ${goods.map((g,i) => plan.destinations[i] === booth ? `<span class="${items[i] === 'done' ? 'log-delivered' : ''}">${icon(g.id)}${g.name}${items[i] === 'done' ? ' ✓' : ''}</span>` : '').join('')}</div>`).join('');
       $('.log-cargo strong span').textContent = onboard + '/2';
-      $('.log-slots').innerHTML = goods.flatMap((g,i) => items[i] === 'cart' ? [`<span>${icon(g.id)}${g.name}</span>`] : []).concat(Array(2-onboard).fill('<span>빈칸</span>')).join('');
+      $('.log-slots').innerHTML = goods.flatMap((g,i) => items[i] === 'cart' ? [`<span role="img" aria-label="${g.name}">${icon(g.id)}</span>`] : []).concat(Array(2-onboard).fill('<span class="log-empty" role="img" aria-label="빈 슬롯"></span>')).join('');
       for (let i = 0; i < goods.length; i++) {
         const button = $('[data-item="'+i+'"]');
         const state = items[i];
@@ -90,7 +92,8 @@
     function click(e) {
       const b = e.target.closest('button');
       if (!b || b.disabled || finished) return;
-      if (b.hasAttribute('data-reset')) reset();
+      if (b.dataset.plan !== undefined) { selectedPlan = Number(b.dataset.plan); reset(); }
+      else if (b.hasAttribute('data-reset')) reset();
       else if (b.dataset.move) move(b.dataset.move);
       else if (b.hasAttribute('data-item')) {
         const i = Number(b.dataset.item);
@@ -100,7 +103,7 @@
       }
     }
     function key(e) {
-      if (finished || e.target.closest('select') || !Object.hasOwn(keys,e.key)) return;
+      if (finished || e.target.closest('.log-plans') || !Object.hasOwn(keys,e.key)) return;
       e.preventDefault(); e.stopPropagation();
       if (!e.repeat) move(keys[e.key]);
     }
@@ -108,9 +111,7 @@
     $('.log-map').focus({preventScroll:true});
     container.addEventListener('click',click);
     container.addEventListener('keydown',key);
-    $('select').addEventListener('change',reset);
-    const select = $('select');
-    return () => { finished = true; container.removeEventListener('click',click); container.removeEventListener('keydown',key); select.removeEventListener('change',reset); };
+    return () => { finished = true; container.removeEventListener('click',click); container.removeEventListener('keydown',key); };
   }
   window.TOUR_GAMES.logistics = {title:'딱 맞게 보내줘! 예술제 물류반',button:'📦 예술제 물류반',room:'4층 전산회계2실',nextGame:'reconcile',cta:{href:'../index.html#erp',label:'ERP비즈니스과 알아보기 →'},naver:'Logistics',maxStars:3,stamp:'물류반 도장 획득!',message:'다영 선배와 부스별 주문, 창고 재고, 배달 경로를 함께 관리했어요.',start};
 })();

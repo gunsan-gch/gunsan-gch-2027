@@ -89,23 +89,89 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     if(changed)save();
     $('#wardrobe-open').textContent='👕 내 옷장';$('#festival-open').textContent=state.complete?'✦ 미션 완료':state.started?`✦ 탐험 미션 ${['ribbon','bread','poster'].filter(k=>state[k]).length}/3`:'✦ 탐험 미션';paintPlayer();points();return {items:unlocked,title};
   }
-  function quest(){sync(false);if(state.complete){completeView();return;}
-    if(!state.started){show('quest','녹원예술제 준비 대작전',`<div class="addon-npc-talk">${portrait('yuna')}<div><h3>학교 한 바퀴, 예술제 준비도 같이!</h3><p>잔디마당의 아름 선배가 준비팀을 찾고 있어요. 리본, 빵, 포스터를 챙기며 학교를 둘러볼까요?</p></div></div><div class="addon-inventory">${icon('ribbon')+icon('bread')+icon('poster')}</div><p class="addon-rule">빵은 기존 <b>「n.00초 빵 굽기」</b>를 끝내면 준비돼요. 준비물 수집과 미션 완료는 도장 개수를 늘리지 않아요.</p><div class="addon-actions"><button class="btn btn-primary" id="addon-meet">아름 선배 만나기</button></div>`);$('#addon-meet').onclick=()=>visit('yuna');return;}
-    const ready=state.ribbon&&state.bread&&state.poster;
-    show('quest','녹원예술제 준비 대작전',`<p class="addon-lead">${ready?'준비물을 모두 챙겼어요. 잔디마당의 아름 선배에게 돌아가요!':'준비물을 찾고, 평소처럼 기존 게임도 즐겨 보세요.'}</p><ul class="addon-tasks">${[{id:'ribbon',name:'예술제 리본',where:'1층 · 정보처리실 앞'},{id:'bread',name:'갓 구운 빵',where:'1층 · 조리제빵실의 기존 게임 완료'},{id:'poster',name:'초대 포스터',where:'3층 · 드림스페이스 앞 송현 선배'}].map(x=>`<li class="${state[x.id]?'is-got':''}">${icon(x.id)}<div class="addon-task-copy"><strong>${x.name}</strong><small>${state[x.id]?'✓ 가방에 챙겼어요':x.where}</small></div><button class="btn" data-addon-task="${x.id}" ${state[x.id]?'disabled':''}>${state[x.id]?'준비됨':x.id==='bread'?'게임으로':'찾아가기'}</button></li>`).join('')}</ul><p class="addon-small">도장은 체험 게임에서 그대로 모아요. 이 미션에서는 준비물만 챙겨요.</p><div class="addon-actions"><button class="btn" id="addon-quest-reset">미션 다시하기</button>${state.poster ? pressAction : ''}${ready?'<button class="btn btn-primary" id="addon-deliver-go">선배에게 전달하러 가기</button>':''}</div>`);
-    $$('[data-addon-task]').forEach(b=>b.onclick=()=>{if(b.dataset.addonTask==='bread'){close();host.room('조리제빵실',$('#festival-open'));}else visit(b.dataset.addonTask)});
-    bindPress();$('#addon-quest-reset').onclick=resetQuest;if(ready)$('#addon-deliver-go').onclick=()=>visit('yuna');
+  const supplies = [
+    { id: 'ribbon', name: '예술제 리본', where: '1층 · 정보처리실 앞' },
+    { id: 'bread', name: '갓 구운 빵', where: '1층 · 조리제빵실' },
+    { id: 'poster', name: '초대 포스터', where: '3층 · 송현 선배' }
+  ];
+  const talkPortrait = id => `<div class="addon-portrait">${portrait(id)}</div>`;
+  function inventory() {
+    return `<div class="addon-inventory">${supplies.map(item => `
+      <div class="addon-supply ${state[item.id] ? 'is-got' : ''}">
+        ${icon(item.id)}<span>${item.name}</span>
+        ${state[item.id] ? '<b class="addon-check" aria-label="수집 완료">✓</b>' : ''}
+      </div>`).join('')}</div>`;
   }
-  function talk(id){
+  function quest() {
+    sync(false);
+    if (state.complete) { completeView(); return; }
+    if (!state.started) {
+      show('quest', '녹원예술제 준비 대작전', `
+        <div class="addon-npc-talk">${talkPortrait('yuna')}
+          <div><h3>예술제, 같이 준비할래?</h3><p>학교를 돌며 준비물 세 가지를 챙겨요.</p></div>
+        </div>
+        ${inventory()}
+        <div class="addon-actions"><button class="btn btn-primary" id="addon-meet">아름 선배 만나기</button></div>`);
+      $('#addon-meet').onclick = () => visit('yuna');
+      return;
+    }
+    const ready = state.ribbon && state.bread && state.poster;
+    show('quest', '녹원예술제 준비 대작전', `
+      <p class="addon-lead">${ready ? '준비 완료! 아름 선배에게 돌아가요.' : '준비물 세 가지를 챙겨요.'}</p>
+      ${inventory()}
+      <ul class="addon-tasks">${supplies.map(item => `
+        <li class="${state[item.id] ? 'is-got' : ''}">
+          <div class="addon-task-copy"><strong>${item.name}</strong>
+            <small>${state[item.id] ? '✓ 준비 완료' : item.where}</small>
+          </div>
+          ${state[item.id] ? '' : `<button class="btn" data-addon-task="${item.id}">${item.id === 'bread' ? '빵 굽기' : '찾아가기'}</button>`}
+        </li>`).join('')}</ul>
+      <div class="addon-actions">
+        <button class="btn" id="addon-quest-reset">미션 다시하기</button>
+        ${state.poster ? pressAction : ''}
+        ${ready ? '<button class="btn btn-primary" id="addon-deliver-go">선배에게 전달하기</button>' : ''}
+      </div>`);
+    $$('[data-addon-task]').forEach(button => button.onclick = () => {
+      if (button.dataset.addonTask === 'bread') {
+        close();
+        host.room('조리제빵실', $('#festival-open'));
+      } else visit(button.dataset.addonTask);
+    });
+    bindPress();
+    $('#addon-quest-reset').onclick = resetQuest;
+    if (ready) $('#addon-deliver-go').onclick = () => visit('yuna');
+  }
+  function talk(id) {
     if (id === 'poster') { talkSonghyeon(); return; }
-    if(id==='yuna'){
-    if(state.complete){completeView();return;}
-    if(!state.started){show('talk','우리 예술제, 같이 준비할래?',`<div class="addon-npc-talk">${portrait('yuna')}<div><p>리본, 갓 구운 빵, 초대 포스터가 필요해. 학교를 돌아보면서 세 가지를 챙겨 와 줄래?</p><p>리본은 1층 정보처리실 앞에, 포스터는 3층 드림스페이스 앞에서 송현 선배가 그리고 있어. 만나면 내가 보냈다고 해 줘! 빵은 조리제빵실의 빵 굽기 게임을 끝내면 준비할 수 있어!</p></div></div><div class="addon-actions"><button class="btn btn-primary" id="addon-start">좋아, 같이 준비하자!</button></div>`,'예술제 준비부 · 아름 선배');$('#addon-start').onclick=()=>{state.started=true;save();sync(false);quest();};return;}
-    if(state.ribbon&&state.bread&&state.poster){show('talk','와, 준비물을 전부 챙겨 왔네!',`<div class="addon-npc-talk">${portrait('yuna')}<div><p>송현이가 그린 초대 포스터네! 리본은 게시판에 달고, 빵은 옆 테이블에 놓자.</p><p>우리 준비팀으로 함께해 줘서 고마워.</p></div></div><div class="addon-inventory">${icon('ribbon')+icon('bread')+icon('poster')}</div><div class="addon-actions"><button class="btn btn-primary" id="addon-finish">준비물 전달하기</button></div>`,'예술제 준비부 · 아름 선배');$('#addon-finish').onclick=()=>{state.complete=true;save();sync(false);completeView()};return;}
-    quest();return;
-  }
-  if(!state.started){quest();return;}if(state[id]){toast('이미 챙긴 준비물이에요.');return;}
-  if(id==='ribbon'){show('collect','예술제 리본을 찾았어요!',`<div class="addon-inventory">${icon('ribbon')}</div><p>친구들이 만든 리본이에요. 예술제 부스를 알록달록하게 꾸밀 수 있겠어요!</p><div class="addon-actions"><button class="btn btn-primary" id="addon-collect">리본을 가방에 넣기</button></div>`);$('#addon-collect').onclick=()=>collect('ribbon');}
+    if (id === 'yuna') {
+      if (state.complete) { completeView(); return; }
+      if (!state.started) {
+        show('talk', '우리 예술제, 같이 준비할래?', `
+          <div class="addon-npc-talk">${talkPortrait('yuna')}<p>리본, 빵, 포스터를 함께 챙겨 줘!</p></div>
+          ${inventory()}
+          <div class="addon-actions"><button class="btn btn-primary" id="addon-start">좋아, 같이 준비하자!</button></div>`, '예술제 준비부 · 아름 선배');
+        $('#addon-start').onclick = () => { state.started = true; save(); sync(false); quest(); };
+        return;
+      }
+      if (state.ribbon && state.bread && state.poster) {
+        show('talk', '준비물을 전부 챙겨 왔네!', `
+          <div class="addon-npc-talk">${talkPortrait('yuna')}<p>함께 준비해 줘서 고마워!</p></div>
+          ${inventory()}
+          <div class="addon-actions"><button class="btn btn-primary" id="addon-finish">준비물 전달하기</button></div>`, '예술제 준비부 · 아름 선배');
+        $('#addon-finish').onclick = () => { state.complete = true; save(); sync(false); completeView(); };
+        return;
+      }
+      quest();
+      return;
+    }
+    if (!state.started) { quest(); return; }
+    if (state[id]) { toast('이미 챙긴 준비물이에요.'); return; }
+    if (id === 'ribbon') {
+      show('collect', '예술제 리본을 찾았어요!', `
+        ${inventory()}
+        <div class="addon-actions"><button class="btn btn-primary" id="addon-collect">리본을 가방에 넣기</button></div>`);
+      $('#addon-collect').onclick = () => collect('ribbon');
+    }
   }
   const pressAction = '<button type="button" class="btn" id="addon-press">수빈 선배와 예술제 취재하기</button>';
   function bindPress() {
@@ -120,72 +186,145 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     let title, line, action, next;
     if (!state.started) {
       title = '포스터 색을 고르는 중이야';
-      line = '안녕, 난 이음의 송현이야. 녹원예술제 초대 포스터를 그리고 있어. 잔디마당에 있는 아름 선배가 준비팀을 찾던데, 같이 해 볼래?';
+      line = '초대 포스터를 그리고 있어. 아름 선배와 같이 준비할래?';
       action = '잔디마당의 아름 선배 만나기';
       next = () => visit('yuna');
     } else if (!state.poster) {
       title = '아름 선배가 보냈구나!';
-      line = '마지막 별까지 다 그렸어. 아름 선배에게 전해 줄래? 드림스페이스에 있는 수빈이는 예술제 신문에 실을 사진을 찍는대.';
+      line = '포스터 완성! 아름 선배에게 전해 줘.';
       action = '초대 포스터 받기';
       next = () => collect('poster');
     } else if (state.complete) {
       title = '우리 포스터, 잘 보이더라!';
-      line = '아름 선배랑 게시판에 붙여 놨어. 네가 가져다준 덕분이야. 수빈이가 예술제 신문을 만든대. 같이 사진 찍으러 갈래?';
+      line = '포스터 잘 붙였어! 이제 수빈이와 예술제 취재하러 갈래?';
       action = '다시 둘러보기';
       next = close;
     } else if (state.ribbon && state.bread) {
       title = '이제 아름 선배에게 가자!';
-      line = '가방에 리본이랑 빵, 내 포스터까지 다 있네. 잔디마당의 아름 선배에게 전해 줘!';
+      line = '준비 완료! 잔디마당의 아름 선배에게 전해 줘.';
       action = '아름 선배에게 전달하러 가기';
       next = () => visit('yuna');
     } else {
       title = '초대 포스터는 네 가방에 있어';
       line = state.ribbon ? '리본도 찾았네. 1층 조리제빵실에서 예술제 빵을 구워 볼래?'
         : state.bread ? '빵 냄새가 좋다! 이제 1층 정보처리실 앞 리본을 찾으면 돼.'
-        : '1층 정보처리실 앞에는 리본이, 조리제빵실에는 예술제 빵이 있어. 챙긴 뒤에 아름 선배에게 가자!';
+        : '1층에서 리본과 빵을 챙겨 줘!';
       action = '준비물 확인하기';
       next = quest;
     }
-    show('talk', title, `<div class="addon-npc-talk"><img class="songhyeon-portrait" src="img/npcs/portraits/songhyeon.png" width="104" height="104" alt=""><p>${line}</p></div>
+    show('talk', title, `<div class="addon-npc-talk"><div class="addon-portrait"><img class="songhyeon-portrait" src="img/npcs/portraits/songhyeon.png" width="104" height="104" alt=""></div><p>${line}</p></div>
       <div class="addon-actions"><button class="btn btn-primary" id="addon-songhyeon-next">${action}</button>${state.poster ? pressAction : ''}</div>`, '홍보동아리 이음 · 송현 선배');
     $('#addon-songhyeon-next').onclick = next;
     bindPress();
   }
   function collect(id){state[id]=true;save();sync(false);quest();toast('가방에 챙겼어요! 남은 준비물도 찾아보세요.');}
-  function completeView(){show('complete','예술제 준비 완료!',`<div class="addon-end">${icon('seal')}<h3>녹원예술제 준비팀</h3><p>네가 함께해서 더 즐거운 예술제!</p></div><p>준비물 3개를 모두 전달했어요. 이제 학교를 더 둘러보거나, 체험 게임에서 별을 모아 꾸미기 보상을 열어 보세요.</p><p class="addon-rule">현재 도장 <b>${score().count} / ${score().games.length}</b>개 · 별 <b>${score().stars} / ${score().maxStars}</b>개. 미션 완료로 도장·별 점수는 바뀌지 않아요.</p><div class="addon-actions"><button class="btn" id="addon-quest-reset">미션 다시하기</button>${pressAction}<button class="btn btn-primary" id="addon-open-closet">내 옷장</button></div>`);$('#addon-quest-reset').onclick=resetQuest;$('#addon-open-closet').onclick=()=>wardrobe();bindPress();}
+  function completeView() {
+    show('complete', '예술제 준비 완료!', `
+      <div class="addon-npc-talk">${talkPortrait('yuna')}
+        <div><h3>녹원예술제 준비팀</h3><p>함께해서 더 즐거운 예술제!</p></div>
+      </div>
+      ${inventory()}
+      <div class="addon-actions">
+        <button class="btn" id="addon-quest-reset">미션 다시하기</button>${pressAction}
+        <button class="btn btn-primary" id="addon-open-closet">내 옷장</button>
+      </div>`);
+    $('#addon-quest-reset').onclick = resetQuest;
+    $('#addon-open-closet').onclick = () => wardrobe();
+    bindPress();
+  }
   function resetQuest(){show('reset','탐험 미션만 다시 할까요?',`<p>모은 준비물과 예술제 준비 완료 표시를 지워요. 기존 게임의 도장·별 기록과 착용한 소품은 유지돼요.</p><div class="addon-actions"><button class="btn btn-primary" id="addon-reset-no">이어서 하기</button><button class="btn" id="addon-reset-yes">미션 다시 시작</button></div>`);$('#addon-reset-no').onclick=quest;$('#addon-reset-yes').onclick=()=>{const {equip,wardrobe}=state;state=clean();state.equip=equip;state.wardrobe=wardrobe;save();sync(false);quest();};$('#addon-reset-no').focus();}
-  function wardrobe(keepPreview=false,preset=null){
+  function outfitTile(item) {
+    const unlocked = has(item), equipped = state.equip[item.slot] === item.id;
+    return `<button type="button" class="addon-outfit ${unlocked ? 'is-unlocked' : ''} ${equipped ? 'is-equipped' : ''}"
+      data-addon-card="${item.id}" data-addon-equip="${item.id}">
+      <span class="addon-item-art">
+        <canvas width="48" height="52" data-addon-costume="${item.id}" aria-hidden="true"></canvas>
+        ${equipped ? '<span class="addon-item-chip">착용 중</span>' : unlocked ? '' :
+          `<span class="addon-item-chip"><i class="addon-lock" aria-hidden="true"></i>★ ${item.at}</span>`}
+      </span>
+      <span class="addon-item-copy"><strong>${item.name}</strong></span>
+    </button>`;
+  }
+  function wardrobe(keepPreview = false, preset = null) {
     sync(false);
-    if(!keepPreview){previewEquip={...state.equip,...(preset||{})};previewWalking=false;}
-    if(!previewEquip)previewEquip={...state.equip};
-    const progress=score(),n=progress.stars,next=rewards.find(r=>!has(r)),practice=progress.games.filter(g=>g.stars<g.maxStars).sort((a,b)=>a.stars-b.stars),tiers=[...new Set(rewards.map(r=>r.at))];
-    const visible=rewards.filter(r=>closetFilter==='all'||(closetFilter==='new'?r.at>=27:r.slot===closetFilter));
-    show('wardrobe','내 옷장',`
-      <div class="addon-closet-top"><p>게임별 최고 별을 모아 나만의 코디를 완성해요.</p><span><b>${state.wardrobe.unlocked.length}</b> / ${rewards.length}종 해금</span></div>
+    if (!keepPreview) { previewEquip = { ...state.equip, ...(preset || {}) }; previewWalking = false; }
+    if (!previewEquip) previewEquip = { ...state.equip };
+    const progress = score(), n = progress.stars, next = rewards.find(item => !has(item));
+    const practice = progress.games.filter(game => game.stars < game.maxStars).sort((a, b) => a.stars - b.stars);
+    const visible = rewards.filter(item => closetFilter === 'all' ||
+      (closetFilter === 'new' ? item.at >= 27 : item.slot === closetFilter));
+    show('wardrobe', '내 옷장', `
       <section class="addon-star-progress" aria-label="옷장 해금 진행">
-        <div class="addon-star-total"><strong>★ ${n} <small>/ ${progress.maxStars}</small></strong><span>도장 ${progress.count} / ${progress.games.length} · 별은 소비되지 않아요</span></div>
-        <progress value="${n}" max="${progress.maxStars||27}" aria-label="모은 최고 별 ${n}개"></progress>
-        <div class="addon-unlock-track" aria-label="별 해금 단계">${tiers.map(k=>`<span class="${rewards.filter(r=>r.at===k).every(has)?'is-open':''}">★ ${k}</span>`).join('')}</div>
-        <p class="addon-next-reward">${next?`다음 아이템까지 <b>★ ${Math.max(0,next.at-n)}개</b> · ${rewards.filter(r=>r.at===next.at&&!has(r)).map(r=>r.name).join(' + ')}`:`${rewards.length}종을 모두 모았어요! 마음에 드는 코디로 둘러보세요.`}</p>
-        <p class="addon-star-title ${state.wardrobe.title?'is-earned':''}">${state.wardrobe.title?'✦ 칭호 획득 · '+rules.TITLE:`★ ${rules.TITLE_AT}개 특별 칭호 · ${rules.TITLE}`}</p>
+        <div class="addon-star-total"><strong>★ ${n}/${progress.maxStars}</strong>
+          <span>옷 ${state.wardrobe.unlocked.length}/${rewards.length}</span>
+        </div>
+        <progress value="${n}" max="${progress.maxStars || 66}" aria-label="모은 최고 별 ${n}개"></progress>
+        <p class="addon-next-reward">${next ? `다음 보상까지 <b>★ ${Math.max(0, next.at - n)}</b>` : '모든 옷을 열었어요!'}</p>
+        ${state.wardrobe.title ? `<p class="addon-star-title">칭호 · ${rules.TITLE}</p>` : ''}
       </section>
-      ${practice.length?`<details class="addon-practice"><summary>별 더 모으러 가기 · ${practice.length}개 게임</summary><p>다시 도전해 최고 기록을 올려요. 같은 점수는 별이 더해지지 않아요.</p><ul>${practice.map(g=>`<li><div><strong>${g.title}</strong><small>${g.floor} · ${g.room} · ★ ${g.stars}/${g.maxStars}</small></div><button class="btn" data-addon-practice="${g.id}" aria-label="${g.title} ${g.played?'다시 도전':'시작'}">${g.played?'다시 도전':'시작'}</button></li>`).join('')}</ul></details>`:''}
-      <div class="addon-closet"><div class="addon-avatar-preview"><div class="addon-fitting-stage"><span class="addon-fitting-tag">FITTING ROOM</span><canvas id="addon-avatar" width="48" height="52" aria-label="캐릭터 꾸미기 미리보기"></canvas><span class="addon-fitting-floor"></span></div><div class="addon-preview-controls"><div class="addon-turns" aria-label="바라보는 방향">${[['down','앞'],['up','뒤'],['left','왼쪽'],['right','오른쪽']].map(([d,t])=>`<button data-addon-turn="${d}" aria-pressed="${previewDir===d}">${t}</button>`).join('')}</div><button class="btn addon-walk-toggle" id="addon-preview-walk" aria-pressed="${previewWalking}">${previewWalking?'■ 멈춰 보기':'▶ 걸어 보기'}</button><p id="addon-preview-label" class="addon-preview-label" role="status"></p><p class="addon-equipped-names" id="addon-equipped-names"></p><div class="addon-clear-slots"><button type="button" data-addon-clear="head">머리 비우기</button><button type="button" data-addon-clear="back">등 비우기</button></div><button class="btn btn-primary" id="addon-apply-outfit" aria-describedby="addon-apply-help">이 코디로 입기</button><p id="addon-apply-help" class="addon-apply-help"></p><button class="btn" id="addon-show-equipped">현재 착용으로 되돌리기</button></div></div>
-      <div class="addon-collection"><div class="addon-filters" aria-label="아이템 종류">${[['all','전체',rewards.length],['new','새 컬렉션',rewards.filter(r=>r.at>=27).length],['head','머리',rewards.filter(r=>r.slot==='head').length],['back','등 소품',rewards.filter(r=>r.slot==='back').length]].map(([v,t,k])=>`<button data-addon-filter="${v}" aria-pressed="${closetFilter===v}">${t} <small>${k}</small></button>`).join('')}</div><div class="addon-closet-list">${visible.map(r=>`<article class="addon-outfit ${has(r)?'is-unlocked':''}" data-addon-card="${r.id}"><div class="addon-item-art"><canvas width="48" height="52" data-addon-costume="${r.id}" aria-hidden="true"></canvas><span>${state.equip[r.slot]===r.id?'착용 중':has(r)?'열림':'★ '+r.at+'개'}</span></div><div class="addon-item-copy"><small>${r.theme}</small><strong>${r.name}</strong><button class="btn" data-addon-equip="${r.id}"></button></div></article>`).join('')}</div></div></div>
-      <p class="addon-small addon-closet-rule">게임별 최고 별의 합계로 열려요. 별은 소비되지 않으며, 열린 아이템은 유지돼요. 기존 도장으로 얻은 아이템도 그대로 사용할 수 있어요. 도장 초기화 시 아이템과 칭호도 초기화돼요.</p><div class="addon-actions"><button class="btn" id="addon-games">도장판 열기</button><button class="btn" id="addon-back-map">둘러보기로 돌아가기</button></div>`,`나만의 픽셀 코디 · ${rewards.length}종`);
+      ${practice.length ? `
+        <details class="addon-practice">
+          <summary>별 더 모으기 · ${practice.length}개 게임</summary>
+          <ul>${practice.map(game => `
+            <li><div><strong>${game.title}</strong><small>${game.floor} · ★ ${game.stars}/${game.maxStars}</small></div>
+              <button class="btn" data-addon-practice="${game.id}" aria-label="${game.title} ${game.played ? '다시 도전' : '시작'}">${game.played ? '다시 도전' : '시작'}</button>
+            </li>`).join('')}
+          </ul>
+        </details>` : ''}
+      <div class="addon-closet">
+        <div class="addon-avatar-preview">
+          <div class="addon-fitting-stage">
+            <canvas id="addon-avatar" width="48" height="52" aria-label="캐릭터 꾸미기 미리보기"></canvas>
+            <span class="addon-fitting-floor"></span>
+          </div>
+          <div class="addon-preview-controls">
+            <div class="addon-turns" aria-label="바라보는 방향">${[['down', '앞'], ['up', '뒤'], ['left', '왼쪽'], ['right', '오른쪽']].map(([direction, label]) => `
+              <button type="button" data-addon-turn="${direction}" aria-pressed="${previewDir === direction}">${label}</button>`).join('')}
+            </div>
+            <button class="btn addon-walk-toggle" id="addon-preview-walk" aria-pressed="${previewWalking}">${previewWalking ? '멈춰 보기' : '걸어 보기'}</button>
+            <p id="addon-preview-label" class="addon-preview-label" role="status"></p>
+            <p class="addon-equipped-names" id="addon-equipped-names"></p>
+            <div class="addon-clear-slots">
+              <button type="button" data-addon-clear="head">머리 비우기</button>
+              <button type="button" data-addon-clear="back">등 비우기</button>
+            </div>
+            <button class="btn btn-primary" id="addon-apply-outfit" aria-describedby="addon-apply-help">이 코디로 입기</button>
+            <p id="addon-apply-help" class="addon-apply-help"></p>
+            <button class="btn" id="addon-show-equipped">현재 착용으로 되돌리기</button>
+          </div>
+        </div>
+        <div class="addon-collection">
+          <div class="addon-filters" aria-label="아이템 종류">${[['all', '전체'], ['new', '새 컬렉션'], ['head', '머리'], ['back', '등 소품']].map(([value, label]) => `
+            <button type="button" data-addon-filter="${value}" aria-pressed="${closetFilter === value}">${label}</button>`).join('')}
+          </div>
+          <div class="addon-closet-list">${visible.map(outfitTile).join('')}</div>
+        </div>
+      </div>
+      <div class="addon-actions">
+        <button class="btn" id="addon-games">도장판 열기</button>
+        <button class="btn" id="addon-back-map">투어로 돌아가기</button>
+      </div>`, '나만의 픽셀 코디');
     const outfit=()=>previewEquip||state.equip;
     const renderAvatar=()=>{if(spriteReady)drawAvatar($('#addon-avatar').getContext('2d'),previewDir,previewWalking?[0,1,2,1][previewTick%4]:1,outfit());};
     const paintPreview=()=>{
       renderAvatar();const selected=outfit(),changed=['head','back'].some(slot=>selected[slot]!==state.equip[slot]);
       const locked=rewards.filter(r=>Object.values(selected).includes(r.id)&&!has(r));
-      $('#addon-preview-label').textContent=changed?'미리보는 중 · 아직 지도에 적용되지 않았어요.':'현재 지도에서 착용한 모습이에요.';
+      $('#addon-preview-label').textContent = changed ? '미리보는 중' : '현재 착용';
       $('#addon-preview-label').classList.toggle('is-preview',changed);
       $('#addon-equipped-names').textContent=['head','back'].map(slot=>rewards.find(r=>r.id===selected[slot])?.name||({head:'머리 장식 없음',back:'등 소품 없음'})[slot]).join(' + ');
-      $('#addon-apply-outfit').disabled=!changed||locked.length>0;
-      $('#addon-apply-help').textContent=locked.length?`별 ${Math.max(...locked.map(r=>r.at))}개를 모으면 이 코디를 입을 수 있어요.`:changed?'버튼을 누르면 입고 지도로 돌아가요.':'아이템을 골라 새 코디를 만들어 보세요.';
-      $$('[data-addon-clear]').forEach(b=>b.disabled=!selected[b.dataset.addonClear]);
+      $('#addon-apply-outfit').hidden = !changed || locked.length > 0;
+      $('#addon-show-equipped').hidden = !changed;
+      $('#addon-apply-help').textContent = locked.length ? `착용하려면 ★ ${Math.max(...locked.map(r => r.at))}` : '';
+      $$('[data-addon-clear]').forEach(button => button.hidden = !selected[button.dataset.addonClear]);
       $$('[data-addon-card]').forEach(card=>card.classList.toggle('is-selected',Object.values(selected).includes(card.dataset.addonCard)));
-      $$('[data-addon-equip]').forEach(b=>{const r=rewards.find(r=>r.id===b.dataset.addonEquip),chosen=selected[r.slot]===r.id;const label=chosen?'빼기':!has(r)?'미리보기':'입어보기';b.textContent=label;b.setAttribute('aria-label',r.name+' '+label);b.setAttribute('aria-pressed',String(chosen));});
+      $$('[data-addon-equip]').forEach(button => {
+        const item = rewards.find(item => item.id === button.dataset.addonEquip);
+        const chosen = selected[item.slot] === item.id;
+        const label = chosen ? '빼기' : '입어보기';
+        const lockedLabel = has(item) ? '' : `, 잠김, 필요 별 ${item.at}개`;
+        button.setAttribute('aria-label', item.name + lockedLabel + ', ' + label);
+        button.setAttribute('aria-pressed', String(chosen));
+      });
     };
     const paintCards=()=>{if(spriteReady)$$('[data-addon-costume]').forEach(c=>{const r=rewards.find(r=>r.id===c.dataset.addonCostume);drawAvatar(c.getContext('2d'),r.slot==='back'?'up':'down',1,{[r.slot]:r.id});});};
     renderCloset=()=>{paintCards();paintPreview();};
@@ -207,19 +346,37 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     $('#addon-games').onclick=()=>{dialog.addEventListener('close',()=>window.tourGame.openBoard(),{once:true});close();};
     renderCloset();previewTimer=setInterval(()=>{if(view==='wardrobe'&&dialog.open&&previewWalking){previewTick++;renderAvatar();}},170);
   }
-  function showNewRewards({items:unlocked,title}){
-    const game=$('#game');if((!unlocked.length&&!title)||game.querySelector('.addon-unlock-result'))return;
-    const panel=document.createElement('section');panel.className='addon-unlock-result';panel.setAttribute('aria-label','새로 열린 꾸미기 아이템');
-    panel.innerHTML=`<span class="eyebrow">★ ${score().stars} / ${score().maxStars} · 새 꾸미기 보상</span><h3>${unlocked.length?`새 아이템 ${unlocked.length}종이 열렸어요!`:'특별 칭호를 얻었어요!'}</h3>${title?`<p class="addon-star-title is-earned">✦ ${rules.TITLE}</p>`:''}<div class="addon-unlock-pair">${unlocked.map(r=>`<figure><canvas width="48" height="52" data-addon-reward="${r.id}" aria-hidden="true"></canvas><figcaption><small>${r.slot==='head'?'머리 장식':'등 소품'}</small><strong>${r.name}</strong></figcaption></figure>`).join('')}</div><button class="btn btn-primary" id="addon-reward-try">${unlocked.length?'바로 입어보기':'내 옷장 보기'}</button><p>옷장에서 조합해 보고, 마음에 들면 입어요.</p>`;
-    const actions=game.querySelector('.game-result-actions');if(actions)actions.before(panel);else $('#game-body').append(panel);
-    // 신문과 책방 그림은 결과 화면 맨 위에서 보고, 보상은 그 아래에서 확인한다.
-    if (!game.querySelector('.press-paper, .bookshop-ending')) {
-      requestAnimationFrame(()=>{if(game.open&&game.classList.contains('is-result')&&panel.isConnected)panel.scrollIntoView({block:'nearest',behavior:'instant'});});
-    }
-    if(spriteReady)panel.querySelectorAll('[data-addon-reward]').forEach(c=>{const r=rewards.find(r=>r.id===c.dataset.addonReward);drawAvatar(c.getContext('2d'),r.slot==='back'?'up':'down',1,{[r.slot]:r.id});});
-    panel.querySelector('#addon-reward-try').onclick=()=>{
-      const preset={...state.equip};for(const r of unlocked)preset[r.slot]=r.id;
-      game.addEventListener('close',()=>{closetFilter='all';wardrobe(false,preset);opener=$('#wardrobe-open');},{once:true});
+  function showNewRewards({ items: unlocked, title }) {
+    const game = $('#game');
+    if ((!unlocked.length && !title) || game.querySelector('.addon-unlock-result')) return;
+    const panel = document.createElement('section');
+    panel.className = 'addon-unlock-result';
+    panel.setAttribute('aria-label', '새 꾸미기 보상');
+    panel.innerHTML = `
+      <div class="addon-reward-copy">
+        ${unlocked.length ? `<strong>새 옷 ${unlocked.length}개 열림</strong>` : ''}
+        ${title ? `<span title="${rules.TITLE}">칭호 · ${rules.TITLE}</span>` : ''}
+      </div>
+      <div class="addon-reward-thumbs" aria-hidden="true">${unlocked.slice(0, 3).map(item => `
+        <canvas width="48" height="52" data-addon-reward="${item.id}"></canvas>`).join('')}
+        ${unlocked.length > 3 ? `<span>+${unlocked.length - 3}</span>` : ''}
+      </div>
+      <button class="btn" id="addon-reward-try">입어보기</button>`;
+    const actions = game.querySelector('.game-result-actions');
+    if (actions) actions.after(panel);
+    else $('#game-body').append(panel);
+    if (spriteReady) panel.querySelectorAll('[data-addon-reward]').forEach(canvas => {
+      const item = rewards.find(item => item.id === canvas.dataset.addonReward);
+      drawAvatar(canvas.getContext('2d'), item.slot === 'back' ? 'up' : 'down', 1, { [item.slot]: item.id });
+    });
+    panel.querySelector('#addon-reward-try').onclick = () => {
+      const preset = { ...state.equip };
+      for (const item of unlocked) preset[item.slot] = item.id;
+      game.addEventListener('close', () => {
+        closetFilter = 'all';
+        wardrobe(false, preset);
+        opener = $('#wardrobe-open');
+      }, { once: true });
       game.close();
     };
   }

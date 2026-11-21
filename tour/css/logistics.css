@@ -7,8 +7,8 @@
 .log-guide p,.log-notice,.log-rules{margin:3px 0}
 .log-toolbar,.log-manifest,.log-cargo strong{justify-content:space-between}
 .log-toolbar{padding:7px 0}
-.log-game button,.log-game select{font:inherit;color:inherit;cursor:pointer}
-.log-toolbar button,.log-toolbar select{background:white;border:1px solid #7b8d90;border-radius:7px;padding:5px}
+.log-game button{font:inherit;color:inherit;cursor:pointer;min-height:44px;min-width:44px}
+.log-toolbar button{background:white;border:2px solid var(--navy,#233e4b);border-radius:4px;padding:5px 10px}
 .log-paper{background:#fff7d9;border:1px solid #b6a56f;border-left:5px solid #cf9443;border-radius:6px;padding:5px 9px}
 .log-manifest{margin-bottom:4px}
 .log-count{font-weight:700;font-size:.86em}
@@ -20,7 +20,7 @@
 .log-map{margin:8px auto;display:grid;grid-template-columns:repeat(5,1fr);width:min(100%,325px);padding:3px;border:2px solid #384f59;border-radius:7px;background:#899d98;overflow:hidden}
 .log-cell{position:relative;aspect-ratio:1.28;background:#e7e8d7;box-shadow:inset 1px 1px #c8ccbe;color:#253b3e;isolation:isolate}
 .log-cell::before{content:"";position:absolute;inset:0 1px 9px;background:var(--facility,none) center top/contain no-repeat;image-rendering:pixelated}
-.log-cell span:not(:empty){position:absolute;right:2px;bottom:2px;padding:1px 3px;background:#fffbee;border:1px solid #76827c;border-radius:3px;font-size:10px;font-weight:800;line-height:1.05;z-index:2}
+.log-cell span:not(:empty){position:absolute;right:2px;bottom:2px;padding:1px 3px;background:#fffbee;border:1px solid #76827c;border-radius:3px;font-size:12px;font-weight:800;line-height:1.05;z-index:2}
 .log-tile-A{--facility:url('../img/games/logistics/booth-a.png');background-color:#f9e3c2}
 .log-tile-B{--facility:url('../img/games/logistics/booth-b.png');background-color:#dceaf0}
 .log-tile-W{--facility:url('../img/games/logistics/depot.png');background-color:#d3e9d9}
@@ -44,3 +44,23 @@
 .log-game button:disabled{cursor:default;background:#e9ece8;color:#58685e;border-color:#b0bdb5}
 .log-notice{color:var(--teal);font-weight:700;min-height:1.35em}.log-rules{font-size:12px}
 .log-game :focus-visible{outline:3px solid #1960ac;outline-offset:2px}
+/* 지도 선택과 카트 슬롯을 픽셀 도구로 묶는다. */
+.log-game { color-scheme: only light; }
+.log-guide > img { width: 48px; height: 48px; }
+.log-guide p { font-size: 12px; }
+.log-plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin-bottom: 8px; padding: 4px; background: #dce9e2; border: 1px solid #94ada0; }
+.log-plans .btn { padding: 6px 2px; font-size: 12px; border: 1px solid #7b948c; background: #fff; border-radius: 3px; box-shadow: 0 2px 0 #adbbb0; white-space: nowrap; }
+.log-plans [aria-pressed=true] { color: #fff; background: var(--navy, #233e4b); border-color: var(--navy, #233e4b); box-shadow: none; }
+.log-cargo { border-color: var(--navy, #233e4b); border-radius: 4px; background: #e6efe6; box-shadow: 0 3px 0 #b1c5b7; }
+.log-slots span { height: 44px; border: 2px solid #527968; border-radius: 2px; box-shadow: inset 2px 2px 0 #c5d5c8; }
+.log-slots .log-empty { border-style: dashed; background: repeating-linear-gradient(0deg, #f6faf2 0 10px, #e8f0e4 10px 11px); }
+.log-slots img { width: 32px; height: 32px; }
+.log-rules { display: flex; gap: 4px; justify-content: center; margin-top: 8px; }
+.log-rules span { padding: 4px; background: #fff5d6; border: 1px solid #cdb77b; border-radius: 4px; font-size: 12px; white-space: nowrap; }
+.log-warehouse small { font-size: 12px; }
+@media (max-height: 500px) and (min-width: 600px) {
+  .log-game { max-width: 850px; display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 1fr); gap: 6px 16px; }
+  .log-guide, .log-toolbar, .log-plans, .log-paper, .log-controls, .log-warehouse, .log-notice, .log-rules { grid-column: 2; }
+  .log-map { grid-column: 1; grid-row: 1 / 7; width: 100%; margin: 0; }
+  .log-toolbar { padding: 0; }
+}

@@ -30,7 +30,7 @@
       <div class="bk-guide"><img src="img/npcs/portraits/jaehee.png" alt=""><div><strong>재희 선배</strong><p>책 사이로 빼꼼 나온 종이 고양이를 눌러 봐!</p></div></div>
       <div class="bk-heading"><h3 tabindex="-1"></h3><span class="bk-count"></span></div>
       <div class="bk-viewport"><div class="bk-scene" role="img"><img class="bk-back" alt="" draggable="false"><div class="bk-region" hidden></div><img class="bk-peek" alt="" draggable="false"></div></div>
-      <div class="bk-tools"><div class="bk-zoom"><button type="button" class="bk-minus" aria-label="장면 축소">−</button><button type="button" class="bk-reset" aria-label="원래 크기로">100%</button><button type="button" class="bk-plus" aria-label="장면 확대">＋</button></div><button type="button" class="bk-hint">힌트 보기</button></div>
+      <div class="bk-tools"><div class="bk-zoom" role="group" aria-label="장면 확대 조절"><i class="bk-loupe" aria-hidden="true"></i><button type="button" class="btn bk-minus" aria-label="장면 축소">−</button><button type="button" class="btn bk-reset" aria-label="원래 크기로">100%</button><button type="button" class="btn bk-plus" aria-label="장면 확대">＋</button></div><button type="button" class="btn bk-hint">힌트</button></div>
       <details class="bk-details"><summary>글 단서로 찾기</summary><p class="bk-clue"></p><div class="bk-choices"></div></details>
       <p class="bk-status" role="status" aria-live="polite"></p><div class="bk-tray" aria-label="모은 고양이 책갈피"></div>
       <button type="button" class="bk-next btn btn-primary" hidden></button>
@@ -52,7 +52,7 @@
       $('.bk-plus').disabled = zoom === 3;
     }
     function renderTray(count) {
-      $('.bk-tray').innerHTML = scenes.map((s,i) => `<span>${i < count ? `<img class="${i === count-1 && found ? 'bk-hop' : ''}" src="${art('cat-'+i)}" alt="${s.cat} 고양이">` : '<i aria-hidden="true">·</i>'}</span>`).join('');
+      $('.bk-tray').innerHTML = scenes.map((s,i) => `<span class="${i < count ? 'is-filled' : 'is-empty'}">${i < count ? `<img class="${i === count-1 && found ? 'bk-hop' : ''}" src="${art('cat-'+i)}" alt="${s.cat} 고양이">` : `<i aria-label="${s.cat} 책갈피 자리">${i+1}</i>`}</span>`).join('');
       $('.bk-count').textContent = '책갈피 ' + count + ' / 3';
     }
     function render() {
@@ -65,7 +65,7 @@
       hint.disabled = false; hint.textContent = '힌트 보기'; region.hidden = next.hidden = true;
       $('.bk-clue').textContent = '책갈피의 메모 “내가 숨은 높이는 ' + height + '. 내 옆을 묘사하면? ' + object + '!”';
       $('.bk-choices').innerHTML = s.spots.map((p,i) => `<button type="button" data-spot="${i}">${p[2]}</button>`).join('');
-      $('.bk-status').textContent = '작은 고양이 귀를 찾아요. 두 손가락으로 벌려 확대하고 한 손가락으로 밀어 봐요.';
+      $('.bk-status').textContent = '고양이 귀 찾기 · 두 손가락으로 확대';
       setZoom(1); renderTray(stage); container.scrollTop = 0;
       $('.bk-heading h3').focus({preventScroll:true});
     }

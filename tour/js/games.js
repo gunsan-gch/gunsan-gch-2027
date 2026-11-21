@@ -185,7 +185,7 @@ window.tourGame = (() => {
     message.className = 'game-result-text';
     message.textContent = game.message || '';
 
-    if (extra) box.append(extra);
+    // 도장과 기본 동작을 먼저 보여 주고, 게임별 결과 그림은 아래에 둡니다.
     if (points !== null) {
       const record = document.createElement('p');
       record.className = 'game-result-best';
@@ -257,6 +257,7 @@ window.tourGame = (() => {
     }
     actions.append(back);
     box.append(actions);
+    if (extra) box.append(extra);
     const count = updateStampCount();
     if (board && count.total) {   // 모은 도장 수 + 도장판으로 가는 버튼
       const more = document.createElement('button');
@@ -270,6 +271,7 @@ window.tourGame = (() => {
       box.append(more);
     }
     body.append(box);
+    body.scrollTop = 0;
     checkAllStamps(count);
 
     announce(`끝났어요. 별 ${max}개 중 ${stars}개. ${game.stamp || '도장 획득!'} ${game.message || ''}`);
@@ -370,46 +372,54 @@ window.tourGame = (() => {
     const { got, total } = updateStampCount();
     const list = document.getElementById('stamps-list');
     list.replaceChildren();
+    const floors = new Map();
     for (const item of rooms) {
+      if (!floors.has(item.floor)) {
+        const group = document.createElement('li');
+        group.className = 'stamp-floor';
+        const heading = document.createElement('h3');
+        heading.textContent = item.floor;
+        const grid = document.createElement('ul');
+        grid.className = 'stamp-grid';
+        group.append(heading, grid);
+        list.append(group);
+        floors.set(item.floor, grid);
+      }
       const stamp = stamps[item.room.game];
       const row = document.createElement('li');
-      row.className = 'stamp-item' + (stamp ? ' is-got' : '');
       const seal = stampArt(item.room.game, 'stamp-seal');
-      const info = document.createElement('div');
-      info.className = 'stamp-info';
       const name = document.createElement('strong');
-      name.textContent = item.room.name;
-      const sub = document.createElement('small');
-      sub.textContent = `${item.floor} · ${item.game.title}`;
-      info.append(name, sub);
-      const earned = document.createElement('small');
-      earned.className = 'stamp-state';
-      earned.textContent = stamp ? '획득' : '미획득';
-      info.append(earned);
-      if (stamp) {
-        const max = item.game.maxStars || 3;
-        const stars = document.createElement('span');
-        stars.className = 'stamp-stars';
-        stars.setAttribute('role', 'img');
-        stars.setAttribute('aria-label', `별 ${max}개 중 ${Math.min(stamp.stars, max)}개`);
-        stars.textContent = '★'.repeat(Math.min(stamp.stars, max)) + '☆'.repeat(Math.max(0, max - stamp.stars));
-        info.append(stars);
-      }
+      name.textContent = item.room.name.replace('창업동아리 지원센터', '창업동아리').replace('학생회 회의실', '학생회실');
+      // 같은 체육관의 종목은 짧은 이름으로 구분합니다.
+      if (item.room.games) name.textContent = item.game.button.replace(/ 도전$/, '');
+      const max = item.game.maxStars || 3;
+      const earned = stamp ? Math.min(stamp.stars, max) : 0;
+      const stars = document.createElement('span');
+      stars.className = 'stamp-stars';
+      stars.setAttribute('aria-hidden', 'true');
+      stars.textContent = '★'.repeat(earned) + '☆'.repeat(max - earned);
       const go = document.createElement('button');
       go.type = 'button';
-      go.className = 'btn' + (stamp ? '' : ' btn-primary');
-      go.textContent = stamp ? '다시' : '도전';
-      go.setAttribute('aria-label', `${item.room.name} ${item.game.title} ${stamp ? '다시 하기' : '도전하기'}`);
+      go.className = 'stamp-item' + (stamp ? ' is-got' : '');
+      go.setAttribute('aria-label', `${item.room.name} ${item.game.title}, ${stamp ? '도장 획득' : '미획득'}, 별 ${max}개 중 ${earned}개, ${stamp ? '다시 하기' : '도전하기'}`);
       go.addEventListener('click', () => playFromBoard(item));
-      row.append(seal, info, go);
-      list.append(row);
+      go.append(seal, name, stars);
+      row.append(go);
+      floors.get(item.floor).append(row);
     }
     const complete = total > 0 && got === total;
-    document.getElementById('stamps-summary').textContent = complete
-      ? `🎉 도장 ${total}개 완성! 군산여상 탐험 완료`
-      : `도장 ${got} / ${total} · 🎮 표시가 있는 공간에서 모아요`;
     const score = progress();
-    document.getElementById('stamps-summary').textContent += ` · ★ ${score.stars} / ${score.maxStars}`;
+    const summary = document.getElementById('stamps-summary');
+    summary.textContent = `도장 ${got}/${total} · ★ ${score.stars}/${score.maxStars}`;
+    let meter = document.getElementById('stamps-progress');
+    if (!meter) {
+      meter = document.createElement('progress');
+      meter.id = 'stamps-progress';
+      summary.after(meter);
+    }
+    meter.max = total || 1;
+    meter.value = got;
+    meter.setAttribute('aria-label', `도장 ${total}개 중 ${got}개`);
     document.getElementById('stamps-done').hidden = !complete;
     if (resetButton) resetButton.disabled = got === 0;
     return { got, total };
