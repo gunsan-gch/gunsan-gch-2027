@@ -12,8 +12,8 @@
     const images = {};
     container.innerHTML = `
       <section class="stairs-game" aria-label="꿈다락 계단 도전">
-        <div class="stairs-guide"><img src="${MINJU}" width="96" height="96" alt="민주 선배">
-          <div><strong>꿈다락 길잡이 · 민주 선배</strong><p class="stairs-message">다음 계단을 보고, 한 칸씩 올라와!</p></div></div>
+        <div class="senior-card"><img src="${MINJU}" width="96" height="96" alt="민주 선배">
+          <div><strong>민주 선배 · 꿈다락 길잡이</strong><p class="stairs-message">다음 계단을 보고, 한 칸씩 올라와!</p></div></div>
         <div class="stairs-hud"><span class="stairs-floor">1층 출발</span><strong><span class="stairs-score">0</span><small> / 80계단</small></strong><span class="stairs-best">최고 ${best}계단</span></div>
         <div class="stairs-energy"><progress max="6" value="6" aria-label="남은 시간"></progress><span class="stairs-time">준비됐나요?</span></div>
         <div class="stairs-stage"><canvas width="320" height="320" role="img" aria-label="민주 선배와 꿈다락으로 오르는 계단"></canvas>
@@ -21,7 +21,7 @@
         </div>
         <p class="stairs-next">오르기 성공 시 시간이 조금 늘어나요.</p>
         <span class="stairs-cue sr-only" role="status" aria-live="polite" aria-atomic="true"></span>
-        <div class="stairs-controls"><button type="button" class="stairs-turn" disabled><span>⇄</span><b>방향 바꿔 오르기</b><small>← / A</small></button><button type="button" class="stairs-climb" disabled><span>↗</span><b>그대로 오르기</b><small>→ / D / Space</small></button></div>
+        <div class="stairs-controls"><button type="button" class="btn stairs-turn" disabled><span>⇄</span><b>방향 바꿔 오르기</b><small>← / A</small></button><button type="button" class="btn stairs-climb btn-primary" disabled><span>↗</span><b>그대로 오르기</b><small>→ / D / Space</small></button></div>
         <div class="stairs-footer"><span>도전 ★1 · 40계단 ★2 · 80계단 ★3</span><button type="button" class="btn stairs-pause" disabled>잠깐 쉬기</button></div>
         <p class="stairs-note">게임 속 상상 계단이에요. 실제 학교에서는 천천히 걸어요.</p>
       </section>`;

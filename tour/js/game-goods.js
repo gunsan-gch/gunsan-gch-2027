@@ -227,17 +227,17 @@
 
   function start(container, api) {
     container.innerHTML = `<section class="goods-game">
-      <div class="goods-play"><div class="goods-modes"><button class="goods-puzzle-mode" aria-pressed="true">한 수 연쇄</button><button class="goods-free-mode" aria-pressed="false">자유 제작</button></div>
-      <div class="goods-brief"><div><small class="goods-chapter"></small><strong class="goods-title"></strong></div><span class="goods-recipe"></span></div><div class="goods-order"><img class="goods-order-art" alt=""><div><small>지영 선배의 주문</small><strong class="goods-order-name"></strong></div><button class="goods-ship" disabled>납품</button></div><div class="goods-hud"><span>점수 <b class="goods-score">0</b></span>
+      <div class="goods-play"><div class="goods-modes"><button class="btn goods-puzzle-mode" aria-pressed="true">한 수 연쇄</button><button class="btn goods-free-mode" aria-pressed="false">자유 제작</button></div>
+      <div class="goods-brief"><div><small class="goods-chapter"></small><strong class="goods-title"></strong></div><span class="goods-recipe"></span></div><div class="goods-order"><img class="goods-order-art" alt=""><div><small>지영 선배의 주문</small><strong class="goods-order-name"></strong></div><button class="btn goods-ship btn-primary" disabled>납품</button></div><div class="goods-hud"><span>점수 <b class="goods-score">0</b></span>
       <small class="goods-best" hidden></small><span class="goods-preview">다음 <img class="goods-next-art" alt=""><strong class="goods-next"></strong></span></div>
       <canvas class="goods-board" width="360" height="430" tabindex="0" aria-label="굿즈 상자. 좌우 방향키로 이동하고 스페이스바나 엔터로 놓아요."></canvas>
       <p class="goods-status" role="status"></p>
-      <div class="goods-controls"><button class="goods-left" aria-label="왼쪽으로 이동">◀</button><button class="goods-drop">굿즈 놓기</button><button class="goods-right" aria-label="오른쪽으로 이동">▶</button></div>
+      <div class="goods-controls"><button class="btn goods-left" aria-label="왼쪽으로 이동">◀</button><button class="btn goods-drop btn-primary">굿즈 놓기</button><button class="btn goods-right" aria-label="오른쪽으로 이동">▶</button></div>
       <p class="goods-help">상자 위에서 좌우로 끌다가 손을 떼면 놓아요. 점선 위에 굿즈가 2초간 쌓이면 마감해요.</p>
-      <div class="goods-actions"><button class="goods-gallery-open">굿즈 도감</button><button class="goods-collect" disabled>도장 받기</button></div>
+      <div class="goods-actions"><button class="btn goods-gallery-open">굿즈 도감</button><button class="btn goods-collect btn-primary" disabled>도장 받기</button></div>
       <small class="goods-rules">제작을 마치면 ★ · 32점 ★★ · 100점 ★★★</small></div>
-      <div class="goods-pause" hidden><p>잠시 멈췄어요.</p><button class="goods-continue">계속하기</button></div>
-      <div class="goods-gallery" hidden><h3>이음 굿즈 도감</h3><p class="goods-count"></p><ol class="goods-list"></ol><button class="goods-resume">상자로 돌아가기</button></div>
+      <div class="goods-pause" hidden><p>잠시 멈췄어요.</p><button class="btn goods-continue btn-primary">계속하기</button></div>
+      <div class="goods-gallery" hidden><h3>이음 굿즈 도감</h3><p class="goods-count"></p><ol class="goods-list"></ol><button class="btn goods-resume btn-primary">상자로 돌아가기</button></div>
       </section>`;
     const $ = name => container.querySelector('.goods-' + name);
     const board = $('board'), ctx = board.getContext('2d');

@@ -2,11 +2,9 @@
 .bk-game{max-width:640px;margin:auto;display:grid;gap:8px;font:inherit}
 .bk-game img,.bk-result img{image-rendering:pixelated}
 .bk-game [hidden]{display:none!important}
-.bk-guide,.bk-heading,.bk-tools,.bk-zoom{display:flex;align-items:center;gap:8px}
-.bk-guide{background:#fbefcf;border:2px solid var(--bk-line);border-radius:8px;padding:4px 10px}
-.bk-guide img{width:clamp(72px,20vw,96px);height:auto;flex:none;image-rendering:auto}
-.bk-guide p,.bk-guide strong,.bk-heading h3,.bk-result h3,.bk-result p{margin:0}
-.bk-guide p,.bk-status,.bk-clue{font-size:.9rem}
+.bk-heading,.bk-tools,.bk-zoom {display:flex;align-items:center;gap:8px}
+.bk-heading h3,.bk-result h3,.bk-result p {margin:0}
+.bk-status,.bk-clue {font-size:.9rem}
 .bk-heading,.bk-tools{justify-content:space-between}
 .bk-heading h3{font-size:1.1rem}.bk-count{font-size:.85rem;font-weight:700}
 .bk-viewport{overflow:auto;aspect-ratio:320/176;width:100%;box-sizing:border-box;background:#ddc99d;outline:2px solid var(--bk-line);outline-offset:-1px;position:relative;direction:ltr}
@@ -15,10 +13,9 @@
 .bk-back{inset:0;width:100%;height:100%}
 .bk-peek{width:5.625%;height:auto;transform:translate(-50%,-50%)}
 .bk-region{top:0;height:100%;width:55%;box-sizing:border-box;border:3px dashed #fff09e;background:#ffe06624;box-shadow:inset 0 0 0 1px #725026}
-.bk-game button:not(.btn),.bk-details summary{min-height:44px;min-width:44px;border:1px solid #977659;border-radius:6px;background:var(--bk-paper);color:var(--bk-ink);padding:5px 10px;font:inherit;font-weight:700;cursor:pointer}
-.bk-game button:disabled{opacity:.55;cursor:default}
+.bk-game button:not(.btn),.bk-details summary{min-height:44px;min-width:44px;padding:5px 10px;font:inherit;font-weight:700;cursor:pointer}
 .bk-game :focus-visible,.bk-result:focus-visible{outline:3px solid #126976;outline-offset:2px}
-.bk-zoom{gap:3px}.bk-tools .bk-hint{background:#f6e1a6}
+.bk-zoom{gap:3px}
 .bk-details summary{box-sizing:border-box;align-content:center}
 .bk-clue{margin:8px 0}.bk-choices{display:grid;grid-template-columns:1fr 1fr;gap:4px}
 .bk-status{margin:0;min-height:1.5em}
@@ -39,12 +36,10 @@
 .bk-viewport{touch-action:pan-x pan-y}
 /* 번호가 있는 책갈피 받침과 돋보기 조작 묶음. */
 .bk-game, .bk-result { color-scheme: only light; }
-.bk-guide img { width: 48px; height: 48px; }
-.bk-guide p { font-size: 12px; }
 .bk-game button { min-width: 44px; min-height: 44px; font-size: 14px; }
 .bk-tools { gap: 4px; }
 .bk-zoom { gap: 3px; padding: 3px; background: #e9d6af; border: 1px solid var(--bk-line); border-bottom-width: 3px; border-radius: 4px; }
-.bk-zoom .btn, .bk-tools .bk-hint { padding: 4px 8px; border: 2px solid var(--navy, #392e39); border-radius: 3px; color: var(--navy, #392e39); background: #fffaf0; font-size: 12px; box-shadow: 0 2px 0 #b5a080; }
+.bk-zoom .btn, .bk-tools .bk-hint { padding: 4px 8px; font-size: 12px; }
 .bk-zoom .bk-reset { min-width: 58px; font-variant-numeric: tabular-nums; }
 .bk-zoom .bk-plus, .bk-zoom .bk-minus { font-size: 20px; }
 .bk-loupe { position: relative; width: 14px; height: 14px; border: 3px solid var(--bk-ink); margin: 0 8px 3px 5px; box-sizing: border-box; flex: none; }
@@ -56,6 +51,7 @@
 .bk-rules { font-size: 12px; }
 @media (max-height: 500px) and (min-width: 600px) {
   .bk-game { max-width: 880px; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: start; }
-  .bk-guide, .bk-heading, .bk-tools, .bk-details, .bk-status, .bk-tray, .bk-next, .bk-rules { grid-column: 2; }
+ .bk-heading, .bk-tools, .bk-details, .bk-status, .bk-tray, .bk-next, .bk-rules { grid-column: 2; }
+.senior-card { grid-column: 2;}
   .bk-viewport { grid-column: 1; grid-row: 1 / 6; }
 }

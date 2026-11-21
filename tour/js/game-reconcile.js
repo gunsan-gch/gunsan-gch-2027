@@ -27,8 +27,8 @@
   const art = name => '<img alt="" src="img/games/reconcile/' + name + '.png">';
   function start(container, api) {
     let round = 0, misses = 0;
-    container.innerHTML = '<section class="reconcile"><div class="rc-guide"><img src="img/npcs/portraits/eunryeong.png" alt="">' +
-      '<div><b>은령 선배</b><p>예술제 장부마다 전표가 한 장씩 비었어. 짝을 맞춰 어떤 결제인지 찾아 줄래?</p></div></div>' +
+    container.innerHTML = '<section class="reconcile"><div class="senior-card"><img src="img/npcs/portraits/eunryeong.png" alt="">' +
+      '<div><b>은령 선배 · 정산실</b><p>예술제 장부마다 전표가 한 장씩 비었어. 짝을 맞춰 어떤 결제인지 찾아 줄래?</p></div></div>' +
       '<p>모의 결제와 전표에서 시각·부스·금액이 모두 같은 두 장을 고르세요. 장부 3권을 마치면 정산 완료!</p>' +
       '<p class="rc-rule">다시 대조한 횟수 · 0회 ★★★ / 1~2회 ★★ / 3회 이상 ★</p>' +
       '<button class="btn btn-primary" type="button">첫 장부 열기</button></section>';
@@ -37,7 +37,7 @@
     function openLedger() {
       const { entries, missing, name } = ledgers[round];
       let selected = null, matched = 0, reported = false;
-      panel.innerHTML = '<div class="rc-guide rc-guide-mini"><img src="img/npcs/portraits/eunryeong.png" alt=""><b>은령 선배 · 같은 두 장을 찾아줘!</b></div>' +
+      panel.innerHTML = '<div class="senior-card is-compact"><img src="img/npcs/portraits/eunryeong.png" alt=""><div><strong>은령 선배 · 정산실</strong><p>같은 두 장을 찾아줘!</p></div></div>' +
         '<h3 tabindex="-1">장부 ' + (round + 1) + ' / 3 · ' + name + '</h3>' +
         '<p class="rc-progress"></p><p class="rc-note" role="status"></p><div class="rc-columns">' +
         '<section><h4>' + art('terminal') + '결제 내역</h4><div class="rc-pay"></div></section>' +
@@ -89,7 +89,7 @@
       }
       function addTile(index, side) {
         const entry = entries[index], tile = document.createElement('button');
-        tile.type = 'button'; tile.className = 'rc-tile'; tile.setAttribute('aria-pressed', 'false');
+        tile.type = 'button'; tile.className = 'btn rc-tile'; tile.setAttribute('aria-pressed', 'false');
         tile.innerHTML = art(side === 'pay' ? 'terminal' : 'receipt') + '<span>' + entry[0] + '</span><b>' + entry[1] + '</b><strong>' + amount(entry) +
           '</strong><small>' + (side === 'pay' ? '결제' : '전표') + '</small>';
         tile.onclick = () => pick(tile, index, side);
@@ -102,7 +102,7 @@
     }
   }
   window.TOUR_GAMES.reconcile = {
-    title: '사라진 한 건! 예술제 정산실', button: '🧾 사라진 한 건! 예술제 정산실',
+    title: '사라진 한 건! 예술제 정산실', icon: 'receipt', button: '사라진 한 건! 예술제 정산실',
     room: '4층 전산회계3실', naver: 'Reconcile', maxStars: 3, stamp: '예술제 정산실 도장 획득!',
     message: '결제 내역과 영수증을 대조했어요. AI핀테크과에서 배우는 디지털 금융도 만나 보세요.',
     cta: { href: '../index.html#fintech', label: 'AI핀테크과 알아보기 →' }, start

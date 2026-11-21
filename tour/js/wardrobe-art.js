@@ -232,8 +232,8 @@
     bookcat:{
       // Clothbound spine, gilt cover stamp and a folded ginger cat over the page edge.
       colors:{s:'mintD',v:'mint',o:'navy',p:'cream',g:'gold',c:'goldD',f:'yellow',e:'ink'},
-      profile:[7,20,['.c.c','.cfc','.cec','.cff','osppso','ovpgso','ovppso','ovppso','ovppso','ovppso','osppso','.oooo']],
-      rear:[8,20,['.........c...c','.........cc.cc','.........cfcfc','.........efefe','.sssssssscfffc','ospppppppccgcc','ossssssssssssso','osvvvvvvvvvvvso','osvvgvvggvvvgso','osvvvvggggvvvso','osvvvvvggvvvvso','osvvgvvvvvvvgso','ospppppppppppso','.ooooooooooooo']]},
+      profile:[7,16,['.c.c','.cfc','.cec','.cff','osppso','ovpgso','ovppso','ovppso','ovppso','ovppso','osppso','.oooo']],
+      rear:[8,17,['.........c...c','.........cc.cc','.........cfcfc','.........efefe','.sssssssscfffc','ospppppppccgcc','ossssssssssssso','osvvvvvvvvvvvso','osvvgvvggvvvgso','osvvvvggggvvvso','osvvvvvggvvvvso','osvvgvvvvvvvgso','ospppppppppppso','.ooooooooooooo']]},
     racketbag:{
       colors:{o:'navy',b:'blueD',c:'cream',n:'blue',g:'goldD',h:'yellow'},
       profile:[8,18,['..bb','.bcn','bcnnb','bcncb','bnncb','.bncb','.bnb','..bb','..bb','...g','...g','...hg','....g','....g']],
@@ -283,8 +283,10 @@
         const tx=edge+outward*offset;
         r(dir==='left'?31-tx:tx,y,1,1,k);
       };
-      tail(0,29,'goldD');tail(1,29,'gold');tail(2,28,'gold');
-      tail(frame===1?2:3,27,'yellow');
+      // 가방을 허리 높이로 올린 만큼 꼬리도 함께 (뒤·앞 3칸, 옆 4칸)
+      const lift=side?4:3;
+      tail(0,29-lift,'goldD');tail(1,29-lift,'gold');tail(2,28-lift,'gold');
+      tail(frame===1?2:3,27-lift,'yellow');
     }
     if(id==='milkbag'){
       if(side){const bx=right?6:22;r(bx+1,17,2,3,'roseD');r(bx,20,5,10,'roseD');r(bx+1,20,3,9,'pink');r(bx+2,22,1,5,'cream');r(right?11:20,20,1,9,'roseD');}

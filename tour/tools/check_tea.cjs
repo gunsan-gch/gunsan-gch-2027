@@ -12,7 +12,7 @@ class Element {
   }
   querySelector(name) {
     if (!this.nodes.has(name)) {
-      assert.ok(this.innerHTML.includes('class="' + name.slice(1) + '"'), 'missing markup for ' + name);
+      assert.ok([...this.innerHTML.matchAll(/class="([^"]*)"/g)].some(match => match[1].split(/\s+/).includes(name.slice(1))), 'missing markup for ' + name);
       this.nodes.set(name, new Element());
     }
     return this.nodes.get(name);

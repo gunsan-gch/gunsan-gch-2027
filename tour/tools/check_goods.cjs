@@ -54,7 +54,7 @@ class Element {
   }
   querySelector(selector) {
     if (!this.nodes.has(selector)) {
-      assert.ok(this.innerHTML.includes('class="' + selector.slice(1) + '"'));
+      assert.ok([...this.innerHTML.matchAll(/class="([^"]*)"/g)].some(match => match[1].split(/\s+/).includes(selector.slice(1))));
       this.nodes.set(selector, new Element());
     }
     return this.nodes.get(selector);

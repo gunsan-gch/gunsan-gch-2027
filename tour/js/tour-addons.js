@@ -87,7 +87,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     for(const r of rewards){if(!has(r)&&state.equip[r.slot]===r.id){state.equip[r.slot]=null;changed=true;}}
     if(state.started&&!state.bread&&window.tourGame.stamps().bakery){state.bread=true;changed=true;}
     if(changed)save();
-    $('#wardrobe-open').textContent='👕 내 옷장';$('#festival-open').textContent=state.complete?'✦ 미션 완료':state.started?`✦ 탐험 미션 ${['ribbon','bread','poster'].filter(k=>state[k]).length}/3`:'✦ 탐험 미션';paintPlayer();points();return {items:unlocked,title};
+    window.TourUI.label($('#wardrobe-open'),'closet','내 옷장');window.TourUI.label($('#festival-open'),'mission',state.complete?'미션 완료':state.started?`탐험 미션 ${['ribbon','bread','poster'].filter(k=>state[k]).length}/3`:'탐험 미션');paintPlayer();points();return {items:unlocked,title};
   }
   const supplies = [
     { id: 'ribbon', name: '예술제 리본', where: '1층 · 정보처리실 앞' },
@@ -95,10 +95,17 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     { id: 'poster', name: '초대 포스터', where: '3층 · 송현 선배' }
   ];
   const talkPortrait = id => `<div class="addon-portrait">${portrait(id)}</div>`;
-  function inventory() {
+  // 아름 선배 말풍선: 한 줄씩 말하듯이
+  const yunaSays = (lines, compact = false) => `
+    <div class="senior-card is-talk${compact ? ' is-compact' : ''}">${talkPortrait('yuna')}
+      <div><strong>아름 선배 · 예술제 준비부</strong>${lines.map(line => `<p>${line}</p>`).join('')}</div>
+    </div>`;
+  // 준비물 3칸 (찾을 곳 표시는 미션 시작 전 안내에서만)
+  function inventory(showWhere = false) {
     return `<div class="addon-inventory">${supplies.map(item => `
       <div class="addon-supply ${state[item.id] ? 'is-got' : ''}">
         ${icon(item.id)}<span>${item.name}</span>
+        ${showWhere && !state[item.id] ? `<small>${item.where}</small>` : ''}
         ${state[item.id] ? '<b class="addon-check" aria-label="수집 완료">✓</b>' : ''}
       </div>`).join('')}</div>`;
   }
@@ -107,17 +114,16 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     if (state.complete) { completeView(); return; }
     if (!state.started) {
       show('quest', '녹원예술제 준비 대작전', `
-        <div class="addon-npc-talk">${talkPortrait('yuna')}
-          <div><h3>예술제, 같이 준비할래?</h3><p>학교를 돌며 준비물 세 가지를 챙겨요.</p></div>
-        </div>
-        ${inventory()}
+        ${yunaSays(['앗, 후배님 마침 잘 왔다!', '예술제가 코앞인데 준비물이 하나도 없어ㅠㅠ', '잔디마당으로 와 줄래? 나 거기 있어!'])}
+        ${inventory(true)}
         <div class="addon-actions"><button class="btn btn-primary" id="addon-meet">아름 선배 만나기</button></div>`);
       $('#addon-meet').onclick = () => visit('yuna');
       return;
     }
     const ready = state.ribbon && state.bread && state.poster;
     show('quest', '녹원예술제 준비 대작전', `
-      <p class="addon-lead">${ready ? '준비 완료! 아름 선배에게 돌아가요.' : '준비물 세 가지를 챙겨요.'}</p>
+      ${yunaSays([ready ? '헐 다 모았어?! 잔디마당으로 빨리 와!!'
+        : `아직 ${supplies.filter(item => !state[item.id]).length}개 남았어! 천천히 와, 기다릴게~`], true)}
       ${inventory()}
       <ul class="addon-tasks">${supplies.map(item => `
         <li class="${state[item.id] ? 'is-got' : ''}">
@@ -147,15 +153,17 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       if (state.complete) { completeView(); return; }
       if (!state.started) {
         show('talk', '우리 예술제, 같이 준비할래?', `
-          <div class="addon-npc-talk">${talkPortrait('yuna')}<p>리본, 빵, 포스터를 함께 챙겨 줘!</p></div>
-          ${inventory()}
+          ${yunaSays(['안녕! 나 예술제 준비부 아름이야 ㅎㅎ', '리본, 갓 구운 빵, 초대 포스터! 딱 세 개만 같이 챙겨 줄래?',
+            '리본은 1층 정보처리실 앞에 두고 왔고', '빵은 조리제빵실에서 빵 굽기 끝내면 생겨!',
+            '포스터는 3층 드림스페이스에서 송현이가 그리는 중~ 내가 보냈다고 하면 돼'])}
+          ${inventory(true)}
           <div class="addon-actions"><button class="btn btn-primary" id="addon-start">좋아, 같이 준비하자!</button></div>`, '예술제 준비부 · 아름 선배');
         $('#addon-start').onclick = () => { state.started = true; save(); sync(false); quest(); };
         return;
       }
       if (state.ribbon && state.bread && state.poster) {
         show('talk', '준비물을 전부 챙겨 왔네!', `
-          <div class="addon-npc-talk">${talkPortrait('yuna')}<p>함께 준비해 줘서 고마워!</p></div>
+          ${yunaSays(['헐 대박, 진짜 다 챙겨 왔네?!', '포스터 완전 예쁘다… 송현이 금손 인정', '너 없었으면 진짜 큰일 날 뻔했어ㅠㅠ'])}
           ${inventory()}
           <div class="addon-actions"><button class="btn btn-primary" id="addon-finish">준비물 전달하기</button></div>`, '예술제 준비부 · 아름 선배');
         $('#addon-finish').onclick = () => { state.complete = true; save(); sync(false); completeView(); };
@@ -212,7 +220,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       action = '준비물 확인하기';
       next = quest;
     }
-    show('talk', title, `<div class="addon-npc-talk"><div class="addon-portrait"><img class="songhyeon-portrait" src="img/npcs/portraits/songhyeon.png" width="104" height="104" alt=""></div><p>${line}</p></div>
+    show('talk', title, `<div class="senior-card"><div class="addon-portrait"><img class="songhyeon-portrait" src="img/npcs/portraits/songhyeon.png" width="104" height="104" alt=""></div><div><strong>송현 선배 · 이음 홍보부</strong><p>${line}</p></div></div>
       <div class="addon-actions"><button class="btn btn-primary" id="addon-songhyeon-next">${action}</button>${state.poster ? pressAction : ''}</div>`, '홍보동아리 이음 · 송현 선배');
     $('#addon-songhyeon-next').onclick = next;
     bindPress();
@@ -220,9 +228,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
   function collect(id){state[id]=true;save();sync(false);quest();toast('가방에 챙겼어요! 남은 준비물도 찾아보세요.');}
   function completeView() {
     show('complete', '예술제 준비 완료!', `
-      <div class="addon-npc-talk">${talkPortrait('yuna')}
-        <div><h3>녹원예술제 준비팀</h3><p>함께해서 더 즐거운 예술제!</p></div>
-      </div>
+      ${yunaSays(['이제 너도 우리 준비팀 정식 멤버야 ㅎㅎ', '예술제 날 꼭 놀러 와!'])}
       ${inventory()}
       <div class="addon-actions">
         <button class="btn" id="addon-quest-reset">미션 다시하기</button>${pressAction}
@@ -381,7 +387,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     };
   }
   $('#festival-open').onclick=quest;$('#wardrobe-open').onclick=()=>wardrobe();
-  document.addEventListener('tour:game-result',()=>{const game=$('#game');const unlocked=sync();showNewRewards(unlocked);if(state.started&&$('#game-title').textContent===window.TOUR_GAMES.bakery.title&&!game.querySelector('.addon-game-note')){const note=document.createElement('p');note.className='addon-game-note';note.textContent='✦ 탐험 미션: 갓 구운 빵을 가방에 챙겼어요.';$('#game-body').append(note);}});
+  document.addEventListener('tour:game-result',()=>{const game=$('#game');const unlocked=sync();showNewRewards(unlocked);if(state.started&&$('#game-title').textContent===window.TOUR_GAMES.bakery.title&&!game.querySelector('.addon-game-note')){const note=document.createElement('p');note.className='addon-game-note';window.TourUI.label(note,'mission','탐험 미션: 갓 구운 빵을 가방에 챙겼어요.');$('#game-body').append(note);}});
   $('#game').addEventListener('close',()=>sync());
   function resetWardrobe(){state.wardrobe=rules.emptyWardrobe();state.equip={head:null,back:null};previewEquip={...state.equip};save();sync(false);if(view==='wardrobe')wardrobe();}
   document.addEventListener('tour:stamps-reset',resetWardrobe);

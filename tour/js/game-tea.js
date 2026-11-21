@@ -13,7 +13,7 @@
     let tailStart = 0, drops = 0, tailAmount = 0;
     const results = [];
     container.innerHTML = `<section class="tea-game">
-      <div class="tea-guide"><img src="img/npcs/portraits/juni.png" alt=""><div><strong>준이 선배</strong><p>잔 안의 두 점선 사이에 차가 닿으면 손님께 올려 봐. 주전자를 바로 세워도 몇 방울 더 떨어져!</p></div></div>
+      <div class="senior-card"><img src="img/npcs/portraits/juni.png" alt=""><div><strong>준이 선배 · 예절실</strong><p>잔 안의 두 점선 사이에 차가 닿으면 손님께 올려 봐. 주전자를 바로 세워도 몇 방울 더 떨어져!</p></div></div>
       <div class="tea-order"><h3 class="tea-name" tabindex="-1"></h3><span class="tea-round"></span></div>
       <svg class="tea-scene" viewBox="0 0 320 176" aria-hidden="true" focusable="false">
         <defs><clipPath id="tea-interior"><path d="${interior}"/></clipPath></defs>
@@ -29,10 +29,10 @@
         <image class="tea-pot" href="${art('pot')}" x="78" y="38" width="116" height="80"/>
       </svg>
       <div class="tea-reading"><span>따른 양 <b class="tea-amount"></b></span><span>목표 <b class="tea-target"></b></span></div>
-      <div class="tea-input"><button class="tea-hold" type="button">꾹 눌러 따르기</button><button class="tea-small" type="button"></button></div>
+      <div class="tea-input"><button class="btn tea-hold btn-primary" type="button">꾹 눌러 따르기</button><button class="btn tea-small" type="button"></button></div>
       <p class="tea-tip">누르고 있으면 차가 흘러요. 키보드는 따르기 버튼에서 스페이스바를 눌러요.</p>
       <p class="tea-feedback" role="status"></p>
-      <button class="tea-serve" type="button">손님께 차 올리기</button>
+      <button class="btn tea-serve btn-primary" type="button">손님께 차 올리기</button>
       <small>목표에 맞춘 잔마다 별 하나 · 세 잔을 올리면 기본 별 하나</small></section>`;
     const $ = selector => container.querySelector('.tea-' + selector);
     const hold = $('hold'), small = $('small'), serve = $('serve'), scene = $('scene');

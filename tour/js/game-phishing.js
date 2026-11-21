@@ -83,7 +83,7 @@
   const number = n => n.toLocaleString('ko-KR');
   const el = (tag, className, text = '') => {
     const node = document.createElement(tag);
-    node.className = className; node.textContent = text;
+    node.className = tag === 'button' ? 'btn ' + className : className; node.textContent = text;
     return node;
   };
 

@@ -21,13 +21,13 @@
     let plan, map, pos, steps, items, selectedPlan = 0, finished = false;
     const $ = selector => container.querySelector(selector);
     container.innerHTML = `<section class="log-game" aria-label="예술제 물류반">
-      <div class="log-guide"><img src="img/npcs/portraits/dayeong.png" alt=""><div><strong>물류반 · 다영 선배</strong><p>창고에서 물품을 눌러 실어 줘! 주문한 부스에 도착하면 물품을 건네줄게.</p></div></div>
+      <div class="senior-card"><img src="img/npcs/portraits/dayeong.png" alt=""><div><strong>다영 선배 · 물류반</strong><p>창고에서 물품을 눌러 실어 줘! 주문한 부스에 도착하면 물품을 건네줄게.</p></div></div>
       <div class="log-toolbar"><strong>배달 지도</strong><button type="button" class="btn" data-reset>처음부터</button></div>
       <div class="log-plans" role="group" aria-label="배달 지도 선택">${plans.map((p,i) => `<button type="button" class="btn" data-plan="${i}" aria-pressed="${i === 0}">${p.name}</button>`).join('')}</div>
       <div class="log-paper"><div class="log-manifest"><b>부스 주문서</b><span class="log-count"></span></div><div class="log-orders"></div></div>
       <div class="log-map" role="img" tabindex="0"></div>
-      <div class="log-controls"><div class="log-pad" aria-label="카트 방향">${Object.entries(directions).map(([key, [, , arrow, label]]) => `<button type="button" class="log-${key}" data-move="${key}" aria-label="${label} 한 칸 이동">${arrow}</button>`).join('')}</div><div class="log-cargo"><strong>카트 <span></span></strong><div class="log-slots"></div></div></div>
-      <div class="log-warehouse"><strong>창고 재고</strong><div>${goods.map((g,i) => `<button type="button" data-item="${i}">${icon(g.id)}<b>${g.name}</b><small></small></button>`).join('')}</div></div>
+      <div class="log-controls"><div class="log-pad" aria-label="카트 방향">${Object.entries(directions).map(([key, [, , arrow, label]]) => `<button type="button" class="btn log-${key}" data-move="${key}" aria-label="${label} 한 칸 이동">${arrow}</button>`).join('')}</div><div class="log-cargo"><strong>카트 <span></span></strong><div class="log-slots"></div></div></div>
+      <div class="log-warehouse"><strong>창고 재고</strong><div>${goods.map((g,i) => `<button class="btn" type="button" data-item="${i}">${icon(g.id)}<b>${g.name}</b><small></small></button>`).join('')}</div></div>
       <p class="log-notice" role="status" aria-live="polite"></p>
       <div class="log-rules" aria-label="별 기준"></div>
     </section>`;
@@ -113,5 +113,5 @@
     container.addEventListener('keydown',key);
     return () => { finished = true; container.removeEventListener('click',click); container.removeEventListener('keydown',key); };
   }
-  window.TOUR_GAMES.logistics = {title:'딱 맞게 보내줘! 예술제 물류반',button:'📦 예술제 물류반',room:'4층 전산회계2실',nextGame:'reconcile',cta:{href:'../index.html#erp',label:'ERP비즈니스과 알아보기 →'},naver:'Logistics',maxStars:3,stamp:'물류반 도장 획득!',message:'다영 선배와 부스별 주문, 창고 재고, 배달 경로를 함께 관리했어요.',start};
+  window.TOUR_GAMES.logistics = {title:'딱 맞게 보내줘! 예술제 물류반',icon: 'box', button: '예술제 물류반',room:'4층 전산회계2실',nextGame:'reconcile',cta:{href:'../index.html#erp',label:'ERP비즈니스과 알아보기 →'},naver:'Logistics',maxStars:3,stamp:'물류반 도장 획득!',message:'다영 선배와 부스별 주문, 창고 재고, 배달 경로를 함께 관리했어요.',start};
 })();

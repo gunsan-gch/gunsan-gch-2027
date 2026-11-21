@@ -6,11 +6,9 @@
   color: #303e35;
   --tea-ink: #314e41;
 }
-.tea-guide, .tea-order, .tea-reading, .tea-input { display: flex; align-items: center; gap: .65rem; }
-.tea-guide img { width: clamp(72px, 15vw, 96px); height: auto; aspect-ratio: 1; object-fit: contain; image-rendering: auto; flex: none; }
-.tea-guide p, .tea-order h3, .tea-feedback, .tea-tip, .tea-result p { margin: 0; }
-.tea-guide strong { color: #8b4937; }
-.tea-guide p, .tea-feedback { font-size: .9rem; line-height: 1.45; }
+ .tea-order, .tea-reading, .tea-input { display: flex; align-items: center; gap: .65rem; }
+ .tea-order h3, .tea-feedback, .tea-tip, .tea-result p { margin: 0; }
+ .tea-feedback { font-size: .9rem; line-height: 1.45; }
 .tea-order, .tea-reading { justify-content: space-between; }
 .tea-order { border-top: 1px solid #d6cebf; padding-top: .5rem; }
 .tea-order h3 { font-size: 1.1rem; }
@@ -22,11 +20,9 @@
 .tea-scene[data-phase="hold"] .tea-stream, .tea-scene[data-phase="tail"] .tea-drop { visibility: visible; }
 .tea-reading { background: #f2efe4; padding: .5rem .7rem; border-radius: 5px; font-size: .84rem; flex-wrap: wrap; }
 .tea-reading b { color: var(--tea-ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
-.tea-input > button, .tea-serve { min-height: 44px; border-radius: 8px; font: inherit; font-weight: 700; cursor: pointer; }
+.tea-input > button, .tea-serve { min-height: 44px; font: inherit; font-weight: 700; cursor: pointer; }
 .tea-input > button { flex: 1; }
-.tea-hold { touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; color: #fff; background: var(--tea-ink); border: 2px solid #223f33; }
-.tea-small, .tea-serve { color: var(--tea-ink); background: #faf6e9; border: 1px solid #9caa96; }
-.tea-game button:disabled { opacity: .55; cursor: default; }
+.tea-hold { touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 .tea-game button:focus-visible { outline: 3px solid #b76628; outline-offset: 2px; }
 .tea-tip, .tea-game > small { font-size: .77rem; color: #526157; }
 .tea-feedback { color: #583e2f; font-weight: 650; }
@@ -34,5 +30,5 @@
 .tea-result ul { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .35rem; padding: 0; list-style: none; }
 .tea-result li { display: grid; justify-items: center; gap: .2rem; padding: .4rem .15rem; background: #f3f1e6; border-radius: 8px; color: #314e41; }
 .tea-result li img { width: 54px; image-rendering: pixelated; }
-.tea-result li small { font-size: .72rem; }
+.tea-result li small { font-size: 12px; }
 @media (prefers-reduced-motion: reduce) { .tea-pot { transition: none; } }

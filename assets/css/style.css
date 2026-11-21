@@ -1903,3 +1903,6 @@ p, li, dd { word-break: keep-all; text-wrap: pretty; }
 .hero-feat-line { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; color: var(--ink-2); font-weight: 700; font-size: 1rem; text-decoration: none; }
 .hero-feat-line .icon { width: 18px; height: 18px; padding: 2px; border-radius: 50%; background: var(--blue); color: #fff; stroke-width: 3; }
 .hero-feat-line:hover span { text-decoration: underline; }
+
+/* 투어 안내의 장식용 픽셀 아이콘. */
+.ui-icon { display: inline-block; width: 20px; height: 20px; vertical-align: middle; image-rendering: pixelated; }

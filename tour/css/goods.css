@@ -5,18 +5,7 @@
   font-family: inherit;
 }
 .goods-game [hidden] { display: none !important; }
-.goods-guide {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 12px;
-  background: #edf3df;
-  border: 1px solid #bdcaa9;
-  border-radius: 8px;
-}
-.goods-guide img { width: 54px; height: 54px; flex: none; object-fit: contain; }
-.goods-guide strong { font-size: .87rem; }
-.goods-guide p, .goods-help, .goods-gallery p { margin: 2px 0; font-size: .86rem; line-height: 1.45; }
+.goods-help, .goods-gallery p { margin: 2px 0; font-size: .86rem; line-height: 1.45; }
 .goods-play { display: grid; justify-items: center; gap: 5px; }
 .goods-hud {
   width: min(100%, 360px);
@@ -48,13 +37,11 @@
 .goods-status { margin: 1px 0; min-height: 1.25em; color: #70451b; font-size: .86rem; font-weight: 700; }
 .goods-controls, .goods-actions { display: flex; gap: 6px; justify-content: center; }
 .goods-game button {
-  min-height: 44px; padding: 5px 13px; border-radius: 6px;
-  border: 1px solid #849e8c; background: #fffdf3; color: #254d40; font: inherit;
+  min-height: 44px; padding: 5px 13px; font: inherit;
   font-size: .88rem; font-weight: 700; cursor: pointer;
 }
 .goods-controls button { min-width: 44px; }
-.goods-game .goods-drop, .goods-game .goods-resume { min-width: 120px; background: #305a4b; color: #fff; }
-.goods-game button:disabled { opacity: .55; cursor: default; }
+.goods-game .goods-drop, .goods-game .goods-resume { min-width: 120px; }
 .goods-game :focus-visible { outline: 3px solid #2674a8; outline-offset: 2px; }
 .goods-help { text-align: center; color: #455c53; }
 .goods-play small { color: #51645a; font-size: .76rem; }
@@ -75,11 +62,9 @@
 .goods-order-art { width: 37px; height: 37px; image-rendering: pixelated; }
 .goods-order > div { display: grid; margin-right: auto; }
 .goods-order strong { font-size: .94rem; }
-.goods-order .goods-ship { background: #85471d; color: #fff; border-color: #79401a; min-width: 83px; }
-.goods-order .goods-ship:disabled { background: #efe0c3; opacity: 1; color: #655847; border-color: #c4ad88; }
+.goods-order .goods-ship { min-width: 83px; }
 .goods-modes { display: flex; gap: 3px; width: min(100%, 360px); }
 .goods-modes button { flex: 1; }
-.goods-modes button[aria-pressed="true"] { background: #315a4c; color: #fff8df; }
 .goods-brief { box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 5px; width: min(100%, 360px); border-bottom: 2px solid #d0af82; padding: 2px 3px 5px; }
 .goods-brief > div { display: grid; }
 .goods-brief strong { font-size: 1rem; }

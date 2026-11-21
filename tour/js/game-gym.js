@@ -26,11 +26,11 @@
   function hub(container, api) {
     const stamps = window.tourGame?.stamps() || {}, count = IDS.filter(id => stamps[id]).length;
     container.innerHTML = `<section class="gym-hub" aria-label="체육관 종목 선택">
-      <div class="gym-guide"><img src="${SUA}" width="56" height="56" alt="수아 선배"><div><strong>수아 선배의 체육관 3종 챌린지</strong><p>우리 체육관 미니게임 대회, 너도 함께해!</p></div></div>
+      <div class="senior-card"><img src="${SUA}" width="56" height="56" alt="수아 선배"><div><strong>수아 선배 · 체육관</strong><p>우리 체육관 미니게임 대회, 너도 함께해!</p></div></div>
       <div class="gym-panorama"><img src="${IMG}gym-hall.png?v=20261118" width="640" height="320" alt="컬링 스톤, 사격 표적, 배드민턴 코트가 있는 픽셀 체육관"><span>원하는 종목부터 자유롭게!</span></div>
       <div class="gym-events">${IDS.map(id => {
         const info = INFO[id], saved = stamps[id];
-        return `<button type="button" class="gym-event" data-sport="${id}"><img src="${IMG}icon-${id}.png?v=20261118" width="48" height="48" alt=""><strong>${info.sport}</strong><span class="gym-event-record ${saved ? 'is-earned' : ''}">${saved ? '★'.repeat(saved.stars) + '☆'.repeat(3 - saved.stars) : '도전 전'}</span></button>`;
+        return `<button type="button" class="btn gym-event" data-sport="${id}"><img src="${IMG}icon-${id}.png?v=20261118" width="48" height="48" alt=""><strong>${info.sport}</strong><span class="gym-event-record ${saved ? 'is-earned' : ''}">${saved ? '★'.repeat(saved.stars) + '☆'.repeat(3 - saved.stars) : '도전 전'}</span></button>`;
       }).join('')}</div>
       <div class="gym-trophy ${count === 3 ? 'is-earned' : ''}"><img src="${IMG}trophy.png?v=20261118" width="56" height="56" alt=""><div><strong>${count === 3 ? '3종 완주 트로피 획득!' : `3종 완주 트로피 · ${count} / 3`}</strong><p>${count === 3 ? '다음은 최고 기록에 도전!' : '실전 3종 완주하면 획득'}</p></div></div>
       <p class="gym-note">종목별 최고 별 3개씩 · 연습은 기록과 별에 영향을 주지 않아요.</p></section>`;
@@ -43,14 +43,14 @@
     let engine = null, raf = 0, last = 0, disposed = false, ended = false, lastEvent = -1, drag = null, muted = false, previousX = 160, previousOpp = 160;
     const audio = window.TourMelodyAudio?.create(), equip = outfit();
     container.innerHTML = `<section class="gym-game gym-${kind}" aria-label="${info.sport} 게임">
-      <div class="gym-guide"><img src="${SUA}" width="48" height="48" alt="수아 선배"><div><strong>수아 선배와 ${info.sport}</strong><p>${info.intro}</p></div></div>
+      <div class="senior-card"><img src="${SUA}" width="48" height="48" alt="수아 선배"><div><strong>수아 선배 · 체육관</strong><p>${info.intro}</p></div></div>
       <div class="gym-hud"><strong class="gym-score">준비됐나요?</strong><span class="gym-round">${kind === 'badminton' ? `최고 ${best.score}득점` : `최고 ${best.score}점`}</span></div>
       <div class="gym-field"><canvas width="320" height="240" tabindex="0" role="img" aria-label="${info.sport} 경기장"></canvas><div class="gym-overlay" hidden></div></div>
       <p class="gym-message" role="status" aria-live="polite">${info.subtitle}</p>
       <div class="gym-setup"><button type="button" class="btn btn-primary" data-action="start">실전 시작</button><button type="button" class="btn" data-action="practice">${info.practice}</button></div>
       ${kind === 'curling' ? `<div class="gym-curling-controls"><label>방향 <output class="gym-angle-label">0°</output><input class="gym-angle" type="range" min="-28" max="28" value="0" step="1" aria-label="스톤 방향" disabled></label><label>힘 <output class="gym-power-label">0%</output><input class="gym-power" type="range" min="0" max="100" value="0" step="1" aria-label="스톤 힘" disabled></label></div>` : ''}
-      <div class="gym-controls">${kind === 'badminton' ? '<button type="button" data-action="left" aria-label="왼쪽 이동" disabled>◀</button>' : ''}<button type="button" class="gym-main-action" data-action="act" disabled>${kind === 'curling' ? '스톤 밀기' : kind === 'target' ? '발사!' : '받아치기'}</button>${kind === 'badminton' ? '<button type="button" data-action="right" aria-label="오른쪽 이동" disabled>▶</button>' : ''}</div>
-      <p class="gym-help">${info.help}</p><div class="gym-tools"><button type="button" class="btn" data-action="hub">종목 선택</button><button type="button" class="btn" data-action="pause" disabled>잠깐 쉬기</button><button type="button" class="btn" data-action="sound" aria-pressed="false">소리 켜짐</button></div>
+      <div class="gym-controls">${kind === 'badminton' ? '<button class="btn" type="button" data-action="left" aria-label="왼쪽 이동" disabled>◀</button>' : ''}<button type="button" class="btn gym-main-action btn-primary" data-action="act" disabled>${kind === 'curling' ? '스톤 밀기' : kind === 'target' ? '발사!' : '받아치기'}</button>${kind === 'badminton' ? '<button class="btn" type="button" data-action="right" aria-label="오른쪽 이동" disabled>▶</button>' : ''}</div>
+      <p class="gym-help">${info.help}</p><div class="gym-tools"><button type="button" class="btn" data-action="hub">종목 선택</button><button type="button" class="btn" data-action="pause" disabled>잠깐 쉬기</button></div>
       <p class="gym-rewards">${info.rewards}</p></section>`;
     const $ = s => container.querySelector(s), field = $('.gym-field'), canvas = $('canvas'), ctx = canvas.getContext('2d'), overlay = $('.gym-overlay');
     const dressed = document.createElement('canvas'); dressed.width = 48; dressed.height = 52;
@@ -149,7 +149,7 @@
       cancelAnimationFrame(raf); engine = R[kind]({ practice }); ended = false; lastEvent = -1; drag = null; keys.clear();
       $('.gym-setup').hidden = true; overlay.hidden = true; last = performance.now(); audio?.unlock();
       const instructions = practice ? (kind === 'curling' ? '스톤 1개로 방향과 힘을 익혀 봐. 연습은 별을 주지 않아.' : kind === 'target' ? '세 발로 조준 타이밍을 익혀 봐. 연습은 별을 주지 않아.' : '세 번만 받아쳐 봐! 놓쳐도 괜찮아. 연습은 계속할 수 있어.') : info.intro;
-      text('.gym-guide p', instructions);
+      text('.senior-card p', instructions);
       hud(); paint(last); (kind === 'curling' ? $('.gym-angle') : $('[data-action="act"]')).focus({ preventScroll: true }); raf = requestAnimationFrame(tick);
       api.announce(`${info.sport} ${practice ? '연습' : '실전'} 시작. ${instructions}`);
     }
@@ -199,7 +199,6 @@
       const action = e.target.closest('[data-action]')?.dataset.action;
       if (action === 'start') begin(false); else if (action === 'practice') begin(true); else if (action === 'act') act();
       else if (action === 'pause') pause(); else if (action === 'resume') resume(); else if (action === 'hub') api.switchGame('gym');
-      else if (action === 'sound') { muted = !muted; audio?.setMuted(muted); $('[data-action="sound"]').textContent = muted ? '소리 꺼짐' : '소리 켜짐'; $('[data-action="sound"]').setAttribute('aria-pressed', String(muted)); if (!muted) audio?.unlock(); }
       else if ((action === 'left' || action === 'right') && e.detail === 0) engine?.moveTo(engine.state.player + (action === 'left' ? -35 : 35));
     }
     function input() { if (kind === 'curling' && engine) { engine.aim(Number($('.gym-angle').value), Number($('.gym-power').value)); hud(); paint(performance.now()); } }
@@ -241,18 +240,22 @@
       if (e.target.closest('button')) return; // Native button activation remains accessible.
       e.preventDefault(); e.stopPropagation(); act();
     }
+    const sound = window.TourUI.mountSound(!muted, () => {
+      muted = !muted; audio?.setMuted(muted); sound.update(!muted);
+      if (!muted) audio?.unlock();
+    });
     const hidden = () => { if (document.hidden) pause(); };
     container.addEventListener('click', click); container.addEventListener('input', input); container.addEventListener('keydown', keyboard); container.addEventListener('keyup', keyboard);
     container.addEventListener('pointerdown', pointerDown); container.addEventListener('pointermove', pointerMove); container.addEventListener('pointerup', pointerUp); container.addEventListener('pointercancel', pointerUp); container.addEventListener('lostpointercapture', pointerUp);
     document.addEventListener('visibilitychange', hidden); window.addEventListener('blur', pause);
     paint(0); $('[data-action="start"]').focus({ preventScroll: true });
     return () => {
-      disposed = true; cancelAnimationFrame(raf); audio?.dispose(); keys.clear(); sprite.onload = null; Object.values(images).forEach(im => im.onload = null);
+      disposed = true; sound.dispose(); cancelAnimationFrame(raf); audio?.dispose(); keys.clear(); sprite.onload = null; Object.values(images).forEach(im => im.onload = null);
       container.removeEventListener('click', click); container.removeEventListener('input', input); container.removeEventListener('keydown', keyboard); container.removeEventListener('keyup', keyboard);
       container.removeEventListener('pointerdown', pointerDown); container.removeEventListener('pointermove', pointerMove); container.removeEventListener('pointerup', pointerUp); container.removeEventListener('pointercancel', pointerUp); container.removeEventListener('lostpointercapture', pointerUp);
       document.removeEventListener('visibilitychange', hidden); window.removeEventListener('blur', pause);
     };
   }
-  window.TOUR_GAMES.gym = { title: '체육관 3종 챌린지', button: '🏆 체육관 3종 챌린지', room: '체육관', naver: 'Gym', isHub: true, start: hub };
+  window.TOUR_GAMES.gym = { title: '체육관 3종 챌린지', icon: 'trophy', button: '체육관 3종 챌린지', room: '체육관', naver: 'Gym', isHub: true, start: hub };
   for (const id of IDS) window.TOUR_GAMES[id] = { title: INFO[id].title, button: INFO[id].sport + ' 도전', room: '체육관', naver: id === 'target' ? 'Target' : id === 'curling' ? 'Curling' : 'Badminton', maxStars: 3, hub: 'gym', stamp: `체육관 ${INFO[id].sport} 도장 획득!`, message: '배드민턴·사격·컬링! 우리 체육관의 미니게임 대회를 즐겨 봐요.', start: (container, api) => start(id, container, api) };
 })();

@@ -85,10 +85,14 @@ for (const a of art) check(crypto.createHash('sha256').update(fs.readFileSync(pa
   load('js/arcade-audio.js');
   const prefs = new Map();
   ctx.document = new EventTarget();
+  // 실제 공통 아이콘 부품을 작은 DOM 대역에서 실행한다.
+  ctx.document.createElement = () => ({ setAttribute(key, value) { this[key] = value; } });
+  vm.runInContext(fs.readFileSync(path.join(root, 'js/games.js'), 'utf8').split('window.tourGame =')[0], ctx);
   ctx.AbortController = AbortController;
   ctx.localStorage = { getItem:key=>prefs.get(key), setItem:(key,value)=>prefs.set(key,value) };
   const dialog = new EventTarget(), toggle = new EventTarget();
-  toggle.setAttribute = () => {};
+  toggle.setAttribute = (key, value) => { toggle[key] = value; };
+  toggle.replaceChildren = (...children) => { toggle.children = children; };
   const sounds = ctx.window.TourArcadeAudio.mount(dialog,toggle);
   const before = oscillators.length;
   sounds.cue('merge');
@@ -103,7 +107,7 @@ for (const a of art) check(crypto.createHash('sha256').update(fs.readFileSync(pa
   sounds.cue('roll');
   check(oscillators.length===before+5&&closed===2&&toggle.hidden,'closing cancels the arcade audio');
   const replay = ctx.window.TourArcadeAudio.mount(dialog,toggle);
-  check(toggle.textContent==='효과음 켜짐'&&created===2,'replay remembers the preference without autoplay');
+  check(toggle['aria-pressed']==='true'&&toggle['aria-label']==='효과음 끄기'&&toggle.children[0].src==='img/ui/speaker-on.png'&&created===2,'replay remembers the preference without autoplay');
   toggle.dispatchEvent(new Event('click'));
   replay.cue('clear');
   check(oscillators.length===before+5,'turning sound off suppresses further cues');

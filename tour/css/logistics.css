@@ -1,14 +1,12 @@
 .log-game{--ink:#233e4b;--teal:#11635b;color:var(--ink);max-width:450px;margin:auto;font-size:14px;line-height:1.35;text-align:left}
 .log-game *{box-sizing:border-box}
 .log-game img{image-rendering:pixelated;object-fit:contain}
-.log-guide,.log-toolbar,.log-manifest,.log-controls,.log-cargo strong,.log-orders>div,.log-slots,.log-warehouse>div{display:flex;align-items:center;gap:.4rem}
-.log-guide{padding:6px 10px;background:#e6f5ee;border:2px solid #568476;border-radius:12px}
-.log-guide>img{width:clamp(72px,20vw,96px);height:auto;flex:none;image-rendering:auto}
-.log-guide p,.log-notice,.log-rules{margin:3px 0}
+.log-toolbar,.log-manifest,.log-controls,.log-cargo strong,.log-orders>div,.log-slots,.log-warehouse>div {display:flex;align-items:center;gap:.4rem}
+.log-notice,.log-rules {margin:3px 0}
 .log-toolbar,.log-manifest,.log-cargo strong{justify-content:space-between}
 .log-toolbar{padding:7px 0}
-.log-game button{font:inherit;color:inherit;cursor:pointer;min-height:44px;min-width:44px}
-.log-toolbar button{background:white;border:2px solid var(--navy,#233e4b);border-radius:4px;padding:5px 10px}
+.log-game button{font:inherit;cursor:pointer;min-height:44px;min-width:44px}
+.log-toolbar button{padding:5px 10px}
 .log-paper{background:#fff7d9;border:1px solid #b6a56f;border-left:5px solid #cf9443;border-radius:6px;padding:5px 9px}
 .log-manifest{margin-bottom:4px}
 .log-count{font-weight:700;font-size:.86em}
@@ -30,10 +28,10 @@
 .log-here:not(.log-tile-path)::after{inset:auto auto 0 1px;width:46%;height:53%}
 .log-controls{justify-content:center;gap:12px}
 .log-pad{display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(2,44px);gap:3px}
-.log-pad button,.log-warehouse button{font-weight:800;background:#f7fbf8;border:1px solid #7d9892;border-bottom:3px solid #51776d;border-radius:7px;touch-action:manipulation}
+.log-pad button,.log-warehouse button{font-weight:800;border-bottom:3px solid #51776d;touch-action:manipulation}
 .log-pad button{font-size:22px;line-height:1}
 .log-pad .log-up{grid-column:2}.log-pad .log-left{grid-column:1}
-.log-game button:active:enabled{transform:translateY(1px);background:#d9eee5}
+.log-game button:active:enabled{transform:translateY(1px)}
 .log-cargo{min-width:112px;border:2px solid #558d81;border-radius:8px;padding:6px;background:#e7f4ec}
 .log-slots{margin-top:4px}
 .log-slots span{width:44px;min-height:44px;display:grid;place-items:center;background:white;border:1px dashed #789587;border-radius:5px;font-size:12px}
@@ -41,15 +39,12 @@
 .log-warehouse{margin-top:8px}.log-warehouse>strong{display:block;margin-bottom:3px}
 .log-warehouse button{flex:1;display:grid;grid-template-columns:auto auto;align-items:center;justify-content:center;gap:0 4px;padding:4px;min-height:45px}
 .log-warehouse img{width:23px;height:23px}.log-warehouse small{grid-column:1/-1}
-.log-game button:disabled{cursor:default;background:#e9ece8;color:#58685e;border-color:#b0bdb5}
 .log-notice{color:var(--teal);font-weight:700;min-height:1.35em}.log-rules{font-size:12px}
 .log-game :focus-visible{outline:3px solid #1960ac;outline-offset:2px}
 /* 지도 선택과 카트 슬롯을 픽셀 도구로 묶는다. */
 .log-game { color-scheme: only light; }
-.log-guide > img { width: 48px; height: 48px; }
-.log-guide p { font-size: 12px; }
 .log-plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin-bottom: 8px; padding: 4px; background: #dce9e2; border: 1px solid #94ada0; }
-.log-plans .btn { padding: 6px 2px; font-size: 12px; border: 1px solid #7b948c; background: #fff; border-radius: 3px; box-shadow: 0 2px 0 #adbbb0; white-space: nowrap; }
+.log-plans .btn { padding: 6px 2px; font-size: 12px; white-space: nowrap; }
 .log-plans [aria-pressed=true] { color: #fff; background: var(--navy, #233e4b); border-color: var(--navy, #233e4b); box-shadow: none; }
 .log-cargo { border-color: var(--navy, #233e4b); border-radius: 4px; background: #e6efe6; box-shadow: 0 3px 0 #b1c5b7; }
 .log-slots span { height: 44px; border: 2px solid #527968; border-radius: 2px; box-shadow: inset 2px 2px 0 #c5d5c8; }
@@ -60,7 +55,8 @@
 .log-warehouse small { font-size: 12px; }
 @media (max-height: 500px) and (min-width: 600px) {
   .log-game { max-width: 850px; display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 1fr); gap: 6px 16px; }
-  .log-guide, .log-toolbar, .log-plans, .log-paper, .log-controls, .log-warehouse, .log-notice, .log-rules { grid-column: 2; }
+ .log-toolbar, .log-plans, .log-paper, .log-controls, .log-warehouse, .log-notice, .log-rules { grid-column: 2; }
+.senior-card { grid-column: 2;}
   .log-map { grid-column: 1; grid-row: 1 / 7; width: 100%; margin: 0; }
   .log-toolbar { padding: 0; }
 }

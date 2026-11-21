@@ -17,8 +17,7 @@
     const listeners = new AbortController();
     const options = {signal: listeners.signal};
     function label() {
-      toggle.textContent = enabled ? '효과음 켜짐' : '효과음 꺼짐';
-      toggle.setAttribute('aria-pressed', String(enabled));
+      window.TourUI.sound(toggle, enabled);
     }
     function unlock() {
       if (!enabled || ready || pending || closed) return;

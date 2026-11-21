@@ -27,7 +27,7 @@
     let stage = 0, hints = 0, used = false, found = false, zoom = 1, ended = false;
     let pointer = null, moved = false, originScroll = [0,0], pinch = null;
     container.innerHTML = `<section class="bk-game">
-      <div class="bk-guide"><img src="img/npcs/portraits/jaehee.png" alt=""><div><strong>재희 선배</strong><p>책 사이로 빼꼼 나온 종이 고양이를 눌러 봐!</p></div></div>
+      <div class="senior-card"><img src="img/npcs/portraits/jaehee.png" alt=""><div><strong>재희 선배 · 도서관</strong><p>책 사이로 빼꼼 나온 종이 고양이를 눌러 봐!</p></div></div>
       <div class="bk-heading"><h3 tabindex="-1"></h3><span class="bk-count"></span></div>
       <div class="bk-viewport"><div class="bk-scene" role="img"><img class="bk-back" alt="" draggable="false"><div class="bk-region" hidden></div><img class="bk-peek" alt="" draggable="false"></div></div>
       <div class="bk-tools"><div class="bk-zoom" role="group" aria-label="장면 확대 조절"><i class="bk-loupe" aria-hidden="true"></i><button type="button" class="btn bk-minus" aria-label="장면 축소">−</button><button type="button" class="btn bk-reset" aria-label="원래 크기로">100%</button><button type="button" class="btn bk-plus" aria-label="장면 확대">＋</button></div><button type="button" class="btn bk-hint">힌트</button></div>
@@ -64,7 +64,7 @@
       peek.src = art('peek-'+stage); peek.style.left = x+'%'; peek.style.top = y+'%'; peek.hidden = false;
       hint.disabled = false; hint.textContent = '힌트 보기'; region.hidden = next.hidden = true;
       $('.bk-clue').textContent = '책갈피의 메모 “내가 숨은 높이는 ' + height + '. 내 옆을 묘사하면? ' + object + '!”';
-      $('.bk-choices').innerHTML = s.spots.map((p,i) => `<button type="button" data-spot="${i}">${p[2]}</button>`).join('');
+      $('.bk-choices').innerHTML = s.spots.map((p,i) => `<button class="btn" type="button" data-spot="${i}">${p[2]}</button>`).join('');
       $('.bk-status').textContent = '고양이 귀 찾기 · 두 손가락으로 확대';
       setZoom(1); renderTray(stage); container.scrollTop = 0;
       $('.bk-heading h3').focus({preventScroll:true});

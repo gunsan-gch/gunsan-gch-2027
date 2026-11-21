@@ -128,7 +128,7 @@
     for (const item of INGREDIENTS) {
       const button = document.createElement('button');
       button.type = 'button';
-      button.className = 'cafe-ing' + (item.cup ? ' is-cup' : '');
+      button.className = 'btn cafe-ing' + (item.cup ? ' is-cup' : '');
       button.dataset.id = item.id;
       button.setAttribute('aria-pressed', 'false');
       const img = document.createElement('img');

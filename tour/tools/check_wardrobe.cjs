@@ -88,14 +88,16 @@ function widthAt(data, yStart, yEnd) {
         if(direction==='left')return 31-(7-reach);
         return (direction==='down'?26:23)+reach;
       };
+      // 가방을 허리 높이로 올린 만큼 꼬리 끝 줄도 위로 (앞·뒤 3칸, 옆 4칸)
+      const tipY=27-(direction==='left'||direction==='right'?4:3);
       // Below the strap, every pixel must move exactly one source pixel, with
       // no horizontal drift, scaling or fractional filtering in any direction.
       for(let y=25;y<40;y++)for(let x=0;x<48;x++)for(let k=0;k<4;k++)
-        if(!(back==='bookcat'&&y===27+dy&&(x===8+tipX(false)||x===8+tipX(true))))
+        if(!(back==='bookcat'&&y===tipY+dy&&(x===8+tipX(false)||x===8+tipX(true))))
           assert.equal(moving[((y+12)*48+x)*4+k],(idle[((y-dy+12)*48+x)*4+k]??0),`${back}/${direction}/${frame}: vertical bob`);
       if(back==='bookcat'){
         const tip=tipX(dy!==0);
-        const i=((27+dy+12)*48+tip+8)*4;
+        const i=((tipY+dy+12)*48+tip+8)*4;
         assert.deepEqual(Array.from(moving.slice(i,i+4)),[255,233,163,255], 'ginger tail tip moves one pixel with the stride');
       }
       if(dy)assert.notDeepEqual(moving,idle,`${back}/${direction}: walking must animate`);

@@ -1,10 +1,8 @@
 /* 수빈의 사진부 — 청록색 뷰파인더, 크림색 예술제 신문 */
 .press-app,.press-paper {--press-ink:#172e37;--press-mint:#a1e5cc;color:var(--press-ink);line-height:1.45}
 .press-app [hidden] {display:none!important}
-.press-guide {display:flex;align-items:center;gap:.8rem;border:2px solid var(--press-ink);background:#ebf8ef;padding:.4rem .7rem;text-align:left}
-.press-guide img {width:clamp(72px,20vw,96px);aspect-ratio:1;object-fit:contain;image-rendering:auto}
-.press-guide strong,.press-slug b {font-size:.82rem;color:#155e52}
-.press-guide p,.press-app h3,.press-app p,.press-paper p {margin:0}
+.press-slug b {font-size:.82rem;color:#155e52}
+.press-app h3,.press-app p,.press-paper p {margin:0}
 .press-intro,.press-job,.press-edit {padding-top:.7rem}
 .press-intro {display:grid;gap:.8rem}
 .press-intro label {display:flex;align-items:center;gap:.45rem;font-size:.9rem}
@@ -22,13 +20,13 @@
 .press-controls {justify-content:center}
 .press-controls button,.press-intro button {min-height:44px}
 .press-choices {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem}
-.press-choices button {padding:.25rem;border:2px solid var(--press-ink);background:#fff7dc;font:inherit;font-size:.85rem;font-weight:bold;color:var(--press-ink);cursor:pointer}
+.press-choices button {padding:.25rem;font:inherit;font-size:.85rem;font-weight:bold;cursor:pointer}
 .press-choices .press-frame {margin-bottom:.35rem}
 .press-app button:focus-visible,.press-app input:focus-visible {outline:3px solid #096a92;outline-offset:2px}
 .press-paper {box-sizing:border-box;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem .65rem;padding:.7rem;border:2px solid var(--press-ink);background:#fff7df;text-align:left;width:100%}
 .press-paper header,.press-paper figure:first-of-type {grid-column:1/-1}
 .press-paper header {padding:.26rem 0;text-align:center;border-top:3px double var(--press-ink);border-bottom:3px double var(--press-ink)}
-.press-paper header span,.press-paper header p,.press-paper small {display:block;font-size:.72rem}
+.press-paper header span,.press-paper header p,.press-paper small {display:block;font-size: 12px}
 .press-paper h3 {font-family:serif;font-size:clamp(1.25rem,5vw,1.85rem);margin:0}
 .press-paper figure {margin:0;min-width:0}
 .press-paper figure:first-of-type {display:grid;align-items:center;grid-template-columns:1.5fr 1fr;gap:.6rem;border-bottom:1px solid #8c8c78;padding-bottom:.45rem}
@@ -39,16 +37,13 @@
 /* 촬영 화면을 채우고 엄지로 누르는 셔터를 하단에 둔다. */
 .press-app, .press-paper { color-scheme: only light; }
 .press-app { max-width: 760px; margin: auto; display: flex; flex-direction: column; gap: 10px; min-height: min(600px, calc(100dvh - 200px)); }
-.press-guide { border-radius: 6px; }
-.press-guide img { width: 48px; height: 48px; flex: none; }
-.press-guide p { font-size: 12px; }
 .press-job { flex: 1; display: flex; flex-direction: column; padding-top: 0; }
 .press-job .press-view { flex: none; min-height: 0; background: #172e37; }
 .press-job .press-frame { flex: none; }
 .press-controls { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: auto; padding-top: 8px; }
 .press-app .press-shoot, .press-app .press-next { width: 100%; min-height: 60px; font-size: 18px; border: 2px solid var(--navy, #172e37); border-radius: 6px; box-shadow: 0 4px 0 #344958; }
-.press-app .press-shoot { background: #f4cf7c; color: var(--navy, #172e37); display: flex; align-items: center; justify-content: center; gap: 12px; }
-.press-shoot i { width: 26px; height: 26px; border: 3px solid currentColor; border-radius: 50%; box-shadow: inset 0 0 0 4px #f4cf7c; background: currentColor; }
+.press-app .press-shoot { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.press-shoot i { width: 26px; height: 26px; border: 3px solid currentColor; border-radius: 50%; box-shadow: inset 0 0 0 4px var(--navy); background: currentColor; }
 .press-app .press-shoot:active { transform: translateY(2px); box-shadow: 0 2px 0 #344958; }
 .press-intro label { min-height: 44px; cursor: pointer; }
 .press-intro input { width: 44px; height: 44px; flex: none; }

@@ -235,9 +235,9 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 .room-label.is-facility .room-label-text { font-weight: 400; background: rgba(240, 244, 248, .92); border-color: #8a97a8; }
 .room-label.is-planned .room-label-text { border-color: var(--orange); }
 .room-label:hover .room-label-text, .room-label:focus-visible .room-label-text { background: #f6dd9c; }
-/* 체험 게임이 있는 공간: 이름표(작은 지도에서는 점) 위에 🎮 */
+/* 체험 게임이 있는 공간: 이름표(작은 지도에서는 점) 위에 도장 아이콘 */
 .room-label.has-game::after {
-  content: "🎮"; position: absolute; left: 50%; top: 0; transform: translate(-50%, -80%);
+  content: ""; width: 24px; height: 24px; background: url("../img/ui/stamp.png") center / contain no-repeat; image-rendering: pixelated; position: absolute; left: 50%; top: 0; transform: translate(-50%, -80%);
   font-size: 1.25em; line-height: 1; pointer-events: none;
   filter: drop-shadow(0 1px 0 #fffbed) drop-shadow(0 -1px 0 #fffbed) drop-shadow(1px 0 0 #fffbed) drop-shadow(-1px 0 0 #fffbed);
 }
@@ -536,4 +536,19 @@ dialog.is-wide .detail-image.is-photo img { object-fit: contain; }
 
 @media (min-width: 761px) and (max-width: 1000px) {
   #scene-cards { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* 가상 스틱 켜고 끄기: 터치 기기에서만 보임 */
+.stick-toggle { display: none; }
+@media (pointer: coarse) {
+  .stick-toggle { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; white-space: nowrap; }
+  .stick-toggle[aria-pressed="false"] { color: var(--muted); border-style: dashed; }
+  .stick-off .joystick { display: none !important; }
+}
+/* 휴대폰: 확대 도구는 한 줄, 그 아래 「크게 보기」와 「스틱」을 나란히 */
+@media (pointer: coarse) and (max-width: 640px) {
+  .scene-toolbar .zoom { flex-basis: 100%; }
+  .scene-toolbar .zoom #fit { flex: 1; }
+  .scene-toolbar .stick-toggle { flex: none; }
+  .scene-toolbar .zoom button { min-width: 44px; }
 }

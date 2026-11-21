@@ -184,7 +184,7 @@ const replay = session(182);
 assert.match(replay.$('.pp-note').textContent,/내 최고 182점/);
 assert.equal(replay.$('.pp-round').textContent,'1구간 · 정문');
 emit(replay.$('.pp-launch'),'click'); advance(7.5,30);
-assert.match(replay.$('.pp-guide p').textContent,/한 번 더/); advance(6,30);
+assert.match(replay.$('.senior-card p').textContent,/한 번 더/); advance(6,30);
 assert.equal(replay.$('.pp-next').hidden,false);
 assert.equal(replay.$('.pp-round').textContent,'2구간 · 교정 화단');
 emit(replay.$('.pp-next'),'click');

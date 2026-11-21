@@ -111,12 +111,12 @@
   }
   function start(container, api) {
     container.innerHTML = `<section class="pp-game">
-      <div class="pp-guide"><img src="img/npcs/portraits/yunhee.png" alt=""><div><strong>윤희 선배</strong><p>리본에 닿기 직전 한 바퀴! 옆으로 빠지려면 빈틈을 톡 눌러 봐.</p></div></div>
+      <div class="senior-card"><img src="img/npcs/portraits/yunhee.png" alt=""><div><strong>윤희 선배 · 종이비행기</strong><p>리본에 닿기 직전 한 바퀴! 옆으로 빠지려면 빈틈을 톡 눌러 봐.</p></div></div>
       <div class="pp-hud"><strong class="pp-round"></strong><span class="pp-distance"></span><span class="pp-rings"></span><span class="pp-wind"></span></div>
-      <div class="pp-field"><canvas width="360" height="400" tabindex="0" aria-label="잔디마당 비행 코스. 좌우 방향키 또는 드래그로 조종"></canvas><span class="pp-cue" role="status" hidden></span><div class="pp-overlay" hidden><strong>잠시 멈춤</strong><button class="pp-resume" type="button">비행 계속하기</button></div></div>
+      <div class="pp-field"><canvas width="360" height="400" tabindex="0" aria-label="잔디마당 비행 코스. 좌우 방향키 또는 드래그로 조종"></canvas><span class="pp-cue" role="status" hidden></span><div class="pp-overlay" hidden><strong>잠시 멈춤</strong><button class="btn pp-resume btn-primary" type="button">비행 계속하기</button></div></div>
       <div class="pp-energy"><label>남은 활공 거리 <meter min="0" max="350" value="236"></meter></label><span></span></div>
       <div class="pp-deck"><label>던지는 힘 <output></output><input class="pp-power" type="range" min="0" max="100" value="75"></label><button class="pp-launch btn btn-primary" type="button">비행기 날리기</button></div>
-      <div class="pp-steering" hidden><button class="pp-left" aria-label="왼쪽으로 조종" type="button">◀ 왼쪽</button><button class="pp-roll" type="button" aria-keyshortcuts="Space">↻ 한 바퀴!</button><button class="pp-right" aria-label="오른쪽으로 조종" type="button">오른쪽 ▶</button><button class="pp-pause" type="button" aria-label="잠시 멈춤">Ⅱ</button></div>
+      <div class="pp-steering" hidden><button class="btn pp-left" aria-label="왼쪽으로 조종" type="button">◀ 왼쪽</button><button class="btn pp-roll btn-primary" type="button" aria-keyshortcuts="Space">↻ 한 바퀴!</button><button class="btn pp-right" aria-label="오른쪽으로 조종" type="button">오른쪽 ▶</button><button class="btn pp-pause" type="button" aria-label="잠시 멈춤">Ⅱ</button></div>
       <p class="pp-note" role="status"></p><button class="pp-next btn btn-primary" hidden type="button"></button>
       <details><summary>조작법과 별 기준</summary><p>코스에서 위로 길게 쓸어 올릴수록 멀리 날아요. 힘을 고르고 버튼을 눌러도 돼요. 고리를 톡 누르면 그쪽으로 날아요. 리본이 다가와 ‘지금!’이 뜨면 스페이스나 ‘한 바퀴!’를 눌러 돌파해요. 성공은 15점과 가속, 스치면 4m를 잃지만 바로 조종할 수 있어요. 좌우로 드래그하거나 방향키·조종 버튼을 길게 눌러도 돼요.</p><p>줄마다 고리 하나를 골라요. 넓은 고리는 8점, 작은 별고리는 18점, 어느 쪽이든 활공 거리 +13m! 두 번째 연속 통과부터 5점과 가속을 얻어요. 네 번 연속 놓치면 잔디에 내려앉아요. 착륙은 중앙 30점, 테두리 15점. 60점부터 별 둘, 155점부터 별 셋이에요.</p></details></section>`;
     const $ = selector => container.querySelector(selector);
@@ -198,7 +198,7 @@
         shownZone = zone; shownMisses = f.misses;
         const guide = f.misses >= 4 ? '잔디에 내려앉아요. 다음엔 넓은 고리를 노려 봐요!'
           : f.misses === 3 ? '한 번 더! 다음 고리를 통과하면 비행을 이어 가요.' : briefings[zone];
-        $('.pp-guide p').textContent = guide;
+        $('.senior-card p').textContent = guide;
       }
       for (let d = 10; d < FINISH+40; d += 32) {
         const y = PLANE_Y - (d-f.distance)*SCALE;

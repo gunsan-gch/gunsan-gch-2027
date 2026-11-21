@@ -28,7 +28,7 @@
     const on = (node, event, handle) => node.addEventListener(event, handle, { signal: controller.signal });
     container.innerHTML = `
       <section class="press-app">
-        <header class="press-guide"><img src="img/npcs/portraits/subin.png" alt=""><div><strong>수빈 선배 · 이음 취재반</strong><p></p></div></header>
+        <header class="senior-card"><img src="img/npcs/portraits/subin.png" alt=""><div><strong>수빈 선배 · 이음 취재반</strong><p></p></div></header>
         <div class="press-intro"><h3>오늘의 특집호, 네 사진으로!</h3><p>체육관, 조리제빵실, 음악실에서 사진을 한 장씩 찍고 1면에 실을 기사를 골라요.</p>
         <label><input type="checkbox" class="press-slow"> 한 컷씩 넘기기</label>
         <button type="button" class="btn btn-primary press-start">취재 시작</button></div>
@@ -41,7 +41,7 @@
         <div class="press-edit" hidden><h3>1면에 어떤 사진을 실을까요?</h3><div class="press-choices"></div></div>
       </section>`;
     const $ = s => container.querySelector(s);
-    const tip = $('.press-guide p'), still = $('.press-slow'), status = $('.press-status');
+    const tip = $('.senior-card p'), still = $('.press-slow'), status = $('.press-status');
     const frame = $('.press-frame'), subject = $('.press-subject'), shoot = $('.press-shoot');
     const next = $('.press-next'), step = $('.press-step');
     const photos = [];
@@ -123,13 +123,13 @@
       tip.textContent = '세 장 모두 잘 받았어! 가장 크게 싣고 싶은 사진을 골라 줘.';
       for (const p of photos) {
         const btn = document.createElement('button');
-        btn.type = 'button'; btn.append(p.print.cloneNode(true), document.createTextNode(p.scene.title));
+        btn.type = 'button'; btn.className = 'btn'; btn.append(p.print.cloneNode(true), document.createTextNode(p.scene.title));
         on(btn,'click',() => publish(p)); $('.press-choices').append(btn);
       }
       $('.press-choices button').focus();
     });
     return () => { playing = false; cancelAnimationFrame(raf); controller.abort(); };
   }
-  window.TOUR_GAMES.press = { title: '찰칵! 녹원예술제 취재반', button: '📷 녹원예술제 취재반', room: '드림스페이스',
+  window.TOUR_GAMES.press = { title: '찰칵! 녹원예술제 취재반', icon: 'camera', button: '녹원예술제 취재반', room: '드림스페이스',
     naver: 'Press', nextGame: 'logistics', maxStars: 3, stamp: '녹원예술제 취재반 도장 획득!', message: '세 곳의 예술제 소식을 담은 나만의 특집호를 발행했어요.', start };
 })();

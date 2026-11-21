@@ -30,11 +30,12 @@
           <canvas class="melody-player" width="48" height="52"></canvas>
           <span class="melody-name">현아 선배</span><span class="melody-player-name">나</span>
         </div>
-        <div class="melody-hud"><strong class="melody-round">준비</strong><span class="melody-lives" role="img" aria-label="남은 기회 3번">♥ ♥ ♥</span><button type="button" class="melody-sound" aria-pressed="true">♪ 소리 켜짐</button></div>
-        <div class="melody-prompt" tabindex="-1"><strong class="melody-phase">소리와 불빛을 기억해요</strong><p class="melody-hint">선배의 연주를 보고, 같은 순서로 건반을 눌러요.</p></div>
+        <div class="melody-hud"><strong class="melody-round">준비</strong><span class="melody-lives" role="img" aria-label="남은 기회 3번">♥ ♥ ♥</span></div>
+        <div class="melody-prompt" tabindex="-1"><strong class="melody-phase">소리와 불빛을 기억해요</strong></div>
+        <div class="senior-card is-compact"><img src="${HYUNA}" alt=""><div><strong>현아 선배 · 음악실</strong><p class="melody-hint">선배의 연주를 보고, 같은 순서로 건반을 눌러요.</p></div></div>
         <div class="melody-sequence" role="group" aria-label="이번 단계 입력 순서"></div>
         <div class="melody-pads" role="group" aria-label="네 가지 건반">
-          ${R.NOTES.map((note, i) => `<button type="button" class="melody-pad melody-pad-${i}" data-note="${i}" aria-label="${note.name} 건반, ${note.key} 또는 ${i+1}" disabled><span aria-hidden="true">${i+1}</span><b>${note.name}</b><kbd>${note.key}</kbd></button>`).join('')}
+          ${R.NOTES.map((note, i) => `<button type="button" class="btn melody-pad melody-pad-${i}" data-note="${i}" aria-label="${note.name} 건반, ${note.key} 또는 ${i+1}" disabled><span aria-hidden="true">${i+1}</span><b>${note.name}</b><kbd>${note.key}</kbd></button>`).join('')}
         </div>
         <div class="melody-actions"><button type="button" class="btn btn-primary melody-main">멜로디 듣고 시작</button><button type="button" class="btn melody-practice">3음 연습</button><button type="button" class="btn melody-pause" hidden>잠깐 쉬기</button></div>
         <p class="melody-help">3음 → 4음 → 5음 → 6음 → 8음 · 시간 제한 없어요.</p>
@@ -45,7 +46,7 @@
     const $ = selector => container.querySelector(selector);
     const pads = [...container.querySelectorAll('.melody-pad')];
     const main = $('.melody-main'), practiceButton = $('.melody-practice'), pauseButton = $('.melody-pause');
-    const soundButton = $('.melody-sound'), live = $('.melody-live');
+    const sound = window.TourUI.mountSound(!muted, toggleSound), live = $('.melody-live');
     const player = $('.melody-player'), sprite = new Image();
     let outfit = {};
     try { outfit = JSON.parse(localStorage.getItem('gch-tour-addons-v1') || '{}').equip || {}; } catch {}
@@ -106,8 +107,7 @@
       const [title, hint, label] = copy[s.phase];
       $('.melody-phase').textContent = title; $('.melody-hint').textContent = hint; main.textContent = label;
       $('.melody-audio-warning').hidden = !audioWarning;
-      soundButton.textContent = muted ? '♪ 소리 꺼짐' : '♪ 소리 켜짐';
-      soundButton.setAttribute('aria-pressed', String(!muted));
+      sound.update(!muted);
       slots();
     }
     async function perform() {
@@ -196,7 +196,6 @@
       else if (e.target.closest('.melody-main')) primary();
       else if (e.target.closest('.melody-practice')) begin(true);
       else if (e.target.closest('.melody-pause')) pause();
-      else if (e.target.closest('.melody-sound')) toggleSound();
     }
     function onKey(e) {
       if (e.ctrlKey || e.metaKey || e.altKey || e.target.closest('input,textarea,select,a') || e.target.isContentEditable) return;
@@ -217,7 +216,7 @@
     document.addEventListener('visibilitychange', onHidden); window.addEventListener('blur', pause);
     render(); main.focus({preventScroll:true});
     return () => {
-      disposed = true; clearPlayback(); audio.dispose(); sprite.onload = null;
+      disposed = true; clearPlayback(); sound.dispose(); audio.dispose(); sprite.onload = null;
       container.removeEventListener('click', onClick); container.removeEventListener('keydown', onKey);
       document.removeEventListener('visibilitychange', onHidden); window.removeEventListener('blur', pause);
     };

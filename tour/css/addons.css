@@ -32,23 +32,6 @@
 .addon-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
 .addon-actions .btn { flex: 1 1 auto; font-size: 14px; }
 .addon-lead { margin: 0 0 16px; font-size: 14px; color: var(--muted); }
-
-/* 같은 액자 안에서 지도 캐릭터는 2배 정수 배율을 유지합니다. */
-.addon-npc-talk { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 16px; align-items: center; }
-.addon-portrait {
-  width: 104px;
-  height: 104px;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  background: var(--green-soft);
-  border: 1px solid var(--line-strong);
-  border-bottom: 4px solid var(--line-strong);
-}
-.addon-portrait canvas { width: 64px; height: 80px; image-rendering: pixelated; }
-.addon-portrait img { width: 100%; height: 100%; object-fit: cover; }
-.addon-npc-talk h3 { margin: 0 0 8px; font-size: 18px; line-height: 1.4; }
-.addon-npc-talk p { margin: 0; font-size: 14px; }
 .addon-inventory { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 20px 0; }
 .addon-supply {
   display: grid;
@@ -210,8 +193,6 @@
   .addon-outfit { padding: 6px 0; gap: 4px; }
   .addon-item-art { min-height: 108px; overflow: hidden; }
   .addon-practice ul { grid-template-columns: 1fr; }
-  .addon-npc-talk { gap: 12px; }
-  .addon-npc-talk h3 { font-size: 16px; }
 }
 
 /* 지도 캐릭터의 크기와 좌표는 기존 규칙을 유지합니다. */
@@ -219,3 +200,10 @@
 #scene-walker.has-addon-outfit{background-image:none!important}#scene-walker .addon-outfit-layer{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
 #scene-walker .addon-outfit-layer{inset:auto;left:-25%;top:-30%;width:150%;height:130%;max-width:none;pointer-events:none}
 .addon-point:not(.is-item) { width: max(26px, calc(var(--stage-w) * .054)); transform: translate(-50%, -87.5%); }
+
+/* 아름 선배 말풍선: 줄마다 말하듯이, 자르지 않음 */
+.senior-card.is-talk { align-items: flex-start; }
+.senior-card.is-talk p { display: block; overflow: visible; -webkit-line-clamp: unset; margin-top: 4px; font-size: 14px; line-height: 1.45; word-break: keep-all; }
+.senior-card.is-talk.is-compact { align-items: center; }
+.senior-card.is-talk.is-compact > .addon-portrait { width: 48px; height: 48px; }
+.addon-supply small { white-space: normal; text-align: center; font-size: 12px; line-height: 1.3; color: var(--muted); }

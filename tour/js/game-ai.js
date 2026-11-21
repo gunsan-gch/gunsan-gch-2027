@@ -77,7 +77,7 @@
   const starText = n => '★'.repeat(n) + '☆'.repeat(3 - n);
   const el = (tag, className, text = '') => {
     const node = document.createElement(tag);
-    node.className = className;
+    node.className = tag === 'button' ? 'btn ' + className : className;
     node.textContent = text;
     return node;
   };

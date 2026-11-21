@@ -1309,6 +1309,86 @@
       "sha256": "45b66d3107f149c6eec0ce182ff17a6a832c2e9856014948d5efb65cb338c3ae",
       "description": "틈을 두고 이어 그리는 깃발 리본",
       "generator": "tools/make_flight_art.mjs"
+    },
+    "ui/stamp.png": {
+      "output": "ui/stamp.png",
+      "kind": "ui-pixel-art",
+      "sha256": "ea5583d1e95258152e73db1192732ec5e9ab7225d225cb2906ecc0dc8c5bc319",
+      "description": "공통 화면 아이콘 · stamp (16×16, 3배)",
+      "source": "직접 생성",
+      "generator": "tools/make_ui_icons.mjs"
+    },
+    "ui/closet.png": {
+      "output": "ui/closet.png",
+      "kind": "ui-pixel-art",
+      "sha256": "4a6503baaeda2cc2fcf9dae9554fc8c726e16513938b0e00dc89c58d222748be",
+      "description": "공통 화면 아이콘 · closet (16×16, 3배)",
+      "source": "직접 생성",
+      "generator": "tools/make_ui_icons.mjs"
+    },
+    "ui/mission.png": {
+      "output": "ui/mission.png",
+      "kind": "ui-pixel-art",
+      "sha256": "c4a175409e6550540064624735bace1775f500beefecb1f23a278bc20a073a69",
+      "description": "공통 화면 아이콘 · mission (16×16, 3배)",
+      "source": "직접 생성",
+      "generator": "tools/make_ui_icons.mjs"
+    },
+    "ui/trophy.png": {
+      "output": "ui/trophy.png",
+      "kind": "ui-pixel-art",
+      "sha256": "6904e56785c9ac7a0c877df2c58dced240b79c5d9b76a620d203bde918128a66",
+      "description": "공통 화면 아이콘 · trophy (16×16, 3배)",
+      "source": "직접 생성",
+      "generator": "tools/make_ui_icons.mjs"
+    },
+    "ui/camera.png": {
+      "output": "ui/camera.png",
+      "kind": "ui-pixel-art",
+      "sha256": "2f6b709b1e00124d960732e83c1b36dea5d5568304af71ee6236be289b70a661",
+      "description": "공통 화면 아이콘 · camera (16×16, 3배)",
+      "source": "직접 생성",
+      "generator": "tools/make_ui_icons.mjs"
+    },
+    "ui/box.png": {
+      "output": "ui/box.png",
+      "kind": "ui-pixel-art",
+      "sha256": "7b71739f10041fbf0b5b7a013baaa335d944c0c60763008fbde5d4131284ebe7",
+      "description": "공통 화면 아이콘 · box (16×16, 3배)",
+      "source": "직접 생성",
+      "generator": "tools/make_ui_icons.mjs"
+    },
+    "ui/receipt.png": {
+      "output": "ui/receipt.png",
+      "kind": "ui-pixel-art",
+      "sha256": "a85037dc5d616f5b293d0e347fca77b64a4d61ae76f3e395aa3027497a9bdfce",
+      "description": "공통 화면 아이콘 · receipt (16×16, 3배)",
+      "source": "직접 생성",
+      "generator": "tools/make_ui_icons.mjs"
+    },
+    "ui/magnifier.png": {
+      "output": "ui/magnifier.png",
+      "kind": "ui-pixel-art",
+      "sha256": "b3c139ace076dba11ec5d787bc5350cf3500841cf3f728f92e6fd5e55252c7a4",
+      "description": "공통 화면 아이콘 · magnifier (16×16, 3배)",
+      "source": "직접 생성",
+      "generator": "tools/make_ui_icons.mjs"
+    },
+    "ui/speaker-on.png": {
+      "output": "ui/speaker-on.png",
+      "kind": "ui-pixel-art",
+      "sha256": "583189a6f0ea21064ac56edd5ac11602b592789174a9a20cd3f1dbc02c068797",
+      "description": "공통 화면 아이콘 · speaker-on (16×16, 3배)",
+      "source": "직접 생성",
+      "generator": "tools/make_ui_icons.mjs"
+    },
+    "ui/speaker-off.png": {
+      "output": "ui/speaker-off.png",
+      "kind": "ui-pixel-art",
+      "sha256": "7235e751c61bcef94c1c904831a7e24e35b19072b5a91e90ede1765664905261",
+      "description": "공통 화면 아이콘 · speaker-off (16×16, 3배)",
+      "source": "직접 생성",
+      "generator": "tools/make_ui_icons.mjs"
     }
   }
 }

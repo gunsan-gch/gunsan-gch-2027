@@ -23,12 +23,37 @@
    공간 데이터(tour-data.js)에 game: 'cafe' 를 적으면 그 공간의 상세 창에 버튼이 생기고,
    tour/index.html?game=cafe 로 들어오면 바로 열립니다.
 
-   지도 위 [🎮 도장 n / m] 버튼은 도장판(<dialog id="stamps">)을 엽니다 — 게임이 있는 공간과 모은 도장·별을 보여 주고 바로 도전할 수 있습니다.
+   지도 위 [도장 n / m] 버튼은 도장판(<dialog id="stamps">)을 엽니다 — 게임이 있는 공간과 모은 도장·별을 보여 주고 바로 도전할 수 있습니다.
    도장은 localStorage 'gch-tour-stamps'에 { cafe: { stars: 2, at: '2026-11-14' } } 꼴로, 최고 별 수만 남깁니다.
    이름·연락처 같은 개인정보는 받지 않고, 서버로 보내는 것도 없습니다.
    ========================================================================= */
 
 window.TOUR_GAMES = window.TOUR_GAMES || {};
+
+/* 장식 아이콘과 소리 버튼의 공통 화면 부품. */
+window.TourUI = {
+  icon(name) {
+    const img = document.createElement('img');
+    img.className = 'ui-icon'; img.src = 'img/ui/' + name + '.png';
+    img.width = 20; img.height = 20; img.alt = ''; img.setAttribute('aria-hidden', 'true');
+    return img;
+  },
+  label(node, name, text) { node.replaceChildren(this.icon(name), document.createTextNode(' ' + text)); },
+  sound(button, enabled) {
+    button.className = 'btn sound-toggle';
+    button.replaceChildren(this.icon(enabled ? 'speaker-on' : 'speaker-off'));
+    button.setAttribute('aria-pressed', String(enabled));
+    button.setAttribute('aria-label', enabled ? '효과음 끄기' : '효과음 켜기');
+  },
+  mountSound(enabled, onClick) {
+    const button = document.getElementById('game-sound');
+    this.sound(button, enabled); button.hidden = false;
+    button.addEventListener('click', onClick);
+    return { update: value => this.sound(button, value), dispose() {
+      button.removeEventListener('click', onClick); button.hidden = true;
+    }};
+  }
+};
 
 window.tourGame = (() => {
   const GAMES = window.TOUR_GAMES;
@@ -262,8 +287,8 @@ window.tourGame = (() => {
     if (board && count.total) {   // 모은 도장 수 + 도장판으로 가는 버튼
       const more = document.createElement('button');
       more.type = 'button';
-      more.className = 'game-result-board';
-      more.textContent = `🎮 모은 도장 ${count.got} / ${count.total} · 도장판 보기`;
+      more.className = 'btn game-result-board';
+      window.TourUI.label(more, 'stamp', `모은 도장 ${count.got} / ${count.total} · 도장판 보기`);
       more.addEventListener('click', () => {
         dialog.addEventListener('close', openBoard, { once: true });
         dialog.close();
@@ -341,7 +366,7 @@ window.tourGame = (() => {
     const stamps = readStamps();
     const got = rooms.filter(item => stamps[item.room.game]).length;
     if (boardButton) {
-      boardButton.textContent = `🎮 도장 ${got} / ${rooms.length}`;
+      window.TourUI.label(boardButton, 'stamp', `도장 ${got} / ${rooms.length}`);
       boardButton.classList.toggle('is-complete', rooms.length > 0 && got === rooms.length);
     }
     return { got, total: rooms.length };

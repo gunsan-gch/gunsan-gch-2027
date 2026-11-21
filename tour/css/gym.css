@@ -3,16 +3,11 @@
 .gym-hub, .gym-game { display: grid; gap: 8px; max-width: 560px; margin: auto; color: var(--navy); }
 .gym-game [hidden], .gym-hub [hidden] { display: none !important; }
 .gym-hub img, .gym-game img, .gym-summary img { image-rendering: pixelated; }
-.gym-guide { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.gym-guide img { flex: none; width: 88px; height: 88px; object-fit: contain; image-rendering: auto; }
-.gym-guide strong { font-family: var(--font-title); font-size: 19px; line-height: 1.3; }
-.gym-guide p { margin: 3px 0 0; font-size: 12px; line-height: 1.45; }
 .gym-panorama { position: relative; border: 2px solid var(--navy); background: #d8b079; }
 .gym-panorama>img { display: block; width: 100%; height: auto; }
 .gym-panorama>span { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: #fffcf2; padding: 3px 9px; font-size: 12px; white-space: nowrap; border: 1px solid var(--navy); }
 .gym-events { display: grid; gap: 8px; }
-.gym-event { display: flex; align-items: center; gap: 12px; width: 100%; padding: 8px 12px; border: 2px solid var(--navy); background: #fffcf2; color: var(--navy); text-align: left; cursor: pointer; border-radius: 0; box-shadow: 3px 3px 0 #c4c8b5; }
-.gym-event:hover { background: #e7efdf; }.gym-event:active { transform: translate(2px,2px); box-shadow: none; }
+.gym-event { display: flex; align-items: center; gap: 12px; width: 100%; padding: 8px 12px; text-align: left; cursor: pointer; }.gym-event:active { transform: translate(2px,2px); }
 .gym-event strong { display: block; font-family: var(--font-title); font-size: 20px; }
 .gym-event small { display: block; font-size: 12px; line-height: 1.6; }
 .gym-event-record { margin-left: auto; text-align: right; font-size: 13px; white-space: nowrap; }
@@ -30,10 +25,9 @@
 .gym-message { font-family: var(--font-title); font-size: 17px; line-height: 1.35; text-align: center; min-height: 23px; margin: 0; }
 .gym-setup { display: flex; justify-content: center; gap: 8px; }.gym-setup .btn { flex: 1; min-height: 44px; padding: 9px; font-size: 13px; }
 .gym-controls { display: flex; gap: 10px; justify-content: center; }
-.gym-controls button { border: 2px solid var(--navy); border-radius: 0; box-shadow: 0 4px 0 #879e92; padding: 9px 14px; min-height: 48px; background: #b7d8c4; color: var(--navy); font: 20px var(--font-title); cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
-.gym-controls .gym-main-action { flex: 1; background: #f3d78d; box-shadow: 0 4px 0 #b39349; }
-.gym-controls button:active:not(:disabled) { transform: translateY(3px); box-shadow: none; }
-.gym-controls button:disabled { opacity: .5; cursor: default; }.gym-game:not([data-phase]) .gym-controls, .gym-game:not([data-phase]) .gym-curling-controls { display: none; }
+.gym-controls button { padding: 9px 14px; min-height: 48px; font: 20px var(--font-title); cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
+.gym-controls .gym-main-action { flex: 1; }
+.gym-controls button:active:not(:disabled) { transform: translateY(3px); }.gym-game:not([data-phase]) .gym-controls, .gym-game:not([data-phase]) .gym-curling-controls { display: none; }
 .gym-controls button[data-action=left], .gym-controls button[data-action=right] { min-width: 70px; }
 .gym-curling-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .gym-curling-controls label { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px; font-size: 12px; }
@@ -48,13 +42,13 @@
   .gym-event-record small { max-width: 100px; white-space: normal; }.gym-event strong { font-size: 19px; }.gym-panorama { max-height: 196px; overflow: hidden; }
 }
 @media(max-width: 599px) and (max-height: 720px) {
-  .gym-game { gap: 5px; }.gym-guide img { width: 40px; height: 40px; }.gym-guide strong { font-size: 17px; }.gym-guide p { font-size: 12px; }
+  .gym-game { gap: 5px; }
   .gym-field { width: min(100%, 320px); }.gym-controls button { min-height: 44px; padding: 7px 10px; font-size: 19px; }.gym-message { font-size: 15px; }
   .gym-hud { padding: 5px 8px; }.gym-tools .btn { min-height: 44px; }.gym-help, .gym-rewards { font-size: 12px; }
 }
 @media(max-height: 500px) and (min-width: 600px) {
   .gym-game { max-width: 920px; grid-template-columns: minmax(0,1.15fr) minmax(0,1fr); column-gap: 14px; row-gap: 5px; }
-  .gym-guide { grid-column: 1; grid-row: 1; }.gym-guide img { width: 36px; height: 36px; }.gym-guide strong { font-size: 16px; }.gym-guide p { font-size: 12px; }
+.senior-card { grid-column: 1; grid-row: 1;}
   .gym-field { grid-column: 1; grid-row: 2 / 9; width: min(100%, 292px); align-self: start; }
   .gym-hud { grid-column: 2; grid-row: 1; padding: 5px 7px; font-size: 12px; }.gym-score { font-size: 14px; }
   .gym-message { grid-column: 2; grid-row: 2; font-size: 16px; }.gym-setup { grid-column: 2; grid-row: 3; flex-wrap: wrap; }
@@ -62,7 +56,8 @@
   .gym-controls button[data-action=left], .gym-controls button[data-action=right] { min-width: 52px; }
   .gym-help { grid-column: 2; grid-row: 5; }.gym-tools { grid-column: 2; grid-row: 6; }.gym-rewards { grid-column: 2; grid-row: 7; }
   .gym-tools .btn { min-height: 44px; }.gym-help, .gym-rewards { font-size: 12px; }
-  .gym-hub { max-width: 900px; grid-template-columns: 1fr 1.2fr; }.gym-hub .gym-guide { grid-column: 1 / 3; }.gym-panorama { grid-column: 1; grid-row: 2; align-self: start; }.gym-events { grid-column: 2; grid-row: 2 / 4; gap: 5px; }.gym-event img { width: 32px; height: 32px; }.gym-event { padding: 4px 6px; }.gym-event strong { font-size: 17px; }.gym-trophy { grid-column: 1; grid-row: 3; padding: 4px; }.gym-trophy img { width: 32px; height: 32px; }.gym-trophy strong { font-size: 12px; }.gym-note { grid-column: 1 / 3; }
+  .gym-hub { max-width: 900px; grid-template-columns: 1fr 1.2fr; }
+.gym-hub .senior-card { grid-column: 1 / 3;}.gym-panorama { grid-column: 1; grid-row: 2; align-self: start; }.gym-events { grid-column: 2; grid-row: 2 / 4; gap: 5px; }.gym-event img { width: 32px; height: 32px; }.gym-event { padding: 4px 6px; }.gym-event strong { font-size: 17px; }.gym-trophy { grid-column: 1; grid-row: 3; padding: 4px; }.gym-trophy img { width: 32px; height: 32px; }.gym-trophy strong { font-size: 12px; }.gym-note { grid-column: 1 / 3; }
 }
 @media(prefers-reduced-motion: reduce) { .gym-controls button:active:not(:disabled), .gym-event:active { transform: none; } }
 /* 상태는 한 칩으로 고정하고 트로피의 윤곽을 살린다. */

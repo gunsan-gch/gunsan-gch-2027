@@ -372,7 +372,9 @@
         sub.textContent = detail;
         button.append(sub);
       }
-      if (room.game) button.append(Object.assign(document.createElement('small'), { className: 'scene-card-game', textContent: '🎮 체험 게임' }));
+      // 체험 게임·수업 실습 공간 꼬리표 (같은 도장 아이콘)
+      const tag = room.game ? '체험 게임' : room.practice ? '수업 실습' : '';
+      if (tag) button.append(Object.assign(document.createElement('small'), { className: 'scene-card-game', innerHTML: `<img class="ui-icon" src="img/ui/stamp.png" width="20" height="20" alt="" aria-hidden="true"> ${tag}` }));
       cards.append(button);
     }
     facilities.hidden = !facilities.children.length;
@@ -421,7 +423,10 @@
     const game = room.game && window.TOUR_GAMES?.[room.game];
     const gameButton = $('#detail-game');
     gameButton.hidden = !game;
-    if (game) gameButton.textContent = game.button || game.title;
+    if (game) {
+      gameButton.textContent = game.button || game.title;
+      if (game.icon) window.TourUI.label(gameButton, game.icon, game.button || game.title);
+    }
 
     const preview = $('#detail-image');
     preview.replaceChildren();
@@ -649,9 +654,28 @@
   $('#zoom-out').addEventListener('click', () => camera.setZoom(camera.zoom / 1.25));
   $('#fit').addEventListener('click', () => camera.setZoom(camera.minZoom()));
   // 크게 보기 안의 같은 버튼들 — 아래 도구 버튼을 그대로 눌러 같은 동작
-  const MAP_ACTIONS = { 'zoom-out': '#zoom-out', fit: '#fit', 'zoom-in': '#zoom-in', locate: '#locate-player', stop: '#stop-walking' };
+  const MAP_ACTIONS = { 'zoom-out': '#zoom-out', fit: '#fit', 'zoom-in': '#zoom-in', locate: '#locate-player', stop: '#stop-walking', stick: '#stick-toggle' };
   document.querySelectorAll('[data-map-action]').forEach(button => {
     button.addEventListener('click', () => $(MAP_ACTIONS[button.dataset.mapAction]).click());
+  });
+
+  /* 가상 스틱 켜고 끄기 — 선택은 이 기기에 기억 (저장이 막혀도 동작) */
+  const STICK_KEY = 'gch-tour-stick';
+  function setStick(on) {
+    document.body.classList.toggle('stick-off', !on);
+    document.querySelectorAll('.stick-toggle').forEach(button => {
+      button.setAttribute('aria-pressed', String(on));
+      button.textContent = button.id === 'stick-toggle' ? (on ? '스틱 켜짐' : '스틱 꺼짐') : '스틱';
+    });
+    if (!on && stickId !== null) endStick({ pointerId: stickId });
+  }
+  let stickOn = true;
+  try { stickOn = localStorage.getItem(STICK_KEY) !== 'off'; } catch {}
+  setStick(stickOn);
+  $('#stick-toggle').addEventListener('click', () => {
+    stickOn = !stickOn;
+    setStick(stickOn);
+    try { localStorage.setItem(STICK_KEY, stickOn ? 'on' : 'off'); } catch {}
   });
 
   /* ---------- 크게 보기 (지도를 화면 가득) ---------- */

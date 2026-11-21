@@ -35,7 +35,7 @@
   const KEY_HINT = matchMedia('(pointer: coarse)').matches ? '' : ' (스페이스바)';
   const el = (tag, className, text) => {
     const node = document.createElement(tag);
-    node.className = className;
+    node.className = tag === 'button' ? 'btn ' + className : className;
     node.textContent = text;
     return node;
   };
