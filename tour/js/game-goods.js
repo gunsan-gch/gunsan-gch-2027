@@ -14,6 +14,18 @@
     return { tier, r, x: clamp(x, r, width-r), y: clamp(y, r, height-r),
       vx: 0, vy: 0, supported: false, landed: false, danger: 0 };
   }
+  function droppedPiece(tier, x) {
+    const p = piece(tier, x, radii[tier]+3);
+    p.angle = 0;
+    p.spinDirection = p.x < width/2 ? -1 : 1;
+    return p;
+  }
+  function rollDrop(p) {
+    if (!p.spinDirection || p.landed) return;
+    // Give a centered drop a visible turn, then follow sideways motion when nudged.
+    if (Math.abs(p.vx) > 12) p.spinDirection = Math.sign(p.vx);
+    p.angle += p.spinDirection * (4 + Math.min(5, Math.abs(p.vy) / (3*p.r))) * step;
+  }
   const orders = [1, 2, 1, 3, 2, 4];
   const requested = world => orders[world.deliveries % orders.length];
   const fee = tier => 3 * 2 ** tier;
@@ -77,6 +89,7 @@
       p.previousY = p.y;
       p.supported = false;
       p.vy += 820 * step;
+      rollDrop(p);
       p.x += p.vx * step;
       p.y += p.vy * step;
       walls(p);
@@ -146,7 +159,7 @@
   function toss(round) {
     if (round.phase !== 'aim') return;
     round.phase = 'fall';
-    round.item = piece(round.spec.first, round.x, radii[round.spec.first]+3);
+    round.item = droppedPiece(round.spec.first, round.x);
   }
   function canNudge(round) {
     return round.phase === 'fall' && !round.nudge && round.item.tier < round.spec.goal;
@@ -166,6 +179,7 @@
     const p = round.item;
     if (p.tier === round.spec.goal) { round.phase = 'won'; return; }
     p.vy += 650 * step;
+    rollDrop(p);
     p.x += p.vx * step;
     p.y += p.vy * step;
     walls(p);
@@ -317,7 +331,7 @@
         return;
       }
       world.turn++;
-      falling = piece(current, x, radii[current]+3);
+      falling = droppedPiece(current, x);
       world.bodies.push(falling);
       discover(current);
       current = next;
@@ -326,7 +340,7 @@
       cooldown = 0.32;
       update();
     }
-    function drawPiece(t, px, py) {
+    function drawPiece(t, px, py, angle = 0) {
       const r = radii[t], img = sprites[t];
       ctx.beginPath();
       ctx.arc(px, py, r-1, 0, 2*Math.PI);
@@ -335,7 +349,16 @@
       ctx.strokeStyle = '#735640';
       ctx.lineWidth = 1.5;
       ctx.stroke();
-      if (img.complete && img.naturalWidth) ctx.drawImage(img, Math.round(px-r), Math.round(py-r), 2*r, 2*r);
+      if (!img.complete || !img.naturalWidth) return;
+      if (angle && !reducedMotion) {
+        ctx.save();
+        ctx.translate(Math.round(px), Math.round(py));
+        ctx.rotate(angle);
+        ctx.drawImage(img, -r, -r, 2*r, 2*r);
+        ctx.restore();
+      } else {
+        ctx.drawImage(img, Math.round(px-r), Math.round(py-r), 2*r, 2*r);
+      }
     }
     function drawPuzzle() {
       const {spec, shelves, item, phase} = round;
@@ -373,7 +396,7 @@
           ctx.fillText(round.nudge < 0 ? '◀ 톡!' : '톡! ▶', clamp(item.x,23,width-23),item.y+item.r+17);
           ctx.textAlign='left';
         }
-        drawPiece(item.tier,item.x,item.y);
+        drawPiece(item.tier,item.x,item.y,item.angle);
         if (round.depth && (round.pause > 0 || phase === 'won')) {
           const lift = reducedMotion ? 0 : 8*(1-clamp(round.pause/.29,0,1));
           ctx.strokeStyle='#bd7438'; ctx.lineWidth=2;
@@ -411,7 +434,7 @@
           ctx.lineWidth = 3;
           ctx.stroke();
         }
-        drawPiece(p.tier, p.x, p.y);
+        drawPiece(p.tier, p.x, p.y, p.angle);
       }
       if (receipt && receipt.time > 0) {
         ctx.font = 'bold 13px sans-serif';

@@ -5,6 +5,7 @@
   const STEP = 1 / 120, SPEED = 9, FINISH = 288;
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const zones = ['정문', '교정 화단', '운동장'];
+  const flightSpeedMultiplier = 1.3;
   const zoneAt = distance => distance < 90 ? 0 : distance < 182 ? 1 : 2;
   const distances = [18,48,78,109,136,165,198,226,254];
   const courses = [
@@ -37,7 +38,10 @@
     f.roll = ROLL_TIME; f.recharge = ROLL_RECHARGE;
     return true;
   }
-  function speedOf(f) { return f.stagger > 0 ? 5.5 : SPEED + (f.boost > 0 ? 4 : 0); }
+  function speedOf(f) {
+    const speed = f.stagger > 0 ? 5.5 : SPEED + (f.boost > 0 ? 4 : 0);
+    return speed * flightSpeedMultiplier;
+  }
   function crossRibbons(f,before,after,x0,x1) {
     for (const ribbon of f.ribbons) {
       if (ribbon.outcome || ribbon.distance <= before || ribbon.distance > after) continue;
