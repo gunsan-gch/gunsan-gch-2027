@@ -153,7 +153,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       if (state.complete) { completeView(); return; }
       if (!state.started) {
         show('talk', '우리 예술제, 같이 준비할래?', `
-          ${yunaSays(['안녕, 나 아름이야.', '예술제 준비물 세 개만 같이 챙겨 줄래?',
+          ${yunaSays(['안녕? 나는 군산여상 전교회장 아름이라고 해.', '예술제 준비물 세 개만 같이 챙겨 줄래?',
             '리본은 1층 정보처리실 앞,', '빵은 조리제빵실 빵 굽기에서!',
             '포스터는 3층 드림스페이스의 송현이(부회장)한테 받아 와.'])}
           ${inventory(true)}

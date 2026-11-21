@@ -238,11 +238,16 @@ button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-c
 /* 체험 게임이 있는 공간: 이름표(작은 지도에서는 점) 위에 도장 아이콘 */
 .room-label.has-game::after, .room-label.has-practice::after {
   content: "🎮"; position: absolute; left: 50%; top: 0; transform: translate(-50%, -80%);
-  font-size: 1.25em; line-height: 1; pointer-events: none;
-  filter: drop-shadow(0 1px 0 #fffbed) drop-shadow(0 -1px 0 #fffbed) drop-shadow(1px 0 0 #fffbed) drop-shadow(-1px 0 0 #fffbed);
+  /* 게임이 있다는 걸 한눈에: 크게 + 흰 동그라미 배지 + 살짝 통통 */
+  font-size: 1.9em; line-height: 1.5em; width: 1.5em; height: 1.5em; text-align: center; pointer-events: none;
+  background: #fffbed; border: 2px solid var(--navy, #1d3673); border-radius: 50%;
+  box-shadow: 0 2px 0 rgba(20, 40, 90, .35);
+  animation: game-badge-bob 1.6s ease-in-out infinite;
 }
+@keyframes game-badge-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -3px; } }
+@media (prefers-reduced-motion: reduce) { .room-label.has-game::after, .room-label.has-practice::after { animation: none; } }
 .room-label.has-practice::after { content: "📖"; }
-.compact-labels .room-label.has-game::after, .compact-labels .room-label.has-practice::after { font-size: 13px; transform: translate(-50%, -55%); }
+.compact-labels .room-label.has-game::after, .compact-labels .room-label.has-practice::after { font-size: 20px; transform: translate(-50%, -70%); }
 /* 이름만 보여 주는 공간: 누를 수 없고, 작은 지도에서는 점도 숨김 */
 .room-label.is-quiet { pointer-events: none; }
 .room-label.is-quiet .room-label-text { box-shadow: none; }
