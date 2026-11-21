@@ -67,21 +67,25 @@ class Element {
     if (entry && !entry.signal?.aborted) entry.callback({preventDefault() {}, ...detail});
   }
   setAttribute(key, value) { this[key] = value; }
-  getContext() { return new Proxy({}, {get: () => () => {}}); }
+  getContext() {
+    this.rotations = [];
+    return new Proxy({rotate: angle => this.rotations.push(angle)}, {get: (ctx, key) => ctx[key] ?? (() => {})});
+  }
   getBoundingClientRect() { return {left: 10, width: 360}; }
   setPointerCapture(id) { this.pointer = id; }
   focus() { this.focused = true; }
 }
-function session(fps, store = new Map(), random = () => 0, bestScore, usePuzzle = false) {
+function session(fps, store = new Map(), random = () => 0, bestScore, usePuzzle = false, reduceMotion = false) {
   const body = new Element(), document = new Element(), window = new Element();
   window.TOUR_GAMES = {};
+  window.matchMedia = () => ({matches:reduceMotion});
   document.createElement = () => new Element();
   let id = 0, time = 0;
   const frames = new Map(), results = [], cues = [];
   const math = Object.create(Math);
   math.random = random;
   vm.runInNewContext(source, {
-    window, document, Image: class {}, AbortController, Math: math,
+    window, document, Image: class { complete = true; naturalWidth = 32; }, AbortController, Math: math,
     localStorage: {getItem: key => store.get(key), setItem: (key, value) => store.set(key, value), removeItem: key => store.delete(key)},
     requestAnimationFrame(callback) { frames.set(++id, callback); return id; },
     cancelAnimationFrame(handle) { frames.delete(handle); }
@@ -100,6 +104,27 @@ function session(fps, store = new Map(), random = () => 0, bestScore, usePuzzle 
   const $ = name => body.querySelector('.goods-' + name);
   if (!usePuzzle) $('free-mode').emit('click');
   return {$, advance, cleanup, results, frames, document, window, cues};
+}
+for (const puzzle of [true, false]) {
+  for (const reduceMotion of [true, false]) {
+    const game = session(60, new Map(), undefined, null, puzzle, reduceMotion);
+    const {rotations} = game.$('board');
+    game.advance(10);
+    assert.equal(rotations.length, 0, 'aim and shelves stay upright');
+    game.$('drop').emit('click');
+    game.advance(14);
+    if (reduceMotion) {
+      assert.equal(rotations.length, 0);
+    } else {
+      assert(new Set(rotations).size > 5, 'first drop rotates immediately in either mode');
+      assert(Math.abs(rotations.at(-1)-rotations[0]) > 0.5);
+    }
+    game.advance(180);
+    rotations.length = 0;
+    game.advance(10);
+    assert(new Set(rotations).size <= 1, 'settled pieces and merge products do not keep turning');
+    game.cleanup();
+  }
 }
 const key = 'gch-tour-goods-catalogue';
 for (const fps of [30,60,120]) {

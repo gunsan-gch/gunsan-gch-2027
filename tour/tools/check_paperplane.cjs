@@ -21,8 +21,13 @@ function simulate(route, power=75, hz=60, index=0) {
       budget -= STEP;
     }
   }
-  assert(f.finished && seconds >= (route==='idle' ? 13 : 25) && seconds <= (route==='idle' ? 15 : 35));
+  assert(f.finished && seconds >= (route==='idle' ? 10 : 19) && seconds <= (route==='idle' ? 12 : 27));
   return f;
+}
+for (const [state, speed] of [[{}, 11.7], [{boost:1}, 16.9], [{stagger:1}, 7.15]]) {
+  const f = Object.assign(flight(75), state);
+  step(f,0);
+  assert(Math.abs(f.distance / STEP - speed) < 1e-10);
 }
 const variants=[0,1,2];
 assert.equal(new Set(variants.map(i=>flight(75,i).marks.at(-1).x)).size,3);
@@ -70,7 +75,8 @@ for (const index of variants) {
     const ring=f.marks.find(m=>!m.outcome), ribbon=f.ribbons.find(r=>!r.outcome);
     let x=ring.kind ? ring.x : ring.starX;
     if (ribbon && ribbon.distance < ring.distance) {
-      x=ribbon.gap<180 ? 255 : 105;
+      // Approach the final ribbon along the edge closest to the landing target.
+      x=ring.kind ? ribbon.gap+(ribbon.gap<180 ? 65 : -65) : ribbon.gap<180 ? 255 : 105;
       if (ribbon.distance-f.distance < 4 && f.recharge === 0) barrelRoll(f);
     }
     step(f,(x-f.x)/22);
@@ -146,7 +152,7 @@ advance(1); assert(field.planeX<95); controls.close();
 for (const input of ['touch','space','early','reduced']) {
   window.matchMedia=()=>({matches:input==='reduced'});
   const play=session(), field=play.$('canvas'), button=play.$('.pp-roll');
-  emit(play.$('.pp-launch'),'click'); advance(input==='early' ? 1 : 3.05);
+  emit(play.$('.pp-launch'),'click'); advance(input==='early' ? .75 : 2.25);
   if(input!=='early') assert.match(play.$('.pp-cue').textContent,/지금/);
   if(input==='space') {
     emit(window,'keydown',{key:' ',code:'Space'});
@@ -154,7 +160,7 @@ for (const input of ['touch','space','early','reduced']) {
   } else {
     point(button,'pointerdown',0); emit(button,'click',{detail:1});
   }
-  advance(input==='early' ? 2.8 : .85);
+  advance(input==='early' ? 2.15 : .85);
   assert.deepEqual(play.cues,['roll',input==='early'?'bump':'ribbon']);
   if(input==='reduced') assert.equal(field.rollFrames,undefined);
   else assert.equal(field.rollFrames.size,4);
@@ -177,7 +183,7 @@ first.close(); assert.equal(frames.size,0); emit(first.$('.pp-resume'),'click');
 const replay = session(182);
 assert.match(replay.$('.pp-note').textContent,/내 최고 182점/);
 assert.equal(replay.$('.pp-round').textContent,'1구간 · 정문');
-emit(replay.$('.pp-launch'),'click'); advance(9.6,30);
+emit(replay.$('.pp-launch'),'click'); advance(7.5,30);
 assert.match(replay.$('.pp-guide p').textContent,/한 번 더/); advance(6,30);
 assert.equal(replay.$('.pp-next').hidden,false);
 assert.equal(replay.$('.pp-round').textContent,'2구간 · 교정 화단');
