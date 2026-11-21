@@ -124,8 +124,20 @@ function checkCue(game, ready) {
   assert.match(game.find('.press-status').textContent, ready ? /◎ 지금!/ : /^(▷ 다가와요|↻ 지나갔어요)$/);
 }
 
+function checkAim(game) {
+  const aim = game.find('.press-focus').style;
+  const subject = game.find('.press-subject').style;
+  assert.equal(aim.visibility, 'visible');
+  assert.ok(parseFloat(aim.width) > 0);
+  // 결정적 순간에는 피사체 중심이 노림 틀 안의 정중앙에 있어야 한다.
+  for (const axis of ['left', 'top']) {
+    assert.ok(Math.abs(parseFloat(subject[axis]) - parseFloat(aim[axis])) < 1e-8);
+  }
+}
+
 function snapshot(root) {
   const frame = root.querySelector('.press-frame');
+  assert.equal(frame.querySelector('.press-focus'), undefined);
   const subject = frame.querySelector('.press-subject');
   const friend = frame.querySelector('.press-friend');
   return [frame.querySelector('.press-back').src, frame.className, { ...subject.style }, subject.hidden,
@@ -156,6 +168,7 @@ for (const manual of [true, false]) {
       if (manual) step(game, clicks);
       else tick([2400, 2000, 1600][scene] * clicks / 12);
       checkCue(game, scene === 0 && value === 3);
+      if (value === 3) checkAim(game);
       grade(game, labels[value], value);
       shots.push(snapshot(game.body));
       game.find('.press-next').click();
@@ -178,13 +191,19 @@ for (const manual of [true, false]) {
 // 새 기회에서 속도와 피크를 다시 뽑는다. 첫 통과는 0.8배, 두 번째는 약 1.2배 시간이다.
 {
   const game = openGame(false, [0, 0, 0.5, 0.5, 0.999, 0.999, 0.5, 0.5]);
+  const aim = game.find('.press-focus').style;
+  const firstAim = { ...aim };
   tick(1920 * 0.36);
+  assert.deepEqual(aim, firstAim);
+  checkAim(game);
   checkCue(game, true);
-  const targetX = game.find('.press-subject').style.left;
   tick(1920 - now);
   chances(game, '●●○');
+  assert.notEqual(aim.left, firstAim.left);
+  const secondAim = { ...aim };
   tick(2400 * (0.8 + 0.999 * 0.4) * (0.36 + 0.999 * 0.28));
-  assert.ok(Math.abs(parseFloat(game.find('.press-subject').style.left) - parseFloat(targetX)) < 1e-8);
+  assert.deepEqual(aim, secondAim);
+  checkAim(game);
   checkCue(game, false);
   grade(game, '결정적 순간', 3);
   game.close();
@@ -200,6 +219,7 @@ for (const [clicks, points] of [[7, 2], [8, 3], [9, 2]]) {
   chances(game, '●●○');
   assert.equal(game.find('.press-count').textContent, '1 / 12컷');
   step(game, clicks);
+  if (points === 3) checkAim(game);
   checkCue(game, false);
   grade(game, labels[points], points);
   game.close();
@@ -248,10 +268,15 @@ for (const [chance, visible] of [[0.1499, true], [0.15, false]]) {
 
 // 셔틀콕의 급강하, 오븐 앞 정지, 음표의 방향 전환을 실제 소품 좌표로 확인한다.
 {
+  const normal = openGame(true);
+  const aim = { ...normal.find('.press-focus').style };
+  normal.close();
   const game = openGame(true, [0.5, 0.5, 0, 0.5]);
   const pos = key => parseFloat(game.find('.press-subject').style[key]);
   step(game, 6);
   const netHeight = pos('top');
+  assert.deepEqual(game.find('.press-focus').style, aim);
+  assert.ok(netHeight > parseFloat(aim.top));
   step(game, 2);
   assert.ok(pos('top') > netHeight + 12 && pos('left') < 50);
   game.find('.press-shoot').click();
@@ -280,4 +305,4 @@ for (const expire of [false, true]) {
   game.find('.press-start').click();
   assert.equal(frames.size + timers.size, 0);
 }
-console.log('취재반 통과 · 판정 경계, 속도·궤적, 3회 제한, 12컷, 특종, 편집·별·종료');
+console.log('취재반 통과 · 노림 틀 정렬·인화 제외, 판정 경계, 속도·궤적, 3회 제한, 12컷, 특종, 편집·별·종료');

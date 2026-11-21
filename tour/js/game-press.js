@@ -2,11 +2,12 @@
 (() => {
   const art = 'img/games/press/';
   const scenes = [
-    { id: 'gym', duration: 2400, desk: '스포츠', place: '체육관', title: '네트 위의 셔틀콕', tip: '네트 한가운데를 노려! 걸리면 바로 떨어져.', caption: '코트를 가르는 하얀 셔틀콕' },
-    { id: 'bakery', duration: 2000, desk: '생활', place: '조리제빵실', title: '오븐에서 갓 나온 빵', tip: '잠깐 멈춘 빵이 오븐 왼쪽 끝을 막 벗어날 때!', caption: '학교에 퍼지는 고소한 빵 냄새' },
-    { id: 'music', duration: 1600, desk: '문화', place: '음악실', title: '후렴을 여는 첫 음표', tip: '흔들리는 음표가 무대 중앙에 가장 높이 뜰 때!', caption: '무대를 가득 채운 후렴 한 소절' }
+    { id: 'gym', duration: 2400, desk: '스포츠', place: '체육관', title: '네트 위의 셔틀콕', tip: '틀 안에 쏙 들어올 때 찰칵! 셔틀콕은 가끔 떨어져.', caption: '코트를 가르는 하얀 셔틀콕' },
+    { id: 'bakery', duration: 2000, desk: '생활', place: '조리제빵실', title: '오븐에서 갓 나온 빵', tip: '빵이 잠깐 멈칫해. 틀 안에 오면 찰칵!', caption: '학교에 퍼지는 고소한 빵 냄새' },
+    { id: 'music', duration: 1600, desk: '문화', place: '음악실', title: '후렴을 여는 첫 음표', tip: '음표가 좌우로 흔들려. 틀에 쏙 들어오면 찰칵!', caption: '무대를 가득 채운 후렴 한 소절' }
   ];
   const steps = 12, passes = 3;
+  const subjectWidth = 11; // 사진 너비에 대한 피사체 너비(%)
   const grades = ['흔들린 사진', '현장 스케치', '생생한 포착', '결정적 순간'];
 
   function newPass(scene, manual) {
@@ -29,7 +30,6 @@
   }
 
   function pose(id, phase, netDrop) {
-    // 실제 판정 시각이 매번 달라도 소품은 그 순간에 장면의 촬영 지점을 지난다.
     const arc = Math.sin(Math.PI * phase);
     if (id === 'bakery') {
       const slide = Math.max(0, phase - 0.33);
@@ -43,6 +43,14 @@
       return [50 - 5 * fall, 62 + 27 * fall, 8 + 80 * fall, 1.1];
     }
     return [15 + phase * 70, 79 - arc * (netDrop ? 17 : 30), -67 + phase * 137, 0.77 + arc * 0.45];
+  }
+
+  function passPose(id, pass, progress, netDrop) {
+    const { target } = pass;
+    const phase = progress <= target ? 0.5 * progress / target : 0.5 + 0.5 * (progress - target) / (1 - target);
+    const [x, y, angle, scale] = pose(id, phase, netDrop);
+    // 기회마다 궤적 전체를 옆으로 옮겨 기존 속도와 멈칫하는 시간을 유지한다.
+    return [x + (target - 0.5) * 60, y, angle, scale];
   }
   // 색상표와 픽셀 격자로 그린 예술제 소품. 배경과 함께 같은 위치로 복제해 인화한다.
   const sprites = {
@@ -67,7 +75,7 @@
     container.innerHTML = `
       <section class="press-app">
         <header class="senior-card"><img src="img/npcs/portraits/subin.png" alt=""><div><strong>수빈 선배 · 이음 취재반</strong><p></p></div></header>
-        <div class="press-intro"><h3>오늘의 특집호, 네 사진으로!</h3><p>장면마다 기회 3번 · 모두 결정적 순간이면 ★★★</p>
+        <div class="press-intro"><h3>오늘의 특집호, 네 사진으로!</h3><p>장면마다 기회 3번 · 노림 틀에 쏙 들어오면 찰칵!</p>
         <label><input type="checkbox" class="press-slow"> 한 컷씩 넘기기</label>
         <button type="button" class="btn btn-primary press-start">취재 시작</button></div>
         <div class="press-job" hidden><div class="press-slug"><b></b><span></span></div><h3></h3>
@@ -86,14 +94,16 @@
     const photos = [];
     const friend = $('.press-friend'), view = $('.press-view'), count = $('.press-count');
     const chances = $('.press-chances');
+    const focus = $('.press-focus');
+    subject.style.width = subjectWidth + '%';
+    if (api.reducedMotion) focus.style.transition = 'none';
     let index = 0, t = 0, raf = 0, playing = false, manual = false, stepIndex = 0;
     let pass, used = 0, started = 0, advanceTimer = 0;
     still.checked = api.reducedMotion;
     tip.textContent = '난 취재반 수빈이야. 오늘은 네가 녹원예술제 사진 기자야!';
     function draw(progress) {
       t = progress;
-      const phase = t <= pass.target ? 0.5 * t / pass.target : 0.5 + 0.5 * (t - pass.target) / (1 - pass.target);
-      const [x, y, angle, scale] = pose(scenes[index].id, phase, pass.netDrop);
+      const [x, y, angle, scale] = passPose(scenes[index].id, pass, t, pass.netDrop);
       subject.style.left = x + '%'; subject.style.top = y + '%';
       subject.style.transform = `translate(-50%,-50%) rotate(${angle}deg) scale(${scale})`;
       const offset = t - pass.friendAt;
@@ -111,6 +121,14 @@
     }
     function rollPass() {
       pass = newPass(scenes[index], manual);
+      // 셔틀콕이 네트에 걸려도 노림 틀은 정상 궤적에 둔다.
+      const [x, y, angle, scale] = passPose(scenes[index].id, pass, pass.target, false);
+      const radians = angle * Math.PI / 180;
+      const width = subjectWidth * scale * (Math.abs(Math.cos(radians)) + Math.abs(Math.sin(radians)));
+      focus.style.left = x + '%';
+      focus.style.top = y + '%';
+      focus.style.width = width + '%';
+      focus.style.visibility = 'visible';
       stepIndex = 0;
       showChances();
     }
@@ -160,6 +178,7 @@
     }
     function finishPhoto(points, rating, caption) {
       playing = false; cancelAnimationFrame(raf);
+      focus.style.visibility = 'hidden';
       view.classList.toggle('press-ready', false);
       const scene = scenes[index];
       const print = frame.cloneNode(true);
