@@ -10,49 +10,66 @@
 
   /* ---------- 선생님이 고칠 수 있는 데이터 ---------- */
 
-  // 후보는 적힌 순서대로 표시. best 3별 · mid 2별 · weak 1별, 힌트는 1별 감점 (최소 1별). 최종 별은 세 라운드 평균
+  // 각 손님의 order는 같은 문구 세 개를 반응이 좋은 순서로 가리킵니다.
   const PRODUCTS = [
-    { name: '흰찰쌀보리 쿠키', desc: '군산 흰찰쌀보리로 구운 담백한 쿠키', emoji: '🍪',
-      target: '간식 찾는 10대', channel: '인스타그램', image: 'product-1.png',
-      hint: 'AI: 이 문구는 근거 없는 과장이 있어요.',
-      choices: [
-        { quality: 'weak', text: '세상에서 제일 맛있는 쿠키! 안 먹으면 후회', likes: 60,
-          feedback: '근거 없는 과장은 상품에 대한 신뢰를 떨어뜨려요.' },
-        { quality: 'best', text: '바삭한 보리향 한 입, 군산에서 구웠어요 🍪 오늘 간식 대신 어때요?', likes: 1200,
-          feedback: '보리향이라는 장점을 전하고, 간식 찾는 손님에게 행동을 권했어요.' },
-        { quality: 'mid', text: '흰찰쌀보리 함유, 100g, 개별 포장', likes: 360,
-          feedback: '틀린 말은 없지만 특징만 나열해서 마음을 움직이지 못했어요.' }
+    { name: '흰찰쌀보리 쿠키', desc: '군산 흰찰쌀보리로 구운 쿠키', emoji: '🍪', image: 'product-1.png',
+      ads: ['쉬는 시간, 친구와 쿠키 한 입 나눠요.', '여행 가방에 군산의 보리 향을 담아 가요.', '따뜻한 차 곁에 담백한 보리 쿠키 한 조각.'],
+      briefs: [
+        { target: '매점에 들른 학생', wish: '종 치기 전에 둘이 같이 먹을 간식을 찾고 있어요.', order: [0,2,1],
+          comments: ['친구한테 반씩 나눠 먹자고 해야겠어요.', '간식으로 괜찮겠어요. 차를 마실 시간은 없지만요.', '군산 여행을 온 건 아니어서 그냥 지나쳤어요.'] },
+        { target: '군산을 떠나는 여행객', wish: '집에서도 이번 여행을 떠올리고 싶어요.', order: [1,2,0],
+          comments: ['군산 보리라니, 집에서 꺼내도 이곳이 생각나겠어요.', '보리 맛은 궁금한데 어디에서 만든 걸까요?', '쉬는 시간 얘기를 보니 학생용 간식 같아요.'] },
+        { target: '다과 모임의 주최자', wish: '오늘 우린 차와 함께 곁들일 다과를 골라요.', order: [2,0,1],
+          comments: ['찻잔 옆에 놓으면 어울리겠어요.', '함께 나누기 좋겠네요. 차와도 잘 맞을까요?', '여행 선물보다는 오늘 낼 다과가 필요해요.'] }
       ] },
-    { name: '무선 이어폰', desc: '가볍고 하루 종일 가는 배터리', emoji: '🎧',
-      target: '통학하는 학생', channel: '숏폼 영상', image: 'product-2.png',
-      hint: 'AI: 이 문구는 통학하는 학생과 대상이 달라요.',
-      choices: [
-        { quality: 'mid', text: '블루투스 5.3, 배터리 30시간, 5색', likes: 420,
-          feedback: '기능만 나열했어요. 통학할 때 어떤 도움이 되는지 말해 보면 좋아요.' },
-        { quality: 'weak', text: '회의가 많은 직장인을 위한 프리미엄 이어폰', likes: 80,
-          feedback: '통학하는 학생에게 직장인 이야기는 공감을 얻기 어려워요.' },
-        { quality: 'best', text: '버스에서 영상 볼 때 끊김 없이, 충전 걱정 없이 하루 종일 🎧 통학 필수템', likes: 1380,
-          feedback: '통학 상황에 맞는 장점을 구체적으로 전하고, 필수템으로 권했어요.' }
+    { name: '무선 이어폰', desc: '선 없이 음악과 음성을 듣는 이어폰', emoji: '🎧', image: 'product-2.png',
+      ads: ['창밖 풍경에 오늘의 플레이리스트를 더해요.', '낯선 발음, 내 자리에서 한 번 더 들어요.', '안무 연습할 땐 선 없이 박자를 타요.'],
+      briefs: [
+        { target: '버스로 통학하는 학생', wish: '창가 자리에 앉아서 좋아하는 노래를 듣고 싶어요.', order: [0,2,1],
+          comments: ['버스 창밖을 보며 들을 노래가 벌써 떠올라요.', '박자를 타고 싶긴 한데 버스에선 앉아 가요.', '등굣길만큼은 공부 대신 음악을 듣고 싶어요.'] },
+        { target: '듣기 연습을 하는 학생', wish: '도서관에서 외국어 대화를 다시 들어 볼 거예요.', order: [1,0,2],
+          comments: ['옆 사람을 방해하지 않고 발음을 다시 들을 수 있겠어요.', '음악 듣는 모습은 떠오르는데 공부할 때는 어떨까요?', '도서관이라 춤을 연습할 자리는 없어요.'] },
+        { target: '댄스 동아리원', wish: '팔을 크게 움직이며 혼자 동작을 맞춰 보고 싶어요.', order: [2,0,1],
+          comments: ['선이 걸리지 않으니 동작에 집중하겠어요.', '연습곡은 떠오르는데 움직일 때도 편할까요?', '지금 맞춰야 하는 건 발음보다 동작이에요.'] }
       ] },
-    { name: '보온 텀블러', desc: '12시간 따뜻한 스테인리스 텀블러', emoji: '☕',
-      target: '카페 자주 가는 직장인', channel: '온라인 쇼핑몰', image: 'product-3.png',
-      hint: 'AI: 영원히 식지 않는다는 말은 과장이에요.',
-      choices: [
-        { quality: 'best', text: '출근길 커피, 점심까지 따뜻하게 ☕ 일회용 컵 대신 텀블러 할인도 받아요', likes: 1440,
-          feedback: '출근길의 장점을 전하고, 카페 손님에게 텀블러 사용을 권했어요.' },
-        { quality: 'mid', text: '스테인리스 소재, 500ml, 보온 12시간', likes: 480,
-          feedback: '소재와 수치만 있어요. 손님이 누릴 좋은 점도 함께 알려 주세요.' },
-        { quality: 'weak', text: '영원히 식지 않는 마법의 텀블러', likes: 40,
-          feedback: '실제 보온 시간과 다른 과장은 상품에 대한 신뢰를 떨어뜨려요.' }
+    { name: '보온 텀블러', desc: '따뜻한 음료를 담는 스테인리스 텀블러', emoji: '☕', image: 'product-3.png',
+      ads: ['출근길에 주문한 커피, 내 컵에 받아 가요.', '산길에서 쉬어 갈 때 따뜻한 차 한 모금.', '책장을 넘기다 잠깐, 내 책상 위 찻집.'],
+      briefs: [
+        { target: '카페에 들른 직장인', wish: '매일 아침 테이크아웃할 때 종이컵이 쌓여요.', order: [0,2,1],
+          comments: ['주문할 때 바로 이 컵을 내밀면 되겠네요.', '책상에서 마시긴 해요. 주문할 때도 쓸 수 있을까요?', '등산할 때보다 동네 카페에서 자주 쓸 것 같아요.'] },
+        { target: '주말 등산객', wish: '바람 부는 고갯마루에서 몸을 녹이고 싶어요.', order: [1,0,2],
+          comments: ['고개를 넘고 나서 마실 따뜻한 차가 떠올라요.', '들고 나가기는 좋겠어요. 산에서 쉴 때는 어떨까요?', '이번 주말에는 책상에서 멀리 떠날 거예요.'] },
+        { target: '독서 모임 회원', wish: '소설을 읽다가 자리를 뜨지 않고 차를 마시고 싶어요.', order: [2,1,0],
+          comments: ['책 옆에 두면 읽던 대목에서 계속 읽겠어요.', '따뜻한 차는 좋지만 오늘 모임은 실내예요.', '오늘은 커피를 사러 밖에 나갈 생각이 없어요.'] }
       ] }
   ];
 
-  const QUALITY_STARS = { best: 3, mid: 2, weak: 1 };
+  function shuffle(items) {
+    const result = [...items];
+    for (let i = result.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+  }
+
+  let productDeck = [];
+  let previousProduct;
+  function drawProduct() {
+    if (!productDeck.length) {
+      productDeck = shuffle(PRODUCTS);
+      if (productDeck.at(-1) === previousProduct) productDeck.reverse();
+    }
+    previousProduct = productDeck.pop();
+    return previousProduct;
+  }
+
+  const LIKES = [1200, 540, 180];
   const STAMP_TEXT = 'AI비즈니스실 도장 획득!';
   const RESULT_TEXT = 'AI마케팅과에서는 콘텐츠를 만들고 반응 데이터를 분석해요.';   // ※ 학교 확인 후 바뀔 수 있는 문구
   const DEPT_LINK = { href: '../index.html#marketing', label: 'AI마케팅과 알아보기 →' };
-  const GUIDE_TEXT = '상품과 대상 손님을 보고, 가장 어울리는 광고 문구를 골라요.';
-  const HINT_TEXT = 'AI 추천 보기';
+  const GUIDE_TEXT = '같은 상품, 다른 손님! 손님의 말에 맞춰 광고 한 줄을 골라요.';
+  const HINT_TEXT = 'AI 추천 보기 (이번 별 −1)';
 
   /* ---------- 도우미 ---------- */
 
@@ -82,6 +99,10 @@
 
   function start(container, api) {
     const state = { round: 0, hinted: false, locked: false, stars: 0, hints: 0, likes: 0 };
+    const product = drawProduct();
+    const briefs = shuffle(product.briefs);
+    let displayedAds;
+    let previousPick;
     let frame = 0;
     let focusFrame = 0;
 
@@ -145,50 +166,58 @@
       state.hinted = true;
       state.hints++;
       hintButton.setAttribute('aria-pressed', 'true');
-      const product = PRODUCTS[state.round];
-      const weak = choicesBox.children[product.choices.findIndex(choice => choice.quality === 'weak')];
+      const brief = briefs[state.round];
+      const weak = choicesBox.children[displayedAds.indexOf(brief.order[2])];
+      const hint = '이 문구의 상황은 지금 손님의 이야기와 가장 멀어요.';
       weak.classList.add('is-dim');
-      weak.append(el('span', 'ai-hint-note', product.hint));
-      api.announce(`${product.hint} 이번 라운드는 별 1개 감점, 최소 1개예요.`);
+      weak.append(el('span', 'ai-hint-note', hint));
+      api.announce(`${product.ads[brief.order[2]]} ${hint} 이번 별 1개 감점, 최소 1개예요.`);
     }
 
-    function pick(choice) {
+    function pick(ad) {
       if (state.locked) return;
       state.locked = true;
-      const product = PRODUCTS[state.round];
-      const stars = Math.max(1, QUALITY_STARS[choice.quality] - Number(state.hinted));
+      const brief = briefs[state.round];
+      const rank = brief.order.indexOf(ad);
+      const likes = LIKES[rank];
+      const stars = Math.max(1, 3 - rank - Number(state.hinted));
       state.stars += stars;
-      state.likes += choice.likes;
+      state.likes += likes;
       for (const button of choicesBox.children) button.disabled = true;
       hintButton.disabled = true;
       root.classList.add('is-picked');
 
       const post = el('div', 'ai-post');
-      post.append(el('p', 'ai-post-head', `${product.channel} · 우리 상품 소식`));
+      post.append(el('p', 'ai-post-head', '모의 SNS · 우리 상품 소식'));
       post.append(picture(product.image, product.emoji, 128));
-      post.append(el('p', 'ai-caption', choice.text), likesRow(choice.likes));
-      const feedback = el('p', 'ai-feedback', choice.feedback);
+      post.append(el('p', 'ai-caption', product.ads[ad]), likesRow(likes));
+      const feedback = el('p', 'ai-feedback', `${brief.target} “${brief.comments[rank]}”`);
       const score = el('p', 'ai-stars', starText(stars));
       score.setAttribute('role', 'img');
       score.setAttribute('aria-label', `이번 라운드 별 ${stars}개`);
       reaction.replaceChildren(post, feedback, score);
+      if (previousPick) {
+        const now = LIKES[brief.order.indexOf(previousPick.ad)];
+        reaction.append(el('p', 'ai-feedback', `지난 광고 “${product.ads[previousPick.ad]}” · ${previousPick.target} ♥ ${number(previousPick.likes)} → ${brief.target} ♥ ${number(now)}`));
+      }
+      previousPick = { ad, likes, target: brief.target };
       reaction.hidden = false;
-      nextButton.textContent = state.round === PRODUCTS.length - 1 ? '결과 보기' : '다음 상품 →';
+      nextButton.textContent = state.round === briefs.length - 1 ? '결과 보기' : '다음 손님 →';
       nextButton.hidden = false;
       nextButton.focus();
-      countLikes(reaction.querySelector('.ai-count'), choice.likes);
+      countLikes(reaction.querySelector('.ai-count'), likes);
     }
 
     function nextRound() {
       if (!state.locked) return;
-      if (state.round < PRODUCTS.length - 1) {
+      if (state.round < briefs.length - 1) {
         state.round++;
         startRound();
         return;
       }
       const extra = likesRow(state.likes, true);
       // 최종 별은 라운드 평균(반올림) — 모든 게임이 최대 3개로 같음
-      api.done({ stars: Math.max(1, Math.round(state.stars / PRODUCTS.length)), hints: state.hints, extra });
+      api.done({ stars: Math.max(1, Math.round(state.stars / briefs.length)), hints: state.hints, extra });
       // games.js가 결과 요소를 문서에 붙인 다음 집계를 시작합니다.
       countLikes(extra.querySelector('.ai-count'), state.likes);
     }
@@ -197,19 +226,20 @@
       cancelAnimationFrame(frame);
       cancelAnimationFrame(focusFrame);
       Object.assign(state, { hinted: false, locked: false });
-      const product = PRODUCTS[state.round];
+      const brief = briefs[state.round];
       root.classList.remove('is-picked');
-      progress.textContent = `${state.round + 1} / ${PRODUCTS.length} 라운드`;
+      progress.textContent = `${state.round + 1} / ${briefs.length} 라운드`;
       productBox.replaceChildren(picture(product.image, product.emoji, 128));
       productBox.append(el('h3', 'ai-name', product.name), el('p', 'ai-description', product.desc));
       const tags = el('div', 'ai-tags');
-      tags.append(el('span', 'ai-tag', `대상: ${product.target}`), el('span', 'ai-tag', `채널: ${product.channel}`));
-      productBox.append(tags);
+      tags.append(el('span', 'ai-tag', brief.target));
+      productBox.append(tags, el('p', 'ai-guide', `“${brief.wish}”`));
       choicesBox.replaceChildren();
-      product.choices.forEach((choice, i) => {
-        const button = el('button', 'ai-choice', `${i + 1}. ${choice.text}`);
+      displayedAds = shuffle(brief.order);
+      displayedAds.forEach((ad, i) => {
+        const button = el('button', 'ai-choice', `${i + 1}. ${product.ads[ad]}`);
         button.type = 'button';
-        button.addEventListener('click', () => pick(choice));
+        button.addEventListener('click', () => pick(ad));
         choicesBox.append(button);
       });
       hintButton.disabled = false;
@@ -217,7 +247,7 @@
       reaction.hidden = true;
       reaction.replaceChildren();
       nextButton.hidden = true;
-      api.announce(`${state.round + 1}번째 상품, ${product.name}. ${GUIDE_TEXT}`);
+      api.announce(`${state.round + 1}번째 손님, ${brief.target}. ${product.name}. ${brief.wish} ${GUIDE_TEXT}`);
       // 창이 열린 뒤 첫 후보에 초점. 새 라운드에서는 위쪽으로 스크롤도 돌아갑니다.
       container.scrollTop = 0;
       focusFrame = requestAnimationFrame(() => choicesBox.firstElementChild.focus({ preventScroll: true }));

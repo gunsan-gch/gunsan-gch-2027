@@ -533,11 +533,13 @@
   stage.addEventListener('click', e => {
     if (e.target.closest('button') || performance.now() < camera.suppressClickUntil) return;
     const point = camera.worldAt(e.clientX, e.clientY);
-    const near = motion.project(point);
+    const near = motion.mapTarget(point, PORTALS.filter(p => p.from === scene.id));
     if (near.d < 2.5) {
-      walkRequest++;
+      const ticket = ++walkRequest;
       say('걸어가고 있어요.');
-      motion.go(...near.p).then(arrived => { if (arrived) say('도착했어요. 공간 이름을 누르면 설명이 열려요.'); });
+      motion.go(...near.p).then(arrived => {
+        if (arrived && ticket === walkRequest && !transitioning) say('도착했어요. 공간 이름을 누르면 설명이 열려요.');
+      });
     } else {
       say('그곳으로는 걸어갈 수 없어요. 복도 바닥을 눌러 보세요.');
     }

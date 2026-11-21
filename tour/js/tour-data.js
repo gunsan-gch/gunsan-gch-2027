@@ -117,8 +117,8 @@ window.TOUR_SCENES = {
       { name: '동아리실(풍물)', at: [93, 91], w: 9, anchor: [70.6, 88] },
       { name: '야외 테라스', at: [45, 53], w: 10, anchor: [69.3, 53], rect: [25, 44, 43, 21],
         desc: '카페실습실 아래쪽의 야외 공간입니다. 오른쪽 복도 쪽 문으로 드나들어요.' },
-      { name: '외부 계단', at: [86, 53], w: 9, anchor: [73.5, 53], rect: [74, 45, 24, 18], note: '학교 밖으로 내려가는 계단',
-        desc: '경비실 아래쪽, 학교 밖으로 내려가는 바깥 계단입니다. 왼쪽에서 오른쪽으로 내려가며, 가운데 난간으로 두 줄이 나뉘어 있어요.' },
+      { name: '외부 계단', at: [86, 53], w: 9, anchor: [73.5, 53], rect: [74, 45, 24, 18], note: '야외로 내려가는 계단',
+        desc: '1층 오른쪽, 경비실과 도서실 사이에서 야외로 내려가는 계단이에요. 투어에서 잔디마당으로 가려면 지도 아래쪽 중앙현관의 출구를 눌러 보세요.' },
       { name: 'E/L', elevator: true, at: [42.5, 65.7], w: 3, anchor: [42.5, 72], facility: true },
       { name: '화장실', quiet: true, at: [47.6, 65.7], w: 6, anchor: [47.6, 72], facility: true, where: '아래쪽 복도' }
     ]
@@ -339,15 +339,15 @@ window.TOUR_SCENES = {
 /* 장면 사이를 걸어서 오가는 연결 지점.
    from 장면에서 캐릭터가 region 안에 들어가면 to 장면의 spawn 위치로 이동합니다. */
 window.TOUR_PORTALS = [
-  { id: 'outdoor-entry', from: 'outdoor', to: '1', region: [51.8, 31, 4.6, 2], spawn: [63, 88], arrival: 'lobby-exit',
+  { id: 'outdoor-entry', from: 'outdoor', to: '1', region: [51.8, 31, 4.6, 2], anchor: [54.2, 32.2], spawn: [63, 88], arrival: 'lobby-exit',
     message: '중앙현관으로 들어와 1층에 도착했어요.' },
-  { id: 'lobby-exit', from: '1', to: 'outdoor', region: [59, 90, 8, 2], spawn: [54.2, 47], arrival: 'outdoor-entry',
+  { id: 'lobby-exit', from: '1', to: 'outdoor', region: [59, 90, 8, 2], clickRegion: [58.2, 91.4, 9.6, 2.8], anchor: [63, 90.4], spawn: [54.2, 47], arrival: 'outdoor-entry',
     message: '중앙현관을 나와 잔디마당에 도착했어요.' },
   // 바깥 계단: 잔디마당 ↔ 2층 문서고 왼쪽 계단
-  { id: 'outdoor-stair', from: 'outdoor', to: '2', region: [33.6, 28.5, 3.4, 1.5], spawn: [17.5, 72], arrival: 'stair-exit',
+  { id: 'outdoor-stair', from: 'outdoor', to: '2', region: [33.6, 28.5, 3.4, 1.5], anchor: [35.3, 29.4], spawn: [17.5, 72], arrival: 'stair-exit',
     message: '바깥 계단으로 올라와 2층에 도착했어요.' },
   // 계단에 들어서면 바로 야외로 (계단 그림 어디를 눌러도 나갈 수 있게)
-  { id: 'stair-exit', from: '2', to: 'outdoor', region: [13.4, 76.5, 8.2, 13.5], spawn: [35.3, 33], arrival: 'outdoor-stair',
+  { id: 'stair-exit', from: '2', to: 'outdoor', region: [13.4, 76.5, 8.2, 13.5], anchor: [17.5, 82], spawn: [35.3, 33], arrival: 'outdoor-stair',
     message: '바깥 계단으로 내려와 잔디마당에 도착했어요.' }
 ];
 
