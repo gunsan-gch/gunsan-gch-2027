@@ -2,10 +2,48 @@
 (() => {
   const art = 'img/games/press/';
   const scenes = [
-    { id: 'gym', desk: '스포츠', place: '체육관', title: '네트를 넘는 셔틀콕', tip: '셔틀콕이 네트 위에 뜨면 셔터를 눌러 봐!', caption: '코트를 가르는 하얀 셔틀콕', before: '셔틀콕이 날아와요', cue: '네트 바로 위!', after: '셔틀콕이 내려가요' },
-    { id: 'bakery', desk: '생활', place: '조리제빵실', title: '오븐에서 갓 나온 빵', tip: '빵이 오븐 앞으로 나오면 따끈한 순간을 담아 봐!', caption: '학교에 퍼지는 고소한 빵 냄새', before: '오븐에서 빵이 나와요', cue: '갓 구운 빵 등장!', after: '빵이 진열대로 향해요' },
-    { id: 'music', desk: '문화', place: '음악실', title: '후렴을 여는 첫 음표', tip: '커다란 음표가 무대 한가운데 떠오를 때야!', caption: '무대를 가득 채운 후렴 한 소절', before: '음표가 떠올라요', cue: '후렴의 첫 음표!', after: '음표가 퍼져 나가요' }
+    { id: 'gym', duration: 2400, desk: '스포츠', place: '체육관', title: '네트 위의 셔틀콕', tip: '네트 한가운데를 노려! 걸리면 바로 떨어져.', caption: '코트를 가르는 하얀 셔틀콕' },
+    { id: 'bakery', duration: 2000, desk: '생활', place: '조리제빵실', title: '오븐에서 갓 나온 빵', tip: '잠깐 멈춘 빵이 오븐 왼쪽 끝을 막 벗어날 때!', caption: '학교에 퍼지는 고소한 빵 냄새' },
+    { id: 'music', duration: 1600, desk: '문화', place: '음악실', title: '후렴을 여는 첫 음표', tip: '흔들리는 음표가 무대 중앙에 가장 높이 뜰 때!', caption: '무대를 가득 채운 후렴 한 소절' }
   ];
+  const steps = 12, passes = 3;
+  const grades = ['흔들린 사진', '현장 스케치', '생생한 포착', '결정적 순간'];
+
+  function newPass(scene, manual) {
+    const duration = scene.duration * (0.8 + Math.random() * 0.4);
+    const target = 0.36 + Math.random() * 0.28;
+    return {
+      duration,
+      target: manual ? Math.round(target * steps) / steps : target,
+      netDrop: scene.id === 'gym' && Math.random() < 0.3,
+      friendAt: Math.random() < 0.15 ? 0.2 + Math.random() * 0.6 : null
+    };
+  }
+
+  function score(distance) {
+    // 소수의 뺄셈 오차 때문에 경계에 찍은 사진이 한 등급 떨어지지 않게 한다.
+    if (distance <= 0.04 + Number.EPSILON) return 3;
+    if (distance <= 0.10 + Number.EPSILON) return 2;
+    if (distance <= 0.20 + Number.EPSILON) return 1;
+    return 0;
+  }
+
+  function pose(id, phase, netDrop) {
+    // 실제 판정 시각이 매번 달라도 소품은 그 순간에 장면의 촬영 지점을 지난다.
+    const arc = Math.sin(Math.PI * phase);
+    if (id === 'bakery') {
+      const slide = Math.max(0, phase - 0.33);
+      return [77 - 12 * Math.min(phase, 0.16) - 85 * slide, 61 + slide * 24, 0, 0.65 + slide];
+    }
+    if (id === 'music') {
+      return [15 + 70 * phase + 10 * Math.sin(4 * Math.PI * phase), 74 - 39 * arc, 15 - arc * 24, 0.77 + arc * 0.45];
+    }
+    if (netDrop && phase >= 0.5) {
+      const fall = Math.min(1, (phase - 0.5) * 4);
+      return [50 - 5 * fall, 62 + 27 * fall, 8 + 80 * fall, 1.1];
+    }
+    return [15 + phase * 70, 79 - arc * (netDrop ? 17 : 30), -67 + phase * 137, 0.77 + arc * 0.45];
+  }
   // 색상표와 픽셀 격자로 그린 예술제 소품. 배경과 함께 같은 위치로 복제해 인화한다.
   const sprites = {
     gym: ['   WWW WWW','  WLLWWLLW','   WLLWLW','   WLLLW','    WLLW','    WLLW','     KK','    KYYK','    KYYK','     KK'],
@@ -29,11 +67,12 @@
     container.innerHTML = `
       <section class="press-app">
         <header class="senior-card"><img src="img/npcs/portraits/subin.png" alt=""><div><strong>수빈 선배 · 이음 취재반</strong><p></p></div></header>
-        <div class="press-intro"><h3>오늘의 특집호, 네 사진으로!</h3><p>체육관, 조리제빵실, 음악실에서 사진을 한 장씩 찍고 1면에 실을 기사를 골라요.</p>
+        <div class="press-intro"><h3>오늘의 특집호, 네 사진으로!</h3><p>장면마다 기회 3번 · 모두 결정적 순간이면 ★★★</p>
         <label><input type="checkbox" class="press-slow"> 한 컷씩 넘기기</label>
         <button type="button" class="btn btn-primary press-start">취재 시작</button></div>
         <div class="press-job" hidden><div class="press-slug"><b></b><span></span></div><h3></h3>
-        <div class="press-view"><div class="press-frame"><img class="press-back" alt=""><img class="press-subject" alt=""></div><i class="press-focus" aria-hidden="true"></i></div>
+        <div class="press-view"><div class="press-frame"><img class="press-back" alt=""><img class="press-subject" alt=""><img class="press-friend" src="img/npcs/portraits/songhyeon.png" alt="" hidden></div><i class="press-focus" aria-hidden="true"></i></div>
+        <div class="press-readout"><span class="press-chances" role="status"></span><span class="press-count"></span></div>
         <p class="press-status" role="status"></p><div class="press-controls">
         <button type="button" class="btn press-step" hidden>다음 순간</button>
         <button type="button" class="btn btn-primary press-shoot"><i aria-hidden="true"></i>촬영하기</button>
@@ -45,22 +84,55 @@
     const frame = $('.press-frame'), subject = $('.press-subject'), shoot = $('.press-shoot');
     const next = $('.press-next'), step = $('.press-step');
     const photos = [];
+    const friend = $('.press-friend'), view = $('.press-view'), count = $('.press-count');
+    const chances = $('.press-chances');
     let index = 0, t = 0, raf = 0, playing = false, manual = false, stepIndex = 0;
+    let pass, used = 0, started = 0, advanceTimer = 0;
     still.checked = api.reducedMotion;
     tip.textContent = '난 취재반 수빈이야. 오늘은 네가 녹원예술제 사진 기자야!';
     function draw(progress) {
       t = progress;
-      const x = index === 1 ? 74 - t * 48 : 15 + t * 70;
-      const arc = Math.sin(Math.PI * t);
-      const y = index === 0 ? 78 - arc * 30 : index === 1 ? 58 + t * 17 : 74 - arc * 32;
-      const scale = index === 1 ? 0.6 + t * 0.95 : 0.77 + arc * 0.45;
-      const angle = index === 0 ? -67 + t * 137 : index === 2 ? 15 - arc * 24 : 0;
+      const phase = t <= pass.target ? 0.5 * t / pass.target : 0.5 + 0.5 * (t - pass.target) / (1 - pass.target);
+      const [x, y, angle, scale] = pose(scenes[index].id, phase, pass.netDrop);
       subject.style.left = x + '%'; subject.style.top = y + '%';
       subject.style.transform = `translate(-50%,-50%) rotate(${angle}deg) scale(${scale})`;
-      const scene = scenes[index], ready = Math.abs(t - 0.5) <= 0.17;
-      const cue = ready ? '◎ 지금! ' + scene.cue : t < 0.5 ? '▷ ' + scene.before : '↻ ' + scene.after;
+      const offset = t - pass.friendAt;
+      friend.hidden = pass.friendAt === null || Math.abs(offset) > 0.12;
+      if (!friend.hidden) friend.style.left = (50 + offset * 520) + '%';
+      const ready = index === 0 && used === 0 && score(Math.abs(t - pass.target)) === 3;
+      const cue = ready ? '◎ 지금!' : t < pass.target + 0.10 ? '▷ 다가와요' : '↻ 지나갔어요';
       if (status.textContent !== cue) status.textContent = cue;
-      $('.press-view').classList.toggle('press-ready', ready);
+      view.classList.toggle('press-ready', ready);
+      if (manual) count.textContent = (stepIndex + 1) + ' / ' + steps + '컷';
+    }
+    function showChances() {
+      chances.textContent = '기회 ' + '●'.repeat(passes - used) + '○'.repeat(used);
+      chances.setAttribute('aria-label', '남은 기회 ' + (passes - used) + '번');
+    }
+    function rollPass() {
+      pass = newPass(scenes[index], manual);
+      stepIndex = 0;
+      showChances();
+    }
+    function endPass() {
+      if (++used < passes) {
+        rollPass();
+      } else {
+        showChances();
+        subject.hidden = true;
+        friend.hidden = true;
+        finishPhoto(0, '놓친 사진', '현장 도착! 피사체는 벌써 퇴장');
+        advanceTimer = setTimeout(advance, 1200);
+      }
+    }
+    function tick(now) {
+      while (playing && now - started >= pass.duration) {
+        started += pass.duration;
+        endPass();
+      }
+      if (!playing) return;
+      draw((now - started) / pass.duration);
+      raf = requestAnimationFrame(tick);
     }
     function begin() {
       const scene = scenes[index];
@@ -72,26 +144,28 @@
       $('.press-back').src = art + scene.id + '.png';
       subject.src = sprite(scene.id);
       step.hidden = !manual; shoot.hidden = false; next.hidden = true;
-      playing = true; stepIndex = 0; draw(0);
+      subject.hidden = false;
+      frame.classList.toggle('press-blurred', false);
+      playing = true; used = 0; rollPass(); draw(0);
       (manual ? step : shoot).focus();
-      const startTime = performance.now();
-      function tick(now) {
-        if (!playing) return;
-        draw(((now - startTime) % 3700) / 3700);
-        raf = requestAnimationFrame(tick);
-      }
+      started = performance.now();
       if (!manual) raf = requestAnimationFrame(tick);
     }
     function photo() {
       if (!playing) return;
+      if (!friend.hidden) return finishPhoto(1, '얼굴 대문짝 특종', '단독 인터뷰? 친구 콧구멍만 1면에!');
+      const points = score(Math.abs(t - pass.target));
+      frame.classList.toggle('press-blurred', points === 0);
+      finishPhoto(points, grades[points], scenes[index].caption);
+    }
+    function finishPhoto(points, rating, caption) {
       playing = false; cancelAnimationFrame(raf);
-      const scene = scenes[index], delta = Math.abs(t - 0.5);
-      const points = delta <= 0.17 ? 3 : delta <= 0.32 ? 2 : 1;
-      const rating = ['','현장 스케치','생생한 포착','결정적 순간'][points];
+      view.classList.toggle('press-ready', false);
+      const scene = scenes[index];
       const print = frame.cloneNode(true);
       print.setAttribute('role','img'); print.setAttribute('aria-label', scene.title + ' · ' + rating);
-      photos.push({ print, scene, points, rating });
-      status.textContent = '✓ 촬영 완료 · ' + rating;
+      photos.push({ print, scene, points, rating, caption });
+      status.textContent = rating + ' · ' + points + '점';
       step.hidden = true; shoot.hidden = true; next.hidden = false;
       next.textContent = index < 2 ? '다음 취재 장소' : '특집호 편집하기'; next.focus();
     }
@@ -106,18 +180,23 @@
         const caption = document.createElement('figcaption');
         const desk = document.createElement('small'), title = document.createElement('strong');
         desk.textContent = (i ? p.scene.desk + '면' : '1면 특종') + ' · ' + p.rating;
-        title.textContent = p.scene.caption;
+        title.textContent = p.caption;
         caption.append(desk,title); story.append(p.print,caption); paper.append(story);
       });
       const total = photos.reduce((sum,p) => sum+p.points,0);
-      api.done({ stars: total >= 8 ? 3 : total >= 5 ? 2 : 1, hints: 0, extra: paper });
+      api.done({ stars: total === 9 ? 3 : total >= 6 ? 2 : 1, hints: 0, extra: paper });
       paper.focus({ preventScroll: true });
       container.scrollTop = 0;
     }
     on($('.press-start'),'click',() => { manual = still.checked; begin(); });
-    on(step,'click',() => { if (playing && manual) draw([0,0.25,0.5,0.75,1][++stepIndex % 5]); });
+    on(step,'click',() => {
+      if (!playing || !manual) return;
+      if (++stepIndex === steps) endPass();
+      if (playing) draw(stepIndex / steps);
+    });
     on(shoot,'click',photo);
-    on(next,'click',() => {
+    function advance() {
+      clearTimeout(advanceTimer);
       if (++index < scenes.length) return begin();
       $('.press-job').hidden = true; $('.press-edit').hidden = false;
       tip.textContent = '세 장 모두 잘 받았어! 가장 크게 싣고 싶은 사진을 골라 줘.';
@@ -127,8 +206,9 @@
         on(btn,'click',() => publish(p)); $('.press-choices').append(btn);
       }
       $('.press-choices button').focus();
-    });
-    return () => { playing = false; cancelAnimationFrame(raf); controller.abort(); };
+    }
+    on(next, 'click', advance);
+    return () => { playing = false; cancelAnimationFrame(raf); clearTimeout(advanceTimer); controller.abort(); };
   }
   window.TOUR_GAMES.press = { title: '찰칵! 녹원예술제 취재반', icon: 'camera', button: '녹원예술제 취재반', room: '드림스페이스',
     naver: 'Press', nextGame: 'logistics', maxStars: 3, stamp: '녹원예술제 취재반 도장 획득!', message: '세 곳의 예술제 소식을 담은 나만의 특집호를 발행했어요.', start };
