@@ -123,6 +123,15 @@ class TourMotion {
     return this.closest(p) || { p: [this.x, this.y], d: Infinity };
   }
 
+  /** 문 그림의 가장자리가 벽으로 투영되면 같은 문 안의 걸을 수 있는 위치를 사용합니다. */
+  mapTarget(point, portals) {
+    const near = this.project(point);
+    const portal = portals.find(p => TourMotion.contains(point, p.region) ||
+      (p.clickRegion && TourMotion.contains(point, p.clickRegion)));
+    if (portal && !TourMotion.contains(near.p, portal.region)) return this.project(portal.anchor);
+    return near;
+  }
+
   /** 현재 위치에서 target까지의 경로(꺾이는 지점 목록). 길이 없으면 [] */
   route(target) {
     const start = [this.x, this.y], end = this.project(target).p;
