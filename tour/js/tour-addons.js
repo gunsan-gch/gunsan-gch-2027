@@ -98,7 +98,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
   // 아름 선배 말풍선: 한 줄씩 말하듯이
   const yunaSays = (lines, compact = false) => `
     <div class="senior-card is-talk${compact ? ' is-compact' : ''}">${talkPortrait('yuna')}
-      <div><strong>아름 선배 · 예술제 준비부</strong>${lines.map(line => `<p>${line}</p>`).join('')}</div>
+      <div><strong>아름 선배 · 전교회장</strong>${lines.map(line => `<p>${line}</p>`).join('')}</div>
     </div>`;
   // 준비물 3칸 (찾을 곳 표시는 미션 시작 전 안내에서만)
   function inventory(showWhere = false) {
@@ -114,7 +114,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     if (state.complete) { completeView(); return; }
     if (!state.started) {
       show('quest', '녹원예술제 준비 대작전', `
-        ${yunaSays(['앗, 후배님 마침 잘 왔다!', '예술제가 코앞인데 준비물이 하나도 없어ㅠㅠ', '잔디마당으로 와 줄래? 나 거기 있어!'])}
+        ${yunaSays(['마침 잘 왔다! 예술제 준비 좀 도와줄래?', '잔디마당에서 기다릴게.'])}
         ${inventory(true)}
         <div class="addon-actions"><button class="btn btn-primary" id="addon-meet">아름 선배 만나기</button></div>`);
       $('#addon-meet').onclick = () => visit('yuna');
@@ -122,8 +122,8 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     }
     const ready = state.ribbon && state.bread && state.poster;
     show('quest', '녹원예술제 준비 대작전', `
-      ${yunaSays([ready ? '헐 다 모았어?! 잔디마당으로 빨리 와!!'
-        : `아직 ${supplies.filter(item => !state[item.id]).length}개 남았어! 천천히 와, 기다릴게~`], true)}
+      ${yunaSays([ready ? '다 모았네! 잔디마당으로 와 줘.'
+        : `아직 ${supplies.filter(item => !state[item.id]).length}개 남았어. 천천히 와!`], true)}
       ${inventory()}
       <ul class="addon-tasks">${supplies.map(item => `
         <li class="${state[item.id] ? 'is-got' : ''}">
@@ -153,19 +153,19 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       if (state.complete) { completeView(); return; }
       if (!state.started) {
         show('talk', '우리 예술제, 같이 준비할래?', `
-          ${yunaSays(['안녕! 나 예술제 준비부 아름이야 ㅎㅎ', '리본, 갓 구운 빵, 초대 포스터! 딱 세 개만 같이 챙겨 줄래?',
-            '리본은 1층 정보처리실 앞에 두고 왔고', '빵은 조리제빵실에서 빵 굽기 끝내면 생겨!',
-            '포스터는 3층 드림스페이스에서 송현이가 그리는 중~ 내가 보냈다고 하면 돼'])}
+          ${yunaSays(['안녕, 나 아름이야.', '예술제 준비물 세 개만 같이 챙겨 줄래?',
+            '리본은 1층 정보처리실 앞,', '빵은 조리제빵실 빵 굽기에서!',
+            '포스터는 3층 드림스페이스의 송현이(부회장)한테 받아 와.'])}
           ${inventory(true)}
-          <div class="addon-actions"><button class="btn btn-primary" id="addon-start">좋아, 같이 준비하자!</button></div>`, '예술제 준비부 · 아름 선배');
+          <div class="addon-actions"><button class="btn btn-primary" id="addon-start">좋아, 같이 준비하자!</button></div>`, '전교회장 · 아름 선배');
         $('#addon-start').onclick = () => { state.started = true; save(); sync(false); quest(); };
         return;
       }
       if (state.ribbon && state.bread && state.poster) {
         show('talk', '준비물을 전부 챙겨 왔네!', `
-          ${yunaSays(['헐 대박, 진짜 다 챙겨 왔네?!', '포스터 완전 예쁘다… 송현이 금손 인정', '너 없었으면 진짜 큰일 날 뻔했어ㅠㅠ'])}
+          ${yunaSays(['와, 진짜 다 챙겨 왔네!', '포스터 예쁘다. 송현이 솜씨 좋지?', '덕분에 예술제 준비 끝!'])}
           ${inventory()}
-          <div class="addon-actions"><button class="btn btn-primary" id="addon-finish">준비물 전달하기</button></div>`, '예술제 준비부 · 아름 선배');
+          <div class="addon-actions"><button class="btn btn-primary" id="addon-finish">준비물 전달하기</button></div>`, '전교회장 · 아름 선배');
         $('#addon-finish').onclick = () => { state.complete = true; save(); sync(false); completeView(); };
         return;
       }
@@ -220,15 +220,15 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       action = '준비물 확인하기';
       next = quest;
     }
-    show('talk', title, `<div class="senior-card"><div class="addon-portrait"><img class="songhyeon-portrait" src="img/npcs/portraits/songhyeon.png" width="104" height="104" alt=""></div><div><strong>송현 선배 · 이음 홍보부</strong><p>${line}</p></div></div>
-      <div class="addon-actions"><button class="btn btn-primary" id="addon-songhyeon-next">${action}</button>${state.poster ? pressAction : ''}</div>`, '홍보동아리 이음 · 송현 선배');
+    show('talk', title, `<div class="senior-card"><div class="addon-portrait"><img class="songhyeon-portrait" src="img/npcs/portraits/songhyeon.png" width="104" height="104" alt=""></div><div><strong>송현 선배 · 전교부회장</strong><p>${line}</p></div></div>
+      <div class="addon-actions"><button class="btn btn-primary" id="addon-songhyeon-next">${action}</button>${state.poster ? pressAction : ''}</div>`, '전교부회장 · 송현 선배');
     $('#addon-songhyeon-next').onclick = next;
     bindPress();
   }
   function collect(id){state[id]=true;save();sync(false);quest();toast('가방에 챙겼어요! 남은 준비물도 찾아보세요.');}
   function completeView() {
     show('complete', '예술제 준비 완료!', `
-      ${yunaSays(['이제 너도 우리 준비팀 정식 멤버야 ㅎㅎ', '예술제 날 꼭 놀러 와!'])}
+      ${yunaSays(['도와줘서 고마워.', '예술제 날 꼭 놀러 와!'])}
       ${inventory()}
       <div class="addon-actions">
         <button class="btn" id="addon-quest-reset">미션 다시하기</button>${pressAction}
