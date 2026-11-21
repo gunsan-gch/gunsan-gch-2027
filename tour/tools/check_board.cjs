@@ -8,27 +8,82 @@ const point = id => `[data-addon-point="${id}"]`;
 const slot = id => `[data-board-slot="${id}"]`;
 const read = page => page.evaluate(key => JSON.parse(localStorage.getItem(key)), key);
 const scores = page => page.evaluate(() => window.tourGame.progress());
+const menu = ['현미밥', '미역국', '계란찜', '시금치', '배추김치', '배', '우유'];
+const feed = {
+  updatedAt: '2026-11-20T21:00:00Z',
+  months: {
+    '2026-11': {
+      events: [3, 23, 24, 25, 26, 27].map(day => ({
+        date: '2026-11-' + String(day).padStart(2, '0'), name: day + '일 행사'
+      })),
+      meals: { '2026-11-23': { lunch: menu } }
+    },
+    '2026-12': { events: [], meals: { '2026-12-01': { lunch: ['보리밥'] } } }
+  }
+};
+const feedRoute = '**/data/school-feed.json';
+
+async function checkFeed(page) {
+  await page.getByText('다음 급식: 11/23(월)').waitFor();
+  assert.deepEqual(await page.locator('[data-feed-slot="meals"] li').allTextContents(), menu.slice(0, 6));
+  assert.deepEqual(await page.locator('.board-dates li').allTextContents(),
+    [23, 24, 25, 26].map(day => day + '일 ' + day + '일 행사'));
+  assert.equal(await page.getByText('학교 홈페이지 · 11월 21일 갱신').count(), 2);
+  for (const name of ['홈페이지 학사일정', '이달의 식단']) {
+    assert.equal(await page.getByRole('link', { name }).getAttribute('target'), '_blank');
+  }
+}
+
+async function checkMobile(page) {
+  await page.setViewportSize({ width: 360, height: 740 });
+  const cards = await page.locator('.board-slot').evaluateAll(elements =>
+    elements.map(el => ({ x: el.offsetLeft, width: el.offsetWidth, overflow: el.scrollWidth - el.clientWidth })));
+  assert.ok(cards[1].x > cards[0].x && cards[4].width > cards[0].width * 2);
+  assert.ok(cards.every(card => card.overflow <= 1));
+  assert.ok(await page.locator('.board-grid a').evaluateAll(links =>
+    links.every(link => link.getBoundingClientRect().height >= 44)));
+  await page.setViewportSize({ width: 1440, height: 920 });
+}
 
 async function checkPublicBoard(page) {
+  await page.clock.setFixedTime(new Date('2026-11-22T03:00:00Z'));
+  await page.route(feedRoute, route => route.fulfill({ json: feed }));
   await page.goto(url + '#floor-2');
   await page.locator(point('board')).click();
   await page.getByRole('heading', { name: '군산여상 게시판' }).waitFor();
-  assert.equal(await page.locator('.board-slot').count(), 4);
+  assert.equal(await page.locator('.board-slot').count(), 5);
   const data = await page.evaluate(() => window.TourBoardData);
-  assert.equal(await page.locator('.board-dates li').count(), data.events.rows.length);
+  await checkFeed(page);
+  await checkMobile(page);
   assert.equal(await page.locator('.board-posters img').count(), data.posters.images.length);
   await page.locator('.board-posters img').evaluateAll(images => Promise.all(images.map(img => img.decode())));
-  const instagramReady = /^https?:\/\//i.test(data.instagram.url.trim());
-  assert.equal(await page.getByText('곧 열려요', { exact: true }).count(), instagramReady ? 0 : 1);
-  assert.equal(await page.getByRole('link', { name: '인스타 보러 가기' }).count(), instagramReady ? 1 : 0);
+  // 인스타 계정: 주소 있는 계정은 버튼, 없는 계정은 「곧 열려요」
+  const ready = data.instagram.accounts.filter(a => /^https?:\/\//i.test(a.url.trim())).length;
+  assert.equal(await page.getByText('곧 열려요', { exact: true }).count(), data.instagram.accounts.length - ready);
+  assert.equal(await page.getByRole('link', { name: '인스타 보기' }).count(), ready);
   assert.equal(await page.getByRole('link', { name: '홈페이지에서 보기' }).getAttribute('href'), '../index.html#careers');
   assert.equal(await page.locator('#board-pin').count(), 0);
   assert.equal(await page.locator(point('schedule')).count(), 0);
   await page.locator('#festival-close').click();
+  await page.clock.setFixedTime(new Date('2026-11-22T16:00:00Z'));
   // 게시판 버튼을 누르지 않고 복도에서 벽으로 다시 걸어와도 열립니다.
   await page.evaluate(() => window.tourAddonHost.go('2', [68.6, 37], '복도'));
   await page.evaluate(() => window.tourAddonHost.go('2', [70.6, 32], '벽'));
   await page.getByRole('heading', { name: '군산여상 게시판' }).waitFor();
+  await page.getByText('오늘 중식: 11/23(월)').waitFor();
+  await page.locator('#festival-close').click();
+  await page.clock.setFixedTime(new Date('2026-11-30T00:00:00Z'));
+  await page.locator(point('board')).click();
+  await page.getByText('다음 급식: 12/1(화)').waitFor();
+  assert.match(await page.locator('.board-dates li').first().innerText(), /3일 행사/);
+  await page.locator('#festival-close').click();
+  await page.unroute(feedRoute);
+  await page.route(feedRoute, route => route.abort('failed'));
+  await page.locator(point('board')).click();
+  await page.getByText(data.meals.fallback).waitFor();
+  assert.deepEqual(await page.locator('.board-dates li').allTextContents(),
+    data.events.rows.map(row => row.join(' ')));
+  assert.equal(await page.getByText(/학교 홈페이지 · .* 갱신/).count(), 0);
   await page.locator('#festival-close').click();
   await page.locator('[data-scene="3"]:visible').first().click();
   assert.equal(await page.locator(point('poster') + ' .addon-alert').count(), 0);
@@ -68,6 +123,8 @@ async function collectPapers(page) {
 }
 
 async function pinPapers(page) {
+  assert.deepEqual(await page.locator('[data-board-slot]').evaluateAll(buttons =>
+    buttons.map(button => button.dataset.boardSlot)), ['events', 'posters', 'careers']);
   await page.locator('[data-board-sheet="schedule"]').click();
   await page.locator(slot('careers')).click();
   assert.equal(await page.locator('.wrong-slot').count(), 1);

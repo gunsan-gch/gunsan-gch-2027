@@ -356,7 +356,8 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
 
   const keeperTitle = '<p class="board-title">칭호 · 게시판 지킴이</p>';
   const boardData = window.TourBoardData;
-  const slotKeys = ['events', 'posters', 'careers', 'instagram'];
+  const slotKeys = ['events', 'posters', 'careers', 'instagram', 'meals'];
+  const koreanDate = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
   function escapeText(value) {
     return String(value).replace(/[&<>"']/g, c =>
       ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -366,33 +367,101 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     return `<a class="btn" href="${escapeText(url)}">${text}</a>`;
   }
 
+  function eventList(rows) {
+    if (!rows.length) return '<p>등록된 행사가 없어요.</p>';
+    return `<ul class="board-dates">${rows.map(([date, name]) =>
+      `<li><b>${escapeText(date)}</b> ${escapeText(name)}</li>`).join('')}</ul>`;
+  }
+
+  // 같은 이름이 이어지는 날짜(예: 시험 4일)는 「23~26일」 한 줄로 묶기
+  function mergeEventDays(events) {
+    const merged = [];
+    for (const event of events) {
+      const day = Number(event.date.slice(-2)), last = merged[merged.length - 1];
+      if (last && last.name === event.name && day - last.end <= 1) last.end = day;
+      else merged.push({ name: event.name, start: day, end: day });
+    }
+    return merged.map(e => [e.start === e.end ? e.start + '일' : `${e.start}~${e.end}일`, e.name]);
+  }
+
+  function upcomingEvents(events, today) {
+    const sorted = [...events].sort((a, b) => a.date.localeCompare(b.date));
+    const remaining = sorted.filter(event => event.date >= today);
+    return eventList(mergeEventDays(remaining.length ? remaining : sorted).slice(0, 4));
+  }
+
+  function lunchMenu(months, today) {
+    const available = Object.values(months).flatMap(month => Object.entries(month.meals))
+      .filter(([date, meals]) => date >= today && meals.lunch?.length)
+      .sort(([a], [b]) => a.localeCompare(b));
+    if (!available.length) return '<p>예정된 중식이 없어요.</p>';
+    const [date, { lunch }] = available[0];
+    const [, month, day] = date.split('-').map(Number);
+    const weekday = '일월화수목금토'[new Date(date + 'T00:00:00Z').getUTCDay()];
+    return `<p><b>${date === today ? '오늘 중식' : '다음 급식'}: ${month}/${day}(${weekday})</b></p>
+      <ul>${lunch.slice(0, 6).map(name => `<li>${escapeText(name)}</li>`).join('')}</ul>`;
+  }
+
+  async function readBoardFeed() {
+    try {
+      const response = await fetch('data/school-feed.json', { cache: 'no-cache' });
+      if (!response.ok) return null;
+      const feed = await response.json();
+      const today = koreanDate.format(new Date());
+      const current = feed.months[today.slice(0, 7)];
+      const [, month, day] = koreanDate.format(new Date(feed.updatedAt)).split('-').map(Number);
+      return {
+        events: upcomingEvents(current.events, today),
+        meals: lunchMenu(feed.months, today),
+        stamp: `학교 홈페이지 · ${month}월 ${day}일 갱신`
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  async function fillBoard(grid, request) {
+    const feed = await request;
+    if (!grid.isConnected) return;
+    for (const slot of grid.querySelectorAll('[data-feed-slot]')) {
+      const key = slot.dataset.feedSlot;
+      slot.innerHTML = feed ? feed[key] : key === 'events'
+        ? eventList(boardData.events.rows) : `<p>${escapeText(boardData.meals.fallback)}</p>`;
+      if (feed) slot.parentElement.querySelector('.board-updated').textContent = feed.stamp;
+    }
+  }
+
   function slotContent(key) {
     const data = boardData[key];
-    if (key === 'events') return `<ul class="board-dates">${data.rows.map(([date, name]) =>
-      `<li><b>${escapeText(date)}</b> ${escapeText(name)}</li>`).join('')}</ul>`;
+    if (key === 'events' || key === 'meals') return `<div data-feed-slot="${key}"><p>불러오는 중…</p></div>
+      <a class="btn" href="${escapeText(data.url)}" target="_blank" rel="noopener">${escapeText(data.link)}</a>
+      <small class="board-updated"></small>`;
     if (key === 'posters') return `<div class="board-posters">${data.images.map(image =>
       `<figure><img src="${escapeText(image.src)}" alt=""><figcaption>${escapeText(image.title)}</figcaption></figure>`
     ).join('')}</div>`;
     if (key === 'careers') return `<small>${escapeText(data.date)}</small>
       <ul>${data.rows.map(row => `<li>${escapeText(row)}</li>`).join('')}</ul>
       ${boardLink(data.url, '홈페이지에서 보기')}`;
-    const url = data.url.trim();
-    return `<p>${escapeText(data.name)}</p>${/^https?:\/\//i.test(url)
-      ? boardLink(url, '인스타 보러 가기') : '<small>곧 열려요</small>'}`;
+    // 인스타 계정마다 새 창 버튼 (주소 없는 계정은 「곧 열려요」)
+    const accounts = data.accounts || [{ name: data.name, url: data.url || '' }];
+    return `<ul class="board-sns">${accounts.map(({ name, url = '' }) => `<li><span>${escapeText(name)}</span>${
+      /^https?:\/\//i.test(url.trim())
+        ? `<a class="btn" href="${escapeText(url.trim())}" target="_blank" rel="noopener">인스타 보기</a>`
+        : '<small>곧 열려요</small>'}</li>`).join('')}</ul>`;
   }
 
   function boardSlot(key, pinning, fresh) {
     const sheet = sheets.find(s => s.slot === key);
     const pinned = state.board.pinned.includes(sheet?.id);
     const title = escapeText(boardData[key].title);
-    const target = pinning && !pinned;
+    const target = pinning && sheet && !pinned;
     return `<section class="board-slot ${pinned ? 'is-pinned' : ''} ${fresh === key ? 'just-pinned' : ''}">
       <h3>${title}</h3>${target
         ? `<button class="board-target" data-board-slot="${key}" aria-label="${title} 칸에 붙이기">여기에 붙이기</button>`
         : slotContent(key)}</section>`;
   }
 
-  function openBoard(pinning = false, fresh = '') {
+  function openBoard(pinning = false, fresh = '', request = readBoardFeed()) {
     pinning = pinning && boardReady() && !boardDone();
     const remaining = sheets.filter(s => !state.board.pinned.includes(s.id));
     const finished = fresh && boardDone();
@@ -403,8 +472,9 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       <div class="board-grid">${slotKeys.map(key => boardSlot(key, pinning, fresh)).join('')}</div>
       ${!pinning && boardReady() && !boardDone() ? `<div class="addon-actions">
         <button class="btn btn-primary" id="board-pin">붙이기</button></div>` : ''}`, '2층 · 직업교육부실 옆');
-    if (pinning) bindPins(remaining[0]);
-    if ($('#board-pin')) $('#board-pin').onclick = () => openBoard(true);
+    fillBoard($('.board-grid'), request);
+    if (pinning) bindPins(remaining[0], request);
+    if ($('#board-pin')) $('#board-pin').onclick = () => openBoard(true, '', request);
   }
 
   function sheetTray(remaining) {
@@ -414,7 +484,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       ).join('')}</div>`;
   }
 
-  function bindPins(selected) {
+  function bindPins(selected, request) {
     const papers = $$('[data-board-sheet]');
     papers[0].focus({ preventScroll: true });
     papers.forEach(button => button.onclick = () => {
@@ -435,7 +505,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       state.board.pinned.push(selected.id);
       save();
       sync(false);
-      openBoard(true, selected.slot);
+      openBoard(true, selected.slot, request);
     });
   }
   function completeView() {

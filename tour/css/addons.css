@@ -280,6 +280,8 @@
 .board-slot ul { list-style: none; margin: 8px 0; padding: 0; }
 .board-slot li + li { margin-top: 5px; }
 .board-dates b { color: #24665a; }
+.board-slot:last-child { grid-column: 1 / -1; }
+.board-updated:not(:empty) { display: block; margin-top: 8px; color: #525d61; }
 .board-slot .btn { display: inline-flex; align-items: center; min-height: 44px; }
 .board-posters, .board-tray { display: flex; flex-wrap: wrap; gap: 8px; }
 .board-posters figure { margin: 0; text-align: center; }
@@ -290,6 +292,8 @@
 .board-tray [aria-pressed="true"] { background: var(--green); color: white; }
 .board-target {
   width: 100%;
+  min-height: 44px;
+  font-size: 13px;
   border: 1px dashed #997554;
   background: transparent;
   color: #684a32;
@@ -317,8 +321,14 @@
   .board-grid { gap: 8px; padding: 8px; }
   .board-slot { padding: 16px 8px 8px; }
   .board-slot h3 { font-size: 14px; }
-  .board-grid:not(:has(.board-target)) .board-slot:nth-child(n+3) { grid-column: 1 / -1; }
+  .board-slot .btn { max-width: 100%; padding-inline: 8px; white-space: normal; }
+  .board-slot .board-sns li { align-items: flex-start; flex-direction: column; gap: 2px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .just-pinned::before, .wrong-slot { animation: none; }
 }
+
+/* 게시판 인스타 칸: 계정마다 한 줄 */
+.board-sns { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.board-sns li { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.board-sns .btn { min-height: 44px; padding: 8px 12px; font-size: 13px; white-space: nowrap; }
