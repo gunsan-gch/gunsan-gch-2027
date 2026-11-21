@@ -332,3 +332,6 @@
 .board-sns { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .board-sns li { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .board-sns .btn { min-height: 44px; padding: 8px 12px; font-size: 13px; white-space: nowrap; }
+/* 학교 포스터(일러스트): 픽셀 처리 없이, 누르면 크게 */
+.board-posters figure.is-photo img { width: 96px; height: 136px; object-fit: cover; image-rendering: auto; border: 1px solid var(--line); }
+.board-posters a { display: block; min-width: 44px; min-height: 44px; }

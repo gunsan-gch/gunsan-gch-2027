@@ -437,7 +437,10 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       <a class="btn" href="${escapeText(data.url)}" target="_blank" rel="noopener">${escapeText(data.link)}</a>
       <small class="board-updated"></small>`;
     if (key === 'posters') return `<div class="board-posters">${data.images.map(image =>
-      `<figure><img src="${escapeText(image.src)}" alt=""><figcaption>${escapeText(image.title)}</figcaption></figure>`
+      // full 이 있으면 누르면 큰 포스터를 새 창으로
+      `<figure class="${image.photo ? 'is-photo' : ''}">${image.full
+        ? `<a href="${escapeText(image.full)}" target="_blank" rel="noopener" aria-label="${escapeText(image.title)} 크게 보기"><img src="${escapeText(image.src)}" alt=""></a>`
+        : `<img src="${escapeText(image.src)}" alt="">`}<figcaption>${escapeText(image.title)}</figcaption></figure>`
     ).join('')}</div>`;
     if (key === 'careers') return `<small>${escapeText(data.date)}</small>
       <ul>${data.rows.map(row => `<li>${escapeText(row)}</li>`).join('')}</ul>

@@ -23,7 +23,11 @@ window.TourBoardData = {
   },
   posters: {
     title: '📌 포스터',
-    images: [{ src: 'img/board/festival.png', title: '녹원예술제' }]
+    // 학교 포스터: 작은 그림(src)과 누르면 열리는 큰 그림(full). photo:true 는 픽셀 처리 없이 매끄럽게
+    images: [
+      { src: 'img/board/poster-2027-thumb.webp', full: 'img/board/poster-2027.webp', title: '2027 신입생 모집', photo: true },
+      { src: 'img/board/festival.png', title: '녹원예술제' }
+    ]
   },
   careers: {
     title: '💼 취업·진학 현황',
