@@ -1389,6 +1389,30 @@
       "description": "공통 화면 아이콘 · speaker-off (16×16, 3배)",
       "source": "직접 생성",
       "generator": "tools/make_ui_icons.mjs"
+    },
+    "board/empty.png": {
+      "output": "board/empty.png",
+      "kind": "mission-pixel-art",
+      "description": "빈 코르크 게시판",
+      "sha256": "6c4d5adc3eb39410554540a0fc485d8ea75b4035b23010bdca8314b2255de67c",
+      "source": "직접 생성",
+      "generator": "tools/make_board_art.mjs"
+    },
+    "board/filled.png": {
+      "output": "board/filled.png",
+      "kind": "mission-pixel-art",
+      "description": "안내문 세 장을 붙인 게시판",
+      "sha256": "20a6e56f5e4108f99463b71752ae7d364314597e45e7e6d9047262f83d32e154",
+      "source": "직접 생성",
+      "generator": "tools/make_board_art.mjs"
+    },
+    "board/festival.png": {
+      "output": "board/festival.png",
+      "kind": "mission-pixel-art",
+      "description": "꽃과 무대 커튼을 그린 녹원예술제 포스터",
+      "sha256": "efff1e6eb79e3fec04023dad7a90ab7b0bce14957fd25aa48cccfa7d374d9d47",
+      "source": "직접 생성",
+      "generator": "tools/make_board_art.mjs"
     }
   }
 }

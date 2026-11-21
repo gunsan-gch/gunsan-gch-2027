@@ -6,13 +6,33 @@
   const rewards=window.TourCostumes.items;
   const rules=window.TourStarProgress;
   const score=()=>window.tourGame.progress();
-  const clean=()=>({wardrobe:rules.emptyWardrobe(),started:false,ribbon:false,bread:false,poster:false,complete:false,equip:{head:null,back:null}});
+  const sheets = [
+    { id: 'poster', slot: 'posters', name: '예술제 포스터', where: '3층 송현 선배' },
+    { id: 'schedule', slot: 'events', name: '행사 일정표', where: '2층 교무실 앞' },
+    { id: 'career', slot: 'careers', name: '취업 현황표', where: '2층 취업지원부실 앞' }
+  ];
+  const clean = () => ({
+    wardrobe: rules.emptyWardrobe(), equip: { head: null, back: null },
+    started: false, ribbon: false, bread: false, poster: false, complete: false,
+    board: { collected: [], pinned: [] }
+  });
+  // 첫 미션을 마친 저장본만 게시판 진행을 이어받습니다.
+  function loadBoard(board) {
+    const ids = sheets.map(sheet => sheet.id);
+    const valid = list => ids.filter(id => Array.isArray(list) && list.includes(id));
+    const collected = valid(board?.collected);
+    return {
+      collected: collected.includes('poster') ? collected : [],
+      pinned: collected.length === sheets.length ? valid(board?.pinned) : []
+    };
+  }
   function loadState(){
     let s={};try{s=JSON.parse(localStorage.getItem(KEY))||{};}catch{}
     const next={...clean(),started:!!s.started,ribbon:!!s.ribbon,bread:!!s.bread,poster:!!s.poster,complete:!!s.complete,
       wardrobe:rules.wardrobe(s.wardrobe,score(),rewards),
       equip:Object.fromEntries(['head','back'].map(slot=>[slot,rewards.some(r=>r.slot===slot&&r.id===s.equip?.[slot])?s.equip[slot]:null]))};
     if(!(next.ribbon&&next.bread&&next.poster))next.complete=false;
+    if (next.complete) next.board = loadBoard(s.board);
     return next;
   }
   let state=loadState();
@@ -49,8 +69,29 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
   const locations = {
     yuna: { floor: 'outdoor', p: [59, 51], approach: [56, 50], name: '아름 선배', npc: 'yuna' },
     ribbon: { floor: '1', p: [44.3, 22], name: '예술제 리본' },
-    poster: { floor: '3', p: [54, 25], approach: [51, 25], name: '송현 선배', npc: 'songhyeon' }
+    poster: { floor: '3', p: [54, 25], approach: [51, 25], name: '송현 선배', npc: 'songhyeon' },
+    board: { floor: '2', p: [71.8, 32], approach: [70.6, 32], name: '게시판' },
+    schedule: { floor: '2', p: [40.6, 19], name: '행사 일정표' },
+    career: { floor: '2', p: [83.1, 19], name: '취업 현황표' }
   };
+  const hasSheet = id => state.board.collected.includes(id);
+  const boardReady = () => state.board.collected.length === sheets.length;
+  const boardDone = () => state.board.pinned.length === sheets.length;
+  const isPickup = id => id === 'schedule' || id === 'career';
+
+  function mapFigure(id, place) {
+    if (place.npc) return portrait(place.npc);
+    if (id === 'board') {
+      const name = boardDone() ? 'filled' : 'empty';
+      return `<img src="img/board/${name}.png" width="36" height="27" alt="">`;
+    }
+    return sheetIcon(id);
+  }
+
+  function sheetIcon(id) {
+    if (!isPickup(id)) return icon(id);
+    return `<span class="board-sheet sheet-${id}" aria-hidden="true"></span>`;
+  }
   async function visit(id){close();const p=locations[id];const ticket=++questTicket;const reached=await host.go(p.floor,p.approach||p.p,p.name);if(reached&&ticket===questTicket)talk(id);}
   function points() {
     const stage = $('#scene-stage');
@@ -58,15 +99,21 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     for (const [id, place] of Object.entries(locations)) {
       if (place.floor !== host.scene()) continue;
       if (id === 'ribbon' && (!state.started || state.ribbon)) continue;
+      if (isPickup(id) && (!hasSheet('poster') || hasSheet(id))) continue;
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'addon-point' + (place.npc ? '' : ' is-item');
+      button.classList.toggle('board-pickup', isPickup(id));
+      button.classList.toggle('wall-board', id === 'board');
       button.style.left = place.p[0] + '%';
       button.style.top = place.p[1] + '%';
       button.dataset.addonPoint = id;
-      button.setAttribute('aria-label', place.name + (place.npc ? ' 만나러 가기' : ' 찾으러 가기'));
-      const alert = id === 'poster' ? state.started && !state.poster : !state.complete;
-      const figure = place.npc ? portrait(place.npc) : icon(id);
+      const action = place.npc ? ' 만나러 가기' : ' 찾으러 가기';
+      button.setAttribute('aria-label', id === 'board' ? '군산여상 게시판 열기' : place.name + action);
+      const alert = id === 'poster'
+        ? (state.started && !state.poster) || (state.complete && !hasSheet('poster'))
+        : id === 'board' ? boardReady() && !boardDone() : !state.complete;
+      const figure = mapFigure(id, place);
       button.innerHTML = figure + `<span class="addon-npc-name">${place.name}</span>` +
         (alert ? '<span class="addon-alert" aria-hidden="true">!</span>' : '');
       button.onclick = () => visit(id);
@@ -77,6 +124,14 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
   const costume=document.createElement('canvas');costume.width=48;costume.height=52;costume.className='addon-outfit-layer';costume.setAttribute('aria-hidden','true');$('#scene-walker').append(costume);
   function paintPlayer(p=lastPose){lastPose=p;const wearing=!!(state.equip.head||state.equip.back);$('#scene-walker').classList.toggle('has-addon-outfit',wearing);costume.hidden=!wearing;if(wearing&&spriteReady)drawAvatar(costume.getContext('2d'),p.facing,p.frame);}
   document.addEventListener('tour:avatar',e=>paintPlayer(e.detail));
+  let atBoard = false;
+  document.addEventListener('tour:avatar', ({ detail: pose }) => {
+    const [x, y] = locations.board.approach;
+    const near = host.scene() === '2' && Math.abs(pose.x - x) < 0.65 && Math.abs(pose.y - y) < 2;
+    const arrived = near && !atBoard && pose.moving;
+    atBoard = near;
+    if (arrived && !document.querySelector('dialog[open]')) openBoard();
+  });
   document.addEventListener('tour:scene',()=>points());
   function sync(notify=true){
     const previous=state.wardrobe;
@@ -87,7 +142,17 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     for(const r of rewards){if(!has(r)&&state.equip[r.slot]===r.id){state.equip[r.slot]=null;changed=true;}}
     if(state.started&&!state.bread&&window.tourGame.stamps().bakery){state.bread=true;changed=true;}
     if(changed)save();
-    window.TourUI.label($('#wardrobe-open'),'closet','내 옷장');window.TourUI.label($('#festival-open'),'mission',state.complete?'미션 완료':state.started?`탐험 미션 ${['ribbon','bread','poster'].filter(k=>state[k]).length}/3`:'탐험 미션');paintPlayer();points();return {items:unlocked,title};
+    window.TourUI.label($('#wardrobe-open'), 'closet', '내 옷장');
+    window.TourUI.label($('#festival-open'), 'mission', missionLabel());
+    paintPlayer();
+    points();
+    return { items: unlocked, title };
+  }
+  function missionLabel() {
+    if (boardDone()) return '미션 완료';
+    if (state.complete) return `게시판 미션 ${state.board.collected.length}/3`;
+    if (!state.started) return '탐험 미션';
+    return `탐험 미션 ${supplies.filter(item => state[item.id]).length}/3`;
   }
   const supplies = [
     { id: 'ribbon', name: '예술제 리본', where: '1층 · 정보처리실 앞' },
@@ -111,7 +176,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
   }
   function quest() {
     sync(false);
-    if (state.complete) { completeView(); return; }
+    if (state.complete) { boardQuest(); return; }
     if (!state.started) {
       show('quest', '녹원예술제 준비 대작전', `
         ${yunaSays(['마침 잘 왔다! 예술제 준비 좀 도와줄래?', '잔디마당에서 기다릴게.'])}
@@ -148,6 +213,8 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     if (ready) $('#addon-deliver-go').onclick = () => visit('yuna');
   }
   function talk(id) {
+    if (id === 'board') { openBoard(); return; }
+    if (isPickup(id)) { pickUpSheet(id); return; }
     if (id === 'poster') { talkSonghyeon(); return; }
     if (id === 'yuna') {
       if (state.complete) { completeView(); return; }
@@ -191,6 +258,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     };
   }
   function talkSonghyeon() {
+    if (state.complete) { boardQuest(true); return; }
     let title, line, action, next;
     if (!state.started) {
       title = '포스터 색을 고르는 중이야';
@@ -202,11 +270,6 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       line = '포스터 완성! 아름 선배에게 전해 줘.';
       action = '초대 포스터 받기';
       next = () => collect('poster');
-    } else if (state.complete) {
-      title = '우리 포스터, 잘 보이더라!';
-      line = '포스터 잘 붙였어! 이제 수빈이와 예술제 취재하러 갈래?';
-      action = '다시 둘러보기';
-      next = close;
     } else if (state.ribbon && state.bread) {
       title = '이제 아름 선배에게 가자!';
       line = '준비 완료! 잔디마당의 아름 선배에게 전해 줘.';
@@ -226,6 +289,155 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     bindPress();
   }
   function collect(id){state[id]=true;save();sync(false);quest();toast('가방에 챙겼어요! 남은 준비물도 찾아보세요.');}
+
+  function songSays(lines) {
+    return `<div class="senior-card is-talk"><div class="addon-portrait">
+      <img class="songhyeon-portrait" src="img/npcs/portraits/songhyeon.png" alt="">
+      </div><div><strong>송현 선배 · 전교부회장</strong>
+      ${lines.map(line => `<p>${line}</p>`).join('')}</div></div>`;
+  }
+
+  function sheetInventory() {
+    return `<div class="addon-inventory board-inventory">${sheets.map(sheet => `
+      <div class="addon-supply ${hasSheet(sheet.id) ? 'is-got' : ''}">
+        ${sheetIcon(sheet.id)}<strong>${sheet.name}</strong><small>${sheet.where}</small>
+        ${hasSheet(sheet.id) ? '<b class="addon-check" aria-label="수집 완료">✓</b>' : ''}
+      </div>`).join('')}</div>`;
+  }
+
+  function boardQuest(withSong = false) {
+    const started = hasSheet('poster');
+    const ready = boardReady();
+    let lines = ['3층 드림스페이스로 와 줘.', '게시판에 붙일 게 있어.'];
+    if (withSong) lines = ['예술제가 끝났으니 게시판을 정리하자.', '2층 직업교육부실 옆에 있어.',
+      '행사 일정표랑 취업 현황표를 받아 와 줘.', '포스터는 내가 줄게.'];
+    if (started) lines = [ready ? '다 모았네. 게시판에 붙이자.' : '2층에서 나머지 자료를 받아 와 줘.'];
+    if (boardDone()) lines = ['이제 복도에서 학교 소식을 볼 수 있겠어.', '정리해 줘서 고마워.'];
+    const action = !started && withSong ? '포스터 받고 시작하기' : !started ? '송현 선배 만나기' : '게시판으로 가기';
+    show('board-quest', '게시판을 채워 줘!', `
+      ${songSays(lines)}${boardDone() ? keeperTitle : ''}
+      ${sheetInventory()}
+      <div class="addon-actions">
+        ${!started || ready ? `<button class="btn btn-primary" id="board-next">${action}</button>` : sheetTrips()}
+        <button class="btn" id="addon-quest-reset">미션 다시하기</button>${pressAction}
+      </div>`, '전교부회장 · 송현 선배');
+    const button = $('#board-next');
+    if (button) button.onclick = () => {
+      if (started) return visit('board');
+      if (!withSong) return visit('poster');
+      takeSheet('poster');
+    };
+    $$('[data-board-trip]').forEach(b => b.onclick = () => visit(b.dataset.boardTrip));
+    $('#addon-quest-reset').onclick = resetQuest;
+    bindPress();
+  }
+
+  function sheetTrips() {
+    return sheets.filter(s => !hasSheet(s.id)).map(s =>
+      `<button class="btn" data-board-trip="${s.id}">${s.name} 찾으러 가기</button>`
+    ).join('');
+  }
+
+  function takeSheet(id) {
+    if (!state.complete || hasSheet(id) || (id !== 'poster' && !hasSheet('poster'))) return;
+    state.board.collected.push(id);
+    save();
+    sync(false);
+    boardQuest();
+  }
+
+  function pickUpSheet(id) {
+    if (!hasSheet('poster') || hasSheet(id)) return;
+    const sheet = sheets.find(item => item.id === id);
+    show('board-pickup', sheet.name, `<p>${sheet.where}에 준비되어 있어요.</p>
+      <div class="addon-actions"><button class="btn btn-primary" id="board-take">가방에 넣기</button></div>`);
+    $('#board-take').onclick = () => takeSheet(id);
+  }
+
+  const keeperTitle = '<p class="board-title">칭호 · 게시판 지킴이</p>';
+  const boardData = window.TourBoardData;
+  const slotKeys = ['events', 'posters', 'careers', 'instagram'];
+  function escapeText(value) {
+    return String(value).replace(/[&<>"']/g, c =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  }
+
+  function boardLink(url, text) {
+    return `<a class="btn" href="${escapeText(url)}">${text}</a>`;
+  }
+
+  function slotContent(key) {
+    const data = boardData[key];
+    if (key === 'events') return `<ul class="board-dates">${data.rows.map(([date, name]) =>
+      `<li><b>${escapeText(date)}</b> ${escapeText(name)}</li>`).join('')}</ul>`;
+    if (key === 'posters') return `<div class="board-posters">${data.images.map(image =>
+      `<figure><img src="${escapeText(image.src)}" alt=""><figcaption>${escapeText(image.title)}</figcaption></figure>`
+    ).join('')}</div>`;
+    if (key === 'careers') return `<small>${escapeText(data.date)}</small>
+      <ul>${data.rows.map(row => `<li>${escapeText(row)}</li>`).join('')}</ul>
+      ${boardLink(data.url, '홈페이지에서 보기')}`;
+    const url = data.url.trim();
+    return `<p>${escapeText(data.name)}</p>${/^https?:\/\//i.test(url)
+      ? boardLink(url, '인스타 보러 가기') : '<small>곧 열려요</small>'}`;
+  }
+
+  function boardSlot(key, pinning, fresh) {
+    const sheet = sheets.find(s => s.slot === key);
+    const pinned = state.board.pinned.includes(sheet?.id);
+    const title = escapeText(boardData[key].title);
+    const target = pinning && !pinned;
+    return `<section class="board-slot ${pinned ? 'is-pinned' : ''} ${fresh === key ? 'just-pinned' : ''}">
+      <h3>${title}</h3>${target
+        ? `<button class="board-target" data-board-slot="${key}" aria-label="${title} 칸에 붙이기">여기에 붙이기</button>`
+        : slotContent(key)}</section>`;
+  }
+
+  function openBoard(pinning = false, fresh = '') {
+    pinning = pinning && boardReady() && !boardDone();
+    const remaining = sheets.filter(s => !state.board.pinned.includes(s.id));
+    const finished = fresh && boardDone();
+    show('school-board', boardData.title, `
+      ${finished ? songSays(['세 장 다 제자리에 붙었네.', '이제 학교 소식을 한눈에 볼 수 있겠다. 고마워.']) : ''}
+      ${boardDone() ? keeperTitle : ''}
+      ${pinning ? sheetTray(remaining) : ''}
+      <div class="board-grid">${slotKeys.map(key => boardSlot(key, pinning, fresh)).join('')}</div>
+      ${!pinning && boardReady() && !boardDone() ? `<div class="addon-actions">
+        <button class="btn btn-primary" id="board-pin">붙이기</button></div>` : ''}`, '2층 · 직업교육부실 옆');
+    if (pinning) bindPins(remaining[0]);
+    if ($('#board-pin')) $('#board-pin').onclick = () => openBoard(true);
+  }
+
+  function sheetTray(remaining) {
+    return `<p class="board-instruction" role="status" id="board-feedback">붙일 자료와 알맞은 칸을 눌러 주세요.</p>
+      <div class="board-tray">${remaining.map((s, i) =>
+        `<button class="btn" data-board-sheet="${s.id}" aria-pressed="${i === 0}">${s.name}</button>`
+      ).join('')}</div>`;
+  }
+
+  function bindPins(selected) {
+    const papers = $$('[data-board-sheet]');
+    papers[0].focus({ preventScroll: true });
+    papers.forEach(button => button.onclick = () => {
+      selected = sheets.find(s => s.id === button.dataset.boardSheet);
+      papers.forEach(b => b.setAttribute('aria-pressed', String(b === button)));
+      $('#board-feedback').textContent = `${selected.name} · 붙일 칸을 눌러 주세요.`;
+    });
+    $$('[data-board-slot]').forEach(button => button.onclick = () => {
+      const card = button.closest('.board-slot');
+      if (button.dataset.boardSlot !== selected.slot) {
+        card.classList.remove('wrong-slot');
+        void card.offsetWidth;
+        card.classList.add('wrong-slot');
+        $('#board-feedback').textContent = selected.name + '에 맞는 칸을 다시 골라 주세요.';
+        return;
+      }
+      if (!boardReady() || state.board.pinned.includes(selected.id)) return;
+      state.board.pinned.push(selected.id);
+      save();
+      sync(false);
+      openBoard(true, selected.slot);
+    });
+  }
   function completeView() {
     show('complete', '예술제 준비 완료!', `
       ${yunaSays(['도와줘서 고마워.', '예술제 날 꼭 놀러 와!'])}
@@ -233,12 +445,27 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       <div class="addon-actions">
         <button class="btn" id="addon-quest-reset">미션 다시하기</button>${pressAction}
         <button class="btn btn-primary" id="addon-open-closet">내 옷장</button>
+        <button class="btn" id="board-meet">송현 선배 만나기</button>
       </div>`);
+    $('#board-meet').onclick = () => visit('poster');
     $('#addon-quest-reset').onclick = resetQuest;
     $('#addon-open-closet').onclick = () => wardrobe();
     bindPress();
   }
-  function resetQuest(){show('reset','탐험 미션만 다시 할까요?',`<p>모은 준비물과 예술제 준비 완료 표시를 지워요. 기존 게임의 도장·별 기록과 착용한 소품은 유지돼요.</p><div class="addon-actions"><button class="btn btn-primary" id="addon-reset-no">이어서 하기</button><button class="btn" id="addon-reset-yes">미션 다시 시작</button></div>`);$('#addon-reset-no').onclick=quest;$('#addon-reset-yes').onclick=()=>{const {equip,wardrobe}=state;state=clean();state.equip=equip;state.wardrobe=wardrobe;save();sync(false);quest();};$('#addon-reset-no').focus();}
+  function resetQuest() {
+    show('reset', '두 탐험 미션을 다시 할까요?', `<p>두 미션의 준비물과 붙인 자료, 게시판 지킴이 칭호를 지워요.</p>
+      <div class="addon-actions"><button class="btn btn-primary" id="addon-reset-no">이어서 하기</button>
+      <button class="btn" id="addon-reset-yes">미션 다시 시작</button></div>`);
+    $('#addon-reset-no').onclick = quest;
+    $('#addon-reset-yes').onclick = () => {
+      const { equip, wardrobe } = state;
+      state = { ...clean(), equip, wardrobe };
+      save();
+      sync(false);
+      quest();
+    };
+    $('#addon-reset-no').focus();
+  }
   function outfitTile(item) {
     const unlocked = has(item), equipped = state.equip[item.slot] === item.id;
     return `<button type="button" class="addon-outfit ${unlocked ? 'is-unlocked' : ''} ${equipped ? 'is-equipped' : ''}"
@@ -393,7 +620,11 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
   document.addEventListener('tour:stamps-reset',resetWardrobe);
   window.addEventListener('storage',e=>{
     if(e.key==='gch-tour-stamps'&&e.newValue===null){resetWardrobe();return;}
-    if(e.key===KEY){state=loadState();}
+    if(e.key===KEY){
+      state=loadState();
+      if (view === 'school-board') openBoard();
+      if (view === 'board-quest' || view === 'board-pickup') quest();
+    }
     if(e.key===KEY||e.key==='gch-tour-stamps'){sync(false);if(view==='wardrobe')wardrobe(true);}
   });
   // Persist the migration even if the player never opens the wardrobe.

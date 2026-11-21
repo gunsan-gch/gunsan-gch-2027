@@ -207,3 +207,118 @@
 .senior-card.is-talk.is-compact { align-items: center; }
 .senior-card.is-talk.is-compact > .addon-portrait { width: 48px; height: 48px; }
 .addon-supply small { white-space: normal; text-align: center; font-size: 12px; line-height: 1.3; color: var(--muted); }
+
+/* 그림의 오른쪽 끝을 직업교육부실 왼쪽 벽에 맞춥니다. */
+.addon-point.wall-board {
+  display: grid;
+  align-items: center;
+  justify-items: end;
+  width: max(44px, calc(var(--stage-w) * .028));
+  height: 44px;
+  transform: translate(-100%, -50%);
+}
+.wall-board img {
+  width: max(22px, calc(var(--stage-w) * .028));
+  height: auto;
+  image-rendering: pixelated;
+}
+.wall-board .addon-npc-name {
+  left: auto;
+  right: 0;
+  top: calc(50% + max(8px, var(--stage-w) * .01));
+  transform: none;
+  font-size: 12px;
+}
+.addon-point.board-pickup {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  transform: translate(-50%, -64%);
+}
+.board-pickup .addon-npc-name { font-size: 12px; }
+.board-sheet {
+  display: inline-block;
+  width: 26px;
+  height: 32px;
+  border: 2px solid #344650;
+  border-top: 7px solid #458c80;
+  background: repeating-linear-gradient(to bottom, #fff4d5 0 4px, #829da0 4px 6px);
+  box-shadow: 2px 2px 0 #92795a;
+}
+.sheet-career {
+  border-top-color: #bf666f;
+  background: linear-gradient(to top, #688b9e 42%, transparent 42%) 4px 4px / 4px 18px no-repeat,
+    linear-gradient(to top, #458c80 74%, transparent 74%) 10px 4px / 4px 18px no-repeat,
+    linear-gradient(to top, #cb9760 95%, transparent 95%) 16px 4px / 4px 18px no-repeat #fff4d5;
+}
+.board-inventory .addon-supply { white-space: normal; text-align: center; }
+.board-inventory canvas, .board-inventory .board-sheet { align-self: center; }
+.board-inventory canvas { width: 40px; height: 40px; }
+
+/* 압정과 종이의 상태는 색과 모양으로 함께 구분합니다. */
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px;
+  border: 4px solid #77543e;
+  background: radial-gradient(#bb8759 1px, transparent 1px) 0 0 / 7px 9px, #d9aa79;
+}
+.board-slot {
+  position: relative;
+  min-width: 0;
+  padding: 16px 12px 10px;
+  background: #fff8df;
+  color: #344650;
+  box-shadow: 2px 3px 0 #9f795a;
+  overflow-wrap: anywhere;
+}
+.board-slot h3 { margin: 0 0 8px; font-size: 15px; }
+.board-slot p, .board-slot li, .board-slot figcaption { font-size: 13px; }
+.board-slot small, .board-slot .btn { font-size: 12px; }
+.board-slot ul { list-style: none; margin: 8px 0; padding: 0; }
+.board-slot li + li { margin-top: 5px; }
+.board-dates b { color: #24665a; }
+.board-slot .btn { display: inline-flex; align-items: center; min-height: 44px; }
+.board-posters, .board-tray { display: flex; flex-wrap: wrap; gap: 8px; }
+.board-posters figure { margin: 0; text-align: center; }
+.board-posters img { width: 72px; height: 90px; object-fit: contain; image-rendering: pixelated; }
+.board-title { font-weight: 700; color: var(--green); }
+.board-instruction { margin-top: 0; }
+.board-tray { margin-bottom: 12px; }
+.board-tray [aria-pressed="true"] { background: var(--green); color: white; }
+.board-target {
+  width: 100%;
+  border: 1px dashed #997554;
+  background: transparent;
+  color: #684a32;
+  cursor: pointer;
+}
+.board-target::after { content: ''; position: absolute; inset: 0; }
+.board-slot.is-pinned::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  background: #b54650;
+  box-shadow: 1px 2px #814346;
+}
+.just-pinned::before { animation: board-pin .28s ease-out; }
+.wrong-slot { outline: 2px solid #b54650; animation: board-shake .25s linear; }
+@keyframes board-pin { from { transform: translateY(-9px) scale(1.8); } }
+@keyframes board-shake {
+  25%, 75% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+}
+@media (max-width: 480px) {
+  .board-grid { gap: 8px; padding: 8px; }
+  .board-slot { padding: 16px 8px 8px; }
+  .board-slot h3 { font-size: 14px; }
+  .board-grid:not(:has(.board-target)) .board-slot:nth-child(n+3) { grid-column: 1 / -1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .just-pinned::before, .wrong-slot { animation: none; }
+}
