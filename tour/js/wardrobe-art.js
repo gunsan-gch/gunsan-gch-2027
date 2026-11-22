@@ -214,7 +214,10 @@
     // Match the existing 0,1,2,1 walk cycle: up one pixel, rest, down one, rest.
     // Only the accessory moves; the body, hair and collision box stay fixed.
     const bob=frame===0?-1:frame===2?1:0;
-    c.save();c.translate(0,bob);backArt(c,id,dir,frame);c.restore();
+    // 정면 몸통 가운데(x16)가 뒷모습(x15)보다 1칸 오른쪽이라 가방이 왼쪽으로 쏠려 보임 → 정면만 1칸 오른쪽으로
+    // (책갈피 고양이 가방은 일부러 오른쪽 허리에 걸치고, 날개는 좌우로 펼쳐서 제외)
+    const frontShift=dir==='down'&&id!=='bookcat'&&id!=='wings'?1:0;
+    c.save();c.translate(frontShift,bob);backArt(c,id,dir,frame);c.restore();
     // A short strap/root stays on the shoulder while its far end follows the item.
     const r=pen(c);
     if(dir==='up'){
