@@ -5,6 +5,11 @@
   const KEY='gch-tour-addons-v1';
   const rewards=window.TourCostumes.items;
   const rules=window.TourStarProgress;
+  const { slots } = rules;
+  const slotNames = { head:'머리', back:'등 소품', face:'얼굴', trail:'효과' };
+  const { collection, matchingSet, sets } = window.TourCostumes;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const fixedMark = [[10, 33]];
   const score=()=>window.tourGame.progress();
   const sheets = [
     { id: 'poster', slot: 'posters', name: '예술제 포스터', where: '3층 송현 선배' },
@@ -12,7 +17,7 @@
     { id: 'career', slot: 'careers', name: '취업 현황표', where: '2층 취업지원부실 앞' }
   ];
   const clean = () => ({
-    wardrobe: rules.emptyWardrobe(), equip: { head: null, back: null },
+    wardrobe: rules.emptyWardrobe(), equip: rules.loadEquip(null, rewards),
     started: false, ribbon: false, bread: false, poster: false, complete: false,
     board: { collected: [], pinned: [] }
   });
@@ -30,7 +35,7 @@
     let s={};try{s=JSON.parse(localStorage.getItem(KEY))||{};}catch{}
     const next={...clean(),started:!!s.started,ribbon:!!s.ribbon,bread:!!s.bread,poster:!!s.poster,complete:!!s.complete,
       wardrobe:rules.wardrobe(s.wardrobe,score(),rewards),
-      equip:Object.fromEntries(['head','back'].map(slot=>[slot,rewards.some(r=>r.slot===slot&&r.id===s.equip?.[slot])?s.equip[slot]:null]))};
+      equip:rules.loadEquip(s.equip, rewards)};
     if(!(next.ribbon&&next.bread&&next.poster))next.complete=false;
     if (next.complete) next.board = loadBoard(s.board);
     return next;
@@ -46,9 +51,9 @@
   const colors={ink:'#233c50',pink:'#ed7988',darkpink:'#c2546b',cream:'#fff2c9',gold:'#f4ca63',green:'#70ac91',darkgreen:'#367966',blue:'#78b7cc'};
 function rect(c,x,y,w,h,color){c.fillStyle=colors[color]||color;c.fillRect(x,y,w,h)}
 function art(c,id){c.clearRect(0,0,32,32);const r=(...a)=>rect(c,...a);if(id==='ribbon'){r(4,9,9,13,'ink');r(19,9,9,13,'ink');r(6,11,7,9,'pink');r(19,11,7,9,'pink');r(12,13,8,7,'ink');r(14,14,4,5,'darkpink');r(7,11,3,3,'#ffb6bf');r(22,11,3,3,'#ffb6bf');r(9,22,5,4,'pink');r(18,22,5,4,'pink');}else if(id==='bread'){r(5,11,22,14,'ink');r(8,8,16,3,'ink');r(7,12,18,11,'#ce843e');r(9,10,14,10,'#edb866');r(11,12,3,3,'cream');r(18,12,3,3,'cream');r(7,24,18,3,'cream');}else if(id==='poster'){r(6,4,20,25,'ink');r(8,6,16,21,'cream');r(8,6,16,5,'pink');r(12,14,8,8,'gold');r(15,12,2,12,'gold');r(10,17,12,2,'gold');r(10,25,12,1,'green');}else if(id==='bag'){r(11,4,10,5,'ink');r(13,6,6,3,'cream');r(6,9,20,19,'ink');r(8,11,16,15,'green');r(10,18,12,7,'darkgreen');r(14,13,4,3,'cream');r(11,20,10,1,'cream');}else if(id==='beret'){r(8,7,18,11,'ink');r(4,11,24,9,'ink');r(6,12,20,6,'blue');r(10,9,14,5,'blue');r(19,8,3,9,'gold');r(16,11,9,3,'gold');r(7,20,19,3,'ink');}else if(id==='cape'){r(11,4,10,6,'gold');r(9,10,14,3,'ink');r(7,13,18,7,'ink');r(5,20,22,8,'ink');r(11,12,10,14,'pink');r(8,19,16,7,'pink');r(7,26,18,2,'gold');r(15,14,2,8,'cream');r(12,17,8,2,'cream');}else{r(9,3,14,3,'gold');r(5,6,22,5,'gold');r(3,11,26,11,'gold');r(5,22,22,4,'gold');r(9,26,14,3,'gold');r(14,8,4,15,'ink');r(9,13,14,4,'ink');r(11,19,10,2,'ink');}}
-function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
+function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player',marks){
   const outfit={...equip};if(who==='yuna')outfit.head='ribbon';
-  window.TourCostumes.draw(c,sprite,dir,frame,outfit);
+  window.TourCostumes.draw(c,sprite,dir,frame,outfit,marks);
 }
 
   // 선배 캐릭터: 플레이어와 같은 32×40 걷기 시트 (tools/make_npc_sheets.py). 시트가 없는 아름 선배는 플레이어 그림에 리본.
@@ -122,8 +127,54 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     paint(stage);
   }
   const costume=document.createElement('canvas');costume.width=48;costume.height=52;costume.className='addon-outfit-layer';costume.setAttribute('aria-hidden','true');$('#scene-walker').append(costume);
-  function paintPlayer(p=lastPose){lastPose=p;const wearing=!!(state.equip.head||state.equip.back);$('#scene-walker').classList.toggle('has-addon-outfit',wearing);costume.hidden=!wearing;if(wearing&&spriteReady)drawAvatar(costume.getContext('2d'),p.facing,p.frame);}
-  document.addEventListener('tour:avatar',e=>paintPlayer(e.detail));
+  const footprints = new Set();
+  let nextFootprint = 0, stride = 0;
+  function clearFootprints() {
+    for (const mark of footprints) mark.remove();
+    footprints.clear();
+    nextFootprint = 0;
+  }
+  function leaveFootprint(p) {
+    const now = performance.now();
+    if (now < nextFootprint || footprints.size >= 5) return;
+    nextFootprint = now + 150;
+    const mark = document.createElement('canvas');
+    mark.width = mark.height = 5;
+    mark.className = 'addon-footprint';
+    mark.setAttribute('aria-hidden', 'true');
+    mark.style.left = p.x + '%';
+    mark.style.top = p.y + '%';
+    mark.style.setProperty('--step-x', stride++ % 2 ? '10%' : '-110%');
+    window.TourCostumes.trailMark(mark.getContext('2d'), state.equip.trail, 0, 0);
+    footprints.add(mark);
+    mark.addEventListener('animationend', () => {
+      mark.remove();
+      footprints.delete(mark);
+    }, { once:true });
+    $('#scene-stage').append(mark);
+  }
+  function paintPlayer(p = lastPose, refresh = true) {
+    const moved = p.moving && (p.x !== lastPose.x || p.y !== lastPose.y);
+    const trail = state.equip.trail;
+    if (trail && moved && !reducedMotion.matches) leaveFootprint(lastPose);
+    const sameFrame = lastPose.frame === p.frame && lastPose.facing === p.facing;
+    lastPose = p;
+    if (!refresh && sameFrame) return;
+    const wearing = slots.some(slot => state.equip[slot]);
+    $('#scene-walker').classList.toggle('has-addon-outfit', wearing);
+    costume.hidden = !wearing;
+    if (wearing && spriteReady) {
+      const marks = reducedMotion.matches ? fixedMark : [];
+      drawAvatar(costume.getContext('2d'), p.facing, p.frame, state.equip, 'player', marks);
+    }
+  }
+  reducedMotion.addEventListener('change', () => {
+    clearFootprints();
+    paintPlayer();
+    renderCloset?.();
+  });
+  document.addEventListener('tour:scene', clearFootprints);
+  document.addEventListener('tour:avatar', e => paintPlayer(e.detail, false));
   let atBoard = false;
   document.addEventListener('tour:avatar', ({ detail: pose }) => {
     const [x, y] = locations.board.approach;
@@ -550,6 +601,24 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
       <span class="addon-item-copy"><strong>${item.name}</strong></span>
     </button>`;
   }
+  function previewMarks() {
+    if (reducedMotion.matches) return fixedMark;
+    if (!previewWalking) return [];
+    const [dx, dy] = {down:[0,-1], up:[0,1], right:[-1,0], left:[1,0]}[previewDir];
+    const marks = [];
+    for (let age = 0; age < Math.min(3, previewTick + 1); age++) {
+      const foot = (previewTick - age) % 2 ? 10 : 18;
+      marks.push([foot + dx * age * 4, 31 + dy * age * 2, 1 - age * 0.3]);
+    }
+    return marks;
+  }
+  function setList() {
+    const rows = sets.map(set => {
+      const names = set.pieces.map(id => rewards.find(item => item.id === id).name);
+      return `<li><strong>${set.name} · ${set.title}</strong><br>${names.join(' + ')}</li>`;
+    });
+    return `<details class="addon-sets"><summary>세트 보기</summary><ul>${rows.join('')}</ul></details>`;
+  }
   function wardrobe(keepPreview = false, preset = null) {
     sync(false);
     if (!keepPreview) { previewEquip = { ...state.equip, ...(preset || {}) }; previewWalking = false; }
@@ -557,7 +626,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     const progress = score(), n = progress.stars, next = rewards.find(item => !has(item));
     const practice = progress.games.filter(game => game.stars < game.maxStars).sort((a, b) => a.stars - b.stars);
     const visible = rewards.filter(item => closetFilter === 'all' ||
-      (closetFilter === 'new' ? item.at >= 27 : item.slot === closetFilter));
+      (closetFilter === 'new' ? collection.includes(item) : item.slot === closetFilter));
     show('wardrobe', '내 옷장', `
       <section class="addon-star-progress" aria-label="옷장 해금 진행">
         <div class="addon-star-total"><strong>★ ${n}/${progress.maxStars}</strong>
@@ -567,6 +636,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
         <p class="addon-next-reward">${next ? `다음 보상까지 <b>★ ${Math.max(0, next.at - n)}</b>` : '모든 옷을 열었어요!'}</p>
         ${state.wardrobe.title ? `<p class="addon-star-title">칭호 · ${rules.TITLE}</p>` : ''}
       </section>
+      ${setList()}
       ${practice.length ? `
         <details class="addon-practice">
           <summary>별 더 모으기 · ${practice.length}개 게임</summary>
@@ -589,9 +659,9 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
             <button class="btn addon-walk-toggle" id="addon-preview-walk" aria-pressed="${previewWalking}">${previewWalking ? '멈춰 보기' : '걸어 보기'}</button>
             <p id="addon-preview-label" class="addon-preview-label" role="status"></p>
             <p class="addon-equipped-names" id="addon-equipped-names"></p>
+            <p id="addon-set-title" class="addon-set-title" role="status"></p>
             <div class="addon-clear-slots">
-              <button type="button" data-addon-clear="head">머리 비우기</button>
-              <button type="button" data-addon-clear="back">등 비우기</button>
+              ${slots.map(slot => `<button type="button" data-addon-clear="${slot}">${slotNames[slot]} 비우기</button>`).join('')}
             </div>
             <button class="btn btn-primary" id="addon-apply-outfit" aria-describedby="addon-apply-help">이 코디로 입기</button>
             <p id="addon-apply-help" class="addon-apply-help"></p>
@@ -599,7 +669,7 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
           </div>
         </div>
         <div class="addon-collection">
-          <div class="addon-filters" aria-label="아이템 종류">${[['all', '전체'], ['new', '새 컬렉션'], ['head', '머리'], ['back', '등 소품']].map(([value, label]) => `
+          <div class="addon-filters" aria-label="아이템 종류">${[['all', '전체'], ['new', '새 컬렉션'], ...Object.entries(slotNames)].map(([value, label]) => `
             <button type="button" data-addon-filter="${value}" aria-pressed="${closetFilter === value}">${label}</button>`).join('')}
           </div>
           <div class="addon-closet-list">${visible.map(outfitTile).join('')}</div>
@@ -610,13 +680,20 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
         <button class="btn" id="addon-back-map">투어로 돌아가기</button>
       </div>`, '나만의 픽셀 코디');
     const outfit=()=>previewEquip||state.equip;
-    const renderAvatar=()=>{if(spriteReady)drawAvatar($('#addon-avatar').getContext('2d'),previewDir,previewWalking?[0,1,2,1][previewTick%4]:1,outfit());};
+    const renderAvatar = () => {
+      if (!spriteReady) return;
+      const frame = previewWalking ? [0,1,2,1][previewTick % 4] : 1;
+      drawAvatar($('#addon-avatar').getContext('2d'), previewDir, frame, outfit(), 'player', previewMarks());
+    };
     const paintPreview=()=>{
-      renderAvatar();const selected=outfit(),changed=['head','back'].some(slot=>selected[slot]!==state.equip[slot]);
+      renderAvatar();const selected=outfit(),changed=slots.some(slot=>selected[slot]!==state.equip[slot]);
       const locked=rewards.filter(r=>Object.values(selected).includes(r.id)&&!has(r));
       $('#addon-preview-label').textContent = changed ? '미리보는 중' : '현재 착용';
       $('#addon-preview-label').classList.toggle('is-preview',changed);
-      $('#addon-equipped-names').textContent=['head','back'].map(slot=>rewards.find(r=>r.id===selected[slot])?.name||({head:'머리 장식 없음',back:'등 소품 없음'})[slot]).join(' + ');
+      const names = rewards.filter(item => selected[item.slot] === item.id).map(item => item.name);
+      $('#addon-equipped-names').textContent = names.join(' + ') || '기본 모습';
+      const set = matchingSet(selected);
+      $('#addon-set-title').textContent = set ? `세트 칭호 · ${set.title}` : '';
       $('#addon-apply-outfit').hidden = !changed || locked.length > 0;
       $('#addon-show-equipped').hidden = !changed;
       $('#addon-apply-help').textContent = locked.length ? `착용하려면 ★ ${Math.max(...locked.map(r => r.at))}` : '';
@@ -641,10 +718,15 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
     $('#addon-show-equipped').onclick=()=>{previewEquip={...state.equip};paintPreview();};
     $('#addon-apply-outfit').onclick=()=>{
       sync(false);const next={...outfit()};
-      if(['head','back'].some(slot=>next[slot]&&!rewards.some(r=>r.id===next[slot]&&r.slot===slot&&has(r)))){paintPreview();toast('아직 열리지 않은 아이템이 있어요.');return;}
+      if(slots.some(slot=>next[slot]&&!rewards.some(r=>r.id===next[slot]&&r.slot===slot&&has(r)))){paintPreview();toast('아직 열리지 않은 아이템이 있어요.');return;}
       const before=state.equip;state.equip=next;
       if(!save()){state.equip=before;paintPreview();return;}
-      paintPlayer();close();toast(next.head||next.back?'새 코디를 입었어요! 학교를 둘러볼까요?':'소품을 벗고 기본 모습으로 돌아왔어요.');
+      clearFootprints();
+      paintPlayer();
+      close();
+      const set = matchingSet(next);
+      const message = slots.some(slot => next[slot]) ? '새 코디를 입었어요!' : '기본 모습으로 돌아왔어요.';
+      toast(set ? `세트 칭호 · ${set.title}` : message);
     };
     $$('[data-addon-practice]').forEach(b=>b.onclick=()=>{const id=b.dataset.addonPractice;dialog.addEventListener('close',()=>window.tourGame.practice(id,$('#wardrobe-open')),{once:true});close();});
     $('#addon-back-map').onclick=close;
@@ -688,11 +770,20 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player'){
   $('#festival-open').onclick=quest;$('#wardrobe-open').onclick=()=>wardrobe();
   document.addEventListener('tour:game-result',()=>{const game=$('#game');const unlocked=sync();showNewRewards(unlocked);if(state.started&&$('#game-title').textContent===window.TOUR_GAMES.bakery.title&&!game.querySelector('.addon-game-note')){const note=document.createElement('p');note.className='addon-game-note';window.TourUI.label(note,'mission','탐험 미션: 갓 구운 빵을 가방에 챙겼어요.');$('#game-body').append(note);}});
   $('#game').addEventListener('close',()=>sync());
-  function resetWardrobe(){state.wardrobe=rules.emptyWardrobe();state.equip={head:null,back:null};previewEquip={...state.equip};save();sync(false);if(view==='wardrobe')wardrobe();}
+  function resetWardrobe() {
+    clearFootprints();
+    state.wardrobe = rules.emptyWardrobe();
+    state.equip = rules.loadEquip(null, rewards);
+    previewEquip = { ...state.equip };
+    save();
+    sync(false);
+    if (view === 'wardrobe') wardrobe();
+  }
   document.addEventListener('tour:stamps-reset',resetWardrobe);
   window.addEventListener('storage',e=>{
     if(e.key==='gch-tour-stamps'&&e.newValue===null){resetWardrobe();return;}
     if(e.key===KEY){
+      clearFootprints();
       state=loadState();
       if (view === 'school-board') openBoard();
       if (view === 'board-quest' || view === 'board-pickup') quest();

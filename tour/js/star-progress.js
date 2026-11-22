@@ -40,6 +40,13 @@
         (!migrated && item.legacyAt && item.legacyAt <= Math.min(8, progress.count))).map(item => item.id),
       title: (migrated && saved.title === true) || progress.stars >= TITLE_AT };
   }
+  const slots = ['head', 'back', 'face', 'trail'];
+  function loadEquip(saved, items) {
+    return Object.fromEntries(slots.map(slot => {
+      const id = saved?.[slot];
+      return [slot, items.some(item => item.slot === slot && item.id === id) ? id : null];
+    }));
+  }
   const emptyWardrobe = () => ({ version: 2, unlocked: [], title: false });
-  window.TourStarProgress = { normalizeStars, pointsOrNull, stampRecord, summarize, wardrobe, emptyWardrobe, TITLE_AT, TITLE };
+  window.TourStarProgress = { normalizeStars, pointsOrNull, stampRecord, summarize, wardrobe, emptyWardrobe, loadEquip, slots, TITLE_AT, TITLE };
 })();

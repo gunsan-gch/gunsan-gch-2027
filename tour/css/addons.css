@@ -122,15 +122,19 @@
 .addon-preview-label { margin: 10px 0 4px; font-size: 12px; color: var(--muted); }
 .addon-preview-label.is-preview { color: var(--orange); }
 .addon-equipped-names { margin: 0; font-size: 12px; color: var(--navy); overflow-wrap: anywhere; }
-.addon-clear-slots { display: flex; gap: 6px; margin-top: 8px; }
-.addon-clear-slots button { flex: 1; }
+.addon-clear-slots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+.addon-sets { margin: 8px 0; font-size: 12px; color: var(--navy); }
+.addon-sets summary { cursor: pointer; padding: 12px 8px; }
+.addon-sets li { margin: 6px 0; }
+.addon-set-title { margin: 6px 0; color: var(--green); font-size: 13px; font-weight: 700; }
+.addon-set-title:empty { display: none; }
 .addon-clear-slots:not(:has(button:not([hidden]))) { display: none; }
 #addon-apply-outfit { width: 100%; margin-top: 8px; font-size: 13px; padding: 8px 4px; }
 .addon-apply-help { font-size: 12px; color: var(--orange); margin: 8px 0; }
 .addon-apply-help:empty { display: none; }
 #addon-show-equipped { margin-top: 6px; padding: 8px 2px; width: 100%; font-size: 12px; border: 0; background: none; box-shadow: none; text-decoration: underline; }
 .addon-collection { min-width: 0; }
-.addon-filters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; }
+.addon-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin-bottom: 10px; }
 .addon-closet-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .addon-outfit {
   display: grid;
@@ -193,6 +197,19 @@
   .addon-outfit { padding: 6px 0; gap: 4px; }
   .addon-item-art { min-height: 108px; overflow: hidden; }
   .addon-practice ul { grid-template-columns: 1fr; }
+}
+
+.addon-footprint {
+  position: absolute;
+  z-index: 4;
+  width: max(5px, calc(var(--stage-w) * .00844));
+  pointer-events: none;
+  image-rendering: pixelated;
+  animation: addon-step-fade 580ms steps(4) forwards;
+}
+@keyframes addon-step-fade {
+  from { opacity: 1; transform: translate(var(--step-x), -70%); }
+  to { opacity: 0; transform: translate(var(--step-x), -130%); }
 }
 
 /* 지도 캐릭터의 크기와 좌표는 기존 규칙을 유지합니다. */

@@ -1,6 +1,4 @@
-/* Original, integer-grid costume artwork. The school's base sprite is unchanged.
-   Hats replace the covered crown pixels; hair below the brim remains visible.
-   48x52 output adds room for ears/wings without changing the walker hitbox. */
+/* 학교 걷기 시트의 32×40 정수 격자에 그린다. 48×52 화면에서는 같은 그림에 여백만 더한다. */
 (() => {
   // at is the total best-star threshold. legacyAt preserves pre-star rewards once.
   const items = [
@@ -42,6 +40,44 @@
     {id:'laurel',name:'챔피언 월계관',at:42,slot:'head',theme:'예술제 챔피언'},
     {id:'trophybag',name:'우승 트로피 가방',at:42,slot:'back',theme:'예술제 챔피언'},
   ];
+  const collection = [
+    {id:'blush', name:'하트 볼터치', at:2, slot:'face', theme:'봄 소풍'},
+    {id:'petals', name:'꽃잎', at:4, slot:'trail', theme:'봄 소풍'},
+    {id:'plaster', name:'반창고', at:8, slot:'face', theme:'미술 실습'},
+    {id:'puppyears', name:'강아지 귀', at:10, slot:'head', theme:'동물 친구'},
+    {id:'freckles', name:'주근깨 스티커', at:14, slot:'face', theme:'실습 카페'},
+    {id:'baguette', name:'바게트 가방', at:16, slot:'back', theme:'실습 카페'},
+    {id:'chefhat', name:'꼬마 요리사 모자', at:20, slot:'head', theme:'실습 카페'},
+    {id:'notes', name:'음표', at:23, slot:'trail', theme:'예술제 무대'},
+    {id:'starshades', name:'별 안경', at:26, slot:'face', theme:'예술제 무대'},
+    {id:'ribbontiara', name:'리본 왕관', at:29, slot:'head', theme:'예술제 무대'},
+    {id:'easel', name:'이젤 화판', at:32, slot:'back', theme:'미술 실습'},
+    {id:'whiskers', name:'고양이 수염', at:35, slot:'face', theme:'동물 친구'},
+    {id:'hearts', name:'하트', at:38, slot:'trail', theme:'동물 친구'},
+    {id:'stagephones', name:'헤드셋', at:41, slot:'head', theme:'방송부'},
+    {id:'roundspecs', name:'동글 안경', at:44, slot:'face', theme:'공부 시간'},
+    {id:'ledger', name:'계산기 가방', at:47, slot:'back', theme:'공부 시간'},
+    {id:'gradcap', name:'졸업모', at:50, slot:'head', theme:'공부 시간'},
+    {id:'sparkles', name:'반짝이', at:53, slot:'trail', theme:'별빛 산책'},
+    {id:'starcloak', name:'별 망토', at:56, slot:'back', theme:'별빛 산책'},
+    {id:'halo', name:'천사 링', at:59, slot:'head', theme:'하늘 산책'},
+    {id:'rainbow', name:'작은 무지개', at:62, slot:'back', theme:'하늘 산책'},
+    {id:'bubbles', name:'비눗방울', at:64, slot:'trail', theme:'하늘 산책'},
+    {id:'bouquet', name:'풍선 다발', at:66, slot:'back', theme:'졸업 축제'},
+  ];
+  items.push(...collection);
+  items.sort((a, b) => a.at - b.at);
+  const sets = [
+    {name:'카페', title:'바리스타 견습생', pieces:['chefhat','baguette','freckles']},
+    {name:'예술제', title:'무대 체질', pieces:['ribbontiara','starshades','notes']},
+    {name:'공부', title:'도서실 단골', pieces:['gradcap','ledger','roundspecs']},
+    {name:'하늘', title:'구름 산책가', pieces:['halo','rainbow','bubbles']},
+    {name:'봄 소풍', title:'꽃길 안내원', pieces:['flower','bowback','petals']}
+  ];
+  function matchingSet(outfit) {
+    const worn = Object.values(outfit);
+    return sets.find(set => set.pieces.every(id => worn.includes(id)));
+  }
   const P={ink:'#343c54',cream:'#fff4dc',white:'#fffdf1',rose:'#e78b9b',pink:'#ffc2c7',roseD:'#aa5c7e',
     gold:'#edbd5c',goldD:'#ac794b',yellow:'#ffe9a3',mint:'#8acdbb',mintD:'#508d88',
     blue:'#8cb9cf',blueD:'#4e7f9c',navy:'#53627f',purple:'#b49bd4',purpleD:'#776598',pale:'#dfcff0'};
@@ -67,6 +103,7 @@
     trailcap:{down:12,up:12,left:12,right:12},
     curlingbeanie:{down:12,up:12,left:12,right:12},
   };
+  for (const id of ['chefhat', 'gradcap']) crownCut[id] = {down:12, up:12, left:12, right:12};
   const covered=new Set(Object.keys(crownCut));
   function tinyStar(r,x,y){r(x+2,y,1,5,'goldD');r(x,y+2,5,1,'goldD');r(x+1,y+1,3,3,'gold');r(x+2,y+1,1,2,'yellow');}
   function pixelLine(r,x0,y0,x1,y1,color){
@@ -74,7 +111,104 @@
     let error=dx+dy;
     for(;;){r(x0,y0,1,1,color);if(x0===x1&&y0===y1)break;const twice=2*error;if(twice>=dy){error+=dy;x0+=sx;}if(twice<=dx){error+=dx;y0+=sy;}}
   }
+  // 도안 한 글자가 원본 시트의 한 픽셀이다. 옆얼굴은 같은 도안을 뒤집는다.
+  const swatch = {
+    k:'ink', n:'navy', w:'white', c:'cream', y:'yellow', g:'gold', d:'goldD',
+    r:'rose', p:'pink', m:'mint', t:'mintD', b:'blue', v:'purple', l:'pale'
+  };
+  function stamp(r, x, y, rows, mirror = false) {
+    rows.forEach((row, dy) => {
+      for (let dx = 0; dx < row.length; dx++) {
+        const color = swatch[row[dx]];
+        if (color) r(mirror ? 31 - x - dx : x + dx, y + dy, 1, 1, color);
+      }
+    });
+  }
+  const hats = {
+    halo: ['...kkkkkkkk...', '.kkgyyyyyygkk.', 'kyg........gyk', '.kkggggggggkk.', '...kkkkkkkk...'],
+    puppyears: ['...kkk.', '..kdygk', '.kdggdk', '.kgdgdk', 'kdgdgdk', 'kdggddk', 'kggddk.', '.kdddk.', '..kkk..'],
+    ribbontiara: ['k...kkk...k', 'kg.kprpk.gk', 'kykppyrpkyk', '.kggrprggk.', '.kyyyyyygk.', '..kkkkkkk..'],
+    gradcap: ['.......kkk.......', '....kkknnnkkk....', '.kkknnbbbbbnnkkk.', 'knnnnbbbggbnnnnnk',
+      '.kkknnnnnnnnnkkk.', '...kkkkknkkkkk...', '....knnnnnnnk....', '....kbnnbbnnk....', '....kkkkkkkkk....'],
+    chefhat: ['......kkkkkk......', '..kkkkwwwwwwkkkk..', '.kcwwwcwwwwcwwwck.', 'kwwwwwwwwwwwwwwwck',
+      'kwwwwwwwwwwwwwwwck', '.kcwwwcwwwwwcwwck.', '..kkcwwcwwwcwwkk..', '...kwwwwwwwwwck...',
+      '...kmmmmmmmmmck...', '...kcttttttttck...', '...kkkkkkkkkkkk...']
+  };
+  function schoolHead(r, id, dir) {
+    const side = dir === 'right' || dir === 'left', left = dir === 'left';
+    if (id === 'halo') stamp(r, side ? 10 : 9, 0, hats.halo, left);
+    if (id === 'puppyears') {
+      stamp(r, side ? 10 : 4, 5, hats.puppyears, left);
+      if (!side) stamp(r, 4, 5, hats.puppyears, true);
+      else stamp(r, 20, 5, ['kkk','kdgk','.kkk'], left);
+    }
+    if (id === 'ribbontiara') {
+      stamp(r, side ? 14 : 10, 2, hats.ribbontiara, left);
+      if (dir === 'up') stamp(r, 13, 4, ['prrrp','.gyr.','pr.rp']);
+    }
+    if (id === 'gradcap') {
+      stamp(r, side ? 9 : 7, 3, hats.gradcap, left);
+      stamp(r, side ? 12 : 21, 6, ['gg','dg','.d','.g','gyg','ggg'], left);
+    }
+    if (id === 'chefhat') {
+      stamp(r, side ? 8 : 7, 1, hats.chefhat, left);
+      if (dir !== 'up') stamp(r, side ? 18 : 16, 9, ['gy','dg'], left);
+    }
+    if (id === 'stagephones') {
+      stamp(r, 7, 3, ['....kkkkkkkkkk....','..kkmmmmmmmmmmkk..','.ktk..........ktk.',
+        'ktk............ktk','ktk............ktk'], left);
+      const cup = ['.kkk.','knmnk','kmwmk','kmmmk','.ktk.'];
+      stamp(r, side ? 12 : 5, 8, cup, left);
+      if (!side) stamp(r, 5, 8, cup, true);
+      if (dir !== 'up') stamp(r, side ? 14 : 7, 13, ['kn....','.kn...','..kkkk','....mk'], left);
+    }
+  }
+  // 앞머리 경계가 계단 모양이므로 각 줄에서 얼굴이 드러난 구간만 칠한다.
+  const faceEdges = {
+    down: [
+      ['...#.###.#.#', '.#..###..#.#', '.##.###.##..', '.#########..', '..#######...'],
+      ['..##.###.#.#', '##.####..#.#', '##.####.##..', '##########..', '.########...'],
+      ['..#.###.##.#', '##.####.##.#', '##.####.##..', '##########..', '.########...']
+    ],
+    side: ['#.##.##', '#.##.##', '..####.']
+  };
+  function face(c, id, dir, frame) {
+    if (!id || dir === 'up') return;
+    const side = dir !== 'down', left = dir === 'left', r = pen(c);
+    const mask = side ? faceEdges.side : faceEdges.down[frame];
+    const start = side ? 16 : 11;
+    const pixel = (x, y, w, h, color) => {
+      if (mask[y - 15]?.[x - start] === '#') r(left ? 31 - x : x, y, 1, 1, color);
+    };
+    if (id === 'roundspecs' || id === 'starshades') {
+      const round = id === 'roundspecs';
+      const lens = round ? ['.nnn.','nb..n','.nnn.'] : ['..g..','gywyg','.gyg.','..g..'];
+      stamp(pixel, side ? 18 : 10, 15, lens);
+      if (!side) stamp(pixel, 17, 15, lens);
+      stamp(pixel, side ? 16 : 15, 16, [round ? 'nn' : 'gg']);
+      return;
+    }
+    const marks = {
+      blush: ['r.p','prp','.r.'], freckles: ['d.g','.d.'],
+      whiskers: ['nn.','..n','nn.'], plaster: ['tcc','cmt']
+    };
+    const motif = marks[id];
+    if (!motif) return;
+    stamp(pixel, side ? 18 : 11, side ? 15 : 17, motif);
+    if (!side && id !== 'plaster') stamp(pixel, 11, 17, motif, true);
+  }
+  const trailArt = {
+    petals: ['..pr','.pwp','prp.','.t..'],
+    notes: ['.nnn','.nlv','.n..','vv..','nv..'],
+    sparkles: ['..g..','.gyg.','gywyg','.gyg.','..g..'],
+    hearts: ['.r.r.','rpppr','.rpr.','..r..'],
+    bubbles: ['.bbb.','bw.lb','b..mb','.bmb.']
+  };
+  function trailMark(c, id, x, y) {
+    if (trailArt[id]) stamp(pen(c), x, y, trailArt[id]);
+  }
   function head(c,id,dir){
+    schoolHead(pen(c), id, dir);
     const r=pen(c),side=dir==='left'||dir==='right',right=dir==='right',rear=dir==='up';
     // Use a true side silhouette, rather than keeping the front decoration on the back.
     if(id==='trailcap'){
@@ -175,7 +309,7 @@
       const ears=side?[x+3,x+11]:[8,21];
       for(const ex of ears){
         if(cat){r(ex+1,1,1,1,outline);r(ex,2,3,5,outline);r(ex+1,3,1,3,'rose');}
-        else{r(ex,-3,3,9,outline);r(ex+1,-2,1,7,'pink');r(ex,5,3,2,fill);}
+        else{r(ex,0,3,6,outline);r(ex+1,1,1,4,'pink');r(ex,5,3,2,fill);}
       }
       r(x+4,5,w-8,1,outline);r(x+1,6,w-2,1,outline);r(x,7,w,5,outline);
       r(x+1,7,w-2,4,fill);r(x+4,6,w-8,1,shine);r(x+2,11,w-4,1,outline);
@@ -193,21 +327,24 @@
     }
     if(id==='crown'){
       const x=side?9:7,w=side?15:18;
-      r(x,0,2,8,'goldD');r(x+w-2,0,2,8,'goldD');r(x+Math.floor(w/2)-1,-3,3,11,'goldD');
+      r(x,0,2,8,'goldD');r(x+w-2,0,2,8,'goldD');r(x+Math.floor(w/2)-1,0,3,8,'goldD');
       r(x+2,3,w-4,5,'goldD');r(x+1,5,w-2,4,'gold');r(x+2,7,w-4,1,'yellow');
-      r(x,0,1,2,'yellow');r(x+w-2,0,1,2,'yellow');r(x+Math.floor(w/2),-3,1,4,'yellow');
+      r(x,0,1,2,'yellow');r(x+w-2,0,1,2,'yellow');r(x+Math.floor(w/2),0,1,3,'yellow');
       r(x+Math.floor(w/2),5,2,2,rear?'cream':'roseD');r(x+3,5,1,1,'white');r(x+w-4,5,1,1,'white');
     }
     if(id==='witch'){
       const tip=side?(right?16:18):17;
-      r(tip,-3,5,1,'ink');r(tip-2,-2,5,2,'ink');r(13,0,6,2,'ink');r(12,2,8,3,'ink');r(10,5,12,4,'ink');
-      r(tip,-2,3,1,'purple');r(15,0,3,2,'purple');r(14,2,4,3,'purple');r(12,5,8,3,'purple');r(19,5,2,3,'purpleD');
+      r(tip,0,5,1,'ink');r(tip-2,1,5,2,'ink');r(13,2,6,2,'ink');r(12,2,8,3,'ink');r(10,5,12,4,'ink');
+      r(tip,1,3,1,'purple');r(15,0,3,2,'purple');r(14,2,4,3,'purple');r(12,5,8,3,'purple');r(19,5,2,3,'purpleD');
       r(11,8,10,1,'roseD');r(12,8,6,1,'pink');
       const x=side?6:4,w=side?21:24;r(x+2,9,w-4,1,'ink');r(x,10,w,1,'ink');r(x+2,11,w-4,1,'ink');r(x+3,10,w-6,1,'purpleD');
       if(!rear)tinyStar(r,side?(right?20:8):21,6);
     }
   }
   const carriedColors={bookcat:'mintD',bag:'mintD',breadbag:'roseD',starbag:'goldD',milkbag:'roseD',bowback:'roseD',wings:'goldD',umbrella:'blueD',cloudpack:'mintD',pianobag:'purpleD',racketbag:'blueD',stonebag:'blueD',targetpack:'roseD',trophybag:'goldD'};
+  Object.assign(carriedColors, {
+    baguette:'goldD', easel:'navy', ledger:'mintD', rainbow:'purpleD', bouquet:'blueD'
+  });
   function back(c,id,dir,frame=1){
     const color=carriedColors[id];
     if(!color){backArt(c,id,dir,frame);return;}
@@ -232,6 +369,54 @@
   // Profiles face right in the pattern and mirror around the sprite centre for left.
   // The inside edge overlaps the jacket, so the bag rests against the body at every step.
   const patternedBags={
+    // 바게트의 칼집, 이젤 위 풍경, 회계 실습용 숫자판을 각각 작은 옆판에도 남긴다.
+    baguette: {
+      profile:[6,19,['....kkk','...kgyk','..kggck','.kgcggk','kdyggdk','kdgggdk',
+        'kpppppk','krppprk','.krrrk','..kkk']],
+      rear:[6,19,['............kkkkk','..........kkgyyygk','........kkgggcgggdk',
+        '......kkgggcgcgggdk','....kkgygcgggggdkk.','..kkgygggcgggdkk...',
+        '.kgggcgggggdkk.....','kdggcgppppkk.......','kdgggppprrk........',
+        '.kdggppprk.........','..kkdrrrk..........','....kkkk...........']]
+    },
+    easel: {
+      profile:[7,18,['...kkk','...kgk','..kkgk','..kwdk','..kcdk','..kmdk','..kbdk',
+        '..kmdk','..kgdk','.kkggkk','..kdkk','..kd.k','.kd..k']],
+      rear:[7,17,['.......kkk.......','.......kgk.......','..kkkkkkkkkkkkk..',
+        '.kdgggggggggggdk.','.kgwwwwwwwwwwwgk.','.kgwyywwwwwbbwgk.','.kgwyywwwwbmbwgk.',
+        '.kgwwwwmmbmmmbgk.','.kgwwbmmmtmttmgk.','.kgbmmmmtttttmgk.','.kdgggggggggggdk.',
+        'kkkkkkkkkkkkkkkkk','kgggggggggggggggk','.kkdkk.....kkdkk.','..kgk.......kgk..']]
+    },
+    ledger: {
+      profile:[7,20,['..kkkk','.ktmmk','ktwwmk','ktbbmk','ktmmmk','ktcgmk','ktmmmk',
+        'ktggmk','ktmmmk','.ktttk','..kkkk']],
+      rear:[7,19,['.....kkkkkkk.....','....ktmmmmmtk....','..kkkkkkkkkkkkk..',
+        '.ktmmmmmmmmmmmtk.','ktmncccccccccnmtk','ktmnbbbnbnbbbnmtk','ktmnnnnnnnnnnnmtk',
+        'ktmmmmmmmmmmmmmtk','ktmccmccmccmggmtk','ktmnnmnnmnnmddmtk','ktmccmccmccmggmtk',
+        'ktmnnmnnmnnmddmtk','.ktttttttttttttk.','..kkkkkkkkkkkkk..']]
+    },
+    rainbow: {
+      profile:[6,17,['...kkk','..krpgk','.krgmmk','krgmbvk','krmbv.k','kmbv..k',
+        '.kk...k','kwck..k','kwwc..k','.kkk..k']],
+      rear:[5,20,['.......kkkkkkk.......','.....kkrrrrrrrkk.....','....krppgggggpprk....',
+        '...krpgymmmmmgyprk...','..krpgymbbbbbmgyprk..','.krpgymbvkkkvbmgyprk.',
+        '.krgymbvk...kvbmygrk.','krgymbvk.....kvbmygrk','krgmbvk.......kvbmgrk',
+        '.kkkvk.........kvkkk.','kwwwck.........kcwwwk','kwwwwck.......kcwwwwk','.kkkkk.........kkkkk.']]
+    },
+    bouquet: {
+      profile:[5,9,['...kkk','..kvwvk','.kkvvvk','krpkkvk','krprkkk','.krkmbk',
+        '..kkwmk','...kmtk','...kktk','....kk','....n.','....n.','.....n',
+        '.....n','.....nn','......nn','......nn']],
+      rear:[0,1,[
+        '.............kkkkk', '............kvwllvk', '...........kvlvvvvvk', '...........kvlvvvvvk',
+        '...........kvvvvvvvk', '............kvvvvvk', '.............kvvvk', '..............knk',
+        '..kkkkk........n........kkkkk', '.krwpppk.......n.......kmwwmmk',
+        'krppppprk......n......kmmmbbmmk', 'krppppprk......n......kmmmmttmk',
+        'krpppprrk......n......kmmmmttmk', '.krrprrk.......n.......ktmmttk',
+        '..krrrk........n........ktttk', '...knk.........n.........knk',
+        '....n..........n..........n', '.....nn........n........nn',
+        '.......nn......n......nn', '.........nn....n....nn', '...........nn..n..nn',
+        '.............nnnnn', '..............prp', '.............prgrp', '.............p...p']]
+    },
     bookcat:{
       // Clothbound spine, gilt cover stamp and a folded ginger cat over the page edge.
       colors:{s:'mintD',v:'mint',o:'navy',p:'cream',g:'gold',c:'goldD',f:'yellow',e:'ink'},
@@ -260,7 +445,7 @@
     // From the front the book peeks past the right hip, with the cat above it.
     const offset=id==='bookcat'&&dir==='down'?3:0;
     rows.forEach((row,dy)=>Array.from(row).forEach((mark,dx)=>{
-      if(mark!=='.')r(dir==='left'?31-x-dx:x+dx+offset,y+dy,1,1,bag.colors[mark]);
+      if(mark!=='.')r(dir==='left'?31-x-dx:x+dx+offset,y+dy,1,1,(bag.colors || swatch)[mark]);
     }));
   }
   function backArt(c,id,dir,frame=1){
@@ -304,8 +489,9 @@
       if(side)r(right?11:20,21,1,8,'blueD');
     }
     if(id==='noteballoon'||id==='planet'){
-      const dy=frame===2?-1:0;
-      c.save();if((side&&right)||rear){c.translate(32,0);c.scale(-1,1);}const q=pen(c);
+      const dy=frame===2?2:3;
+      c.save();if((side&&right)||rear){c.translate(32,0);c.scale(-1,1);}c.translate(side ? -2 : -3, 0);
+      const q=pen(c);
       let knot=30;
       if(id==='noteballoon'){
         if(side){q(28,-1+dy,3,10,'purpleD');q(29,dy,1,7,'pink');q(27,6+dy,4,3,'purpleD');q(28,7+dy,2,1,'pale');knot=29;}
@@ -320,6 +506,16 @@
         q(bx-1,5+dy,1,2,'purpleD');q(bx+w+1,1+dy,1,2,'purpleD');knot=bx+Math.floor(w/2);q(knot,8+dy,1,2,'goldD');
       }
       pixelLine(q,knot,11+dy,29,17,'purpleD');pixelLine(q,29,17,25,21,'purpleD');pixelLine(q,25,21,20,24,'purpleD');c.restore();
+    }
+    if(id==='starcloak'){
+      const sway = frame - 1;
+      const collar = side ? ['..kkkk','..knbk','..knnk','..kbnk','..knnb'] :
+        ['.....kkkkkkk.....','....knngygnnk....','...knbbgygbnnk...','..knnnnngnnnbnk..','..knbnnbbbnnnnk..'];
+      const hem = side ? ['..knbnk','..knngk','.kbngyk','.kkkkk'] :
+        ['.knbngnnbnngnbnk.','knbngygnbngygnbnk','knbnngnnnnngnnbnk','.kggygggygggyggk.','..kkkkkkkkkkkkk..'];
+      const x = side ? 16 : (front ? 8 : 7);
+      stamp(r, x, 20, collar, side && right);
+      stamp(r, x + sway, 25, hem, side && right);
     }
     if(id==='cape'){
       // Shoulder stays fixed beneath the hair; only the lower cloth sways.
@@ -388,7 +584,7 @@
       }
     }
     if(id==='balloon'){
-      const dy=frame===2?-1:0;
+      const dy=frame===2?0:1;
       if(side){
         c.save();if(right){c.translate(32,0);c.scale(-1,1);}const q=pen(c);
         // A five-pixel side face shows the inflated edge, not the full star.
@@ -396,7 +592,7 @@
         q(29,2+dy,1,6,'mint');q(28,4+dy,2,2,'cream');q(29,9+dy,2,1,'mintD');
         pixelLine(q,30,10+dy,29,16,'mintD');pixelLine(q,29,16,25,20,'mintD');pixelLine(q,25,20,20,24,'mintD');c.restore();
       }else{
-        const bx=rear?-3:26;star(r,bx,dy,'blueD',rear?'mint':'cream');
+        const bx=rear?0:24;star(r,bx,dy,'blueD',rear?'mint':'cream');
         r(bx+3,2+dy,2,4,'mint');r(bx+2,3+dy,1,2,rear?'mintD':'white');r(bx+3,8+dy,2,1,'mintD');
         const knot=bx+4,mid=rear?4:28,anchor=rear?12:20;
         pixelLine(r,knot,9+dy,knot,15,'mintD');pixelLine(r,knot,15,mid,20,'mintD');pixelLine(r,mid,20,anchor,24,'mintD');
@@ -404,7 +600,7 @@
     }
     if(id==='moon'){
       // Crescent and tiny satellites sit behind the body in every direction.
-      const mx=right?-5:25;
+      const mx=right?0:23;
       r(mx+3,8,5,2,'goldD');r(mx+1,10,4,2,'goldD');r(mx,12,3,12,'goldD');r(mx+1,24,4,3,'goldD');r(mx+4,27,5,2,'goldD');
       r(mx+3,10,3,2,'yellow');r(mx+1,12,3,10,'gold');r(mx+2,14,1,8,'yellow');r(mx+3,22,2,4,'gold');r(mx+5,25,3,2,'yellow');
       r(mx+5,10,2,2,'cream');r(mx+7,25,2,2,'cream');r(right?26:2,12,1,5,'purple');r(right?24:0,14,5,1,'purple');r(right?23:8,24,2,2,'gold');
@@ -412,9 +608,17 @@
   }
   const base=document.createElement('canvas');base.width=32;base.height=40;
   const bc=base.getContext('2d');
-  function draw(c,sprite,dir='down',frame=1,equip={}){
+  const sampleMarks = [[5,32], [23,34], [9,35]];
+  function draw(c,sprite,dir='down',frame=1,equip={},marks=sampleMarks){
     c.clearRect(0,0,c.canvas.width,c.canvas.height);c.imageSmoothingEnabled=false;c.save();
     if(c.canvas.width===48)c.translate(8,12);
+    if (equip.trail) {
+      for (const [x, y, alpha = 1] of marks) {
+        c.globalAlpha = alpha;
+        trailMark(c, equip.trail, x, y);
+      }
+      c.globalAlpha = 1;
+    }
     const row={down:0,right:1,up:2,left:3}[dir]??0;
     bc.clearRect(0,0,32,40);bc.imageSmoothingEnabled=false;bc.drawImage(sprite,frame*32,row*40,32,40,0,0,32,40);
     // The top of the original head is stationary in all 12 frames. Never bob
@@ -422,7 +626,8 @@
     const cut=crownCut[equip.head]?.[dir];
     if(cut)bc.clearRect(0,0,32,cut);
     const floating=['moon','balloon','noteballoon','planet'].includes(equip.back);
-    const capeSide=equip.back==='cape'&&(dir==='left'||dir==='right');
+    const cloak = equip.back === 'starcloak';
+    const capeSide=(equip.back==='cape' || cloak)&&(dir==='left'||dir==='right');
     if(dir==='down'||floating||capeSide)back(c,equip.back,dir,frame);
     c.drawImage(base,0,0);
     if(dir!=='down'&&!floating&&!capeSide){
@@ -439,7 +644,14 @@
     }
     // A small neck fastening joins the cloth to the uniform, below the face.
     if(equip.back==='cape'){const r=pen(c);if(dir==='down'){r(12,21,3,1,'roseD');r(18,21,2,1,'roseD');r(15,22,3,1,'rose');r(16,21,1,2,'gold');}else if(capeSide){r(dir==='left'?18:12,21,2,1,'roseD');r(dir==='left'?18:13,22,1,1,'gold');}}
+    if (cloak && dir !== 'up') {
+      const x = dir === 'down' ? 15 : dir === 'left' ? 18 : 12;
+      stamp(pen(c), x, 21, ['ng','gy']);
+    }
+    face(c, equip.face, dir, frame);
     head(c,equip.head,dir);c.restore();
   }
-  window.TourCostumes={items,draw,covered:[...covered],crownCut};
+  window.TourCostumes = {
+    items, collection, sets, matchingSet, trailMark, draw, covered:[...covered], crownCut
+  };
 })();
