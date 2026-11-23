@@ -13,7 +13,7 @@ vm.runInContext(fs.readFileSync(path.join(tour, 'js/wardrobe-art.js'), 'utf8'), 
 vm.runInContext(fs.readFileSync(path.join(tour, 'js/star-progress.js'), 'utf8'), context);
 const art = context.window.TourCostumes;
 const rules = context.window.TourStarProgress;
-const newPacks = ['baguette', 'easel', 'ledger', 'rainbow', 'bouquet'];
+const newPacks = ['mailcat', 'baguette', 'easel', 'ledger', 'rainbow', 'bouquet'];
 function render(sprite, direction, frame, outfit) {
   const canvas = createCanvas(48, 52);
   art.draw(canvas.getContext('2d'), sprite, direction, frame, outfit);
@@ -55,7 +55,7 @@ async function checkOldSave(page, key, read) {
   }, key);
   await page.reload();
   assert.deepEqual((await read()).equip, {head:'ribbon',back:'bag',face:null,trail:null});
-  assert.equal((await read()).wardrobe.unlocked.length, 59);
+  assert.equal((await read()).wardrobe.unlocked.length, 62);
 }
 async function checkFilters(page) {
   await page.locator('#wardrobe-open').click();
@@ -65,7 +65,7 @@ async function checkFilters(page) {
   assert.equal(new Set(boxes.map(box => box.y)).size, 2);
   assert(boxes.every(box => box.width >= 44 && box.height >= 44 && box.x >= 0 && box.right <= 360));
   await page.locator('[data-addon-filter="new"]').click();
-  assert.equal(await page.locator('[data-addon-card]').count(), 23);
+  assert.equal(await page.locator('[data-addon-card]').count(), 26);
   assert.match(await page.locator('.addon-next-reward').innerText(), /★ 1/);
 }
 async function chooseSet(page) {
@@ -74,7 +74,9 @@ async function chooseSet(page) {
   assert(await page.locator('#addon-apply-outfit').isHidden());
   await page.locator('#addon-show-equipped').click();
   await page.getByText('세트 보기', {exact:true}).click();
-  assert.equal(await page.locator('.addon-sets li:visible').count(), 5);
+  assert.equal(await page.locator('.addon-sets li:visible').count(), 6);
+  for (const id of ['planepin','mailcat','postmarks']) await card(id).click();
+  assert.match(await page.locator('#addon-set-title').innerText(), /하늘 우체부/);
   for (const id of ['halo','rainbow','blush','bubbles']) await card(id).click();
   assert.match(await page.locator('#addon-set-title').innerText(), /구름 산책가/);
 }
@@ -141,9 +143,12 @@ async function checkBrowser() {
   const empty = createCanvas(sprite.width, sprite.height);
   const headIds = [null, ...art.items.filter(x => x.slot === 'head').map(x => x.id)];
   const backIds = [null, ...art.items.filter(x => x.slot === 'back').map(x => x.id)];
-  assert.equal(art.items.length, 60);
-  assert.equal(new Set(art.items.map(x => x.id)).size, 60);
-  assert.deepEqual(Array.from(rules.slots, slot => art.collection.filter(i => i.slot === slot).length), [6,6,6,5]);
+  assert.equal(art.items.length, 63);
+  assert.equal(new Set(art.items.map(x => x.id)).size, 63);
+  assert.deepEqual(Array.from(rules.slots, slot => art.collection.filter(i => i.slot === slot).length), [7,7,6,6]);
+  for (const [id, at] of [['planepin',6], ['mailcat',12], ['postmarks',18]]) {
+    assert.equal(art.items.find(item => item.id === id).at, at);
+  }
   for (const item of art.collection) {
     assert.equal(art.items.filter(i => i.at === item.at).length, 1, item.id + ' 해금 별 중복');
   }
@@ -155,7 +160,7 @@ async function checkBrowser() {
     {head:'witch',back:'bag',face:null,trail:null});
   for (const stars of [65, 66]) {
     const wardrobe = rules.wardrobe(old, {stars, count:22}, art.items);
-    assert.equal(wardrobe.unlocked.length, stars === 66 ? 60 : 59);
+    assert.equal(wardrobe.unlocked.length, stars === 66 ? 63 : 62);
     assert.equal(wardrobe.unlocked.includes('bouquet'), stars === 66);
   }
   for (const set of art.sets) {
@@ -364,6 +369,6 @@ async function checkBrowser() {
     for(let y=0;y<52;y++)for(let x=0;x<48;x++)for(let k=0;k<4;k++)
       assert.equal(left[(y*48+x)*4+k],right[(y*48+47-x)*4+k],`cape: symmetric side placement ${frame}`);
   }
-  console.log(JSON.stringify({ singleRenders, renders, hairChecks, faceChecks, capeChecks, bobChecks, crownLeaks: 0, edgeClipping: 0, sideProfiles: '21개 × 3프레임', unlocks: '66별 · 60종' }));
+  console.log(JSON.stringify({ singleRenders, renders, hairChecks, faceChecks, capeChecks, bobChecks, crownLeaks: 0, edgeClipping: 0, sideProfiles: '22개 × 3프레임', unlocks: '66별 · 63종' }));
   if (process.argv.includes('--browser')) await checkBrowser();
 })().catch(error => { console.error(error); process.exitCode = 1; });

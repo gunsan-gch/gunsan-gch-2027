@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require.resolve('../js/game-paperplane.js');
-const { flight, chooseCourse, barrelRoll, step, crossings, score, stars, landingBonus, STEP } = require(path);
+const { flight, chooseCourse, barrelRoll, step, sendLetter, postX, crossings, score, stars, landingBonus, STEP } = require(path);
 function simulate(route, power=75, hz=60, index=0) {
   const f = flight(power,index);
   let budget=0, seconds=0, ticks=0, steer=0;
@@ -95,6 +95,51 @@ cross(2,36); assert.equal(swept.chain,0); assert.equal(swept.boost,0);
 cross(3,0); assert.equal(swept.chain,1); assert.equal(swept.best,2);
 assert.deepEqual([0,18,18.1,44,44.1].map(landingBonus),[30,30,15,15,0]);
 assert.deepEqual([0,59,60,154,155].map(stars),[1,1,2,2,3]);
+// Fly each entire route using real steering physics and one letter per stop.
+for (const index of variants) {
+  const f = flight(75,index);
+  assert.equal(sendLetter(f), false);
+  while (!f.finished) {
+    const post = f.posts.find(p => !p.outcome);
+    const ring = f.marks.find(m => !m.outcome);
+    let target = ring.x;
+    if (post && post.distance - f.distance <= 25 && !f.parcel) {
+      target = postX(post,post.distance);
+      if (post.distance-f.distance <= 8) {
+        assert(sendLetter(f));
+        assert.equal(sendLetter(f), false);
+      }
+    }
+    step(f,(target-f.x)/10);
+  }
+  assert.equal(f.distance,288);
+  assert.equal(f.delivered,3);
+  assert(f.bullseyes >= 2);
+  assert.equal(f.landing,30);
+  assert.equal(sendLetter(f),false);
+}
+// Exercise all accuracy and timing bands, drift, recovery and all-three bonus.
+function deliverAt(offset, ahead, vx=0, already=0) {
+  const f = flight(75), p = f.posts[0];
+  f.distance = p.distance-ahead; f.x = p.x+offset; f.vx = vx;
+  f.marks=[]; f.ribbons=[]; // Isolate the letter score from the adjacent ring.
+  f.delivered=already; f.energy=35; f.misses=3;
+  assert(sendLetter(f));
+  for(let i=0; i<200 && f.parcel; i++) step(f,0);
+  return f;
+}
+for(const [offset,ahead,vx,expected,points] of [
+  [0,8,0,'perfect',22], [20,8,0,'hit',12], [0,12,0,'hit',12],
+  [0,15,0,'miss',0], [37,8,0,'miss',0], [40,8,-150,'hit',12]
+]){
+  const f=deliverAt(offset,ahead,vx);
+  assert.equal(f.posts[0].outcome,expected);
+  assert.equal(f.points,points);
+  assert.equal(f.misses,points?0:3);
+  assert.equal(f.delivered,Number(points>0));
+  assert(Math.abs(f.energy-(points?39:27))<.15);
+}
+assert.equal(deliverAt(0,8,0,2).points,40);
 // Drive the registered UI with a deterministic animation clock, including close/reopen.
 class Surface extends EventTarget {
   constructor() { super(); this.value='75'; this.dataset={}; this.hidden=false; this.textContent=''; this.captured = new Set(); }
@@ -168,6 +213,24 @@ for (const input of ['touch','space','early','reduced']) {
   emit(play.$('.pp-pause'),'click'); advance(2); point(button,'pointerdown',0);
   play.close(); point(button,'pointerdown',0); assert.equal(play.cues.length,2);
 }
+for (const input of ['keyboard','button']) {
+  const play=session(), field=play.$('canvas'), send=play.$('.pp-send');
+  assert.equal(send.disabled,true);
+  emit(play.$('.pp-launch'),'click');
+  point(field,'pointerdown',155.5); point(field,'pointerup',155.5);
+  for (let n=0;n<500 && parseInt(play.$('.pp-distance').textContent,10)<50;n++) advance(1/60);
+  assert.equal(send.disabled,false);
+  assert.match(play.$('.pp-cue').textContent,/지금 배달/);
+  emit(play.$('.pp-pause'),'click');
+  emit(send,'click'); emit(window,'keydown',{key:'e',code:'KeyE'});
+  emit(play.$('.pp-resume'),'click');
+  if (input==='keyboard') emit(window,'keydown',{key:'e',code:'KeyE'});
+  else emit(send,'click');
+  assert.equal(send.disabled,true);
+  emit(send,'click'); advance(1.2);
+  assert.equal(play.$('.pp-mail-count').textContent,'✉ 1/3');
+  play.close();
+}
 const first = session();
 emit(first.$('.pp-launch'),'click'); advance(1);
 emit(first.$('canvas'),'pointerdown',{button:0,pointerId:5,clientX:180,clientY:200});
@@ -193,4 +256,4 @@ assert.match(replay.result().extra.innerHTML,/중간 착지/);
 const result=replay.result();
 emit(replay.$('.pp-next'),'click'); assert.equal(replay.result(),result);
 replay.close();
-console.log('paperplane: routes, roll timing, ribbon gaps and collisions, keyboard/touch, reduced motion, scoring and lifecycle passed');
+console.log('paperplane: three complete mail routes, hit windows, drift, keyboard and touch delivery, roll timing, collisions, reduced motion, scoring and lifecycle passed');

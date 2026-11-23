@@ -43,10 +43,13 @@
   const collection = [
     {id:'blush', name:'하트 볼터치', at:2, slot:'face', theme:'봄 소풍'},
     {id:'petals', name:'꽃잎', at:4, slot:'trail', theme:'봄 소풍'},
+    {id:'planepin', name:'종이날개 머리핀', at:6, slot:'head', theme:'교정 항공우편'},
     {id:'plaster', name:'반창고', at:8, slot:'face', theme:'미술 실습'},
     {id:'puppyears', name:'강아지 귀', at:10, slot:'head', theme:'동물 친구'},
+    {id:'mailcat', name:'고양이 편지 가방', at:12, slot:'back', theme:'교정 항공우편'},
     {id:'freckles', name:'주근깨 스티커', at:14, slot:'face', theme:'실습 카페'},
     {id:'baguette', name:'바게트 가방', at:16, slot:'back', theme:'실습 카페'},
+    {id:'postmarks', name:'딸기 우표', at:18, slot:'trail', theme:'교정 항공우편'},
     {id:'chefhat', name:'꼬마 요리사 모자', at:20, slot:'head', theme:'실습 카페'},
     {id:'notes', name:'음표', at:23, slot:'trail', theme:'예술제 무대'},
     {id:'starshades', name:'별 안경', at:26, slot:'face', theme:'예술제 무대'},
@@ -68,6 +71,7 @@
   items.push(...collection);
   items.sort((a, b) => a.at - b.at);
   const sets = [
+    {name:'교정 항공우편', title:'하늘 우체부', pieces:['planepin','mailcat','postmarks']},
     {name:'카페', title:'바리스타 견습생', pieces:['chefhat','baguette','freckles']},
     {name:'예술제', title:'무대 체질', pieces:['ribbontiara','starshades','notes']},
     {name:'공부', title:'도서실 단골', pieces:['gradcap','ledger','roundspecs']},
@@ -136,6 +140,10 @@
   };
   function schoolHead(r, id, dir) {
     const side = dir === 'right' || dir === 'left', left = dir === 'left';
+    if (id === 'planepin') {
+      stamp(r, side ? 11 : dir === 'up' ? 7 : 16, 5,
+        ['........nnn','.....nnnwwn','..nnnwwwbn.','nnwwwbbcn..','.nnbbwwn...','..ncnnn....','..nn..rr...'], left);
+    }
     if (id === 'halo') stamp(r, side ? 10 : 9, 0, hats.halo, left);
     if (id === 'puppyears') {
       stamp(r, side ? 10 : 4, 5, hats.puppyears, left);
@@ -198,6 +206,7 @@
     if (!side && id !== 'plaster') stamp(pixel, 11, 17, motif, true);
   }
   const trailArt = {
+    postmarks: ['.c.c.','cwdwc','.rrr.','cprwc','.c.c.'],
     petals: ['..pr','.pwp','prp.','.t..'],
     notes: ['.nnn','.nlv','.n..','vv..','nv..'],
     sparkles: ['..g..','.gyg.','gywyg','.gyg.','..g..'],
@@ -343,7 +352,7 @@
   }
   const carriedColors={bookcat:'mintD',bag:'mintD',breadbag:'roseD',starbag:'goldD',milkbag:'roseD',bowback:'roseD',wings:'goldD',umbrella:'blueD',cloudpack:'mintD',pianobag:'purpleD',racketbag:'blueD',stonebag:'blueD',targetpack:'roseD',trophybag:'goldD'};
   Object.assign(carriedColors, {
-    baguette:'goldD', easel:'navy', ledger:'mintD', rainbow:'purpleD', bouquet:'blueD'
+    mailcat:'blueD', baguette:'goldD', easel:'navy', ledger:'mintD', rainbow:'purpleD', bouquet:'blueD'
   });
   // Source-pixel adjustments from the resting jacket. The side view pulls the
   // pack against the back; tall props need more lift to clear the shoes.
@@ -354,6 +363,7 @@
     cloudpack: { lift: 3, center: -1 }, pianobag: { lift: 2 },
     racketbag: { lift: 4 }, stonebag: { lift: 2, center: 1 },
     targetpack:{ lift: 3 }, trophybag: { lift: 4, center: 1 },
+    mailcat:   { lift: 2 },
     baguette:  { lift: 3 }, easel: { lift: 4 }, ledger: { lift: 4 },
     rainbow:   { lift: 4, sideLift: 1 }
   };
@@ -394,6 +404,12 @@
   // Profiles face right in the pattern and mirror around the sprite centre for left.
   // The inside edge overlaps the jacket, so the bag rests against the body at every step.
   const patternedBags={
+    mailcat: {
+      profile:[7,19,['..n..n','..npnn','.nbccn','nbccwn','nbcwrn','nbccwn','nbcwbn','nbcwwn','.nbccn','..nnnn']],
+      rear:[7,19,['..n...........n..','..npn.......npn..','..nppnnnnnnnppn..',
+        '.nbwwwwwwwwwwwbn.','nrbwcwnwwwnwcwbrn','nwwbwwwwpwwwwbwwn','nbwwbbwwwwwbbwwbn',
+        'nwwwwwbbrbbwwwwwn','nrwwwwwrprwwwwwrn','nbwwwwwwrwwwwwwbn','.nnnnnnnnnnnnnnn.']]
+    },
     // 바게트의 칼집, 이젤 위 풍경, 회계 실습용 숫자판을 각각 작은 옆판에도 남긴다.
     baguette: {
       profile:[6,19,['....kkk','...kgyk','..kggck','.kgcggk','kdyggdk','kdgggdk',
