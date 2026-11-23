@@ -127,6 +127,9 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player',marks){
     paint(stage);
   }
   const costume=document.createElement('canvas');costume.width=48;costume.height=52;costume.className='addon-outfit-layer';costume.setAttribute('aria-hidden','true');$('#scene-walker').append(costume);
+  const footprintInterval = 150;
+  const footprintLifetime = 1500;
+  const maxFootprints = Math.ceil(footprintLifetime / footprintInterval);
   const footprints = new Set();
   let nextFootprint = 0, stride = 0;
   function clearFootprints() {
@@ -136,12 +139,18 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player',marks){
   }
   function leaveFootprint(p) {
     const now = performance.now();
-    if (now < nextFootprint || footprints.size >= 5) return;
-    nextFootprint = now + 150;
+    if (now < nextFootprint) return;
+    if (footprints.size >= maxFootprints) {
+      const oldest = footprints.values().next().value;
+      oldest.remove();
+      footprints.delete(oldest);
+    }
+    nextFootprint = now + footprintInterval;
     const mark = document.createElement('canvas');
     mark.width = mark.height = 5;
     mark.className = 'addon-footprint';
     mark.setAttribute('aria-hidden', 'true');
+    mark.style.setProperty('--footprint-life', footprintLifetime + 'ms');
     mark.style.left = p.x + '%';
     mark.style.top = p.y + '%';
     mark.style.setProperty('--step-x', stride++ % 2 ? '10%' : '-110%');
@@ -606,9 +615,9 @@ function drawAvatar(c,dir='down',frame=1,equip=state.equip,who='player',marks){
     if (!previewWalking) return [];
     const [dx, dy] = {down:[0,-1], up:[0,1], right:[-1,0], left:[1,0]}[previewDir];
     const marks = [];
-    for (let age = 0; age < Math.min(3, previewTick + 1); age++) {
-      const foot = (previewTick - age) % 2 ? 10 : 18;
-      marks.push([foot + dx * age * 4, 31 + dy * age * 2, 1 - age * 0.3]);
+    for (let age = 0; age < Math.min(5, previewTick + 1); age++) {
+      const foot = (previewTick - age) % 2 ? 11 : 18;
+      marks.push([foot + dx * age * 2, 31 + dy * age, 1 - age * 0.18]);
     }
     return marks;
   }

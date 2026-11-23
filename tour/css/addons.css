@@ -205,10 +205,10 @@
   width: max(5px, calc(var(--stage-w) * .00844));
   pointer-events: none;
   image-rendering: pixelated;
-  animation: addon-step-fade 580ms steps(4) forwards;
+  animation: addon-step-fade var(--footprint-life) steps(6) forwards;
 }
 @keyframes addon-step-fade {
-  from { opacity: 1; transform: translate(var(--step-x), -70%); }
+  0%, 35% { opacity: 1; transform: translate(var(--step-x), -70%); }
   to { opacity: 0; transform: translate(var(--step-x), -130%); }
 }
 

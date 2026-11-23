@@ -99,7 +99,11 @@ async function checkWalking(page) {
   const steps = page.locator('.addon-footprint');
   await page.evaluate(() => { window.tourAddonHost.go('outdoor', [56,50], '산책'); });
   await steps.first().waitFor();
-  assert(await steps.count() <= 5);
+  const mark = await steps.first().elementHandle();
+  assert.equal(await mark.evaluate(el => getComputedStyle(el).animationDuration), '1.5s');
+  await page.waitForTimeout(700);
+  assert(await mark.evaluate(el => el.isConnected), 'the first step should outlast 700 ms');
+  assert(await steps.count() <= 10);
   await page.evaluate(() => window.tourAddonHost.stop());
   await steps.first().waitFor({state:'detached'});
   const player = page.locator('.addon-outfit-layer');
@@ -263,12 +267,12 @@ async function checkBrowser() {
       const moving=render(empty,direction,frame,{back});
       const tipX=(walking)=>{
         const reach=walking?3:2;
-        if(direction==='right')return 7-reach;
-        if(direction==='left')return 31-(7-reach);
-        return (direction==='down'?26:23)+reach;
+        if(direction==='right')return 8-reach;
+        if(direction==='left')return 31-(8-reach);
+        return (direction==='down'?23:22)+reach;
       };
-      // 가방을 허리 높이로 올린 만큼 꼬리 끝 줄도 위로 (앞·뒤 3칸, 옆 4칸)
-      const tipY=27-(direction==='left'||direction==='right'?4:3);
+      // The tail stays attached to the raised book on all three frames.
+      const tipY=27-(direction==='left'||direction==='right'?6:5);
       // Below the strap, every pixel must move exactly one source pixel, with
       // no horizontal drift, scaling or fractional filtering in any direction.
       for(let y=25;y<40;y++)for(let x=0;x<48;x++)for(let k=0;k<4;k++)
@@ -289,6 +293,29 @@ async function checkBrowser() {
       bobChecks++;
     }
     assert.deepEqual(render(empty,direction,1,{back}),idle,`${back}/${direction}: stopping restores rest pose`);
+  }
+  // Bags should end above the shoes and stay centred on the jacket. Side
+  // profiles use the same clearance on either side of the 32-pixel sprite.
+  const fittedPacks = carried.filter(id => id !== 'wings' && id !== 'bouquet');
+  for (const back of fittedPacks) for (const frame of [0,1,2]) {
+    for (const direction of ['down','up']) {
+      const layer = render(empty, direction, frame, {back});
+      const xs = [];
+      for (let y = 0; y < 40; y++) for (let x = 0; x < 32; x++) {
+        if (!layer[((y+12)*48+x+8)*4+3]) continue;
+        xs.push(x);
+        assert(y <= 29, back + ': pack overlaps shoes');
+      }
+      const center = (Math.min(...xs) + Math.max(...xs)) / 2;
+      assert(Math.abs(center - (direction === 'down' ? 16 : 15.5)) <= 1, back + ': pack off centre');
+    }
+    const left = render(empty, 'left', frame, {back});
+    const right = render(empty, 'right', frame, {back});
+    for (let y=0; y<40; y++) for (let x=0; x<32; x++) {
+      const i = ((y+12)*48+x+8)*4+3;
+      const j = ((y+12)*48+31-x+8)*4+3;
+      assert.equal(left[i], right[j], back + ': side profiles sit at different distances');
+    }
   }
   // Beyond the short shoulder strap the depth of each new pack overlaps the
   // actual jacket, even at the extremes of the walk cycle.
