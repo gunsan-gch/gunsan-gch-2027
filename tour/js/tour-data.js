@@ -52,7 +52,7 @@ window.TOUR_SCENES = {
       { name: '학교 전경 보기', at: [38, 58], w: 10, anchor: [42.5, 58], status: '실제 사진', note: '드론 사진', photos: ['img/drone.jpg', 'img/drone-2.jpg', 'img/drone-3.jpg', 'img/drone-4.jpg'], spot: true,
         desc: '드론으로 하늘에서 찍은 우리 학교 전경입니다.' },
       { name: '잔디마당', game: 'paperplane', at: [67, 62], w: 12, anchor: [67, 68],
-        desc: '윤희 선배와 종이비행기를 날려 보세요. 깃발 리본을 한 바퀴 돌아 찢거나 빈틈으로 지나며 운동장 과녁을 노려요.' },
+        desc: '윤희 선배의 하늘우체국에서 편지 세 통을 맡아 보세요. 종이비행기로 리본을 돌파하고, 우편함에 편지를 배달한 뒤 운동장 과녁에 착륙해요.' },
       { name: '1층', door: '중앙현관으로 1층 들어가기', at: [54.3, 22.5], w: 4, anchor: [54.2, 32.2] },
       { name: '2층', door: '바깥 계단으로 2층 올라가기', at: [35.3, 23], w: 4, anchor: [35.3, 29.4] }
     ]
