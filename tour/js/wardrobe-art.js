@@ -345,25 +345,50 @@
   Object.assign(carriedColors, {
     baguette:'goldD', easel:'navy', ledger:'mintD', rainbow:'purpleD', bouquet:'blueD'
   });
+  // Source-pixel adjustments from the resting jacket. The side view pulls the
+  // pack against the back; tall props need more lift to clear the shoes.
+  const packFit = {
+    bag:       { lift: 2 }, breadbag: { lift: 2 }, milkbag: { lift: 2 },
+    starbag:   { lift: 1, center: 1 }, bowback: { lift: 3 },
+    bookcat:   { lift: 2, center: -1 }, umbrella: { lift: 3, center: -2 },
+    cloudpack: { lift: 3, center: -1 }, pianobag: { lift: 2 },
+    racketbag: { lift: 4 }, stonebag: { lift: 2, center: 1 },
+    targetpack:{ lift: 3 }, trophybag: { lift: 4, center: 1 },
+    baguette:  { lift: 3 }, easel: { lift: 4 }, ledger: { lift: 4 },
+    rainbow:   { lift: 4, sideLift: 1 }
+  };
   function back(c,id,dir,frame=1){
     const color=carriedColors[id];
     if(!color){backArt(c,id,dir,frame);return;}
     // Match the existing 0,1,2,1 walk cycle: up one pixel, rest, down one, rest.
     // Only the accessory moves; the body, hair and collision box stay fixed.
     const bob=frame===0?-1:frame===2?1:0;
-    // 정면 몸통 가운데(x16)가 뒷모습(x15)보다 1칸 오른쪽이라 가방이 왼쪽으로 쏠려 보임 → 정면만 1칸 오른쪽으로
-    // (책갈피 고양이 가방은 일부러 오른쪽 허리에 걸치고, 날개는 좌우로 펼쳐서 제외)
-    const frontShift=dir==='down'&&id!=='bookcat'&&id!=='wings'?1:0;
-    c.save();c.translate(frontShift,bob);backArt(c,id,dir,frame);c.restore();
+    const fit = packFit[id];
+    const side = dir === 'left' || dir === 'right';
+    const lift = (side ? fit?.sideLift : undefined) ?? fit?.lift ?? 0;
+    const tuck = dir === 'right' ? 1 : -1;
+    const center = (fit?.center || 0) + (dir === 'down' && id !== 'wings' ? 1 : 0);
+    const dx = side ? (fit ? tuck : 0) : center;
+    c.save();
+    c.translate(dx, bob - lift);
+    // Use the same side-to-jacket distance on both profiles.
+    if (fit && dir === 'left') {
+      c.translate(32, 0);
+      c.scale(-1, 1);
+      backArt(c, id, 'right', frame);
+    } else {
+      backArt(c, id, dir, frame);
+    }
+    c.restore();
     // A short strap/root stays on the shoulder while its far end follows the item.
     const r=pen(c);
     if(dir==='up'){
-      pixelLine(r,15,20,15,22+bob,color);
+      pixelLine(r,15,20,15,22+bob-lift,color);
       r(14,20,3,1,color);
     }else if(dir==='left'||dir==='right'){
       const right=dir==='right',from=id==='umbrella'?(right?11:20):(right?12:19);
       const to=id==='wings'?(right?11:20):(right?9:22);
-      pixelLine(r,from,21,to,22+bob,color);
+      pixelLine(r,from,21,to+dx,22+bob-lift,color);
     }
   }
   // Profiles face right in the pattern and mirror around the sprite centre for left.
@@ -442,10 +467,8 @@
   function patternedBag(r,id,dir){
     const bag=patternedBags[id],side=dir==='left'||dir==='right';
     const [x,y,rows]=side?bag.profile:bag.rear;
-    // From the front the book peeks past the right hip, with the cat above it.
-    const offset=id==='bookcat'&&dir==='down'?3:0;
     rows.forEach((row,dy)=>Array.from(row).forEach((mark,dx)=>{
-      if(mark!=='.')r(dir==='left'?31-x-dx:x+dx+offset,y+dy,1,1,(bag.colors || swatch)[mark]);
+      if(mark!=='.')r(dir==='left'?31-x-dx:x+dx,y+dy,1,1,(bag.colors || swatch)[mark]);
     }));
   }
   function backArt(c,id,dir,frame=1){
@@ -466,7 +489,7 @@
     if(patternedBags[id])patternedBag(r,id,dir);
     if(id==='bookcat'){
       // The tail curls beyond the cover. Its tip flicks one horizontal pixel per step.
-      const edge=side?7:(front?26:23), outward=side?-1:1;
+      const edge=side?7:23, outward=side?-1:1;
       const tail=(offset,y,k)=>{
         const tx=edge+outward*offset;
         r(dir==='left'?31-tx:tx,y,1,1,k);
@@ -600,10 +623,13 @@
     }
     if(id==='moon'){
       // Crescent and tiny satellites sit behind the body in every direction.
-      const mx=right?0:23;
+      c.save();
+      if (right) { c.translate(32, 0); c.scale(-1, 1); }
+      const mx=23;
       r(mx+3,8,5,2,'goldD');r(mx+1,10,4,2,'goldD');r(mx,12,3,12,'goldD');r(mx+1,24,4,3,'goldD');r(mx+4,27,5,2,'goldD');
       r(mx+3,10,3,2,'yellow');r(mx+1,12,3,10,'gold');r(mx+2,14,1,8,'yellow');r(mx+3,22,2,4,'gold');r(mx+5,25,3,2,'yellow');
-      r(mx+5,10,2,2,'cream');r(mx+7,25,2,2,'cream');r(right?26:2,12,1,5,'purple');r(right?24:0,14,5,1,'purple');r(right?23:8,24,2,2,'gold');
+      r(mx+5,10,2,2,'cream');r(mx+7,25,2,2,'cream');r(2,12,1,5,'purple');r(0,14,5,1,'purple');r(8,24,2,2,'gold');
+      c.restore();
     }
   }
   const base=document.createElement('canvas');base.width=32;base.height=40;
@@ -637,7 +663,7 @@
     }
     // The pack is behind the torso in front view. Two short webbing ends cross
     // the jacket shoulders, leaving its central tie and the face visible.
-    if(dir==='down'&&(patternedBags[equip.back]||equip.back==='cloudpack'||equip.back==='pianobag')){
+    if(dir==='down' && (packFit[equip.back] || equip.back === 'bouquet')){
       const r=pen(c),strap=carriedColors[equip.back];
       r(11,21,1,3,strap);r(12,23,1,1,strap);
       r(20,21,1,3,strap);r(19,23,1,1,strap);
