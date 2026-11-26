@@ -35,7 +35,7 @@
   <link rel="preload" as="image" href="img/outdoor.webp">
   <link rel="stylesheet" href="css/tour.css?v=20261126-mobile1">
   <link rel="stylesheet" href="css/stairs.css?v=20261121-unify1">
-  <link rel="stylesheet" href="css/games.css?v=20261126-fest1">
+  <link rel="stylesheet" href="css/games.css?v=20261126-fest2">
   <link rel="stylesheet" href="css/melody.css?v=20261121-unify1">
   <link rel="stylesheet" href="css/gym.css?v=20261121-unify1">
   <link rel="stylesheet" href="css/press.css?v=20261121-aim1">
@@ -234,6 +234,33 @@
     </div>
   </dialog>
 
+  <!-- 「녹원예술제 D-1」 초대장 (js/festival-story.js) -->
+  <dialog id="story-invite" class="game-dialog story-invite" aria-labelledby="story-invite-title">
+    <div class="game-head">
+      <div>
+        <span class="eyebrow">녹원예술제 D-1</span>
+        <h2 id="story-invite-title">일일 도우미 초대장</h2>
+      </div>
+      <button type="button" class="invite-close" aria-label="초대장 닫기">✕</button>
+    </div>
+    <div class="game-body">
+      <div class="invite-letter">
+        <img src="img/games/stamps/paperplane.png?v=20261118" alt="" width="56" height="56">
+        <div>
+          <p class="invite-from">보내는 사람 · 아름 선배(전교회장)</p>
+          <p>내일은 우리 학교 <strong>녹원예술제</strong>야! 그런데 네 학과 부스가 아직 준비 중이라 일손이 모자라.</p>
+          <p>오늘 하루 <strong>일일 도우미</strong>가 되어 줄래? 부스마다 미션 두 개씩만 도와주면 돼.</p>
+        </div>
+      </div>
+      <ul class="invite-booths" aria-label="도와줄 학과 부스 4곳"></ul>
+      <p class="invite-note">부스 두 곳 이상 도와주면 5층 학생회실에서 예술제를 열 수 있어요. 진행 상황은 지도 위 「예술제 준비」 버튼에서 볼 수 있어요.</p>
+      <div class="invite-actions">
+        <button type="button" class="btn btn-primary invite-go">첫 미션: 잔디마당 종이비행기 →</button>
+        <button type="button" class="btn invite-later">지도 먼저 둘러볼게요</button>
+      </div>
+    </div>
+  </dialog>
+
   <!-- 체험 게임 창: 틀은 js/games.js, 게임 본체는 js/game-○○.js -->
   <dialog id="game" class="game-dialog" aria-labelledby="game-title">
     <div class="game-head">
@@ -244,6 +271,7 @@
       <button type="button" id="game-sound" aria-label="효과음" aria-pressed="false" hidden>효과음 꺼짐</button>
       <button type="button" id="game-close" aria-label="게임 닫기" autofocus>✕</button>
     </div>
+    <p id="game-story" class="game-story" hidden></p>
     <div id="game-body" class="game-body"></div>
     <p id="game-status" class="sr-only" aria-live="polite"></p>
   </dialog>
@@ -297,7 +325,7 @@
   <script src="js/labels.js?v=20261121-memory1"></script>
   <script src="js/tour.js?v=20261121-memory1"></script>
   <script src="js/star-progress.js?v=20261122-items1"></script>
-  <script src="js/games.js?v=20261126-fest1"></script>
+  <script src="js/games.js?v=20261126-fest2"></script>
   <script src="js/game-cafe.js?v=20261121-unify1"></script>
   <script src="js/game-ai.js?v=20261121-unify1"></script>
   <script src="js/game-typing.js?v=20261121-unify1"></script>
@@ -324,7 +352,7 @@
   <script src="js/game-goods.js?v=20261121-unify1"></script>
   <script src="js/game-paperplane.js?v=20261123-airmail"></script>
   <script src="js/game-art.js?v=20261126-art1"></script>
-  <script src="js/festival-story.js?v=20261126-fest1"></script>
+  <script src="js/festival-story.js?v=20261126-fest2"></script>
   <script src="js/wardrobe-art.js?v=20261123-airmail"></script>
   <script src="js/board-data.js?v=20261122-board2"></script>
   <script src="js/tour-addons.js?v=20261123-fit"></script>

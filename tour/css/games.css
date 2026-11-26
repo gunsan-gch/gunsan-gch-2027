@@ -31,19 +31,19 @@
 .senior-card .addon-portrait canvas { width: 48px; height: 60px; image-rendering: pixelated; }
 
 /* 버튼은 두 색만 사용하고 비활성인 조작만 흐리게 표시한다. */
-#game button, #game input[type="range"], #festival-dialog button, #stamps button {
+#game button, #game input[type="range"], #festival-dialog button, #stamps button, #story-invite button {
   min-width: 44px; min-height: 44px;
 }
-#game .btn, #festival-dialog .btn, #stamps .btn {
+#game .btn, #festival-dialog .btn, #stamps .btn, #story-invite .btn {
   border: 2px solid var(--navy); border-radius: 4px;
   background: #fff; color: var(--navy); cursor: pointer;
 }
-#game .btn.btn-primary, #festival-dialog .btn.btn-primary, #stamps .btn.btn-primary {
+#game .btn.btn-primary, #festival-dialog .btn.btn-primary, #stamps .btn.btn-primary, #story-invite .btn.btn-primary {
   background: var(--navy); color: #fff;
 }
 #game .btn:hover:enabled, #festival-dialog .btn:hover:enabled { background: #eef2fb; }
 #game .btn.btn-primary:hover:enabled, #festival-dialog .btn.btn-primary:hover:enabled { background: var(--navy-2); }
-#game button:disabled, #game input:disabled, #festival-dialog button:disabled, #stamps button:disabled {
+#game button:disabled, #game input:disabled, #festival-dialog button:disabled, #stamps button:disabled, #story-invite button:disabled {
   opacity: .5; cursor: default; box-shadow: none;
 }
 #game button:enabled { opacity: 1; }
@@ -864,9 +864,35 @@ span.interview-robot { display: grid; place-items: center; font-size: 64px; }
 .stamp-booth.is-done .stamp-badge { background: var(--dept); color: #fff; }
 .stamp-booth .stamp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .stamp-dept-link { font-size: 13px; font-weight: 700; color: var(--dept); }
-.stamp-role { font-size: 11px; line-height: 1.35; color: var(--muted); }
+.stamp-role { font-size: 12px; line-height: 1.35; color: var(--muted); }
 .stamp-extras .stamp-grid + .stamp-grid { margin-top: 8px; }
 @media (max-width: 520px) {
   .stamp-booths { grid-template-columns: minmax(0, 1fr); }
   .stamp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+.stamp-invite-again { margin-top: 8px; padding: 4px 0; border: 0; background: none; font-size: 13px; font-weight: 700; color: var(--navy); text-decoration: underline; cursor: pointer; }
+
+/* 게임 창 위 「예술제 미션」 한 줄, 결과 화면의 예술제 소식 */
+.game-story { margin: 0; padding: 6px 16px; border-bottom: 1px solid var(--line); background: #fff6e6; font-size: 13px; line-height: 1.45; color: var(--ink); word-break: keep-all; }
+.game-story[hidden] { display: none; }
+.game-story b { margin-right: 4px; padding: 1px 5px; background: var(--orange); color: #fff; font-size: 12px; font-weight: 700; }
+.game-story-result { margin: 4px 0 0; padding: 8px 10px; border-left: 4px solid var(--orange); background: #fff6e6; font-size: 14px; font-weight: 700; color: var(--ink); word-break: keep-all; }
+.game-story-result.is-opening { border-color: var(--green); background: var(--green-soft); }
+@media (max-height: 520px) and (orientation: landscape) { .game-story { display: none; } }
+
+/* 초대장 */
+.story-invite { width: min(520px, 100% - 24px); }
+.story-invite .invite-close { flex-shrink: 0; width: 44px; height: 44px; border: 0; background: none; font-size: 20px; cursor: pointer; }
+.invite-letter { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border: 2px solid var(--navy); background: var(--paper); box-shadow: var(--pixel-shadow); }
+.invite-letter img { flex: none; image-rendering: pixelated; }
+.invite-letter p { margin: 0 0 6px; font-size: 15px; line-height: 1.55; word-break: keep-all; }
+.invite-letter .invite-from { font-size: 12px; font-weight: 700; color: var(--green); }
+.invite-booths { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.invite-booths li { --dept: var(--navy); display: flex; gap: 8px; align-items: center; padding: 8px; border: 1px solid var(--line-strong); border-left: 5px solid var(--dept); background: #fff; }
+.invite-booths img { flex: none; image-rendering: pixelated; }
+.invite-booths strong { display: block; font-size: 13px; color: var(--dept); }
+.invite-booths small { display: block; font-size: 12px; line-height: 1.35; color: var(--muted); word-break: keep-all; }
+.invite-note { margin: 12px 0 0; font-size: 13px; color: var(--muted); word-break: keep-all; }
+.invite-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.invite-actions .btn { flex: 1 1 auto; }
+#story-invite button { font: inherit; }

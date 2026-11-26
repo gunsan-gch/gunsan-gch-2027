@@ -125,6 +125,18 @@ window.tourGame = (() => {
 
   /* ---------- 열기 ---------- */
 
+  /** 게임 창 위 「예술제 미션」 한 줄 (js/festival-story.js의 lines) */
+  const storyEl = $('#game-story');
+  function storyLine(id) {
+    if (!storyEl) return;
+    const line = window.TOUR_FESTIVAL?.lines?.[id]?.[0];
+    storyEl.hidden = !line;
+    if (!line) return;
+    const tag = document.createElement('b');
+    tag.textContent = '예술제 미션';
+    storyEl.replaceChildren(tag, ' ' + line);
+  }
+
   function open(id, room = null, from = null) {
     const game = GAMES[id];
     if (!game || dialog.open) return false;
@@ -133,6 +145,7 @@ window.tourGame = (() => {
     current = { id, game, roomName, cleanup: null, finished: false };
     titleEl.textContent = game.title;
     roomEl.textContent = roomName;
+    storyLine(id);
     dialog.classList.remove('is-result');
     body.replaceChildren();
     status.textContent = '';
@@ -223,6 +236,14 @@ window.tourGame = (() => {
       box.append(record);
     }
     box.append(starRow, score, stamp, message);
+    const storyAfter = window.TOUR_FESTIVAL?.lines?.[id]?.[1];
+    const opening = window.TOUR_FESTIVAL && id === window.TOUR_FESTIVAL.finale.id;
+    if (storyAfter) {
+      const news = document.createElement('p');
+      news.className = 'game-story-result' + (opening ? ' is-opening' : '');
+      news.textContent = storyAfter + (opening ? ' 현황판에 「예술제 둘러보기」가 열렸어요.' : '');
+      box.append(news);
+    }
     if (best && best.stars > stars) {
       const note = document.createElement('p');
       note.className = 'game-result-best';
@@ -251,6 +272,21 @@ window.tourGame = (() => {
     back.addEventListener('click', () => dialog.close());
 
     actions.append(retry);
+    const story = festivalProgress();
+    const nextStory = story?.next && story.next.id !== id && GAMES[story.next.id] && story.next.id !== game.nextGame ? story.next : null;
+    if (nextStory) {
+      const go = document.createElement('button');
+      go.type = 'button';
+      go.className = 'btn btn-primary';
+      go.textContent = '다음 할 일 · ' + GAMES[nextStory.id].title;
+      go.addEventListener('click', () => {
+        const from = opener;
+        tourTrack('tour_story_next', { game_id: id, next_id: nextStory.id }, ['TourStory', 'Next']);
+        dialog.addEventListener('close', () => practice(nextStory.id, from), { once: true });
+        dialog.close();
+      });
+      actions.append(go);
+    }
     if (game.nextGame && GAMES[game.nextGame]) {
       const next = document.createElement('button');
       next.type = 'button';
@@ -291,7 +327,10 @@ window.tourGame = (() => {
       const more = document.createElement('button');
       more.type = 'button';
       more.className = 'btn game-result-board';
-      window.TourUI.label(more, 'stamp', `모은 도장 ${count.got} / ${count.total} · 도장판 보기`);
+      const prep = festivalProgress();
+      window.TourUI.label(more, 'stamp', prep && !prep.opened
+        ? `예술제 준비 ${prep.got} / ${prep.total} · 현황판 보기`
+        : `모은 도장 ${count.got} / ${count.total} · 도장판 보기`);
       more.addEventListener('click', () => {
         dialog.addEventListener('close', openBoard, { once: true });
         dialog.close();
@@ -492,7 +531,19 @@ window.tourGame = (() => {
       nextBox.append(nextText);
     }
 
-    section('1. 초대장 받기', '내일은 녹원예술제! 일일 도우미로 초대받았어요.').append(grid(data.prologue));
+    const prologue = section('1. 초대장 받기', '내일은 녹원예술제! 일일 도우미로 초대받았어요.');
+    prologue.append(grid(data.prologue));
+    if (window.TourFestivalInvite) {
+      const again = document.createElement('button');
+      again.type = 'button';
+      again.className = 'stamp-invite-again';
+      again.textContent = '초대장 다시 보기';
+      again.addEventListener('click', () => {
+        board.addEventListener('close', () => window.TourFestivalInvite.open(), { once: true });
+        board.close();
+      });
+      prologue.append(again);
+    }
 
     const boothGroup = section('2. 학과 부스 4곳 준비하기', `미션 두 개를 끝내면 학과 배지가 켜져요 · 배지 ${story.badges} / ${data.booths.length}`);
     const cards = document.createElement('ul');
