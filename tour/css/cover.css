@@ -45,3 +45,12 @@
 }
 .cover-reset[hidden] { display: none; }
 @media (max-width: 480px) { .cover-hint { font-size: 11px; padding: 3px 10px; } }
+/* 시작 영상 (치즈의 정문 인사): 3D 위에 덮었다가 끝나면 사라짐 */
+.cover-intro { position: absolute; inset: 0; z-index: 3; width: 100%; height: 100%; object-fit: cover; background: #f2ecdd; transition: opacity .4s ease; }
+.cover-intro.is-gone { opacity: 0; pointer-events: none; }
+.cover-stage.is-intro .cover-hint, .cover-stage.is-intro .cover-reset { visibility: hidden; }
+.cover-skip {
+  position: absolute; right: 10px; bottom: 10px; z-index: 4; min-height: 32px; padding: 5px 12px; border: 0; border-radius: 999px;
+  background: rgba(255, 255, 255, .85); color: #1c2533; font: inherit; font-size: 12px; font-weight: 600;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .14); cursor: pointer;
+}

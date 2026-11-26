@@ -15,6 +15,7 @@
 `tour/index.html?game=melody`로 2층 음악실 「멜로디 따라잡기」를 바로 열 수 있습니다.
 **첫 화면 「AI로 지은 우리 학교」** (`js/ai-cover.js`, `css/cover.css`): 투어를 열면 3D 학교 모형을 끌어서 돌려 보고 「픽셀투어 떠나기」로 들어갑니다.
 모델은 `img/campus-3d/campus.glb`(같은 이름으로 덮어쓰고 `ai-cover.js`의 `MODEL` ?v= 값을 바꾸면 교체), 불러오는 동안 `poster.webp`를 보여 줍니다. 3D 화면은 `vendor/model-viewer`(첫 화면에서만 불러옴).
+시작 영상은 `img/campus-3d/intro.mp4`(소리 없음, H.264)로 3D 위에서 먼저 재생되고, 끝나거나 「건너뛰기」를 누르면 3D가 보입니다. 바꿀 때는 같은 이름으로 덮어쓰고 `INTRO`의 ?v= 값을 바꾸세요. 움직임 줄이기 설정이면 영상 없이 바로 3D.
 `?game=`·`?room=` 링크나 `#floor-n`으로 들어오면, 또는 같은 탭에서 이미 닫았으면 건너뜁니다. 「떠나기」를 누르면 GA4 `tour_cover_start` / 네이버 `TourCover`(Start)를 보냅니다.
 
 `tour/index.html?game=art`로 5층 미술실 「물감 섞기 미션」을 바로 열 수 있습니다 (목표 색·방울 수는 `js/game-art.js` 맨 위 `TARGETS`에서 수정).

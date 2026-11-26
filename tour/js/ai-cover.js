@@ -4,11 +4,14 @@
      첫 장면 각도는 CAMERA_ORBIT(가로각 세로각 거리)로 맞춥니다.
    - 3D 화면 도구는 vendor/model-viewer (첫 화면을 띄울 때만 불러옴, 약 0.9MB). 불러오기 전·실패 시엔 poster.webp 그림이 그대로 보입니다.
    - ?game= · ?room= 링크나 #floor-n 으로 들어오면 첫 화면 없이 바로 투어로 갑니다.
+   - 시작 영상(img/campus-3d/intro.mp4, 소리 없음 4.5초)이 먼저 나오고, 끝나거나 「건너뛰기」를 누르면 3D 모형이 보입니다.
+     영상을 바꾸려면 같은 이름으로 덮어쓰고 INTRO의 ?v= 값을 바꾸세요. 움직임 줄이기 설정이면 영상 없이 바로 3D.
    - 같은 탭에서 한 번 닫으면 새로 고침해도 다시 띄우지 않습니다(sessionStorage). */
 (() => {
   'use strict';
-  const MODEL = 'img/campus-3d/campus.glb?v=20261126-final2';   // 최종본 (군산여상_360_후문_전폭돌계단.glb)
-  const POSTER = 'img/campus-3d/poster.webp';
+  const MODEL = 'img/campus-3d/campus.glb?v=20261126-v7';   // 군산여상_전경_잔디결_v7.glb (고양이 2.5배)
+  const INTRO = 'img/campus-3d/intro.mp4?v=20261126-v6';   // 군산여상_치즈의_정문인사_v6.mp4
+  const POSTER = 'img/campus-3d/poster.webp?v=20261126-v7';
   const CAMERA_ORBIT = '0deg 58deg 80%';   // 거리 %가 작을수록 모형이 크게 보임
   const SEEN = 'gch-tour-cover-seen';
   // 건물 이름표: 모델 좌표(미터, 가로 x · 높이 y · 앞뒤 z). 모델을 바꾸면 위치를 다시 맞춰야 합니다
@@ -29,6 +32,35 @@
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const stage = dialog.querySelector('.cover-stage');
+
+  // 시작 영상: 3D를 불러오는 동안 위에 덮어 재생. 자동 재생이 막히면 바로 3D로
+  let video = null;
+  const endIntro = () => {
+    if (!video) return;
+    const v = video; video = null;
+    stage.classList.remove('is-intro');
+    v.classList.add('is-gone');
+    setTimeout(() => v.remove(), 450);
+    dialog.querySelector('.cover-skip')?.remove();
+  };
+  if (!reduced) {
+    video = document.createElement('video');
+    Object.assign(video, { muted: true, playsInline: true, autoplay: true, preload: 'auto', className: 'cover-intro' });
+    video.setAttribute('muted', ''); video.setAttribute('playsinline', '');
+    video.poster = 'img/campus-3d/intro-poster.webp';
+    video.src = INTRO;
+    video.setAttribute('aria-label', '시작 영상: 고양이 치즈가 정문에서 인사하고 학교 전경으로 넘어가요');
+    video.addEventListener('ended', endIntro);
+    video.addEventListener('error', endIntro);
+    const skip = document.createElement('button');
+    skip.type = 'button'; skip.className = 'cover-skip'; skip.textContent = '건너뛰기';
+    skip.addEventListener('click', () => {
+      endIntro();
+      if (window.tourTrack) window.tourTrack('tour_cover_intro_skip', {}, ['TourCover', 'IntroSkip']);
+    });
+    stage.classList.add('is-intro');
+    stage.append(video, skip);
+  }
 
   import('../vendor/model-viewer/model-viewer.min.js').then(() => {
     if (!dialog.open) return;
@@ -89,4 +121,5 @@
   document.body.classList.add('cover-open');
   dialog.showModal();
   dialog.querySelector('.cover-start').focus();
+  video?.play().catch(endIntro);
 })();
