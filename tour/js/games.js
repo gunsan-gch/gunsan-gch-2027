@@ -369,7 +369,10 @@ window.tourGame = (() => {
     const stamps = readStamps();
     const got = rooms.filter(item => stamps[item.room.game]).length;
     if (boardButton) {
-      window.TourUI.label(boardButton, 'stamp', `도장 ${got} / ${rooms.length}`);
+      const story = festivalProgress(stamps);
+      // 개막 전에는 본편(예술제 준비)만 세고, 개막 뒤에는 전체 도장을 셉니다.
+      if (story && !story.opened) window.TourUI.label(boardButton, 'stamp', `예술제 준비 ${story.got} / ${story.total}`);
+      else window.TourUI.label(boardButton, 'stamp', `도장 ${got} / ${rooms.length}`);
       boardButton.classList.toggle('is-complete', rooms.length > 0 && got === rooms.length);
     }
     return { got, total: rooms.length };
@@ -394,14 +397,154 @@ window.tourGame = (() => {
     board.close();
   }
 
+  /* ---------- 「녹원예술제 D-1」 현황판 (js/festival-story.js가 있을 때) ---------- */
+
+  /** 본편(시작 2 + 학과 핵심 8 + 개막 1) 진행 상황. 이야기 데이터가 없으면 null */
+  function festivalProgress(stamps = readStamps()) {
+    const story = window.TOUR_FESTIVAL;
+    if (!story) return null;
+    const main = [...story.prologue, ...story.booths.flatMap(b => b.main), story.finale].filter(s => GAMES[s.id]);
+    const extras = [...story.booths.flatMap(b => b.bonus), ...story.life].filter(s => GAMES[s.id]);
+    const badges = story.booths.filter(b => b.main.every(s => stamps[s.id])).length;
+    const opened = !!stamps[story.finale.id];
+    const next = main.find(s => !stamps[s.id]) || null;
+    return { main, extras, badges, opened, next,
+      got: main.filter(s => stamps[s.id]).length, total: main.length,
+      showExtras: opened || extras.some(s => stamps[s.id]) };
+  }
+
+  function stampButton(item, stamps, label, role) {
+    const stamp = stamps[item.room.game];
+    const max = item.game.maxStars || 3;
+    const earned = stamp ? Math.min(stamp.stars, max) : 0;
+    const go = document.createElement('button');
+    go.type = 'button';
+    go.className = 'stamp-item' + (stamp ? ' is-got' : '');
+    go.setAttribute('aria-label', `${role ? role + ', ' : ''}${item.room.name} ${item.game.title}, ${stamp ? '도장 획득' : '미획득'}, 별 ${max}개 중 ${earned}개, ${stamp ? '다시 하기' : '도전하기'}`);
+    go.addEventListener('click', () => playFromBoard(item));
+    const name = document.createElement('strong');
+    name.textContent = label;
+    const stars = document.createElement('span');
+    stars.className = 'stamp-stars';
+    stars.setAttribute('aria-hidden', 'true');
+    stars.textContent = '★'.repeat(earned) + '☆'.repeat(max - earned);
+    go.append(stampArt(item.room.game, 'stamp-seal'), name);
+    if (role) {
+      const small = document.createElement('small');
+      small.className = 'stamp-role';
+      small.textContent = role;
+      go.append(small);
+    }
+    go.append(stars);
+    const li = document.createElement('li');
+    li.append(go);
+    return li;
+  }
+
+  function shortRoom(item) {
+    if (item.room.games) return item.game.button.replace(/ 도전$/, '');
+    return item.room.name.replace('창업동아리 지원센터', '창업동아리').replace('학생회 회의실', '학생회실');
+  }
+
+  function renderFestivalBoard(list, rooms, stamps, story) {
+    const data = window.TOUR_FESTIVAL;
+    const byId = new Map(rooms.map(item => [item.room.game, item]));
+    const section = (title, note, className = '') => {
+      const group = document.createElement('li');
+      group.className = 'stamp-floor ' + className;
+      const heading = document.createElement('h3');
+      heading.textContent = title;
+      group.append(heading);
+      if (note) {
+        const p = document.createElement('p');
+        p.className = 'stamp-note';
+        p.textContent = note;
+        group.append(p);
+      }
+      list.append(group);
+      return group;
+    };
+    const grid = (entries, labelOf = shortRoom) => {
+      const ul = document.createElement('ul');
+      ul.className = 'stamp-grid';
+      for (const s of entries) {
+        const item = byId.get(s.id);
+        if (item) ul.append(stampButton(item, stamps, labelOf(item), s.role));
+      }
+      return ul;
+    };
+
+    // 다음 할 일 한 줄
+    const nextBox = section('다음 할 일', '', 'stamp-next');
+    const nextItem = story.next && byId.get(story.next.id);
+    const nextText = document.createElement('p');
+    nextText.className = 'stamp-next-text';
+    if (nextItem) {
+      nextText.textContent = `${nextItem.floor} ${shortRoom(nextItem)} · ${story.next.role || nextItem.game.title}`;
+      const go = document.createElement('button');
+      go.type = 'button';
+      go.className = 'btn btn-primary';
+      go.textContent = '여기로 가기';
+      go.addEventListener('click', () => playFromBoard(nextItem));
+      nextBox.append(nextText, go);
+    } else {
+      nextText.textContent = '예술제가 열렸어요! 아래 「예술제 둘러보기」에서 남은 체험도 즐겨 보세요.';
+      nextBox.append(nextText);
+    }
+
+    section('1. 초대장 받기', '내일은 녹원예술제! 일일 도우미로 초대받았어요.').append(grid(data.prologue));
+
+    const boothGroup = section('2. 학과 부스 4곳 준비하기', `미션 두 개를 끝내면 학과 배지가 켜져요 · 배지 ${story.badges} / ${data.booths.length}`);
+    const cards = document.createElement('ul');
+    cards.className = 'stamp-booths';
+    for (const booth of data.booths) {
+      const dept = data.depts[booth.dept];
+      const done = booth.main.every(s => stamps[s.id]);
+      const card = document.createElement('li');
+      card.className = 'stamp-booth' + (done ? ' is-done' : '');
+      card.style.setProperty('--dept', dept.color);
+      const head = document.createElement('div');
+      head.className = 'stamp-booth-head';
+      const name = document.createElement('strong');
+      name.textContent = dept.name;
+      const badge = document.createElement('span');
+      badge.className = 'stamp-badge';
+      badge.textContent = done ? '배지 획득' : `${booth.main.filter(s => stamps[s.id]).length} / ${booth.main.length}`;
+      head.append(name, badge);
+      const job = document.createElement('p');
+      job.textContent = `${dept.booth} · ${dept.job}`;
+      card.append(head, job, grid(booth.main));
+      if (done) {
+        const link = document.createElement('a');
+        link.className = 'stamp-dept-link';
+        link.href = dept.href;
+        link.textContent = `${dept.name} 알아보기 →`;
+        card.append(link);
+      }
+      cards.append(card);
+    }
+    boothGroup.append(cards);
+
+    section('3. 개막 준비', story.badges >= 2 || story.opened ? '학생회실에서 네 부스 자리를 정하면 예술제가 열려요.'
+      : '부스 2곳 이상 준비한 뒤 도전하면 좋아요.').append(grid([data.finale]));
+
+    if (story.showExtras) {
+      const extra = section('예술제 둘러보기', '학과 보너스 미션과 학교생활 체험이에요.', 'stamp-extras');
+      const bonus = data.booths.flatMap(b => b.bonus.map(s => ({ ...s, role: `${data.depts[b.dept].name} · ${s.role}` })));
+      extra.append(grid(bonus), grid(data.life));
+    }
+  }
+
   function renderBoard() {
     const rooms = stampRooms();
     const stamps = readStamps();
     const { got, total } = updateStampCount();
     const list = document.getElementById('stamps-list');
     list.replaceChildren();
+    const story = festivalProgress(stamps);
     const floors = new Map();
-    for (const item of rooms) {
+    if (story) renderFestivalBoard(list, rooms, stamps, story);
+    else for (const item of rooms) {
       if (!floors.has(item.floor)) {
         const group = document.createElement('li');
         group.className = 'stamp-floor';
@@ -438,17 +581,20 @@ window.tourGame = (() => {
     const complete = total > 0 && got === total;
     const score = progress();
     const summary = document.getElementById('stamps-summary');
-    summary.textContent = `도장 ${got}/${total} · ★ ${score.stars}/${score.maxStars}`;
+    summary.textContent = story && !story.opened
+      ? `예술제 준비 ${story.got}/${story.total} · ★ ${score.stars}/${score.maxStars}`
+      : `도장 ${got}/${total} · ★ ${score.stars}/${score.maxStars}`;
     let meter = document.getElementById('stamps-progress');
     if (!meter) {
       meter = document.createElement('progress');
       meter.id = 'stamps-progress';
       summary.after(meter);
     }
-    meter.max = total || 1;
-    meter.value = got;
-    meter.setAttribute('aria-label', `도장 ${total}개 중 ${got}개`);
-    document.getElementById('stamps-done').hidden = !complete;
+    const [mGot, mTotal] = story && !story.opened ? [story.got, story.total] : [got, total];
+    meter.max = mTotal || 1;
+    meter.value = mGot;
+    meter.setAttribute('aria-label', `${story && !story.opened ? '예술제 준비' : '도장'} ${mTotal}개 중 ${mGot}개`);
+    document.getElementById('stamps-done').hidden = !(complete || story?.opened);
     if (resetButton) resetButton.disabled = got === 0;
     return { got, total };
   }
