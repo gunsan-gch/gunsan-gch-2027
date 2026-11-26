@@ -595,6 +595,18 @@ window.tourGame = (() => {
     section('3. 개막 준비', story.badges >= 2 || story.opened ? '학생회실에서 네 부스 자리를 정하면 예술제가 열려요.'
       : '부스 2곳 이상 준비한 뒤 도전하면 좋아요.').append(grid([data.finale]));
 
+    if (story.opened && window.TourFestivalEnding) {
+      const again = document.createElement('button');
+      again.type = 'button';
+      again.className = 'stamp-invite-again';
+      again.textContent = '개막 장면 다시 보기';
+      again.addEventListener('click', () => {
+        board.addEventListener('close', () => window.TourFestivalEnding.open(), { once: true });
+        board.close();
+      });
+      list.lastElementChild.append(again);
+    }
+
     if (story.showExtras) {
       const extra = section('예술제 둘러보기', '학과 보너스 미션과 학교생활 체험이에요.', 'stamp-extras');
       const bonus = data.booths.flatMap(b => b.bonus.map(s => ({ ...s, role: `${data.depts[b.dept].name} · ${s.role}` })));

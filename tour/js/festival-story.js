@@ -115,6 +115,7 @@
     dialog.querySelector('.invite-go').focus({ preventScroll: true });
     try { localStorage.setItem(SEEN, '1'); } catch (e) { /* 저장 막힘 */ }
     track('tour_story_invite', 'Invite');
+    window.TourFestivalReach?.('invite');
   }
   dialog.querySelector('.invite-go').addEventListener('click', () => {
     dialog.addEventListener('close', () => window.tourGame?.practice(story.prologue[0].id, document.getElementById('stamp-open')), { once: true });
@@ -139,4 +140,104 @@
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', schedule, { once: true });
   else schedule();
+})();
+
+/* ---------- 개막 엔딩과 장별 도달 분석 ----------
+   - 5층 학생회실 「부스 자리, 기억나?」를 처음 끝내면, 결과 창을 닫을 때 개막 화면을 보여 줍니다.
+     현황판의 「개막 장면 다시 보기」로 다시 볼 수 있어요.
+   - 장별 도달(초대장 → 첫 미션 → 부스 고르기 → 배지 1·2·3·4개 → 개막)을 브라우저마다 한 번씩만 셉니다.
+     보내는 값은 장 이름뿐이고 이름·연락처·기기 식별값은 보내지 않습니다. */
+(function () {
+  const story = window.TOUR_FESTIVAL;
+  const dialog = document.getElementById('story-ending');
+  if (!story || !dialog || typeof dialog.showModal !== 'function') return;
+  const CH_KEY = 'gch-tour-story-chapters';
+  const ORDER = ['invite', 'first_mission', 'booth_pick', 'badge_1', 'badge_2', 'badge_3', 'badge_4', 'opening'];
+  const stamps = () => window.tourGame?.stamps() || {};
+  const pick = () => { try { return localStorage.getItem('gch-tour-story-pick'); } catch (e) { return null; } };
+
+  function reach(chapter) {
+    let seen = [];
+    try { seen = JSON.parse(localStorage.getItem(CH_KEY) || '[]'); } catch (e) { seen = []; }
+    if (!Array.isArray(seen) || seen.includes(chapter)) return;
+    seen.push(chapter);
+    try { localStorage.setItem(CH_KEY, JSON.stringify(seen)); } catch (e) { return; }   // 저장 못 하면 중복 집계를 피해 보내지 않음
+    window.tourTrack?.('tour_story_chapter', { chapter, chapter_no: ORDER.indexOf(chapter) + 1 }, ['TourStory', 'Ch_' + chapter]);
+  }
+  window.TourFestivalReach = reach;
+
+  function checkChapters() {
+    const s = stamps();
+    if (s[story.prologue[0].id]) reach('first_mission');
+    if (s[story.prologue[1].id]) reach('booth_pick');
+    const badges = story.booths.filter(b => b.main.every(m => s[m.id])).length;
+    for (let i = 1; i <= badges; i++) reach('badge_' + i);
+    if (s[story.finale.id]) reach('opening');
+  }
+
+  function render() {
+    const s = stamps();
+    const helped = story.booths.filter(b => b.main.some(m => s[m.id]));
+    dialog.querySelector('.ending-thanks').textContent = helped.length
+      ? `네 덕분에 부스 ${helped.length}곳이 제때 문을 열었어! 오늘 정말 고마웠어. 내년에는 우리 학교 후배로 다시 만나자.`
+      : '부스 자리가 다 정해졌어! 이제 부스들을 돌며 예술제를 즐겨 봐. 내년에는 우리 학교 후배로 다시 만나자.';
+    const list = dialog.querySelector('.ending-booths');
+    list.replaceChildren();
+    for (const booth of story.booths) {
+      const dept = story.depts[booth.dept];
+      const done = booth.main.every(m => s[m.id]);
+      const li = document.createElement('li');
+      li.style.setProperty('--dept', dept.color);
+      li.classList.toggle('is-off', !booth.main.some(m => s[m.id]));
+      const img = document.createElement('img');
+      img.src = `img/games/stamps/${booth.main[0].id}.png?v=20261118`;
+      img.alt = ''; img.width = 40; img.height = 40;
+      const text = document.createElement('span');
+      const name = document.createElement('strong');
+      name.textContent = dept.name;
+      const small = document.createElement('small');
+      small.textContent = done ? '배지 획득 · ' + dept.booth + ' 완료' : booth.main.some(m => s[m.id]) ? dept.booth + ' 조금 도움' : '다음에 들러 줘';
+      text.append(name, small);
+      li.append(img, text);
+      list.append(li);
+    }
+    const p = pick();
+    const dept = story.depts[p];
+    const link = dialog.querySelector('.ending-dept');
+    dialog.querySelector('.ending-pick').textContent = dept
+      ? `처음 추천받은 부스는 ${dept.name}였어요. 이 학과에서 3년 동안 무엇을 배우는지 살펴보세요.`
+      : '네 학과에서 3년 동안 무엇을 배우는지 살펴보세요.';
+    link.href = dept ? dept.href : '../index.html#departments';
+    link.textContent = dept ? `${dept.name} 알아보기 →` : '4개 학과 알아보기 →';
+  }
+
+  function open() {
+    if (dialog.open || document.querySelector('dialog[open]')) return;
+    render();
+    dialog.showModal();
+    dialog.querySelector('.ending-dept').focus({ preventScroll: true });
+    window.tourTrack?.('tour_story_ending', {}, ['TourStory', 'Ending']);
+  }
+  window.TourFestivalEnding = { open };
+
+  dialog.querySelector('.ending-close').addEventListener('click', () => dialog.close());
+  dialog.querySelector('.ending-more').addEventListener('click', () => {
+    dialog.addEventListener('close', () => window.tourGame?.openBoard(), { once: true });
+    dialog.close();
+  });
+  dialog.querySelector('.ending-dept').addEventListener('click', () => window.tourTrack?.('tour_story_ending_cta', { cta: 'dept', transport_type: 'beacon' }, ['TourStory', 'EndingDept']));
+
+  // 개막 미션을 처음 끝냈을 때만 개막 화면을 자동으로 띄웁니다(본 적 있음 표시만 저장, 도장 초기화 때 지움).
+  const SHOWN = 'gch-tour-story-ending-seen';
+  const gameDialog = document.getElementById('game');
+  document.addEventListener('tour:game-result', e => {
+    checkChapters();
+    if (e.detail?.id !== story.finale.id) return;
+    try {
+      if (localStorage.getItem(SHOWN) === '1') return;
+      localStorage.setItem(SHOWN, '1');
+    } catch (err) { return; }
+    gameDialog?.addEventListener('close', () => setTimeout(open, 200), { once: true });
+  });
+  document.addEventListener('tour:stamps-reset', () => { try { localStorage.removeItem(SHOWN); } catch (e) { /* 무시 */ } });
 })();
