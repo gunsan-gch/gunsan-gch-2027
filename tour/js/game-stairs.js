@@ -16,7 +16,7 @@
           <div><strong>민주 선배 · 꿈다락 길잡이</strong><p class="stairs-message">다음 계단을 보고, 한 칸씩 올라와!</p></div></div>
         <div class="stairs-hud"><span class="stairs-floor">1층 출발</span><strong><span class="stairs-score">0</span><small> / 80계단</small></strong><span class="stairs-best">최고 ${best}계단</span></div>
         <div class="stairs-energy"><progress max="6" value="6" aria-label="남은 시간"></progress><span class="stairs-time">준비됐나요?</span></div>
-        <div class="stairs-stage"><canvas width="320" height="320" role="img" aria-label="민주 선배와 꿈다락으로 오르는 계단"></canvas>
+        <div class="stairs-stage"><canvas width="1280" height="1280" role="img" aria-label="민주 선배와 꿈다락으로 오르는 계단"></canvas>
           <div class="stairs-overlay"><span class="stairs-kicker">DREAM STAIRS</span><h3>한 칸씩, 꿈다락까지!</h3><p>같은 방향이면 <b>그대로</b><br>길이 꺾이면 <b>방향 바꿔</b> 올라요.</p><div class="stairs-start-actions"><button type="button" class="btn btn-primary stairs-start">실전 시작</button><button type="button" class="btn stairs-practice">6계단 연습</button></div></div>
         </div>
         <p class="stairs-next">오르기 성공 시 시간이 조금 늘어나요.</p>
@@ -47,7 +47,7 @@
       if (disposed) return;
       const s = engine?.state || { path: R.makePath(() => .7), steps: 0, facing: 1, phase: 'ready', goal: R.GOAL };
       const floor = R.floor(s.steps);
-      ctx.imageSmoothingEnabled = false; ctx.fillStyle = '#edf5eb'; ctx.fillRect(0,0,320,320);
+      ctx.setTransform(4,0,0,4,0,0); ctx.imageSmoothingEnabled = false; ctx.fillStyle = '#edf5eb'; ctx.fillRect(0,0,320,320);   // 4배로 또렷하게 그린 뒤 화면 크기에 맞게 줄임
       // Keep both furnished edges at 2×; omit two strips of empty middle wall.
       const backdrop = images[`floor-${floor}`];
       if (backdrop?.complete && backdrop.naturalWidth) {

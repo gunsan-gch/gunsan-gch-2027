@@ -338,7 +338,7 @@ body.game-open { overflow: hidden; }
     align-items: start;
   }
   .ai-product { padding: 24px 16px; }
-  .ai-product img, .ai-product .ai-emoji { width: 160px; height: 160px; }
+  .ai-product img, .ai-product .ai-emoji { width: 128px; height: 128px; }   /* 원본 128px 그대로 */
   .ai.is-picked { grid-template-areas: "progress progress" "reaction panel" "reaction next"; }
   .ai.is-picked .ai-product { display: none; }
   .ai.is-picked .ai-panel { display: flex; }
@@ -497,7 +497,7 @@ body.game-open { overflow: hidden; }
     grid-template-columns: minmax(160px, 1fr) minmax(0, 1.5fr); gap: 12px 24px;
     grid-template-areas: "progress progress" "target target" "tip tip" "bread clock" "bread feedback" "bread button";
   }
-  .bakery-bread { width: 160px; height: 160px; }
+  .bakery-bread { width: 128px; height: 128px; }   /* 원본 128px 그대로 (1.25배는 픽셀 굵기가 들쭉날쭉) */
   .bakery-time { font-size: 64px; }
 }
 
@@ -903,3 +903,10 @@ span.interview-robot { display: grid; place-items: center; font-size: 64px; }
 .story-ending .invite-actions .btn { text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
 .ending-booths li.is-off { opacity: .55; }
 #story-ending button, #story-ending .btn { font: inherit; }
+
+/* 타자 소나기 · 휴대폰 (2026-11-26 품질 점검): 화면 자판이 하늘 아래쪽을 가리므로
+   입력칸을 하늘 위로 올리고, 하늘 높이를 줄입니다. */
+@media (pointer: coarse) {
+  .rain { grid-template-areas: "status" "controls" "sky"; gap: 8px; }
+  .rain-sky { height: 200px; }   /* 자판이 올라와도 입력칸~땅까지 한 화면에 */
+}

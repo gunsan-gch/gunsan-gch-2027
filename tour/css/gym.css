@@ -19,7 +19,7 @@
 .gym-hud { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--navy); color: #fffcf2; padding: 7px 10px; font-size: 13px; }
 .gym-score { font-size: 16px; }.gym-round { white-space: nowrap; }
 .gym-field { position: relative; width: min(100%, 440px); margin: auto; border: 2px solid var(--navy); background: #d8b079; }
-.gym-field canvas { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; touch-action: none; image-rendering: pixelated; user-select: none; -webkit-user-select: none; }
+.gym-field canvas { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; touch-action: none; image-rendering: auto; user-select: none; -webkit-user-select: none; }
 .gym-overlay { position: absolute; inset: 14px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; padding: 12px; text-align: center; background: #fffcf2f5; border: 2px solid var(--navy); }
 .gym-overlay h3 { margin: 0; font: 24px var(--font-title); }.gym-overlay p { margin: 0; font-size: 13px; }.gym-overlay .btn { min-height: 44px; }
 .gym-message { font-family: var(--font-title); font-size: 17px; line-height: 1.35; text-align: center; min-height: 23px; margin: 0; }

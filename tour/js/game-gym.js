@@ -45,7 +45,7 @@
     container.innerHTML = `<section class="gym-game gym-${kind}" aria-label="${info.sport} 게임">
       <div class="senior-card"><img src="${SUA}" width="48" height="48" alt="수아 선배"><div><strong>수아 선배 · 체육관</strong><p>${info.intro}</p></div></div>
       <div class="gym-hud"><strong class="gym-score">준비됐나요?</strong><span class="gym-round">${kind === 'badminton' ? `최고 ${best.score}득점` : `최고 ${best.score}점`}</span></div>
-      <div class="gym-field"><canvas width="320" height="240" tabindex="0" role="img" aria-label="${info.sport} 경기장"></canvas><div class="gym-overlay" hidden></div></div>
+      <div class="gym-field"><canvas width="1280" height="960" tabindex="0" role="img" aria-label="${info.sport} 경기장"></canvas><div class="gym-overlay" hidden></div></div>
       <p class="gym-message" role="status" aria-live="polite">${info.subtitle}</p>
       <div class="gym-setup"><button type="button" class="btn btn-primary" data-action="start">실전 시작</button><button type="button" class="btn" data-action="practice">${info.practice}</button></div>
       ${kind === 'curling' ? `<div class="gym-curling-controls"><label>방향 <output class="gym-angle-label">0°</output><input class="gym-angle" type="range" min="-28" max="28" value="0" step="1" aria-label="스톤 방향" disabled></label><label>힘 <output class="gym-power-label">0%</output><input class="gym-power" type="range" min="0" max="100" value="0" step="1" aria-label="스톤 힘" disabled></label></div>` : ''}
@@ -72,7 +72,7 @@
     }
     function paint(now) {
       if (disposed) return;
-      ctx.imageSmoothingEnabled = false; ctx.fillStyle = '#e0bb83'; ctx.fillRect(0, 0, 320, 240);
+      ctx.setTransform(4, 0, 0, 4, 0, 0); ctx.imageSmoothingEnabled = false; ctx.fillStyle = '#e0bb83'; ctx.fillRect(0, 0, 320, 240);   // 4배 크기로 또렷하게 그린 뒤 화면 크기에 맞게 줄임 (픽셀 굵기 고르게)
       const s = engine?.state;
       if (kind === 'curling') {
         art('curling-rink', 0, 0, 320, 240);

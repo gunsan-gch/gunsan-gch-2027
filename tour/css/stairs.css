@@ -13,7 +13,7 @@
 .stairs-energy.is-low progress::-webkit-progress-value { background: #b84b4f; }
 .stairs-time { min-width: 100px; text-align: right; font-variant-numeric: tabular-nums; }
 .stairs-stage { position: relative; overflow: hidden; border: 2px solid #14285a; border-top: 0; background: #edf5eb; }
-.stairs-stage canvas { display: block; width: 100%; height: clamp(220px, 38dvh, 340px); object-fit: contain; image-rendering: pixelated; }
+.stairs-stage canvas { display: block; width: 100%; height: clamp(220px, 38dvh, 340px); object-fit: contain; image-rendering: auto; }
 .stairs-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px; padding: 18px; text-align: center; background: #fffbeded; }
 .stairs-overlay[hidden] { display: none; }
 .stairs-kicker { color: #35634c; letter-spacing: 2px; font-size: 12px; font-weight: 800; }

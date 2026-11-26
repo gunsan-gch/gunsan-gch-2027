@@ -577,3 +577,26 @@ dialog.is-wide .detail-image.is-photo img { object-fit: contain; }
   .guide { width: 48px; }
   .scene-notice strong { font-size: 15px; }
 }
+
+/* ---------- PC 첫 화면 (2026-11-26 품질 점검) ----------
+   노트북(1366×768~820)에서도 지도가 첫 화면에 보이도록 소개를 한 줄로 줄이고,
+   도장판·검색·조작 방법은 지도 아래로 내립니다. 지도 칸은 화면 높이에 맞춥니다. */
+@media (min-width: 761px) {
+  main#main { display: flex; flex-direction: column; }
+  main#main > * { order: 10; }
+  main#main > .intro { order: 1; padding: 18px 0 12px; gap: 16px; justify-content: flex-start; align-items: center; }
+  main#main > .scene-notice { order: 2; padding: 8px 14px; font-size: 13px; display: flex; align-items: baseline; gap: 12px; }
+  main#main > .scene-nav { order: 3; margin: 12px 0 8px; }
+  main#main > .map-section { order: 4; margin-top: 0; }
+  main#main > .tour-tools { order: 5; margin-top: 14px; }
+  .intro > div { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 16px; }
+  .intro .eyebrow { display: none; }
+  .intro h1 { font-size: 30px; margin: 0; line-height: 1.2; }
+  .intro h1 br { display: none; }
+  .intro .lead { font-size: 15px; }
+  .intro .lead br { display: none; }
+  .guide { order: -1; width: 44px; margin-right: 0; }
+  .scene-notice strong { font-size: 15px; white-space: nowrap; }
+  .scene-notice p { margin: 0; }
+  #scene-scroll { max-height: max(360px, calc(100svh - 300px)); }
+}

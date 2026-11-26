@@ -38,6 +38,8 @@
   function start(container, api) {
     // 수업·검증용 규칙 변경은 다음 시작부터 적용합니다.
     const rules = { ...RULES };
+    // 휴대폰 화면 자판은 느리고 화면을 가리므로 낱말이 조금 천천히 떨어집니다 (별 기준은 같음).
+    if (window.matchMedia?.('(pointer: coarse)').matches) rules.fallSeconds = 9;
     const state = { active: false, ended: false, score: 0, lives: rules.lives, items: 0,
       spawned: 0, began: 0, elapsed: 0, last: 0, nextSpawn: rules.spawnEveryMs,
       iceUntil: 0, slowUntil: 0, words: [], painted: -Infinity };
@@ -244,6 +246,8 @@
       state.began = performance.now();
       updateStatus();
       input.focus({ preventScroll: true });
+      // 휴대폰: 자판이 올라와도 입력칸과 하늘이 보이도록 게임판 맨 위로 맞춤
+      if (window.matchMedia?.('(pointer: coarse)').matches) setTimeout(() => $('.rain').scrollIntoView({ block: 'start' }), 350);
       frame = requestAnimationFrame(tick);
     }
 

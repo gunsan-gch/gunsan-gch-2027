@@ -13,7 +13,9 @@
     '표에 모은 숫자를 살펴보면 우리 반 친구들이 좋아하는 간식을 한눈에 알 수 있습니다. 자료를 바르게 입력하고 합계와 평균을 구한 뒤 보기 좋은 그래프로 바꾸어 서로의 생각을 나누며 결과를 발표해 보아요.',
     '녹원예술제를 준비하며 친구들과 해야 할 일을 나누고 일정표를 만들었습니다. 서로의 생각을 듣고 맡은 일을 하나씩 끝내면서 함께 힘을 모으면 더 즐거운 학교생활을 만들 수 있다는 것을 배워요.'
   ];
-  const STAR_RULE = { three: 300, two: 180, accuracyFloor: 90 };
+  // 휴대폰·태블릿 화면 자판은 PC 자판보다 느려서 별 기준을 따로 둡니다.
+  const TOUCH = window.matchMedia?.('(pointer: coarse)').matches;
+  const STAR_RULE = TOUCH ? { three: 200, two: 120, accuracyFloor: 90 } : { three: 300, two: 180, accuracyFloor: 90 };
   const GUIDE_TEXT = '문장을 그대로 따라 쳐 보세요. 첫 글자를 치면 시간이 시작돼요.';
   const SUMMARY_TEXT = (accuracy, seconds, count) => `정확도 ${accuracy}% · ${seconds}초 · 글자 ${count}개`;
   let previous = -1;
