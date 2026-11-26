@@ -7,7 +7,7 @@
    - 같은 탭에서 한 번 닫으면 새로 고침해도 다시 띄우지 않습니다(sessionStorage). */
 (() => {
   'use strict';
-  const MODEL = 'img/campus-3d/campus.glb?v=20261126-welcome1';   // 환영 고양이 버전 (gunsan-gch-campus-360-welcome-cats.glb)
+  const MODEL = 'img/campus-3d/campus.glb?v=20261126-final1';   // 최종본 (gunsan-gch-campus-360-rear-stone-stairs.glb)
   const POSTER = 'img/campus-3d/poster.webp';
   const CAMERA_ORBIT = '0deg 58deg 80%';   // 거리 %가 작을수록 모형이 크게 보임
   const SEEN = 'gch-tour-cover-seen';
