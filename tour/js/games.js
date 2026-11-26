@@ -691,6 +691,8 @@ window.tourGame = (() => {
     meter.value = mGot;
     meter.setAttribute('aria-label', `${story && !story.opened ? '예술제 준비' : '도장'} ${mTotal}개 중 ${mGot}개`);
     document.getElementById('stamps-done').hidden = !(complete || story?.opened);
+    const reward = document.getElementById('stamps-reward');
+    if (reward) reward.hidden = !complete;   // 해 질 무렵 전경: 전체 도장 완주 보상
     if (resetButton) resetButton.disabled = got === 0;
     return { got, total };
   }

@@ -753,6 +753,13 @@ body.game-open { overflow: hidden; }
 .stamp-done[hidden] { display: none; }
 .stamp-done { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .stamp-done .btn { flex: 1 1 auto; }
+/* 완주 보상: 해 질 무렵 전경 */
+.stamp-reward[hidden] { display: none; }
+.stamp-reward { flex: 1 1 100%; margin: 0 0 4px; border-radius: 12px; overflow: hidden; background: #2b2030; box-shadow: 0 4px 16px rgba(0, 0, 0, .18); }
+.stamp-reward img { display: block; width: 100%; height: auto; aspect-ratio: 1760 / 1024; object-fit: cover; }
+.stamp-reward figcaption { display: grid; gap: 2px; padding: 10px 14px 12px; background: linear-gradient(180deg, #4a3346, #2b2030); color: #fff4e6; text-align: left; }
+.stamp-reward figcaption strong { font-size: 15px; font-weight: 800; color: #ffd7a1; }
+.stamp-reward figcaption span { font-size: 13px; line-height: 1.45; }
 .stamp-reset-area { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line-strong); }
 .stamp-reset-panel { margin-top: 12px; padding: 12px; border: 2px solid #9b352c; background: #fff6e6; }
 .stamp-reset-panel[hidden] { display: none; }

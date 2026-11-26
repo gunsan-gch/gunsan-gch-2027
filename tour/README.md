@@ -18,6 +18,7 @@
 3D가 뜨기 전 첫 그림은 PC `img/campus-3d/cover-pc.webp`(1920×1000), 휴대폰 `cover-mobile.webp`(1000×1400, 화면 칸은 4:5). 같은 이름으로 덮어쓰고 index.html의 ?v= 값을 바꾸세요.
 교정 고양이 도감: 3D에서 고양이를 누르면 카드가 열리고 「고양이 도감」에서 모아 봅니다(5마리, 이 기기에만 저장, 위치 힌트 없음). 이름·소개는 `ai-cover.js`의 `CATS`, 카드 그림은 `img/campus-3d/cats/<id>.webp`(864×1080; cheese·danpung·kkamang·eunbyeol·bora, 못 찾은 칸 locked).
 치즈 인사 영상 `img/campus-3d/intro.mp4`(소리 없음, H.264)는 「치즈 인사 보기」를 눌렀을 때만 재생합니다. 바꿀 때는 같은 이름으로 덮어쓰고 `INTRO`의 ?v= 값을 바꾸세요.
+도장판 완주 보상: 도장을 모두 모으면 도장판 아래에 해 질 무렵 전경 `img/campus-3d/dusk.webp`(1760×1024)이 나타납니다(index.html `#stamps-reward`).
 `?game=`·`?room=` 링크나 `#floor-n`으로 들어오면, 또는 같은 탭에서 이미 닫았으면 건너뜁니다. 「떠나기」를 누르면 GA4 `tour_cover_start` / 네이버 `TourCover`(Start)를 보냅니다.
 
 `tour/index.html?game=art`로 5층 미술실 「물감 섞기 미션」을 바로 열 수 있습니다 (목표 색·방울 수는 `js/game-art.js` 맨 위 `TARGETS`에서 수정).
