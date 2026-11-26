@@ -454,6 +454,18 @@
       "description": "완성 아이스 바닐라라떼 — make_reward_game_art.mjs, 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-15)",
       "sha256": "d658286bc64fa8c9f8d7eba4201ef1f582f0f554872aecbfaf541b90e5c79318"
     },
+    "games/cafe/drink-hot-americano.png": {
+      "output": "games/cafe/drink-hot-americano.png",
+      "kind": "game",
+      "description": "완성 따뜻한 아메리카노 — GPT 제작, 카페 게임 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-27)",
+      "sha256": "19bd39381eadbbb4d7fd21ceadc5433c2c0b4b5b24aeebd45bc6fc242e7d0327"
+    },
+    "games/cafe/drink-strawberry-latte.png": {
+      "output": "games/cafe/drink-strawberry-latte.png",
+      "kind": "game",
+      "description": "완성 딸기라떼 — GPT 제작, 카페 게임 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-27)",
+      "sha256": "c42134cee4827133ed8eff9b7f71751514a5152718dbc6dadfc8e6f94aefc1cf"
+    },
     "games/interview/robot-neutral.png": {
       "output": "games/interview/robot-neutral.png",
       "kind": "game",
