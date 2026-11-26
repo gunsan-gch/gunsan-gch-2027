@@ -15,8 +15,8 @@
 `tour/index.html?game=melody`로 2층 음악실 「멜로디 따라잡기」를 바로 열 수 있습니다.
 **첫 화면 「AI로 지은 우리 학교」** (`js/ai-cover.js`, `css/cover.css`): 투어를 열면 3D 학교 모형을 끌어서 돌려 보고 「픽셀투어 떠나기」로 들어갑니다.
 모델은 `img/campus-3d/campus.glb`(같은 이름으로 덮어쓰고 `ai-cover.js`의 `MODEL` ?v= 값을 바꾸면 교체). 3D 화면은 `vendor/model-viewer`(첫 화면에서만 불러옴).
-3D가 뜨기 전 첫 그림은 PC `img/campus-3d/cover-pc.webp`(16:10, 예: 1600×1000), 휴대폰 `cover-mobile.webp`(4:3, 예: 1200×900). 같은 이름으로 덮어쓰고 index.html의 ?v= 값을 바꾸세요.
-숨은 고양이 찾기: 3D에서 고양이를 누르면 수집 카드가 열립니다(5마리, 찾은 개수는 이 기기에만 저장). 이름·소개는 `ai-cover.js`의 `CATS`, 초상화는 `img/campus-3d/cats/<id>.webp`(정사각형, cheese·roof·backgate·gym·rear).
+3D가 뜨기 전 첫 그림은 PC `img/campus-3d/cover-pc.webp`(1920×1000), 휴대폰 `cover-mobile.webp`(1000×1400, 화면 칸은 4:5). 같은 이름으로 덮어쓰고 index.html의 ?v= 값을 바꾸세요.
+교정 고양이 도감: 3D에서 고양이를 누르면 카드가 열리고 「고양이 도감」에서 모아 봅니다(5마리, 이 기기에만 저장, 위치 힌트 없음). 이름·소개는 `ai-cover.js`의 `CATS`, 카드 그림은 `img/campus-3d/cats/<id>.webp`(864×1080; cheese·danpung·kkamang·eunbyeol·bora, 못 찾은 칸 locked).
 치즈 인사 영상 `img/campus-3d/intro.mp4`(소리 없음, H.264)는 「치즈 인사 보기」를 눌렀을 때만 재생합니다. 바꿀 때는 같은 이름으로 덮어쓰고 `INTRO`의 ?v= 값을 바꾸세요.
 `?game=`·`?room=` 링크나 `#floor-n`으로 들어오면, 또는 같은 탭에서 이미 닫았으면 건너뜁니다. 「떠나기」를 누르면 GA4 `tour_cover_start` / 네이버 `TourCover`(Start)를 보냅니다.
 

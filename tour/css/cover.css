@@ -1,6 +1,6 @@
 /* 투어 첫 화면 「AI로 만든 학교 전경」 (js/ai-cover.js) */
 .ai-cover {
-  width: min(100% - 24px, 760px); max-height: calc(100dvh - 24px); padding: 0; overflow: auto;
+  width: min(100% - 24px, 900px); max-height: calc(100dvh - 24px); padding: 0; overflow: auto;
   border: 2px solid var(--navy, #14285a); background: #f7f4ea; color: var(--navy, #14285a);
   box-shadow: 6px 6px 0 rgba(20, 40, 90, .35);
 }
@@ -9,8 +9,8 @@
 .cover-inner p { margin: 0; }
 .ai-cover h2 { margin: 0; font-family: var(--font-title, inherit); font-weight: 900; font-size: clamp(24px, 5vw, 34px); line-height: 1.2; }
 .cover-lead { font-size: clamp(15px, 3.4vw, 18px); font-weight: 700; color: #2e6b4f; }
-.cover-stage { position: relative; aspect-ratio: 16 / 10; background: #e4e2da; overflow: hidden; border: 1px solid #c4c0b4; }
-.cover-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.cover-stage { position: relative; aspect-ratio: 1920 / 1000; background: #e4e2da; overflow: hidden; border: 1px solid #c4c0b4; }
+.cover-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .cover-stage model-viewer { position: absolute; inset: 0; width: 100%; height: 100%; background: transparent; --poster-color: transparent; }
 .cover-stage.is-3d .cover-poster { visibility: hidden; }
 .cover-stage model-viewer:focus-visible { outline: 3px solid #7141a8; outline-offset: -3px; }
@@ -25,7 +25,7 @@
   .cover-inner { padding: 14px 12px 12px; gap: 8px; }
   .cover-start { width: 100%; }
 }
-@media (max-width: 480px) { .cover-stage { aspect-ratio: 4 / 3; } }
+@media (max-width: 480px) { .cover-stage { aspect-ratio: 4 / 5; max-height: calc(100dvh - 300px); } }
 /* 건물 이름표 (본관·후관·체육관): 반투명 알약 + 아래 작은 점 */
 .cover-label {
   position: relative; padding: 4px 10px; border-radius: 999px;
@@ -71,28 +71,29 @@
 .cover-cats.is-done { background: #fff3d6; }
 .cover-stage.is-intro .cover-cats { visibility: hidden; }
 .cover-label-cat { background: rgba(255, 243, 214, .92); color: #8a4a12; font-size: 11px; padding: 3px 8px; }
+.cover-cats { border: 0; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; min-height: 30px; }
+/* 고양이 카드·도감: 첫 화면 전체 위에 띄우는 판 */
+.cover-inner { position: relative; }
 .cover-card {
-  position: absolute; left: 50%; bottom: 44px; z-index: 5; transform: translateX(-50%); width: min(92%, 380px);
-  display: grid; gap: 10px; padding: 12px; border-radius: 14px; text-align: left;
-  background: rgba(255, 255, 255, .96); box-shadow: 0 6px 24px rgba(0, 0, 0, .22); animation: cover-card-in .25s ease-out;
+  position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  padding: 14px; background: rgba(247, 244, 234, .97); animation: cover-card-in .25s ease-out; overflow: auto;
 }
-.cover-card-inner { display: flex; gap: 12px; align-items: center; }
-.cover-card-photo { flex: none; width: 84px; height: 84px; border-radius: 12px; overflow: hidden; background: #f2ecdd; }
-.cover-card-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.cover-card-photo.is-empty::before { content: '🐾'; display: grid; place-items: center; height: 100%; font-size: 32px; }
-.cover-card-text { display: grid; gap: 2px; min-width: 0; }
-.cover-card-text small { color: #c0661c; font-size: 12px; font-weight: 700; }
-.cover-card-text strong { font-size: 18px; font-weight: 800; color: #1c2533; }
-.cover-card-text p { font-size: 13px; line-height: 1.45; color: #3a4250; }
-.cover-card-close {
-  justify-self: end; min-height: 34px; padding: 5px 14px; border: 0; border-radius: 999px;
-  background: var(--navy, #14285a); color: #fff; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+.cover-card-head { font-size: 15px; font-weight: 800; color: #c0661c; }
+.cover-card-img { display: block; width: auto; height: auto; max-width: 100%; max-height: calc(100% - 120px); min-height: 0; flex: 0 1 auto; border-radius: 12px; box-shadow: 0 4px 18px rgba(0, 0, 0, .16); object-fit: contain; }
+.cover-card-text { font-size: 13px; line-height: 1.45; color: #3a4250; max-width: 36em; }
+.cover-card-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.cover-card-btn {
+  min-height: 40px; padding: 6px 16px; border: 1px solid #c4c0b4; border-radius: 999px; background: #fff; color: #1c2533;
+  font: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
 }
-@keyframes cover-card-in { from { opacity: 0; transform: translate(-50%, 8px); } }
+.cover-card-btn.is-primary { border-color: var(--navy, #14285a); background: var(--navy, #14285a); color: #fff; }
+.cover-dex { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; width: 100%; max-width: 640px; }
+.cover-dex-cell { padding: 0; border: 0; background: none; cursor: pointer; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, .12); }
+.cover-dex-cell:disabled { cursor: default; }
+.cover-dex-cell img { display: block; width: 100%; height: auto; }
+@keyframes cover-card-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .cover-card { animation: none; } }
 @media (max-width: 480px) {
-  .cover-card { bottom: 8px; padding: 10px; gap: 8px; }
-  .cover-card-photo { width: 64px; height: 64px; }
-  .cover-card-text strong { font-size: 16px; }
-  .cover-card-text p { font-size: 12px; }
+  .cover-dex { grid-template-columns: repeat(3, 1fr); max-width: 300px; }
+  .cover-card-text { font-size: 12px; }
 }

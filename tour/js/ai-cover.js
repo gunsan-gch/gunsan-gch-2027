@@ -4,26 +4,27 @@
      첫 장면 각도는 CAMERA_ORBIT(가로각 세로각 거리)로 맞춥니다.
    - 3D 화면 도구는 vendor/model-viewer (첫 화면을 띄울 때만 불러옴, 약 0.9MB). 불러오기 전·실패 시엔 poster.webp 그림이 그대로 보입니다.
    - ?game= · ?room= 링크나 #floor-n 으로 들어오면 첫 화면 없이 바로 투어로 갑니다.
-   - 첫 그림(3D 불러오기 전): PC는 img/campus-3d/cover-pc.webp(16:10), 휴대폰(480px 이하)은 cover-mobile.webp(4:3).
+   - 첫 그림(3D 불러오기 전): PC는 img/campus-3d/cover-pc.webp(1920×1000), 휴대폰(480px 이하)은 cover-mobile.webp(1000×1400).
      index.html <picture>에 있으며 같은 이름으로 덮어쓰고 ?v= 값만 바꾸면 됩니다.
-   - 숨은 고양이 찾기: 3D 모형의 고양이(모델 재질 이름이 'cats'로 시작)를 누르면 CATS의 카드가 열립니다.
-     초상화는 img/campus-3d/cats/<id>.webp(정사각형). 찾은 고양이는 이 기기에만 저장(localStorage 'gch-tour-cats', 개인정보 없음).
+   - 숨은 고양이 찾기: 3D 모형의 고양이(모델 재질 이름이 'cats'로 시작)를 누르면 CATS의 카드가 열리고, 「고양이 도감」에서 모아 봅니다.
+     카드 그림은 img/campus-3d/cats/<id>.webp(864×1080), 못 찾은 칸은 locked.webp. 위치 힌트는 보여 주지 않습니다. 찾은 고양이는 이 기기에만 저장(localStorage 'gch-tour-cats', 개인정보 없음).
    - 치즈 인사 영상(img/campus-3d/intro.mp4, 소리 없음)은 「치즈 인사 보기」를 눌렀을 때만 재생합니다. 바꿀 때 INTRO의 ?v= 갱신.
    - 같은 탭에서 한 번 닫으면 새로 고침해도 다시 띄우지 않습니다(sessionStorage). */
 (() => {
   'use strict';
   const MODEL = 'img/campus-3d/campus.glb?v=20261126-v7';   // 군산여상_전경_잔디결_v7.glb (고양이 2.5배)
-  const INTRO = 'img/campus-3d/intro.mp4?v=20261126-v6';
-  const POSTER_PC = 'img/campus-3d/cover-pc.webp?v=20261126-cats';   // 군산여상_치즈의_정문인사_v6.mp4
-  // 숨은 고양이 5마리. at = 모델 좌표(미터, 가로 x · 고양이 머리 높이 y · 앞뒤 z). 이름·소개·초상화는 그림이 오면 여기만 바꾸면 됩니다
+  const INTRO = 'img/campus-3d/intro.mp4?v=20261126-v6';   // 군산여상_치즈의_정문인사_v6.mp4
+  const POSTER_PC = 'img/campus-3d/cover-pc.webp?v=20261126-dex';   // 3D 불러오기 전 그림 (휴대폰은 index.html picture가 고름)
+  // 교정 고양이 도감 5마리 (GPT 에셋 cards/cat-cards.json 순서). at = 모델 좌표(미터, 가로 x · 고양이 머리 높이 y · 앞뒤 z)
+  // 카드 그림 img/campus-3d/cats/<id>.webp (864×1080, 이름·소개가 그림 안에 있음), 못 찾은 칸은 locked.webp
   const CATS = [
-    { id: 'cheese', name: '치즈', where: '잔디마당', line: '정문에서 인사하던 우리 학교 대표 고양이. 잔디마당 햇볕 자리가 제일 좋아요.', at: [-0.7, 3.6, 4] },
-    { id: 'roof', name: '옥상 고양이', where: '건물 옥상', line: '높은 곳에서 학교를 내려다보는 걸 좋아해요. 오늘도 순찰 중!', at: [-4.5, 11.4, -5] },
-    { id: 'backgate', name: '후문 고양이', where: '후문 계단', line: '후문 돌계단 옆에서 등교하는 학생들을 맞이해요.', at: [22, 4.3, -9.5] },
-    { id: 'gym', name: '체육관 고양이', where: '체육관 뒤', line: '체육관 뒤 담장 위에서 낮잠 자는 게 하루 일과예요.', at: [-22.9, 4.1, -16] },
-    { id: 'rear', name: '후관 고양이', where: '후관 뒤', line: '후관 뒤 조용한 길을 좋아하는 수줍은 고양이예요.', at: [-2, 3.9, -25] }
+    { id: 'cheese', name: '치즈', subtitle: '먼저 다가오는 인사꾼', line: '꼬리를 세우고 먼저 인사를 건네요.', alt: '동그란 눈과 크림색 앞발을 가진 치즈빛 고양이', at: [-0.7, 3.6, 4] },
+    { id: 'danpung', name: '단풍', subtitle: '바람을 쫓는 수집가', line: '잎사귀가 살랑이면 앞발이 먼저 나가요.', alt: '낙엽을 향해 앞발을 뻗은 삼색 고양이', at: [22, 4.3, -9.5] },
+    { id: 'kkamang', name: '까망', subtitle: '낮잠 수집가', line: '두 앞발을 모으면 금세 눈이 스르르 감겨요.', alt: '앞발을 모으고 눈을 감은 턱시도 고양이', at: [-2, 3.9, -25] },
+    { id: 'eunbyeol', name: '은별', subtitle: '반짝임 탐험가', line: '반짝이는 걸 보면 발걸음이 빨라져요.', alt: '꼬리를 세우고 걷는 은빛 줄무늬 고양이', at: [-4.5, 11.4, -5] },
+    { id: 'bora', name: '보라', subtitle: '느긋한 산책 친구', line: '한숨 돌릴 땐 곁에 조용히 자리를 잡아요.', alt: '연보랏빛 털에 회색 꼬리를 둥글게 말고 엎드린 고양이', at: [-22.9, 4.1, -16] }
   ];
-  const CAT_IMG = id => `img/campus-3d/cats/${id}.webp?v=20261126-cats`;
+  const CAT_IMG = id => `img/campus-3d/cats/${id}.webp?v=20261126-dex`;
   const CAT_KEY = 'gch-tour-cats';
   const CAMERA_ORBIT = '0deg 58deg 80%';   // 거리 %가 작을수록 모형이 크게 보임
   const SEEN = 'gch-tour-cover-seen';
@@ -85,31 +86,60 @@
   const counter = dialog.querySelector('.cover-cats');
   const showCount = () => { counter.querySelector('b').textContent = found.length; counter.classList.toggle('is-done', found.length === CATS.length); };
   showCount();
+  // 카드·도감은 첫 화면 위에 띄우는 판 하나(.cover-card)를 같이 씀
+  const inner = dialog.querySelector('.cover-inner');
   let card = null;
   function closeCard() { card?.remove(); card = null; }
-  function openCard(cat, isNew) {
+  function sheet(label) {
     closeCard();
-    const all = found.length === CATS.length;
     card = document.createElement('div');
-    card.className = 'cover-card'; card.setAttribute('role', 'dialog'); card.setAttribute('aria-label', `${cat.name} 카드`);
-    card.innerHTML =
-      '<div class="cover-card-inner">' +
-        '<span class="cover-card-photo"><img alt="" width="96" height="96"></span>' +
-        '<div class="cover-card-text"><small></small><strong></strong><p></p></div>' +
-      '</div>' +
-      '<button type="button" class="cover-card-close"></button>';
-    const img = card.querySelector('img');
-    img.src = CAT_IMG(cat.id); img.alt = `${cat.name} 그림`;
-    img.addEventListener('error', () => { img.remove(); card?.querySelector('.cover-card-photo').classList.add('is-empty'); });
-    card.querySelector('small').textContent = isNew ? `${found.length}번째 고양이 발견! · ${cat.where}` : `${cat.where} · 이미 찾았어요`;
-    card.querySelector('strong').textContent = cat.name;
-    card.querySelector('p').textContent = all && isNew ? `${cat.line} 다섯 마리 모두 찾았어요!` : cat.line;
-    const btn = card.querySelector('.cover-card-close');
-    btn.textContent = all ? '닫기' : `계속 찾기 (${found.length}/${CATS.length})`;
-    btn.addEventListener('click', closeCard);
-    stage.append(card);
-    btn.focus();
+    card.className = 'cover-card'; card.setAttribute('role', 'dialog'); card.setAttribute('aria-label', label);
+    card.addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeCard(); counter.focus(); } });
+    inner.append(card);
+    return card;
   }
+  const actions = (...buttons) => { const row = document.createElement('div'); row.className = 'cover-card-actions'; row.append(...buttons); return row; };
+  const button = (text, onClick, primary) => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = text;
+    b.className = primary ? 'cover-card-btn is-primary' : 'cover-card-btn'; b.addEventListener('click', onClick); return b;
+  };
+  function openCard(cat, isNew) {
+    const box = sheet(`${cat.name} 카드`);
+    const all = found.length === CATS.length;
+    const head = document.createElement('p'); head.className = 'cover-card-head';
+    head.textContent = isNew ? (all ? '다섯 마리 모두 찾았어요!' : `${found.length}번째 고양이 발견!`) : '도감에 있는 고양이예요';
+    const img = new Image(864, 1080); img.className = 'cover-card-img'; img.src = CAT_IMG(cat.id);
+    img.alt = `${cat.name}, ${cat.subtitle}. ${cat.line} (${cat.alt})`;
+    const text = document.createElement('p'); text.className = 'cover-card-text';
+    text.innerHTML = '<strong></strong> · <span></span>';
+    text.querySelector('strong').textContent = cat.name; text.querySelector('span').textContent = cat.line;
+    const keep = button(all ? '닫기' : `계속 찾기 (${found.length}/${CATS.length})`, closeCard, true);
+    box.append(head, img, text, actions(button('도감 보기', openDex), keep));
+    keep.focus();
+  }
+  function openDex() {
+    const box = sheet('교정 고양이 도감');
+    const head = document.createElement('p'); head.className = 'cover-card-head';
+    head.textContent = `교정 고양이 도감 ${found.length}/${CATS.length}`;
+    const grid = document.createElement('div'); grid.className = 'cover-dex';
+    for (const cat of CATS) {
+      const has = found.includes(cat.id);
+      const cell = document.createElement('button'); cell.type = 'button'; cell.className = 'cover-dex-cell';
+      cell.disabled = !has;
+      cell.setAttribute('aria-label', has ? `${cat.name} 카드 보기` : '아직 찾지 못한 고양이');
+      const img = new Image(864, 1080); img.alt = ''; img.loading = 'lazy';
+      img.src = has ? CAT_IMG(cat.id) : CAT_IMG('locked');
+      cell.append(img);
+      if (has) cell.addEventListener('click', () => openCard(cat, false));
+      grid.append(cell);
+    }
+    const note = document.createElement('p'); note.className = 'cover-card-text';
+    note.textContent = found.length === CATS.length ? '모든 고양이를 찾았어요. 픽셀투어도 떠나 볼까요?' : '3D 학교를 돌려 보며 숨은 고양이를 눌러 보세요.';
+    const close = button('닫기', closeCard, true);
+    box.append(head, grid, note, actions(close));
+    close.focus();
+  }
+  counter.addEventListener('click', openDex);
   function markFound(viewer, cat) {
     const isNew = !found.includes(cat.id);
     if (isNew) {
