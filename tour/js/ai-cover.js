@@ -7,7 +7,7 @@
    - 같은 탭에서 한 번 닫으면 새로 고침해도 다시 띄우지 않습니다(sessionStorage). */
 (() => {
   'use strict';
-  const MODEL = 'img/campus-3d/campus.glb?v=20261126-360';
+  const MODEL = 'img/campus-3d/campus.glb?v=20261126-cats';   // 고양이 버전 (gunsan-gch-campus-360-with-cats.glb)
   const POSTER = 'img/campus-3d/poster.webp';
   const CAMERA_ORBIT = '0deg 58deg 80%';   // 거리 %가 작을수록 모형이 크게 보임
   const SEEN = 'gch-tour-cover-seen';
@@ -15,7 +15,9 @@
   const LABELS = [
     { name: '본관', position: '8m 10.5m -4m' },
     { name: '후관', position: '-2m 9.8m -16.5m' },
-    { name: '체육관', position: '-19m 9.8m -5m' }
+    { name: '체육관', position: '-19m 9.8m -5m' },
+    { name: '정문', position: '-24.2m 4.6m -3.8m' },
+    { name: '후문', position: '23.9m 5.2m -10.6m' }
   ];
 
   const dialog = document.getElementById('ai-cover');
