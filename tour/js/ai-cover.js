@@ -1,4 +1,4 @@
-/* 투어 첫 화면 「AI로 만든 학교 전경」
+/* 투어 첫 화면 「AI로 지은 우리 학교」
    3D 모델(img/campus-3d/campus.glb)을 손가락·마우스로 돌려 보고, 「픽셀투어 떠나기」로 투어에 들어갑니다.
    - 모델 교체: 새 .glb를 img/campus-3d/campus.glb 이름으로 덮어쓰고, 아래 MODEL의 ?v= 값만 바꾸면 됩니다.
      첫 장면 각도는 CAMERA_ORBIT(가로각 세로각 거리)로 맞춥니다.
@@ -32,7 +32,7 @@
     if (!dialog.open) return;
     const viewer = document.createElement('model-viewer');
     Object.entries({
-      src: MODEL, poster: POSTER, alt: 'AI로 만든 3D 학교 전경 모형. 끌어서 돌려 볼 수 있어요.',
+      src: MODEL, poster: POSTER, alt: 'AI로 지은 우리 학교 3D 모형. 끌어서 돌려 볼 수 있어요.',
       'camera-controls': '', 'touch-action': 'pan-y', 'interaction-prompt': 'none',
       'camera-orbit': CAMERA_ORBIT, 'min-camera-orbit': 'auto 20deg 45%', 'max-camera-orbit': 'auto 80deg 110%',
       'shadow-intensity': '1', exposure: '1.05', 'environment-image': 'neutral',
@@ -46,7 +46,7 @@
       tag.textContent = label.name;
       viewer.append(tag);
     }
-    viewer.setAttribute('alt', `AI로 만든 3D 학교 전경 모형. ${LABELS.map(l => l.name).join('·')} 이름표가 있고, 끌어서 돌려 볼 수 있어요.`);
+    viewer.setAttribute('alt', `AI로 지은 우리 학교 3D 모형. ${LABELS.map(l => l.name).join('·')} 이름표가 있고, 끌어서 돌려 볼 수 있어요.`);
     viewer.addEventListener('load', () => stage.classList.add('is-3d'), { once: true });
     viewer.addEventListener('error', () => viewer.remove(), { once: true });   // 3D를 못 그리면 그림만 보여 줌
     stage.prepend(viewer);

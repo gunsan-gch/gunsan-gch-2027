@@ -13,7 +13,7 @@
 `tour/index.html?game=phishing`로 4층 금융실습실 「피싱 탐정」, `tour/index.html?game=cashier`로 1층 전산회계1실 「매점 계산왕」을 바로 열 수 있습니다.
 `tour/index.html?game=stairs`로 5층 꿈다락 「꿈다락까지 올라라!」를 바로 열 수 있습니다.
 `tour/index.html?game=melody`로 2층 음악실 「멜로디 따라잡기」를 바로 열 수 있습니다.
-**첫 화면 「AI로 만든 학교 전경」** (`js/ai-cover.js`, `css/cover.css`): 투어를 열면 3D 학교 모형을 끌어서 돌려 보고 「픽셀투어 떠나기」로 들어갑니다.
+**첫 화면 「AI로 지은 우리 학교」** (`js/ai-cover.js`, `css/cover.css`): 투어를 열면 3D 학교 모형을 끌어서 돌려 보고 「픽셀투어 떠나기」로 들어갑니다.
 모델은 `img/campus-3d/campus.glb`(같은 이름으로 덮어쓰고 `ai-cover.js`의 `MODEL` ?v= 값을 바꾸면 교체), 불러오는 동안 `poster.webp`를 보여 줍니다. 3D 화면은 `vendor/model-viewer`(첫 화면에서만 불러옴).
 `?game=`·`?room=` 링크나 `#floor-n`으로 들어오면, 또는 같은 탭에서 이미 닫았으면 건너뜁니다. 「떠나기」를 누르면 GA4 `tour_cover_start` / 네이버 `TourCover`(Start)를 보냅니다.
 
