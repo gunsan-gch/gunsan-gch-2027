@@ -13,7 +13,7 @@
       ready: ['dough-smooth', '발효를 기다리는 반죽'],
       early: ['dough', '반죽이 아직 덜 부풀었어요'], onTime: ['risen', '반죽이 봉긋하게 부풀었어요'],
       late: ['dough-slack', '너무 오래 발효돼 반죽이 꺼졌어요'] },
-    { name: '굽기', target: 10.00, hideAfter: 5.0, tip: '오븐 앞을 떠나면 빵이 타요!',
+    { name: '굽기', target: 10.00, spread: 1.5, hideAfter: 5.0, tip: '오븐 앞을 떠나면 빵이 타요!',
       ready: ['risen', '오븐에 넣을 부푼 반죽'],
       early: ['bread-raw', '덜 익음'], late: ['bread-burnt', '탔어요'] }
   ];
@@ -41,6 +41,11 @@
   };
 
   function start(container, api) {
+    // 2026-11-26 게임성: 판마다 목표 시간을 0.1초 단위로 무작위로 정함 (반죽 4~6초 · 발효 6~8초 · 굽기 8.5~11.5초).
+    const rounds = ROUNDS.map(r => {
+      const target = Math.round((r.target + (Math.random() * 2 - 1) * (r.spread ?? 1)) * 10) / 10;
+      return { ...r, target, hideAfter: Math.round(target * 6) / 10 };
+    });
     const state = { round: 0, phase: 'ready', began: 0, results: [], hidden: false };
     let frame = 0;
     let timer = 0;
@@ -80,13 +85,13 @@
     }
 
     function ready() {
-      const round = ROUNDS[state.round];
+      const round = rounds[state.round];
       state.phase = 'ready';
       root.classList.remove('bakery-picked', 'bakery-miss');
       // 히든 이벤트 추첨 (window.TOUR_GAMES.bakery.hiddenChance 로 바꿀 수 있음)
       state.hidden = Math.random() < (window.TOUR_GAMES.bakery.hiddenChance ?? HIDDEN_CHANCE);
       root.classList.toggle('bakery-hidden-event', state.hidden);
-      $('.bakery-progress').textContent = `${state.round + 1} / ${ROUNDS.length} · ${round.name}`;
+      $('.bakery-progress').textContent = `${state.round + 1} / ${rounds.length} · ${round.name}`;
       $('.bakery-target').textContent = `목표 ${round.target.toFixed(2)}초`;
       $('.bakery-tip').textContent = round.tip;
       $('.bakery-guide').textContent = state.hidden
@@ -105,7 +110,7 @@
       if (state.phase !== 'running') return;
       const now = performance.now();
       const elapsed = now - state.began;
-      const round = ROUNDS[state.round];
+      const round = rounds[state.round];
       if (elapsed >= round.target * 2000) return stop(now);   // 목표의 두 배가 지나면 자동 정지
       const hidden = state.hidden && elapsed >= round.hideAfter * 1000;
       time.textContent = hidden ? '?.??' : seconds(elapsed);
@@ -117,17 +122,17 @@
       state.phase = 'running';
       state.began = now;
       button.textContent = '지금!' + KEY_HINT;
-      say(`${ROUNDS[state.round].name} 시작. ${ROUNDS[state.round].target.toFixed(2)}초에 멈춰요!`);
+      say(`${rounds[state.round].name} 시작. ${rounds[state.round].target.toFixed(2)}초에 멈춰요!`);
       frame = requestAnimationFrame(tick);
       // 목표의 두 배(굽기는 20초)가 지나면 자동 정지. 배경 탭에서 rAF가 멈춰도 타이머로 처리합니다.
-      timer = setTimeout(() => stop(performance.now()), ROUNDS[state.round].target * 2000);
+      timer = setTimeout(() => stop(performance.now()), rounds[state.round].target * 2000);
     }
 
     function stop(now) {
       if (state.phase !== 'running') return;
       state.phase = 'stopped';
       clearClock();
-      const round = ROUNDS[state.round];
+      const round = rounds[state.round];
       const elapsed = now - state.began;
       const delta = elapsed - round.target * 1000;
       const error = Math.abs(delta);
@@ -151,13 +156,13 @@
         root.classList.add('bakery-picked');
         root.classList.toggle('bakery-miss', miss);
       }
-      button.textContent = state.round === ROUNDS.length - 1 ? '결과 보기' : '다음 단계 →';
+      button.textContent = state.round === rounds.length - 1 ? '결과 보기' : '다음 단계 →';
       button.focus({ preventScroll: true });
       say(`${round.name} ${seconds(elapsed)}초. ${difference}. ${feedback}. 별 ${grade.stars}개.`);
     }
 
     function next() {
-      if (state.round < ROUNDS.length - 1) {
+      if (state.round < rounds.length - 1) {
         state.round++;
         ready();
         return;
@@ -170,7 +175,9 @@
         `${result.target.toFixed(2)}→${seconds(result.elapsed)}`).join(' · ')));
       // 최종 별은 라운드 평균(반올림) — 모든 게임이 최대 3개로 같음
       const starSum = state.results.reduce((sum, result) => sum + result.stars, 0);
-      api.done({ stars: Math.max(1, Math.round(starSum / ROUNDS.length)), hints: 0, extra });
+      // 점수: 단계마다 1000점에서 오차 0.01초당 5점씩 뺌 (2초 넘게 틀리면 0점, 최고 3000점)
+      const points = state.results.reduce((sum, result) => sum + Math.max(0, Math.round(1000 - result.error / 2)), 0);
+      api.done({ stars: Math.max(1, Math.round(starSum / rounds.length)), hints: 0, extra, points });
     }
 
     function act(now) {

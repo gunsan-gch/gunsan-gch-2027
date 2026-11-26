@@ -165,7 +165,8 @@
       extra.append(robot(stars === 3 ? 'love' : stars === 2 ? 'happy' : 'error', 80),
         el('strong', 'interview-grade', GRADE_TEXT[stars]),
         el('p', 'interview-detail', `호감도 ${state.score} · 최고 ${state.best}콤보`));
-      api.done({ stars, hints: 0, extra });
+      // 점수: 최종 호감도 × 10 + 최고 콤보 × 50
+      api.done({ stars, hints: 0, extra, points: Math.max(0, Math.round(state.score * 10 + state.best * 50)) });
     }
 
     // answer가 null이면 시간 초과

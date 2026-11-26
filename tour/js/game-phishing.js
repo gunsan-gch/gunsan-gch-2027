@@ -175,7 +175,8 @@
       extra.append(el('strong', 'phishing-total', `${state.money < 0 ? '털린' : '지킨'} 용돈 ${number(Math.abs(state.money))}원`),
         el('p', '', `${messages.length}통 중 ${state.correct}통 적중 · 단서 ${state.clues}개 · 최고 ${state.best}콤보`),
         el('p', 'phishing-rank', stars === 3 ? '명탐정' : stars === 2 ? '수사관' : '새내기 탐정'));
-      api.done({ stars, hints: 0, extra });
+      // 점수: 지킨 용돈(원). 털렸으면 0원
+      api.done({ stars, hints: 0, extra, points: Math.max(0, state.money) });
     }
 
     function findClue(part) {
@@ -301,7 +302,7 @@
 
   window.TOUR_GAMES = window.TOUR_GAMES || {};
   window.TOUR_GAMES.phishing = {
-    title: '피싱 탐정', button: '🕵️ 피싱 탐정', room: '금융실습실', naver: 'Phishing', maxStars: 3,
+    title: '피싱 탐정', button: '🕵️ 피싱 탐정', room: '금융실습실', naver: 'Phishing', maxStars: 3, scoreUnit: '원',
     stamp: '금융실습실 도장 획득!',
     message: 'AI핀테크과에서는 안전한 금융 생활을 데이터로 배워요.', // ※ 학교 확인
     cta: { href: '../index.html#fintech', label: 'AI핀테크과 알아보기 →' },

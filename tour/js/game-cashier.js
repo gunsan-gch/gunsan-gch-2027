@@ -213,7 +213,9 @@
       const extra = el('div', 'cashier-summary');
       extra.append(el('strong', 'cashier-summary-total', `손님 ${state.served}명 · 매출 ${number(state.sales)}원`),
         el('p', '', `정정 전표 ${state.slips}장 · 최고 ${state.best}콤보 · 팁 ${number(state.tips)}원`));
-      api.done({ stars, hints: 0, extra });
+      // 점수: 손님 한 명 100점 + 최고 콤보 × 20점 − 정정 전표 한 장 30점
+      const points = Math.max(0, state.served * 100 + state.best * 20 - state.slips * 30);
+      api.done({ stars, hints: 0, extra, points });
     }
 
     function ledger() {

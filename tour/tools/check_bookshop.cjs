@@ -31,7 +31,7 @@ class Node {
     if (listener && !listener.options.signal.aborted) listener.callback(data);
   }
 }
-const context={window:{TOUR_GAMES:{}},document:{createElement:()=>new Node()},AbortController};
+const context={window:{TOUR_GAMES:{}},document:{createElement:()=>new Node()},AbortController,performance:{now:()=>0}};
 vm.runInNewContext(fs.readFileSync(path.resolve(__dirname,'../js/game-bookshop.js'),'utf8'),context);
 const game=context.window.TOUR_GAMES.bookshop;
 const seen=[new Set(),new Set(),new Set()];

@@ -172,18 +172,19 @@
     function photo() {
       if (!playing) return;
       if (!friend.hidden) return finishPhoto(1, '얼굴 대문짝 특종', '단독 인터뷰? 친구 콧구멍만 1면에!');
-      const points = score(Math.abs(t - pass.target));
+      const distance = Math.abs(t - pass.target);
+      const points = score(distance);
       frame.classList.toggle('press-blurred', points === 0);
-      finishPhoto(points, grades[points], scenes[index].caption);
+      finishPhoto(points, grades[points], scenes[index].caption, distance);
     }
-    function finishPhoto(points, rating, caption) {
+    function finishPhoto(points, rating, caption, distance = 1) {
       playing = false; cancelAnimationFrame(raf);
       focus.style.visibility = 'hidden';
       view.classList.toggle('press-ready', false);
       const scene = scenes[index];
       const print = frame.cloneNode(true);
       print.setAttribute('role','img'); print.setAttribute('aria-label', scene.title + ' · ' + rating);
-      photos.push({ print, scene, points, rating, caption });
+      photos.push({ print, scene, points, rating, caption, distance });
       status.textContent = rating + ' · ' + points + '점';
       step.hidden = true; shoot.hidden = true; next.hidden = false;
       next.textContent = index < 2 ? '다음 취재 장소' : '특집호 편집하기'; next.focus();
@@ -203,7 +204,9 @@
         caption.append(desk,title); story.append(p.print,caption); paper.append(story);
       });
       const total = photos.reduce((sum,p) => sum+p.points,0);
-      api.done({ stars: total === 9 ? 3 : total >= 6 ? 2 : 1, hints: 0, extra: paper });
+      // 점수: 사진마다 등급 × 200점 + 정중앙에 가까울수록 최대 200점 보너스
+      const record = photos.reduce((sum,p) => sum + p.points*200 + Math.max(0, Math.round((0.1 - p.distance) * 2000)), 0);
+      api.done({ stars: total === 9 ? 3 : total >= 6 ? 2 : 1, hints: 0, extra: paper, points: record });
       paper.focus({ preventScroll: true });
       container.scrollTop = 0;
     }

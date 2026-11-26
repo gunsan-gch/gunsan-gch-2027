@@ -29,14 +29,24 @@
   ];
 
   // 라운드별 주문. recipe는 재료 id 목록 (컵 하나 + 재료들, 순서는 상관없음). customer는 손님 그림 번호
+  // 2026-11-26 게임성: 아래 7가지 주문 중 3개를 판마다 무작위로 골라요 (같은 음료는 한 판에 한 번만).
   const ORDERS = [
     { drink: '아이스 아메리카노', image: 'drink-americano.png', customer: 1, who: '학생', say: '아이스 아메리카노 한 잔 주세요!',
       recipe: ['cup-ice', 'ice', 'water', 'shot'] },
     { drink: '따뜻한 카페라떼', image: 'drink-hot-latte.png', customer: 2, who: '선생님', say: '따뜻한 카페라떼 한 잔 부탁해요.',
       recipe: ['cup-mug', 'shot', 'steamed-milk'] },
     { drink: '아이스 바닐라라떼', image: 'drink-vanilla-latte.png', customer: 3, who: '학부모', say: '아이스 바닐라라떼로 주세요.',
-      recipe: ['cup-ice', 'vanilla', 'ice', 'milk', 'shot'] }
+      recipe: ['cup-ice', 'vanilla', 'ice', 'milk', 'shot'] },
+    { drink: '따뜻한 아메리카노', image: 'drink-hot-latte.png', customer: 2, who: '선생님', say: '따뜻한 아메리카노 한 잔이요. 우유는 빼 주세요.',
+      recipe: ['cup-mug', 'water', 'shot'] },
+    { drink: '아이스 카페라떼', image: 'drink-vanilla-latte.png', customer: 1, who: '학생', say: '아이스 카페라떼요! 시럽은 안 넣어도 돼요.',
+      recipe: ['cup-ice', 'ice', 'milk', 'shot'] },
+    { drink: '딸기라떼', image: 'drink-vanilla-latte.png', customer: 1, who: '학생', say: '커피 말고… 시원한 딸기라떼 주세요!',
+      recipe: ['cup-ice', 'ice', 'strawberry', 'milk'] },
+    { drink: '따뜻한 바닐라라떼', image: 'drink-hot-latte.png', customer: 3, who: '학부모', say: '따뜻한 바닐라라떼 한 잔 부탁드려요.',
+      recipe: ['cup-mug', 'vanilla', 'shot', 'steamed-milk'] }
   ];
+  const ORDERS_PER_GAME = 3;
 
   const STARS_PER_ROUND = 3;   // 라운드 시작 별 수 (힌트·실수마다 1개씩 줄고 최소 1개)
   const STAMP_TEXT = '카페실습실 도장 획득!';
@@ -57,6 +67,8 @@
   /* ---------- 게임 ---------- */
 
   function start(container, api) {
+    const orders = [...ORDERS].sort(() => Math.random() - 0.5).slice(0, ORDERS_PER_GAME);
+    let roundStarted = performance.now(), points = 0;
     const state = { round: 0, cup: null, items: [], penalty: 0, hinted: false, locked: false, stars: [], hints: 0 };
     const timers = new Set();
     const later = (fn, ms) => { const t = setTimeout(() => { timers.delete(t); fn(); }, ms); timers.add(t); };
@@ -120,7 +132,7 @@
     const CUSTOMER_EMOJI = ['🧑‍🎓', '🧑‍🏫', '🧑'];
     customerImg.addEventListener('error', () => {
       customerImg.hidden = true;
-      customerBox.dataset.emoji = CUSTOMER_EMOJI[(ORDERS[state.round].customer - 1) % CUSTOMER_EMOJI.length];
+      customerBox.dataset.emoji = CUSTOMER_EMOJI[(orders[state.round].customer - 1) % CUSTOMER_EMOJI.length];
     });
 
     // 재료 버튼 9개
@@ -209,7 +221,7 @@
 
     function showHint() {
       if (state.locked) return;
-      const order = ORDERS[state.round];
+      const order = orders[state.round];
       const recipe = order.recipe.map(id => byId[id].name).join(' + ');
       recipeEl.hidden = false;
       recipeEl.textContent = `레시피: ${recipe}`;
@@ -226,7 +238,7 @@
     function serve() {
       if (state.locked) { nextRound(); return; }
       if (!state.cup) { shake(); return say('먼저 컵을 골라요.'); }
-      const order = ORDERS[state.round];
+      const order = orders[state.round];
       const want = new Set(order.recipe);
       const have = new Set([state.cup, ...state.items]);
       const missing = order.recipe.filter(id => !have.has(id));
@@ -245,6 +257,9 @@
     function succeed(order) {
       const stars = Math.max(1, STARS_PER_ROUND - state.penalty);
       state.stars.push(stars);
+      // 점수: 별 1개당 100점 + 빨리 낼수록 보너스 (25초 안에서 1초 빠를 때마다 8점, 최대 200점)
+      const secondsTaken = (performance.now() - roundStarted) / 1000;
+      points += stars * 100 + Math.max(0, Math.round((25 - secondsTaken) * 8));
       state.locked = true;
       customerBox.classList.add('is-happy');
       cupEl.classList.add('is-served');
@@ -257,17 +272,17 @@
       recipeEl.hidden = true;
       hintButton.disabled = true;
       resetButton.disabled = true;
-      const last = state.round === ORDERS.length - 1;
+      const last = state.round === orders.length - 1;
       serveButton.textContent = last ? '결과 보기' : '다음 손님 →';
       serveButton.focus({ preventScroll: true });
       say(`정답! ${order.drink} 완성. 별 ${stars}개를 받았어요.${last ? '' : ' 다음 손님이 기다려요.'}`);
     }
 
     function nextRound() {
-      if (state.round >= ORDERS.length - 1) {
+      if (state.round >= orders.length - 1) {
         // 최종 별은 라운드 평균(반올림) — 모든 게임이 최대 3개로 같음
         const sum = state.stars.reduce((a, b) => a + b, 0);
-        api.done({ stars: Math.max(1, Math.round(sum / ORDERS.length)), hints: state.hints });
+        api.done({ stars: Math.max(1, Math.round(sum / orders.length)), hints: state.hints, points });
         return;
       }
       state.round++;
@@ -275,7 +290,8 @@
     }
 
     function startRound() {
-      const order = ORDERS[state.round];
+      const order = orders[state.round];
+      roundStarted = performance.now();
       Object.assign(state, { cup: null, items: [], penalty: 0, hinted: false, locked: false });
       customerBox.classList.remove('is-happy');
       cupEl.classList.remove('is-served');
@@ -291,7 +307,7 @@
       orderEl.textContent = order.say;
       recipeEl.hidden = true;
       recipeEl.textContent = '';
-      roundEl.textContent = `${state.round + 1} / ${ORDERS.length} 라운드`;
+      roundEl.textContent = `${state.round + 1} / ${orders.length} 라운드`;
       hintButton.disabled = false;
       hintButton.textContent = '레시피 보기 −★1';
       hintButton.setAttribute('aria-pressed', 'false');

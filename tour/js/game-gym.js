@@ -165,7 +165,9 @@
       const score = kind === 'badminton' ? `${s.mine} : ${s.theirs} · 최고 ${s.bestRally}랠리 · 스매시 ${s.smashes}회` : `${s.score}점 · 내 최고 ${record.score}점`;
       const completed = IDS.every(id => id === kind || window.tourGame?.stamps()[id]);
       extra.innerHTML = `<img src="${IMG}${completed ? 'trophy' : 'icon-' + kind}.png?v=20261118" width="80" height="80" alt=""><h3>${title}</h3><p>${score}</p>${kind === 'curling' ? `<p>내 스톤 최종 점수: ${s.stones.filter(v => v.owner === 'coral').map(v => R.curlingPoints(v.x, v.y)).join(' + ')}</p>` : ''}${kind === 'target' ? `<p>명중 점수: ${s.shots.map(v => v.base + (v.bonus ? '+1' : '')).join(' / ')}</p>` : ''}${completed ? '<strong class="gym-complete-note">체육관 3종 완주 트로피 획득!</strong>' : '<p>다른 종목에도 도전해서 3종 완주 트로피를 모아 봐!</p>'}`;
-      api.done({ stars: R.stars(kind, s), extra });
+      // 점수: 컬링·사격은 경기 점수 그대로, 배드민턴은 내 득점 × 100 + 최고 랠리 × 20 + 스매시 × 30 − 상대 득점 × 40
+      const points = kind === 'badminton' ? Math.max(0, s.mine * 100 + s.bestRally * 20 + s.smashes * 30 - s.theirs * 40) : Math.max(0, Math.round(s.score));
+      api.done({ stars: R.stars(kind, s), extra, points });
     }
     function tick(now) {
       if (disposed || !engine || engine.state.phase === 'paused') return;

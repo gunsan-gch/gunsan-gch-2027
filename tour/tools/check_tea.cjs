@@ -35,6 +35,7 @@ function session() {
   document.createElement = () => new Element();
   vm.runInNewContext(source, {window, document, AbortController, performance:{now:() => time},
     requestAnimationFrame(fn) { queue.set(++id, fn); return id; }, cancelAnimationFrame(id) { queue.delete(id); }});
+  window.TOUR_GAMES.tea.randomTargets = false;   // 2026-11-26: 판마다 바뀌는 목표량을 검사에서는 원래 값으로 고정
   const cleanup = window.TOUR_GAMES.tea.start(body, { done(data) {assert.equal(result, undefined); result = data; cleanup();} });
   function advance(ms) {
     time += ms;

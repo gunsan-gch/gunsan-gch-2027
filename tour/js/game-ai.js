@@ -65,6 +65,11 @@
   }
 
   const LIKES = [1200, 540, 180];
+  // 2026-11-26 게임성: 손님마다 제한 시간이 있고, 빨리 고를수록·연속으로 최고 문구를 고를수록 좋아요가 더 붙어요.
+  // 별은 지금처럼 고른 문구로만 정해요 (시간은 별에 영향 없음). 점수 = 총 좋아요.
+  const SECONDS = 15;          // 손님 한 명당 고르는 시간
+  const SPEED_BONUS = 0.5;     // 남은 시간 비율 × 기본 좋아요 × 이 값만큼 더함
+  const COMBO_BONUS = 300;     // 최고 문구를 2번 연속부터 한 번에 이만큼 더함
   const STAMP_TEXT = 'AI비즈니스실 도장 획득!';
   const RESULT_TEXT = 'AI마케팅과에서는 콘텐츠를 만들고 반응 데이터를 분석해요.';   // ※ 학교 확인 후 바뀔 수 있는 문구
   const DEPT_LINK = { href: '../index.html#marketing', label: 'AI마케팅과 알아보기 →' };
@@ -98,7 +103,8 @@
   /* ---------- 게임 ---------- */
 
   function start(container, api) {
-    const state = { round: 0, hinted: false, locked: false, stars: 0, hints: 0, likes: 0 };
+    const state = { round: 0, hinted: false, locked: false, stars: 0, hints: 0, likes: 0, combo: 0, deadline: 0 };
+    let clock = 0, timeout = 0;
     const product = drawProduct();
     const briefs = shuffle(product.briefs);
     let displayedAds;
@@ -112,6 +118,7 @@
         <section class="ai-product" aria-label="이번 상품"></section>
         <div class="ai-panel">
           <p class="ai-guide"></p>
+          <div class="ai-timer" role="timer" aria-label="남은 시간"><span></span><b></b></div>
           <div class="ai-choices" role="group" aria-label="광고 문구 후보"></div>
           <button type="button" class="btn ai-hint" aria-pressed="false"></button>
         </div>
@@ -174,12 +181,35 @@
       api.announce(`${product.ads[brief.order[2]]} ${hint} 이번 별 1개 감점, 최소 1개예요.`);
     }
 
+    function stopClock() { cancelAnimationFrame(clock); clearTimeout(timeout); }
+    function runClock() {
+      stopClock();
+      state.deadline = performance.now() + SECONDS * 1000;
+      const box = $('.ai-timer'), bar = $('.ai-timer span'), label = $('.ai-timer b');
+      const tick = () => {
+        const left = Math.max(0, state.deadline - performance.now());
+        bar.style.width = `${(left / (SECONDS * 1000)) * 100}%`;
+        label.textContent = `${Math.ceil(left / 1000)}초`;
+        box.classList.toggle('is-low', left < 5000);
+        if (left > 0 && !state.locked) clock = requestAnimationFrame(tick);
+      };
+      tick();
+      timeout = setTimeout(() => pick(null), SECONDS * 1000);
+    }
+
     function pick(ad) {
       if (state.locked) return;
       state.locked = true;
+      stopClock();
       const brief = briefs[state.round];
+      const timedOut = ad === null;
+      if (timedOut) ad = brief.order[2];   // 시간 초과: 손님이 그냥 지나감 (좋아요 0)
       const rank = brief.order.indexOf(ad);
-      const likes = LIKES[rank];
+      const left = Math.max(0, state.deadline - performance.now()) / (SECONDS * 1000);
+      state.combo = rank === 0 && !timedOut ? state.combo + 1 : 0;
+      const speed = timedOut ? 0 : Math.round(LIKES[rank] * left * SPEED_BONUS);
+      const combo = state.combo >= 2 ? COMBO_BONUS * (state.combo - 1) : 0;
+      const likes = timedOut ? 0 : LIKES[rank] + speed + combo;
       const stars = Math.max(1, 3 - rank - Number(state.hinted));
       state.stars += stars;
       state.likes += likes;
@@ -191,7 +221,8 @@
       post.append(el('p', 'ai-post-head', '모의 SNS · 우리 상품 소식'));
       post.append(picture(product.image, product.emoji, 128));
       post.append(el('p', 'ai-caption', product.ads[ad]), likesRow(likes));
-      const feedback = el('p', 'ai-feedback', `${brief.target} “${brief.comments[rank]}”`);
+      const feedback = el('p', 'ai-feedback', timedOut ? `⏰ 시간 초과! 손님이 광고를 못 보고 지나갔어요.` : `${brief.target} “${brief.comments[rank]}”`);
+      const bonusText = [speed ? `빠른 선택 +${number(speed)}` : '', combo ? `🔥 ${state.combo}연속 최고 문구 +${number(combo)}` : ''].filter(Boolean).join(' · ');
       const score = el('p', 'ai-stars', starText(stars));
       score.setAttribute('role', 'img');
       score.setAttribute('aria-label', `이번 라운드 별 ${stars}개`);
@@ -200,7 +231,8 @@
         const now = LIKES[brief.order.indexOf(previousPick.ad)];
         reaction.append(el('p', 'ai-feedback', `지난 광고 “${product.ads[previousPick.ad]}” · ${previousPick.target} ♥ ${number(previousPick.likes)} → ${brief.target} ♥ ${number(now)}`));
       }
-      previousPick = { ad, likes, target: brief.target };
+      if (bonusText) reaction.append(el('p', 'ai-bonus', bonusText));
+      previousPick = { ad, likes: timedOut ? 0 : LIKES[rank], target: brief.target };   // 비교는 보너스 뺀 기본 좋아요로
       reaction.hidden = false;
       nextButton.textContent = state.round === briefs.length - 1 ? '결과 보기' : '다음 손님 →';
       nextButton.hidden = false;
@@ -217,7 +249,7 @@
       }
       const extra = likesRow(state.likes, true);
       // 최종 별은 라운드 평균(반올림) — 모든 게임이 최대 3개로 같음
-      api.done({ stars: Math.max(1, Math.round(state.stars / briefs.length)), hints: state.hints, extra });
+      api.done({ stars: Math.max(1, Math.round(state.stars / briefs.length)), hints: state.hints, extra, points: state.likes });
       // games.js가 결과 요소를 문서에 붙인 다음 집계를 시작합니다.
       countLikes(extra.querySelector('.ai-count'), state.likes);
     }
@@ -251,12 +283,13 @@
       // 창이 열린 뒤 첫 후보에 초점. 새 라운드에서는 위쪽으로 스크롤도 돌아갑니다.
       container.scrollTop = 0;
       focusFrame = requestAnimationFrame(() => choicesBox.firstElementChild.focus({ preventScroll: true }));
+      runClock();
     }
 
     hintButton.addEventListener('click', showHint);
     nextButton.addEventListener('click', nextRound);
     startRound();
-    return () => { cancelAnimationFrame(frame); cancelAnimationFrame(focusFrame); };
+    return () => { cancelAnimationFrame(frame); cancelAnimationFrame(focusFrame); stopClock(); };
   }
 
   window.TOUR_GAMES = window.TOUR_GAMES || {};
@@ -266,6 +299,7 @@
     room: 'AI비즈니스실',
     naver: 'Ai',
     maxStars: 3,
+    scoreUnit: ' 좋아요',
     stamp: STAMP_TEXT,
     message: RESULT_TEXT,
     cta: DEPT_LINK,

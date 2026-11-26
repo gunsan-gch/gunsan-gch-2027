@@ -71,7 +71,7 @@ function checkRuns(game) {
     assert(result.stars === (mistakes === 0 ? 3 : mistakes < 3 ? 2 : 1), 'star threshold');
   }
 }
-const context = { window: { TOUR_GAMES: {} }, document: { createElement: tag => new Element(tag) } };
+const context = { window: { TOUR_GAMES: {} }, document: { createElement: tag => new Element(tag) }, performance: { now: () => 0 } };
 vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../js/game-reconcile.js'), 'utf8'), context);
 checkRuns(context.window.TOUR_GAMES.reconcile);
 console.log('Reconcile: 12 ledgers, retry, missing report, replay and all star thresholds passed.');

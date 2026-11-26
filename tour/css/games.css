@@ -910,3 +910,14 @@ span.interview-robot { display: grid; place-items: center; font-size: 64px; }
   .rain { grid-template-areas: "status" "controls" "sky"; gap: 8px; }
   .rain-sky { height: 200px; }   /* 자판이 올라와도 입력칸~땅까지 한 화면에 */
 }
+
+/* 최고 기록 (2026-11-26 게임성 1) */
+.game-result-best { font-size: 14px; font-weight: 700; color: var(--navy); }
+.game-result-best.is-new { display: inline-block; padding: 4px 10px; color: #fff; background: var(--orange); }
+.stamp-best { display: block; font-size: 11px; line-height: 1.3; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ai-timer { position: relative; height: 22px; margin: 6px 0 10px; border: 2px solid var(--navy); background: #fff; }
+.ai-timer span { position: absolute; inset: 0 auto 0 0; background: var(--green); }
+.ai-timer.is-low span { background: #d9534f; }
+.ai-timer b { position: absolute; top: 50%; right: 4px; transform: translateY(-50%); padding: 0 6px; font-size: 12px; line-height: 16px; color: var(--navy); background: #fff; }
+.ai-bonus { margin: 6px 0 0; font-weight: 700; color: var(--orange); }
+.ai.is-picked .ai-timer { visibility: hidden; }

@@ -104,7 +104,8 @@
       const extra = el('div', 'typing-summary');
       extra.append(el('strong', 'typing-speed', `${m.speed}타/분`));
       extra.append(el('p', 'typing-detail', SUMMARY_TEXT(m.accuracy, m.seconds, target.length)));
-      api.done({ stars, hints: 0, extra });
+      // 점수: 타수 × 정확도 (예: 250타 · 정확도 96% → 240점)
+      api.done({ stars, hints: 0, extra, points: Math.round(m.speed * m.accuracy / 100) });
       // 공통 결과 안내 뒤에 타수·정확도까지 함께 읽습니다.
       api.announce(`${extra.textContent}. 별 ${stars}개. 정보처리실 도장 획득!`);
     }

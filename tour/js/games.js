@@ -18,6 +18,8 @@
    api.done({ stars, hints, extra })의 extra는 별 줄 위에 넣을 DOM 요소입니다 (선택).
    api.announce(text)는 화면 읽기 프로그램용 안내, api.reducedMotion은 '움직임 줄이기' 설정 여부입니다.
    점수 경쟁 게임은 api.bestScore로 이전 최고점을 읽고, 완료할 때 points에 이번 점수를 전달합니다.
+   점수는 클수록 좋은 0 이상의 정수입니다. 단위를 바꾸려면 게임 등록에 scoreUnit: '원' 처럼 적습니다 (없으면 '점').
+   최고 점수는 결과 화면과 도장판에 함께 보입니다 (2026-11-26: 내 취향 찾기 빼고 모든 게임에 점수).
    돌려준 함수(cleanup)는 창을 닫을 때 불려 타이머 등을 정리합니다 (없어도 됨).
 
    공간 데이터(tour-data.js)에 game: 'cafe' 를 적으면 그 공간의 상세 창에 버튼이 생기고,
@@ -230,9 +232,14 @@ window.tourGame = (() => {
     if (points !== null) {
       const record = document.createElement('p');
       record.className = 'game-result-best';
-      record.textContent = previousScore !== null && points > previousScore
-        ? `최고 기록 경신! ${points}점 · 지난 기록보다 ${points - previousScore}점 더 얻었어요.`
-        : `내 최고 ${best.bestScore}점`;
+      const unit = game.scoreUnit || '점';
+      const n = v => Number(v).toLocaleString('ko-KR');
+      record.textContent = previousScore === null
+        ? `이번 기록 ${n(points)}${unit} · 다시 하면 최고 기록에 도전할 수 있어요.`
+        : points > previousScore
+          ? `최고 기록 경신! ${n(points)}${unit} · 지난 기록보다 ${n(points - previousScore)}${unit} 더!`
+          : `이번 ${n(points)}${unit} · 내 최고 ${n(best.bestScore)}${unit}${points === previousScore ? ' (같은 기록!)' : ` · ${n(previousScore - points)}${unit} 모자라요`}`;
+      if (previousScore !== null && points > previousScore) record.classList.add('is-new');
       box.append(record);
     }
     box.append(starRow, score, stamp, message);
@@ -462,6 +469,16 @@ window.tourGame = (() => {
       showExtras: opened || extras.some(s => stamps[s.id]) };
   }
 
+  /** 도장판: 최고 점수 한 줄 (점수가 없으면 빈 요소) */
+  function bestLine(stamp, game) {
+    const line = document.createElement('small');
+    line.className = 'stamp-best';
+    const best = window.TourStarProgress.pointsOrNull(stamp?.bestScore);
+    if (best !== null) line.textContent = `최고 ${best.toLocaleString('ko-KR')}${game.scoreUnit || '점'}`;
+    else line.hidden = true;
+    return line;
+  }
+
   function stampButton(item, stamps, label, role) {
     const stamp = stamps[item.room.game];
     const max = item.game.maxStars || 3;
@@ -484,7 +501,7 @@ window.tourGame = (() => {
       small.textContent = role;
       go.append(small);
     }
-    go.append(stars);
+    go.append(stars, bestLine(stamp, item.game));
     const li = document.createElement('li');
     li.append(go);
     return li;
@@ -653,7 +670,7 @@ window.tourGame = (() => {
       go.className = 'stamp-item' + (stamp ? ' is-got' : '');
       go.setAttribute('aria-label', `${item.room.name} ${item.game.title}, ${stamp ? '도장 획득' : '미획득'}, 별 ${max}개 중 ${earned}개, ${stamp ? '다시 하기' : '도전하기'}`);
       go.addEventListener('click', () => playFromBoard(item));
-      go.append(seal, name, stars);
+      go.append(seal, name, stars, bestLine(stamp, item.game));
       row.append(go);
       floors.get(item.floor).append(row);
     }

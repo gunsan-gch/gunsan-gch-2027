@@ -8,7 +8,8 @@ class Node {
   constructor() {
     this.children = [];
     this.nodes = new Map();
-    this.classList = { add() {}, remove() {} };
+    this.classList = { add() {}, remove() {}, toggle() {} };
+    this.style = {};
     this.listeners = {};
   }
   querySelector(selector) {
@@ -27,7 +28,9 @@ const context = {
   window: {},
   document: { createElement: () => new Node(), createTextNode: text => text },
   requestAnimationFrame: () => 1,
-  cancelAnimationFrame() {}
+  cancelAnimationFrame() {},
+  // 2026-11-26: 손님별 제한 시간 — 검사에서는 시간이 흐르지 않음 (항상 시간 남음, 시간 초과 없음)
+  performance: { now: () => 0 }, setTimeout: () => 1, clearTimeout() {}
 };
 vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../js/game-ai.js'), 'utf8'), context);
 const best = {
@@ -75,7 +78,9 @@ for (let game = 0; game < 6; game++) {
   assert.equal(guests.size, 3);
   assert.equal(result.stars, game < 3 ? 3 : 2);
   assert.equal(result.hints, game < 3 ? 0 : 3);
-  assert.equal(result.extra['aria-label'], '총 좋아요 3,600');
+  // 시간이 멈춘 검사: 기본 1,200 × 3 + 빠른 선택 600 × 3 + 연속 보너스 300 + 600 = 6,300
+  assert.equal(result.extra['aria-label'], '총 좋아요 6,300');
+  assert.equal(result.points, 6300);
   assert.notEqual(product, campaigns.at(-1));
   campaigns.push(product);
   cleanup();

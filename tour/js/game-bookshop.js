@@ -25,6 +25,8 @@
     const picks = drawSpots();
     const events = new AbortController();
     let stage = 0, hints = 0, used = false, found = false, zoom = 1, ended = false;
+    // 점수: 고양이 한 마리마다 1000점에서 1초에 15점씩 깎임(최소 200점), 힌트 한 번에 200점 감점
+    let stageStarted = performance.now(), points = 0;
     let pointer = null, moved = false, originScroll = [0,0], pinch = null;
     container.innerHTML = `<section class="bk-game">
       <div class="senior-card"><img src="img/npcs/portraits/jaehee.png" alt=""><div><strong>재희 선배 · 도서관</strong><p>책 사이로 빼꼼 나온 종이 고양이를 눌러 봐!</p></div></div>
@@ -57,6 +59,7 @@
     }
     function render() {
       found = used = false;
+      stageStarted = performance.now();
       const s = scenes[stage], [x,y,,height,object] = spot();
       $('.bk-heading h3').textContent = (stage+1) + '. ' + s.name;
       $('.bk-back').src = art(s.image);
@@ -72,7 +75,7 @@
     function guess(correct) {
       if (ended || found) return;
       if (!correct) { $('.bk-status').textContent = '여기에는 없네. 다른 곳을 살펴봐!'; return; }
-      found = true; peek.hidden = region.hidden = true; hint.disabled = true;
+      found = true; points += Math.max(200, Math.round(1000 - (performance.now() - stageStarted) / 1000 * 15)); peek.hidden = region.hidden = true; hint.disabled = true;
       for (const b of $('.bk-choices').children) b.disabled = true;
       renderTray(stage+1);
       $('.bk-status').textContent = scenes[stage].cat + ' 고양이 발견! 책갈피 받침에 앉았어.';
@@ -145,7 +148,7 @@
       ended = true;
       const extra = document.createElement('article'); extra.className='bookshop-ending bk-result'; extra.tabIndex = -1; extra.setAttribute('aria-label','책갈피 고양이들의 낮잠');
       extra.innerHTML = `<div class="bk-book" role="img" aria-label="펼친 책 위에 잠든 고양이 세 마리">${scenes.map((_,i)=>`<img src="${art('sleep-'+i)}" alt="">`).join('')}</div><h3>세 친구가 책 위에서 잠들었어!</h3><p>책갈피 3개 · 사용한 힌트 ${hints}회</p>`;
-      api.done({stars:Math.max(1,3-hints),hints,extra});
+      api.done({stars:Math.max(1,3-hints),hints,extra,points:Math.max(0,points-hints*200)});
       container.scrollTop = 0; extra.focus({preventScroll:true});
     });
     render();

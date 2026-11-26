@@ -23,7 +23,9 @@ function node(name) {
 }
 const root = node('main');
 root.querySelector = node;
-const env = {window:{TOUR_GAMES:{}},document:{createElement:()=>({})}};
+// 2026-11-26: 게임이 판마다 배달 부스·지도 뒤집기를 무작위로 고르므로, 검사는 무작위 값을 고정해서 돌립니다.
+const fixedMath = Object.create(Math); fixedMath.random = () => 0.99;   // 뒤집기 없음 · 배달 순서 'BBA'
+const env = {window:{TOUR_GAMES:{}},document:{createElement:()=>({})},Math:fixedMath};
 vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../js/game-logistics.js'),'utf8'),env);
 const permutations = [[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]];
 const dirs = [[0,-1,'ArrowUp'],[1,0,'ArrowRight'],[0,1,'ArrowDown'],[-1,0,'ArrowLeft']];

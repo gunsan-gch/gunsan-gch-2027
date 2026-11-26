@@ -27,6 +27,7 @@
   const art = name => '<img alt="" src="img/games/reconcile/' + name + '.png">';
   function start(container, api) {
     let round = 0, misses = 0;
+    const began = performance.now();   // 점수: 3000점에서 다시 대조 한 번 300점, 1초에 10점씩 깎임 (최소 300점)
     container.innerHTML = '<section class="reconcile"><div class="senior-card"><img src="img/npcs/portraits/eunryeong.png" alt="">' +
       '<div><b>은령 선배 · 정산실</b><p>예술제 장부마다 전표가 한 장씩 비었어. 짝을 맞춰 어떤 결제인지 찾아 줄래?</p></div></div>' +
       '<p>모의 결제와 전표에서 시각·부스·금액이 모두 같은 두 장을 고르세요. 장부 3권을 마치면 정산 완료!</p>' +
@@ -62,7 +63,8 @@
             if (++round < ledgers.length) return openLedger();
             const extra = document.createElement('p');
             extra.textContent = '전표 9쌍 대조 · 누락 3건 확인 · 다시 대조 ' + misses + '회';
-            api.done({ stars: misses === 0 ? 3 : misses <= 2 ? 2 : 1, extra });
+            const points = Math.max(300, Math.round(3000 - misses * 300 - (performance.now() - began) / 100));
+            api.done({ stars: misses === 0 ? 3 : misses <= 2 ? 2 : 1, extra, points });
           };
           return;
         }

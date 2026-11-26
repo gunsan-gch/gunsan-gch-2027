@@ -179,7 +179,9 @@
       const avg = document.createElement('li');
       avg.textContent = `평균 ${average}%${hints ? ` · 힌트 ${hints}번` : ''}`;
       extra.append(avg);
-      api.done({ stars: average >= 90 ? 3 : average >= 70 ? 2 : 1, hints, extra });
+      // 점수: 세 색 닮은 정도(%)의 합 × 10, 힌트 한 번에 50점 감점 (최고 3000점)
+      const points = Math.max(0, scores.reduce((sum, s) => sum + s.score, 0) * 10 - hints * 50);
+      api.done({ stars: average >= 90 ? 3 : average >= 70 ? 2 : 1, hints, extra, points });
     });
 
     openRound();

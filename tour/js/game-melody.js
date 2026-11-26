@@ -154,7 +154,9 @@
       const detail = document.createElement('p'); detail.textContent = `「${song.title}」 · ${s.cleared} / 5단계 성공`;
       const next = document.createElement('p'); next.textContent = '다시 도전하면 다른 멜로디가 나와요.';
       extra.append(img, heading, detail, next);
-      api.done({ stars: R.stars(s.cleared), hints: s.replays, extra });
+      // 점수: 성공한 단계 × 200점 + 남은 하트 × 100점 − 다시 듣기 한 번에 20점
+      const points = Math.max(0, s.cleared * 200 + s.lives * 100 - s.replays * 20);
+      api.done({ stars: R.stars(s.cleared), hints: s.replays, extra, points });
     }
     function press(note) {
       const result = engine.press(note);

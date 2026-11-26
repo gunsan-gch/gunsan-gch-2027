@@ -1,6 +1,6 @@
 /* 예절실 · 손님 세 분께 차 올리기 */
 (() => {
-  const rounds = [
+  const ROUNDS = [
     { name: '청자잔', guest: '첫 손님', capacity: 80, low: 46, high: 54, rate: 17, unit: 8, scale: 2.5, tea: '#f3be59' },
     { name: '살구빛 잔', guest: '둘째 손님', capacity: 110, low: 72, high: 80, rate: 24, unit: 10, scale: 2.8, tea: '#dca947' },
     { name: '연보라 잔', guest: '셋째 손님', capacity: 140, low: 96, high: 104, rate: 32, unit: 12, scale: 3.15, tea: '#dc9653' }
@@ -8,6 +8,13 @@
   const interior = 'M9 8H31V11H30V14H29V17H28V20H27V23H26V24H14V23H13V20H12V17H11V14H10V11H9Z';
   const art = name => 'img/games/tea/' + name + '.png';
   function start(container, api) {
+    // 2026-11-26 게임성: 판마다 잔별 목표량을 무작위로 (잔 크기의 40~75% 사이, 폭은 그대로)
+    //    (검사·수업용: window.TOUR_GAMES.tea.randomTargets = false 이면 원래 목표량 그대로)
+    const rounds = window.TOUR_GAMES.tea?.randomTargets === false ? ROUNDS : ROUNDS.map(r => {
+      const width = r.high - r.low;
+      const low = Math.round(r.capacity * (0.4 + Math.random() * 0.35));
+      return { ...r, low, high: low + width };
+    });
     const events = new AbortController();
     let stage = 0, amount = 0, phase = 'ready', owner = null, frame = 0, last = 0;
     let tailStart = 0, drops = 0, tailAmount = 0;
@@ -156,7 +163,9 @@
       extra.className = 'tea-result';
       const wins = results.filter(result => result.good).length;
       extra.innerHTML = `<h3>세 손님의 찻상이 차려졌어요</h3><p>준이 선배 “${wins === 3 ? '세 잔 모두 딱 알맞네. 이제 우리도 한 잔 할까?' : '마지막 손님까지 정성껏 챙겨 줬구나.'}”</p><ul>${results.map((result,i) => `<li><img src="${art('cup-'+i)}" alt=""><strong>${rounds[i].name}</strong><span>${result.amount} mL</span><small>${result.good ? '목표 달성' : '목표 '+rounds[i].low+'–'+rounds[i].high+' mL'}</small></li>`).join('')}</ul>`;
-      api.done({stars:Math.max(1,wins), hints:0, extra});
+      // 점수: 잔마다 목표 한가운데면 300점, 1 mL 벗어날 때마다 25점씩 깎임
+      const points = results.reduce((sum, result, i) => sum + Math.max(0, Math.round(300 - Math.abs(result.amount - (rounds[i].low + rounds[i].high) / 2) * 25)), 0);
+      api.done({stars:Math.max(1,wins), hints:0, extra, points});
     });
     render();
     return () => { phase = 'done'; owner = null; cancelAnimationFrame(frame); events.abort(); };

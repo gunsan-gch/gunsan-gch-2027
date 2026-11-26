@@ -130,7 +130,9 @@
       extra.append(el('strong', 'rain-total', `맞힌 낱말 ${state.score}개`));
       extra.append(el('p', 'rain-detail', `남은 생명 ${state.lives} · 아이템 ${state.items}개 사용 · ${seconds}초`));
       say('끝났어요. 결과를 확인해 보세요.');
-      later(() => api.done({ stars, hints: 0, extra }), 600);
+      // 점수: 맞힌 낱말 × 100점 + 남은 생명 × 50점
+      const points = state.score * 100 + state.lives * 50;
+      later(() => api.done({ stars, hints: 0, extra, points }), 600);
     }
 
     function applyItem(item) {

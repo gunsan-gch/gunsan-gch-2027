@@ -15,6 +15,43 @@
   };
   const keys = { ArrowUp: 'up', ArrowLeft: 'left', ArrowDown: 'down', ArrowRight: 'right' };
   const station = { W: '창고', A: 'A부스', B: 'B부스', '#': '장비', '.': '통로' };
+  // 2026-11-26 게임성: 판마다 세 물품의 배달 부스를 무작위로 바꾸고, 최단 이동 칸 수를 바로 계산해요.
+  const ROUTES = ['AAB', 'ABA', 'BAA', 'ABB', 'BAB', 'BBA'];
+  function shortest(rows, destinations) {
+    const map = rows.join(''), start = map.indexOf('W'), DONE = 3 ** goods.length - 1;
+    // 물품 상태: 0 창고 · 1 카트 · 2 배달 완료 (3진수로 묶음)
+    const digit = (code, i) => Math.floor(code / 3 ** i) % 3;
+    const seen = new Map(), queue = [[start, 0, 0]];
+    const key = (p, c) => p * 100 + c;
+    seen.set(key(start, 0), 0);
+    const loads = code => {   // 창고에서 싣기·내리기 (이동 0칸): 카트에는 두 개까지
+      const out = [];
+      const free = [...Array(goods.length).keys()].filter(i => digit(code, i) !== 2);
+      for (let m = 0; m < 1 << free.length; m++) {
+        const onCart = free.filter((_, j) => m & (1 << j));
+        if (onCart.length > 2) continue;
+        let c = code;
+        for (const i of free) c += ((onCart.includes(i) ? 1 : 0) - digit(code, i)) * 3 ** i;
+        out.push(c);
+      }
+      return out;
+    };
+    for (let q = 0; q < queue.length; q++) {
+      const [p, code, d] = queue[q];
+      if (code === DONE) return d;
+      for (const c of map[p] === 'W' ? loads(code) : [code]) {
+        for (const [dy, dx] of [[-1,0],[1,0],[0,-1],[0,1]]) {
+          const y = Math.floor(p / 5) + dy, x = p % 5 + dx;
+          if (y < 0 || y >= 5 || x < 0 || x >= 5 || rows[y][x] === '#') continue;
+          const np = y * 5 + x;
+          let nc = c;
+          for (let i = 0; i < goods.length; i++) if (digit(c, i) === 1 && destinations[i] === map[np]) nc += 3 ** i;
+          if (!seen.has(key(np, nc))) { seen.set(key(np, nc), d + 1); queue.push([np, nc, d + 1]); }
+        }
+      }
+    }
+    return Infinity;
+  }
   const icon = id => '<img src="' + art + id + '.png" alt="" draggable="false">';
 
   function start(container, api) {
@@ -32,7 +69,13 @@
       <div class="log-rules" aria-label="별 기준"></div>
     </section>`;
     function reset() {
-      plan = plans[selectedPlan];
+      const base = plans[selectedPlan];
+      const destinations = ROUTES[Math.floor(Math.random() * ROUTES.length)];
+      // 지도도 좌우·위아래로 무작위로 뒤집어서 같은 길을 외우지 못하게 해요.
+      let rows = [...base.rows];
+      if (Math.random() < 0.5) rows = rows.map(r => [...r].reverse().join(''));
+      if (Math.random() < 0.5) rows = rows.reverse();
+      plan = { ...base, rows, destinations, best: shortest(rows, destinations) };
       plans.forEach((_,i) => $('[data-plan="'+i+'"]').setAttribute('aria-pressed', String(i === selectedPlan)));
       map = plan.rows.join('');
       pos = map.indexOf('W');
@@ -86,7 +129,9 @@
         finished = true;
         const extra = document.createElement('p');
         extra.textContent = `${plan.name} · 세 물품 배달 완료! 이동 ${steps}칸 / 최단 ${plan.best}칸`;
-        api.done({stars: steps <= plan.best ? 3 : steps <= plan.best+4 ? 2 : 1, extra});
+        // 점수: 최단 거리면 1000점, 한 칸 더 갈 때마다 60점씩 깎임 (최소 100점)
+        const points = Math.max(100, 1000 - (steps - plan.best) * 60);
+        api.done({stars: steps <= plan.best ? 3 : steps <= plan.best+4 ? 2 : 1, extra, points});
       }
     }
     function click(e) {

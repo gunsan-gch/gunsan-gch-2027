@@ -126,7 +126,7 @@
       const title=document.createElement('h3');title.textContent=s.reason==='goal'?'꿈다락 도착! 민주 선배와 하이파이브!':s.reason==='time'?'잠깐 숨 고르고, 다시 도전!':'앗, 계단은 반대쪽이었어!';
       const score=document.createElement('p');score.textContent=`${s.steps}계단 · ${R.floor(s.steps)}층 / 내 최고 ${best}계단`;
       const tip=document.createElement('p');tip.textContent=s.reason==='goal'?'한 칸씩 쌓은 도전이 여기까지 왔어요.':s.steps<40?'40계단에 도착하면 별 2개!':'80계단 꿈다락에 도착하면 별 3개!';
-      extra.append(image,title,score,tip);api.done({stars:R.stars(s.steps),extra});
+      extra.append(image,title,score,tip);api.done({stars:R.stars(s.steps),extra,points:s.steps*10+(s.reason==='goal'?Math.round(s.remaining*100):0)});   // 점수: 계단 × 10 + 꿈다락 도착 시 남은 시간 보너스
     }
     function act(turn) {
       if(!engine || engine.state.phase!=='running' || disposed)return;
