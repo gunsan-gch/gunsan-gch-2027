@@ -13,6 +13,7 @@
 `tour/index.html?game=phishing`로 4층 금융실습실 「피싱 탐정」, `tour/index.html?game=cashier`로 1층 전산회계1실 「매점 계산왕」을 바로 열 수 있습니다.
 `tour/index.html?game=stairs`로 5층 꿈다락 「꿈다락까지 올라라!」를 바로 열 수 있습니다.
 `tour/index.html?game=melody`로 2층 음악실 「멜로디 따라잡기」를 바로 열 수 있습니다.
+`tour/index.html?game=art`로 5층 미술실 「물감 섞기 미션」을 바로 열 수 있습니다 (목표 색·방울 수는 `js/game-art.js` 맨 위 `TARGETS`에서 수정).
 `tour/index.html?game=gym#floor-3`로 3층 체육관 종목 선택을 엽니다. `?game=curling`, `?game=target`, `?game=badminton`은 각각 컬링·사격·배드민턴을 바로 엽니다.
 
 ## 폴더 구성

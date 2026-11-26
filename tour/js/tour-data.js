@@ -340,7 +340,7 @@ window.TOUR_SCENES = {
     walkObstacles: [],
     hints: [],
     rooms: [
-      { name: '미술실', at: [22, 11], w: 16, anchor: [28.2, 24],
+      { name: '미술실', game: 'art', at: [22, 11], w: 16, anchor: [28.2, 24],
         desc: '미술 시간에 떠올린 생각을 그림과 작품으로 표현하는 교실이에요.' },
       { name: '2학년부실', at: [36, 11], w: 10, anchor: [39.3, 24], status: '선생님 교무실',
         desc: '2학년 선생님들이 수업을 준비하고 학생들의 학교생활을 챙기는 교무실이에요.' },

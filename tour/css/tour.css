@@ -559,3 +559,21 @@ dialog.is-wide .detail-image.is-photo img { object-fit: contain; }
   .scene-toolbar .stick-toggle { flex: none; }
   .scene-toolbar .zoom button { min-width: 44px; }
 }
+
+/* ---------- 휴대폰 첫 화면 (2026-11-26 검토본) ----------
+   소개를 줄이고 지도를 층 버튼 바로 아래로 올립니다. 도장판·검색·조작 방법은 지도 아래로.
+   PC 배치는 그대로입니다. */
+@media (max-width: 760px) {
+  main#main { display: flex; flex-direction: column; }
+  main#main > * { order: 10; }
+  main#main > .intro { order: 1; padding: 14px 0 10px; gap: 12px; }
+  main#main > .scene-notice { order: 2; padding: 8px 12px; font-size: 13px; }
+  main#main > .scene-nav { order: 3; margin: 10px 0 8px; }
+  main#main > .map-section { order: 4; margin-top: 0; }
+  main#main > .tour-tools { order: 5; margin-top: 12px; }
+  .intro h1 { font-size: 28px; margin-bottom: 4px; }
+  .intro h1 br { display: none; }
+  .intro .lead { font-size: 14px; }
+  .guide { width: 48px; }
+  .scene-notice strong { font-size: 15px; }
+}

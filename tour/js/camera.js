@@ -130,7 +130,8 @@ class TourCamera {
     this.viewport.classList.toggle('fit', fit);
     this.viewport.classList.toggle('compact-labels', width < COMPACT_STAGE);
     const label = document.querySelector('#zoom-value');
-    if (label) label.textContent = Math.round(this.zoom * 100) + '%';
+    // 처음 보이는 배율을 100%로 표시 (휴대폰에서 394% 같은 낯선 숫자가 뜨지 않게)
+    if (label) label.textContent = Math.round(this.zoom / Math.max(0.01, this.defaultZoom()) * 100) + '%';
     document.querySelectorAll('#fit, [data-map-action="fit"]').forEach(b => b.setAttribute('aria-pressed', String(fit)));
   }
 

@@ -61,7 +61,7 @@ window.TourUI = {
 window.tourGame = (() => {
   const GAMES = window.TOUR_GAMES;
   const STAMP_KEY = 'gch-tour-stamps';
-  const STAMP_ART = new Set(['bakery', 'typing', 'cafe', 'cashier', 'rain', 'ai', 'career', 'phishing', 'interview', 'stairs', 'melody', 'curling', 'target', 'badminton', 'press', 'logistics', 'reconcile', 'bookshop', 'tea', 'booths', 'goods', 'paperplane']);
+  const STAMP_ART = new Set(['bakery', 'typing', 'cafe', 'cashier', 'rain', 'ai', 'career', 'phishing', 'interview', 'stairs', 'melody', 'curling', 'target', 'badminton', 'press', 'logistics', 'reconcile', 'bookshop', 'tea', 'booths', 'goods', 'paperplane', 'art']);
   function stampArt(id, className) {
     const seal = document.createElement('span');
     seal.className = className;
