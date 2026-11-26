@@ -54,6 +54,10 @@
 
   const DEPT_EMOJI = { erp: '📊', marketing: '📣', fintech: '📈', cafe: '☕' };
   const DONE_KEY = 'gch-tour-career-done';
+  // 「녹원예술제 D-1」 짧은 판: 학과로 이어지는 3문항만 묻고, 추천 학과 부스를 현황판 맨 앞에 둡니다.
+  // 추천 결과는 학과 이름표(erp·marketing·fintech·cafe)만 이 기기에 남깁니다(개인정보 없음).
+  const QUICK = ['q1', 'q3', 'q5'];
+  const PICK_KEY = 'gch-tour-story-pick';
   const DEFAULT_CTA = { href: '../index.html#departments', label: '4개 학과 알아보기 →' };
 
   /* ---------- 도우미 ---------- */
@@ -97,7 +101,7 @@
     return link;
   }
 
-  function summary(dept, counts) {
+  function summary(dept, counts, asked) {
     const box = el('section', 'career-summary');
     if (dept) box.append(picture(dept));
     box.append(el('h3', 'career-title', dept ? '관심사와 연결되는 학과: ' + DEPT_NAMES[dept] : '군산여상 4개 학과를 둘러보세요'));
@@ -105,7 +109,7 @@
     box.append(el('p', 'career-count-help', '연결 문항 수 · 선택한 관심사를 학과 활동과 연결했어요.'));
     const bars = el('div', 'career-bars');
     // 막대는 학과(안내 학과 포함)로 이어지는 문항 수를 기준으로 표시합니다 (통학 문항 제외).
-    const total = Math.max(1, QUESTIONS.filter(q => q.choices.some(c => c.dept || c.guide)).length);
+    const total = Math.max(1, asked.filter(q => q.choices.some(c => c.dept || c.guide)).length);
     Object.keys(DEPT_NAMES).forEach(id => {
       const row = el('div', 'career-bar-row');
       row.setAttribute('role', 'img');
@@ -128,13 +132,18 @@
     let round = 0;
     let locked = false;
     let finished = false;
+    let asked = QUESTIONS;
+    let mode = 'full';
+    const story = !!window.TOUR_FESTIVAL;
     window.TOUR_GAMES.career.cta = { ...DEFAULT_CTA };
     container.innerHTML = `
       <div class="career-game">
         <section class="career-intro">
           <h3 class="career-title">내 취향 찾기</h3>
-          <p>7문항, 1분이면 끝나요.<br>마음이 끌리는 보기를 골라 보세요.</p>
-          <button type="button" class="btn btn-primary career-start">시작</button>
+          <p>${story ? '어느 학과 부스부터 도울지 골라 줄게요.<br>' : ''}마음이 끌리는 보기를 골라 보세요.</p>
+          ${story ? `<button type="button" class="btn btn-primary career-start" data-mode="quick">빠르게 3문항 · 부스 고르기</button>
+          <button type="button" class="btn career-start" data-mode="full">자세히 7문항</button>`
+            : '<button type="button" class="btn btn-primary career-start" data-mode="full">시작 · 7문항</button>'}
         </section>
         <section class="career-question" aria-live="polite" aria-atomic="true"></section>
         <div class="career-choices" role="group" aria-labelledby="career-question-title" hidden></div>
@@ -148,10 +157,10 @@
 
     function showQuestion() {
       locked = false;
-      const question = QUESTIONS[round];
+      const question = asked[round];
       const title = el('h3', 'career-title', question.text);
       title.id = 'career-question-title';
-      $('.career-question').replaceChildren(el('p', 'career-progress', `${round + 1} / ${QUESTIONS.length}`), title);
+      $('.career-question').replaceChildren(el('p', 'career-progress', `${round + 1} / ${asked.length}`), title);
       choices.hidden = false;
       choices.replaceChildren();
       question.choices.forEach(choice => {
@@ -204,20 +213,27 @@
         ? { href: '../index.html#' + dept, label: DEPT_NAMES[dept] + ' 알아보기 →' }
         : { ...DEFAULT_CTA };
       tourTrack('tour_career_result', {
-        dept: dept || 'none', commute: selected('commute'), elsewhere: selected('elsewhere'), repeat
+        dept: dept || 'none', commute: selected('commute'), elsewhere: selected('elsewhere'), repeat, mode
       }, ['TourCareer', 'Result_' + (dept || 'none')]);
-      try { localStorage.setItem(DONE_KEY, '1'); } catch (e) { /* 저장이 막혀도 완료와 재플레이는 그대로 */ }
-      api.done({ stars: 3, hints: 0, extra: summary(dept, counts) });
+      try {
+        localStorage.setItem(DONE_KEY, '1');
+        if (dept) localStorage.setItem(PICK_KEY, dept);
+      } catch (e) { /* 저장이 막혀도 완료와 재플레이는 그대로 */ }
+      const extra = summary(dept, counts, asked);
+      if (story && dept) extra.prepend(el('p', 'career-booth-pick', `추천 부스: ${DEPT_NAMES[dept]}부터 도와줘요!`));
+      api.done({ stars: 3, hints: 0, extra });
       container.scrollTop = 0;
     }
 
-    $('.career-start').addEventListener('click', () => {
+    container.querySelectorAll('.career-start').forEach(button => button.addEventListener('click', () => {
+      mode = button.dataset.mode;
+      asked = mode === 'quick' ? QUESTIONS.filter(q => QUICK.includes(q.id)) : QUESTIONS;
       $('.career-intro').remove();
       showQuestion();
-    }, { once: true });
+    }, { once: true }));
     next.addEventListener('click', () => {
       if (!locked || finished) return;
-      if (++round < QUESTIONS.length) showQuestion();
+      if (++round < asked.length) showQuestion();
       else finish();
     });
     $('.career-start').focus({ preventScroll: true });

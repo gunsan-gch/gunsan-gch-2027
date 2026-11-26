@@ -438,16 +438,26 @@ window.tourGame = (() => {
 
   /* ---------- 「녹원예술제 D-1」 현황판 (js/festival-story.js가 있을 때) ---------- */
 
+  /** 「내 취향 찾기」에서 추천받은 학과 (erp·marketing·fintech·cafe 중 하나, 없으면 null) */
+  function storyPick() {
+    try {
+      const pick = localStorage.getItem('gch-tour-story-pick');
+      return window.TOUR_FESTIVAL?.depts?.[pick] ? pick : null;
+    } catch (e) { return null; }
+  }
+
   /** 본편(시작 2 + 학과 핵심 8 + 개막 1) 진행 상황. 이야기 데이터가 없으면 null */
   function festivalProgress(stamps = readStamps()) {
     const story = window.TOUR_FESTIVAL;
     if (!story) return null;
-    const main = [...story.prologue, ...story.booths.flatMap(b => b.main), story.finale].filter(s => GAMES[s.id]);
+    const pick = storyPick();
+    const booths = pick ? [...story.booths].sort((a, b) => (b.dept === pick) - (a.dept === pick)) : story.booths;
+    const main = [...story.prologue, ...booths.flatMap(b => b.main), story.finale].filter(s => GAMES[s.id]);
     const extras = [...story.booths.flatMap(b => b.bonus), ...story.life].filter(s => GAMES[s.id]);
     const badges = story.booths.filter(b => b.main.every(s => stamps[s.id])).length;
     const opened = !!stamps[story.finale.id];
     const next = main.find(s => !stamps[s.id]) || null;
-    return { main, extras, badges, opened, next,
+    return { main, extras, badges, opened, next, pick, booths,
       got: main.filter(s => stamps[s.id]).length, total: main.length,
       showExtras: opened || extras.some(s => stamps[s.id]) };
   }
@@ -548,11 +558,17 @@ window.tourGame = (() => {
     const boothGroup = section('2. 학과 부스 4곳 준비하기', `미션 두 개를 끝내면 학과 배지가 켜져요 · 배지 ${story.badges} / ${data.booths.length}`);
     const cards = document.createElement('ul');
     cards.className = 'stamp-booths';
-    for (const booth of data.booths) {
+    for (const booth of story.booths) {
       const dept = data.depts[booth.dept];
       const done = booth.main.every(s => stamps[s.id]);
       const card = document.createElement('li');
-      card.className = 'stamp-booth' + (done ? ' is-done' : '');
+      card.className = 'stamp-booth' + (done ? ' is-done' : '') + (booth.dept === story.pick ? ' is-pick' : '');
+      if (booth.dept === story.pick) {
+        const tag = document.createElement('span');
+        tag.className = 'stamp-pick';
+        tag.textContent = '내 추천 부스';
+        card.append(tag);
+      }
       card.style.setProperty('--dept', dept.color);
       const head = document.createElement('div');
       head.className = 'stamp-booth-head';
@@ -686,6 +702,7 @@ window.tourGame = (() => {
       // 도장·별만 초기화. 커리어존 재참여 표시와 브라우저당 1회 완료 집계는 유지합니다.
       try {
         localStorage.removeItem(STAMP_KEY);
+        localStorage.removeItem('gch-tour-story-pick');   // 예술제 추천 부스도 처음부터
         if (localStorage.getItem(STAMP_KEY) !== null) throw new Error('Stamp reset failed');
       } catch (e) {
         resetStatus.textContent = '기록을 지우지 못했어요. 브라우저 저장 설정을 확인한 뒤 다시 시도해 주세요.';
