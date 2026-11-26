@@ -25,6 +25,11 @@
     { id: 'bora', name: '보라', subtitle: '느긋한 산책 친구', line: '한숨 돌릴 땐 곁에 조용히 자리를 잡아요.', alt: '연보랏빛 털에 회색 꼬리를 둥글게 말고 엎드린 고양이', at: [-22.9, 4.1, -16] }
   ];
   const CAT_IMG = id => `img/campus-3d/cats/${id}.webp?v=20261126-dex`;
+  // 5마리를 다 찾으면 받는 완주 포토카드 (1080×1350). 보기용 webp, 저장용 jpg
+  const POSTCARDS = [
+    { id: 'day', name: '낮', label: '햇살이 머문 교정' },
+    { id: 'dusk', name: '노을', label: '노을에 물든 교정' }
+  ];
   const CAT_KEY = 'gch-tour-cats';
   const CAMERA_ORBIT = '0deg 58deg 80%';   // 거리 %가 작을수록 모형이 크게 보임
   const SEEN = 'gch-tour-cover-seen';
@@ -114,7 +119,9 @@
     text.innerHTML = '<strong></strong> · <span></span>';
     text.querySelector('strong').textContent = cat.name; text.querySelector('span').textContent = cat.line;
     const keep = button(all ? '닫기' : `계속 찾기 (${found.length}/${CATS.length})`, closeCard, true);
-    box.append(head, img, text, actions(button('도감 보기', openDex), keep));
+    box.append(head, img, text, all ? actions(button('도감 보기', openDex), button('완주 포토카드 받기', openPostcards, true))
+      : actions(button('도감 보기', openDex), keep));
+    if (all) { box.querySelector('.is-primary').focus(); return; }
     keep.focus();
   }
   function openDex() {
@@ -135,9 +142,30 @@
     }
     const note = document.createElement('p'); note.className = 'cover-card-text';
     note.textContent = found.length === CATS.length ? '모든 고양이를 찾았어요. 픽셀투어도 떠나 볼까요?' : '3D 학교를 돌려 보며 숨은 고양이를 눌러 보세요.';
-    const close = button('닫기', closeCard, true);
-    box.append(head, grid, note, actions(close));
+    const close = button('닫기', closeCard, found.length !== CATS.length);
+    box.append(head, grid, note, found.length === CATS.length ? actions(close, button('완주 포토카드 받기', openPostcards, true)) : actions(close));
     close.focus();
+  }
+  function openPostcards() {
+    const box = sheet('완주 포토카드');
+    const head = document.createElement('p'); head.className = 'cover-card-head';
+    head.textContent = '완주 포토카드 · 마음에 드는 한 장을 저장하세요';
+    const row = document.createElement('div'); row.className = 'cover-postcards';
+    for (const card of POSTCARDS) {
+      const link = document.createElement('a');
+      link.className = 'cover-postcard'; link.href = `img/campus-3d/postcards/${card.id}.jpg?v=20261126`;
+      link.download = `gunsan-gch-cat-postcard-${card.id}.jpg`;
+      const img = new Image(1080, 1350); img.src = `img/campus-3d/postcards/${card.id}.webp?v=20261126`;
+      img.alt = `교정의 다섯 친구 완주 포토카드, ${card.label}`;
+      const label = document.createElement('span'); label.textContent = `${card.name} 버전 저장`;
+      link.append(img, label);
+      link.addEventListener('click', () => { if (window.tourTrack) window.tourTrack('tour_cover_postcard', { card: card.id }, ['TourCover', 'Postcard']); });
+      row.append(link);
+    }
+    const note = document.createElement('p'); note.className = 'cover-card-text';
+    note.textContent = '휴대폰에서 저장이 안 되면 그림을 길게 눌러 저장해 주세요.';
+    box.append(head, row, note, actions(button('도감 보기', openDex), button('닫기', closeCard, true)));
+    row.querySelector('a').focus();
   }
   counter.addEventListener('click', openDex);
   function markFound(viewer, cat) {

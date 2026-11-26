@@ -279,7 +279,10 @@
   /* ---------- 네 학과 한눈에 보기 (요약 카드) ---------- */
   $("dept-cards").innerHTML = D.departments.map(function (d) {
     return '<article class="dept-card" data-dept="' + esc(d.id) + '">' +
-      '<div class="dept-card-img">' + img(d.image, "", true) + '</div>' +
+      (d.scene
+        ? '<div class="dept-card-img has-scene">' + img(d.scene, "dept-card-scene", true) +
+            '<span class="dept-card-face">' + img(d.image, "", true, "") + '</span></div>'
+        : '<div class="dept-card-img">' + img(d.image, "", true) + '</div>') +
       '<div class="dept-card-body">' +
         '<p class="dept-seats">' + esc(d.classes + "학급 " + d.seats + "명") + '</p>' +
         '<h3 class="dept-card-title"><a href="#' + esc(d.id) + '">' + esc(d.name) + '</a></h3>' +

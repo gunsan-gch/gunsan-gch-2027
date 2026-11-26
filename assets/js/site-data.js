@@ -66,6 +66,13 @@ window.SITE_DATA = {
         width: 640,
         height: 670
       },
+      // 학과 활동 미니어처 (1600×1000, 글자 없음). 요약 카드 그림으로 씀
+      scene: {
+        src: "assets/img/departments/scenes/erp.webp",
+        alt: "상품 상자, 재고 스캐너, 매출·재고 보고서로 모의회사 업무를 하는 장면",
+        width: 1600,
+        height: 1000
+      },
       interest: "숫자와 자료로 회사 업무 정리하기",
       easyLine: "회계·인사·물류로\n회사 업무를 배웁니다.",
       oneLiner: "회계·인사·물류를 연결하는 경영지원 실무",
@@ -116,6 +123,13 @@ window.SITE_DATA = {
         alt: "AI마케팅과 캐릭터",
         width: 640,
         height: 685
+      },
+      // 학과 활동 미니어처 (1600×1000, 글자 없음). 요약 카드 그림으로 씀
+      scene: {
+        src: "assets/img/departments/scenes/marketing.webp",
+        alt: "제품을 촬영하고 숏폼 광고와 반응 지표를 살펴보는 장면",
+        width: 1600,
+        height: 1000
       },
       interest: "이미지·영상·SNS로 상품 알리기",
       easyLine: "AI로 콘텐츠를 만들고,\n마케팅을 배웁니다.",
@@ -170,6 +184,13 @@ window.SITE_DATA = {
         width: 640,
         height: 640
       },
+      // 학과 활동 미니어처 (1600×1000, 글자 없음). 요약 카드 그림으로 씀
+      scene: {
+        src: "assets/img/departments/scenes/fintech.webp",
+        alt: "금융 보고서 수치를 자료 원본과 대조하는 장면",
+        width: 1600,
+        height: 1000
+      },
       interest: "금융·회계와 데이터를 다루기",
       easyLine: "금융·회계에\nAI 활용을 더합니다.",
       oneLiner: "금융·회계와 디지털 금융 실무",
@@ -215,6 +236,13 @@ window.SITE_DATA = {
         alt: "카페비즈과 캐릭터",
         width: 640,
         height: 640
+      },
+      // 학과 활동 미니어처 (1600×1000, 글자 없음). 요약 카드 그림으로 씀
+      scene: {
+        src: "assets/img/departments/scenes/cafe.webp",
+        alt: "라테와 디저트를 만들고 레시피와 원가를 정리하는 장면",
+        width: 1600,
+        height: 1000
       },
       interest: "빵·커피 만들기와 매장 운영하기",
       easyLine: "제과제빵·커피와\n마케팅을 함께 배웁니다.",
