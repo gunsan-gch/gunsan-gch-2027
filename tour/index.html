@@ -47,6 +47,7 @@
   <link rel="stylesheet" href="css/goods.css?v=20261121-unify1">
   <link rel="stylesheet" href="css/paperplane.css?v=20261123-airmail">
   <link rel="stylesheet" href="css/art.css?v=20261126-art1">
+  <link rel="stylesheet" href="css/cover.css?v=20261126-cover1">
   <link rel="stylesheet" href="css/addons.css?v=20261123-fit">
 </head>
 <body>
@@ -201,6 +202,22 @@
     </div>
   </footer>
 
+  <!-- 첫 화면: AI로 만든 학교 전경 (js/ai-cover.js). 바로가기 링크로 들어오면 건너뜀 -->
+  <dialog id="ai-cover" class="ai-cover" aria-labelledby="ai-cover-title">
+    <div class="cover-inner">
+      <p class="eyebrow">픽셀 학교 투어</p>
+      <h2 id="ai-cover-title">AI로 만든 우리 학교 전경</h2>
+      <p class="cover-lead">AI를 배우면 이런 3D도 손쉽게 만들 수 있어요!</p>
+      <!-- 3D 모델: img/campus-3d/campus.glb (같은 이름으로 바꾸면 교체), 불러오는 동안 poster.webp -->
+      <div class="cover-stage">
+        <img class="cover-poster" src="img/campus-3d/poster.webp" width="1200" height="630" alt="AI로 만든 3D 학교 전경 모형">
+        <p class="cover-hint" aria-hidden="true">손가락이나 마우스로 끌어서 돌려 보세요</p>
+      </div>
+      <button type="button" class="btn btn-primary cover-start">픽셀투어 떠나기 →</button>
+      <p class="cover-note">사진을 참고해 만든 모형이라 실제 건물과 조금 다를 수 있어요.</p>
+    </div>
+  </dialog>
+
   <dialog id="detail" aria-labelledby="detail-title">
     <div class="dialog-head">
       <span class="eyebrow" id="detail-floor"></span>
@@ -312,6 +329,7 @@
   <script src="js/wardrobe-art.js?v=20261123-airmail"></script>
   <script src="js/board-data.js?v=20261122-board2"></script>
   <script src="js/tour-addons.js?v=20261123-fit"></script>
+  <script src="js/ai-cover.js?v=20261126-cover1"></script>
 <script type="text/javascript" src="//wcs.pstatic.net/wcslog.js"></script>
 <script type="text/javascript">
 if(!wcs_add) var wcs_add = {};

@@ -1,0 +1,27 @@
+/* 투어 첫 화면 「AI로 만든 학교 전경」 (js/ai-cover.js) */
+.ai-cover {
+  width: min(100% - 24px, 760px); max-height: calc(100dvh - 24px); padding: 0; overflow: auto;
+  border: 2px solid var(--navy, #14285a); background: #f7f4ea; color: var(--navy, #14285a);
+  box-shadow: 6px 6px 0 rgba(20, 40, 90, .35);
+}
+.ai-cover::backdrop { background: rgba(15, 29, 51, .72); }
+.cover-inner { display: grid; gap: 10px; padding: 18px 20px 16px; text-align: center; }
+.cover-inner p { margin: 0; }
+.ai-cover h2 { margin: 0; font-family: var(--font-title, inherit); font-weight: 900; font-size: clamp(24px, 5vw, 34px); line-height: 1.2; }
+.cover-lead { font-size: clamp(15px, 3.4vw, 18px); font-weight: 700; color: #2e6b4f; }
+.cover-stage { position: relative; aspect-ratio: 16 / 10; background: #e4e2da; overflow: hidden; border: 1px solid #c4c0b4; }
+.cover-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.cover-stage model-viewer { position: absolute; inset: 0; width: 100%; height: 100%; background: transparent; --poster-color: transparent; }
+.cover-stage.is-3d .cover-poster { visibility: hidden; }
+.cover-stage model-viewer:focus-visible { outline: 3px solid #7141a8; outline-offset: -3px; }
+.cover-hint {
+  position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); margin: 0; padding: 3px 10px;
+  background: rgba(15, 29, 51, .7); color: #fff; font-size: 13px; white-space: nowrap; pointer-events: none;
+}
+.cover-start { justify-self: center; min-height: 52px; padding: 10px 28px; font-size: 18px; font-weight: 800; }
+.cover-note { font-size: 12px; color: #5b6a60; }
+@media (max-width: 480px) {
+  .cover-inner { padding: 14px 12px 12px; gap: 8px; }
+  .cover-start { width: 100%; }
+}
+@media (max-width: 480px) { .cover-stage { aspect-ratio: 4 / 3; } }
