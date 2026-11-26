@@ -25,3 +25,11 @@
   .cover-start { width: 100%; }
 }
 @media (max-width: 480px) { .cover-stage { aspect-ratio: 4 / 3; } }
+/* 건물 이름표 (본관·후관·체육관) */
+.cover-label {
+  padding: 3px 9px; background: var(--navy, #14285a); color: #fff; border: 2px solid #fff;
+  font-size: 14px; font-weight: 800; white-space: nowrap; pointer-events: none;
+  box-shadow: 2px 2px 0 rgba(20, 40, 90, .35); transform: translateY(-50%);
+  transition: opacity .2s;
+}
+@media (max-width: 480px) { .cover-label { font-size: 12px; padding: 2px 7px; } }

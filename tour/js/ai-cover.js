@@ -11,6 +11,12 @@
   const POSTER = 'img/campus-3d/poster.webp';
   const CAMERA_ORBIT = '0deg 58deg 80%';   // 거리 %가 작을수록 모형이 크게 보임
   const SEEN = 'gch-tour-cover-seen';
+  // 건물 이름표: 모델 좌표(미터, 가로 x · 높이 y · 앞뒤 z). 모델을 바꾸면 위치를 다시 맞춰야 합니다
+  const LABELS = [
+    { name: '본관', position: '8m 10.5m -4m' },
+    { name: '후관', position: '-2m 9.8m -16.5m' },
+    { name: '체육관', position: '-19m 9.8m -5m' }
+  ];
 
   const dialog = document.getElementById('ai-cover');
   if (!dialog || typeof dialog.showModal !== 'function') return;
@@ -33,6 +39,14 @@
       'disable-pan': '', 'disable-tap': '', loading: 'eager', reveal: 'auto'
     }).forEach(([k, v]) => viewer.setAttribute(k, v));
     if (!reduced) { viewer.setAttribute('auto-rotate', ''); viewer.setAttribute('auto-rotate-delay', '1500'); viewer.setAttribute('rotation-per-second', '12deg'); }
+    for (const [i, label] of LABELS.entries()) {
+      const tag = document.createElement('div');
+      tag.slot = `hotspot-${i}`; tag.className = 'cover-label';
+      tag.dataset.position = label.position; tag.dataset.normal = '0m 1m 0m';
+      tag.textContent = label.name;
+      viewer.append(tag);
+    }
+    viewer.setAttribute('alt', `AI로 만든 3D 학교 전경 모형. ${LABELS.map(l => l.name).join('·')} 이름표가 있고, 끌어서 돌려 볼 수 있어요.`);
     viewer.addEventListener('load', () => stage.classList.add('is-3d'), { once: true });
     viewer.addEventListener('error', () => viewer.remove(), { once: true });   // 3D를 못 그리면 그림만 보여 줌
     stage.prepend(viewer);
