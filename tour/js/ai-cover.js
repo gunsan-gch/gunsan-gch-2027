@@ -7,7 +7,7 @@
    - 같은 탭에서 한 번 닫으면 새로 고침해도 다시 띄우지 않습니다(sessionStorage). */
 (() => {
   'use strict';
-  const MODEL = 'img/campus-3d/campus.glb?v=20261126-cats';   // 고양이 버전 (gunsan-gch-campus-360-with-cats.glb)
+  const MODEL = 'img/campus-3d/campus.glb?v=20261126-cats2';   // 고양이 버전 (gunsan-gch-campus-360-with-cats.glb)
   const POSTER = 'img/campus-3d/poster.webp';
   const CAMERA_ORBIT = '0deg 58deg 80%';   // 거리 %가 작을수록 모형이 크게 보임
   const SEEN = 'gch-tour-cover-seen';
@@ -36,9 +36,9 @@
     Object.entries({
       src: MODEL, poster: POSTER, alt: 'AI로 지은 우리 학교 3D 모형. 끌어서 돌려 볼 수 있어요.',
       'camera-controls': '', 'touch-action': 'pan-y', 'interaction-prompt': 'none',
-      'camera-orbit': CAMERA_ORBIT, 'min-camera-orbit': 'auto 20deg 45%', 'max-camera-orbit': 'auto 80deg 110%',
+      'camera-orbit': CAMERA_ORBIT, 'min-camera-orbit': 'auto 20deg 18%', 'max-camera-orbit': 'auto 80deg 110%',
       'shadow-intensity': '1', exposure: '1.05', 'environment-image': 'neutral',
-      'disable-pan': '', 'disable-tap': '', loading: 'eager', reveal: 'auto'
+      'disable-tap': '', loading: 'eager', reveal: 'auto'
     }).forEach(([k, v]) => viewer.setAttribute(k, v));
     if (!reduced) { viewer.setAttribute('auto-rotate', ''); viewer.setAttribute('auto-rotate-delay', '1500'); viewer.setAttribute('rotation-per-second', '12deg'); }
     for (const [i, label] of LABELS.entries()) {
@@ -50,7 +50,31 @@
     }
     viewer.setAttribute('alt', `AI로 지은 우리 학교 3D 모형. ${LABELS.map(l => l.name).join('·')} 이름표가 있고, 끌어서 돌려 볼 수 있어요.`);
     viewer.addEventListener('load', () => stage.classList.add('is-3d'), { once: true });
-    viewer.addEventListener('error', () => viewer.remove(), { once: true });   // 3D를 못 그리면 그림만 보여 줌
+    viewer.addEventListener('error', () => viewer.remove(), { once: true });
+    // 두 번 누르면(더블클릭·더블탭) 그 자리를 가운데로 당겨 확대. 두 손가락·오른쪽 버튼 끌기로 옮기기도 됨
+    const reset = dialog.querySelector('.cover-reset');
+    let lastTap = 0, lastXY = [0, 0];
+    const zoomTo = (x, y) => {
+      const hit = viewer.positionAndNormalFromPoint(x, y);
+      if (!hit) return;
+      viewer.removeAttribute('auto-rotate');
+      viewer.cameraTarget = `${hit.position.x}m ${hit.position.y}m ${hit.position.z}m`;
+      const orbit = viewer.getCameraOrbit();
+      viewer.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad 30%`;
+      reset.hidden = false;
+    };
+    viewer.addEventListener('dblclick', e => zoomTo(e.clientX, e.clientY));
+    viewer.addEventListener('pointerup', e => {   // 휴대폰 더블탭 (dblclick이 오지 않는 브라우저 대비)
+      if (e.pointerType !== 'touch') return;
+      const now = performance.now(), near = Math.hypot(e.clientX - lastXY[0], e.clientY - lastXY[1]) < 30;
+      if (now - lastTap < 320 && near) { zoomTo(e.clientX, e.clientY); lastTap = 0; } else { lastTap = now; lastXY = [e.clientX, e.clientY]; }
+    });
+    viewer.addEventListener('camera-change', e => { if (e.detail.source === 'user-interaction') reset.hidden = false; });
+    reset.addEventListener('click', () => {
+      viewer.cameraTarget = 'auto auto auto'; viewer.cameraOrbit = CAMERA_ORBIT;
+      if (!reduced) viewer.setAttribute('auto-rotate', '');
+      reset.hidden = true;
+    });   // 3D를 못 그리면 그림만 보여 줌
     stage.prepend(viewer);
   }).catch(() => { /* 오래된 브라우저: 그림만 */ });
 
