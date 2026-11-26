@@ -14,7 +14,7 @@
   'use strict';
   const MODEL = 'img/campus-3d/campus.glb?v=20261126-v11';   // 군산여상_전경_v11_돌계단_검토.glb (고양이 2.5배)
   const INTRO = 'img/campus-3d/intro.mp4?v=20261126-v6';   // 군산여상_치즈의_정문인사_v6.mp4
-  const POSTER_PC = 'img/campus-3d/cover-pc.webp?v=20261126-dex';   // 3D 불러오기 전 그림 (휴대폰은 index.html picture가 고름)
+  const POSTER_PC = 'img/campus-3d/cover-pc.webp?v=20261126-v11';   // 3D 불러오기 전 그림 (휴대폰은 index.html picture가 고름)
   // 교정 고양이 도감 5마리 (GPT 에셋 cards/cat-cards.json 순서). at = 모델 좌표(미터, 가로 x · 고양이 머리 높이 y · 앞뒤 z)
   // 카드 그림 img/campus-3d/cats/<id>.webp (864×1080, 이름·소개가 그림 안에 있음), 못 찾은 칸은 locked.webp
   const CATS = [
