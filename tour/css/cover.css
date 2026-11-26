@@ -25,11 +25,15 @@
   .cover-start { width: 100%; }
 }
 @media (max-width: 480px) { .cover-stage { aspect-ratio: 4 / 3; } }
-/* 건물 이름표 (본관·후관·체육관) */
+/* 건물 이름표 (본관·후관·체육관): 반투명 알약 + 아래 작은 점 */
 .cover-label {
-  padding: 3px 9px; background: var(--navy, #14285a); color: #fff; border: 2px solid #fff;
-  font-size: 14px; font-weight: 800; white-space: nowrap; pointer-events: none;
-  box-shadow: 2px 2px 0 rgba(20, 40, 90, .35); transform: translateY(-50%);
-  transition: opacity .2s;
+  position: relative; padding: 4px 10px; border-radius: 999px;
+  background: rgba(255, 255, 255, .82); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  color: #1c2533; font-size: 12px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .14); pointer-events: none; transform: translateY(calc(-100% - 6px));
 }
-@media (max-width: 480px) { .cover-label { font-size: 12px; padding: 2px 7px; } }
+.cover-label::after {
+  content: ''; position: absolute; left: 50%; bottom: -8px; width: 5px; height: 5px; margin-left: -2.5px;
+  border-radius: 50%; background: #fff; box-shadow: 0 0 0 1.5px rgba(28, 37, 51, .55);
+}
+@media (max-width: 480px) { .cover-label { font-size: 11px; padding: 3px 8px; } }
