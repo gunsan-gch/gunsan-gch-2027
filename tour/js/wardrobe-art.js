@@ -60,6 +60,7 @@
     {id:'stagephones', name:'헤드셋', at:41, slot:'head', theme:'방송부'},
     {id:'roundspecs', name:'동글 안경', at:44, slot:'face', theme:'공부 시간'},
     {id:'ledger', name:'계산기 가방', at:47, slot:'back', theme:'공부 시간'},
+    {id:'celadonbag', name:'다도 청자 가방', at:45, slot:'back', theme:'다도 시간'},
     {id:'gradcap', name:'졸업모', at:50, slot:'head', theme:'공부 시간'},
     {id:'sparkles', name:'반짝이', at:53, slot:'trail', theme:'별빛 산책'},
     {id:'starcloak', name:'별 망토', at:56, slot:'back', theme:'별빛 산책'},
@@ -352,7 +353,7 @@
   }
   const carriedColors={bookcat:'mintD',bag:'mintD',breadbag:'roseD',starbag:'goldD',milkbag:'roseD',bowback:'roseD',wings:'goldD',umbrella:'blueD',cloudpack:'mintD',pianobag:'purpleD',racketbag:'blueD',stonebag:'blueD',targetpack:'roseD',trophybag:'goldD'};
   Object.assign(carriedColors, {
-    mailcat:'blueD', baguette:'goldD', easel:'navy', ledger:'mintD', rainbow:'purpleD', bouquet:'blueD'
+    mailcat:'blueD', baguette:'goldD', easel:'navy', ledger:'mintD', rainbow:'purpleD', bouquet:'blueD', celadonbag:'mintD'
   });
   // Source-pixel adjustments from the resting jacket. The side view pulls the
   // pack against the back; tall props need more lift to clear the shoes.
@@ -365,6 +366,7 @@
     targetpack:{ lift: 3 }, trophybag: { lift: 4, center: 1 },
     mailcat:   { lift: 2 },
     baguette:  { lift: 3 }, easel: { lift: 4 }, ledger: { lift: 4 },
+    celadonbag:{ lift: 2 },
     rainbow:   { lift: 4, sideLift: 1 }
   };
   function back(c,id,dir,frame=1){
@@ -478,7 +480,13 @@
     trophybag:{
       colors:{o:'goldD',g:'gold',h:'yellow',r:'roseD',p:'pink',n:'navy'},
       profile:[7,20,['..ohhho','ooogggoh','o.ohggo','o.ohggo','.ooggo','..oggo','...oo','...og','...og','..oggo','.oggggo','.nnnnno']],
-      rear:[8,20,['...ohhhhhho','ooooggggggoooo','o..ohgggggo..o','o..ohgrrggo..o','.o.oggrpggo.o','..oooggggooo','.....oggo','......oo','......og','.....oggo','....ohgggo','...onnnnnno']]}
+      rear:[8,20,['...ohhhhhho','ooooggggggoooo','o..ohgggggo..o','o..ohgrrggo..o','.o.oggrpggo.o','..oooggggooo','.....oggo','......oo','......og','.....oggo','....ohgggo','...onnnnnno']]},
+    // 다도실 청자: 비색 몸통, 학 두 마리 상감, 금빛 잠금쇠. 옆면은 같은 빛깔의 좁은 판.
+    celadonbag:{
+      colors:{o:'#3f6f66',v:'#9fd3c0',l:'#d3efe3',w:'white',g:'gold',d:'goldD',n:'navy'},
+      profile:[7,20,['.oo.','o..o','oooooo','ollllo','ogdooo','ovwvvo','ovvvvo','ovvvvo','.oooo.']],
+      rear:[8,20,['.....oooooo.....','....o......o....','.oooooooooooooo.','olllllllllllllvo',
+        'oooooooggooooooo','ovvwvvvddvvvvwvo','ovwwwvvvvvvvwwwo','ovvvvvvvvvvvvvvo','.oooooooooooooo.']]},
   };
   function patternedBag(r,id,dir){
     const bag=patternedBags[id],side=dir==='left'||dir==='right';

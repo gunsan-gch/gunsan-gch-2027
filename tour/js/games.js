@@ -155,11 +155,46 @@ window.tourGame = (() => {
     dialog.showModal();
     document.body.classList.add('game-open');
     const session = current;
+    if (COVERS[id] && !coverSeen.has(id)) {
+      coverSeen.add(id);
+      showCover(session, () => launch(session));
+    } else {
+      launch(session);
+    }
+    return true;
+  }
+
+  // 처음 여는 게임 몇 개는 그림 한 장으로 시작한다. 게임 타이머는 '시작'을 누른 뒤에야 돈다.
+  const COVERS = { phishing: 'phishing', press: 'press', target: 'target' };
+  const coverSeen = new Set();
+  function showCover(session, go) {
+    const wrap = document.createElement('div');
+    wrap.className = 'game-cover';
+    const img = new Image();
+    img.src = `img/games/covers/${COVERS[session.id]}.webp?v=20261127`;
+    img.alt = '';
+    img.width = 1200; img.height = 750;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'btn btn-primary game-cover-start';
+    button.textContent = '시작하기';
+    button.addEventListener('click', () => {
+      if (session !== current) return;
+      body.replaceChildren();
+      go();
+    }, { once: true });
+    wrap.append(img, button);
+    body.replaceChildren(wrap);
+    button.focus({ preventScroll: true });
+  }
+
+  function launch(session) {
+    const { id, game } = session;
     try {
       if (id === 'goods' || id === 'paperplane') {
         session.audio = window.TourArcadeAudio?.mount(dialog, $('#game-sound'));
       }
-      current.cleanup = game.start(body, {
+      session.cleanup = game.start(body, {
         cue: session.audio?.cue,
         bestScore: window.TourStarProgress.pointsOrNull(readStamps()[id]?.bestScore),
         done: result => finish(session, result),
@@ -172,7 +207,6 @@ window.tourGame = (() => {
       body.textContent = '게임을 불러오지 못했어요. 창을 닫고 다시 열어 주세요.';
       console.error(e);
     }
-    return true;
   }
 
   // Switching sports follows the same close/cleanup lifecycle as a replay.

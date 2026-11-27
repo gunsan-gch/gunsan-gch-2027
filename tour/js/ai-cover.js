@@ -15,17 +15,20 @@
   const MODEL = 'img/campus-3d/campus.glb?v=20261126-v11';   // 군산여상_전경_v11_돌계단_검토.glb (고양이 2.5배)
   const INTRO = 'img/campus-3d/intro.mp4?v=20261126-v6';   // 군산여상_치즈의_정문인사_v6.mp4
   const POSTER_PC = 'img/campus-3d/cover-pc.webp?v=20261126-v11';   // 3D 불러오기 전 그림 (휴대폰은 index.html picture가 고름)
-  // 교정 고양이 도감 5마리 (GPT 에셋 cards/cat-cards.json 순서). at = 모델 좌표(미터, 가로 x · 고양이 머리 높이 y · 앞뒤 z)
+  const SLEEPER_AT = [9, 9.7, -22];   // 호두 자리: 후관 옥상 뒤쪽 (모델을 바꾸면 다시 맞추기)
+  // 교정 고양이 도감 6마리 (5마리는 모델 안, 호두는 그림) (GPT 에셋 cards/cat-cards.json 순서). at = 모델 좌표(미터, 가로 x · 고양이 머리 높이 y · 앞뒤 z)
   // 카드 그림 img/campus-3d/cats/<id>.webp (864×1080, 이름·소개가 그림 안에 있음), 못 찾은 칸은 locked.webp
   const CATS = [
     { id: 'cheese', name: '치즈', subtitle: '먼저 다가오는 인사꾼', line: '꼬리를 세우고 먼저 인사를 건네요.', alt: '동그란 눈과 크림색 앞발을 가진 치즈빛 고양이', at: [-0.7, 3.6, 4] },
     { id: 'danpung', name: '단풍', subtitle: '바람을 쫓는 수집가', line: '잎사귀가 살랑이면 앞발이 먼저 나가요.', alt: '낙엽을 향해 앞발을 뻗은 삼색 고양이', at: [22, 4.3, -9.5] },
     { id: 'kkamang', name: '까망', subtitle: '낮잠 수집가', line: '두 앞발을 모으면 금세 눈이 스르르 감겨요.', alt: '앞발을 모으고 눈을 감은 턱시도 고양이', at: [-2, 3.9, -25] },
     { id: 'eunbyeol', name: '은별', subtitle: '반짝임 탐험가', line: '반짝이는 걸 보면 발걸음이 빨라져요.', alt: '꼬리를 세우고 걷는 은빛 줄무늬 고양이', at: [-4.5, 11.4, -5] },
-    { id: 'bora', name: '보라', subtitle: '느긋한 산책 친구', line: '한숨 돌릴 땐 곁에 조용히 자리를 잡아요.', alt: '연보랏빛 털에 회색 꼬리를 둥글게 말고 엎드린 고양이', at: [-22.9, 4.1, -16] }
+    { id: 'bora', name: '보라', subtitle: '느긋한 산책 친구', line: '한숨 돌릴 땐 곁에 조용히 자리를 잡아요.', alt: '연보랏빛 털에 회색 꼬리를 둥글게 말고 엎드린 고양이', at: [-22.9, 4.1, -16] },
+    // 여섯째(보너스): 모델에 없는 고양이라 3D 위에 작은 그림(cats/hodu-sprite.webp)으로 숨겨 둠
+    { id: 'hodu', name: '호두', subtitle: '책더미 위 낮잠쟁이', line: '책 위에 엎드리면 금세 꿈나라로 가요.', alt: '책 세 권 위에 엎드려 잠든 살구빛 고양이', at: SLEEPER_AT, sprite: true }
   ];
   const CAT_IMG = id => `img/campus-3d/cats/${id}.webp?v=20261126-dex`;
-  // 5마리를 다 찾으면 받는 완주 포토카드 (1080×1350). 보기용 webp, 저장용 jpg
+  // 모두 찾으면 받는 완주 포토카드 (1080×1350). 보기용 webp, 저장용 jpg
   const POSTCARDS = [
     { id: 'day', name: '낮', label: '햇살이 머문 교정' },
     { id: 'dusk', name: '노을', label: '노을에 물든 교정' }
@@ -112,7 +115,7 @@
     const box = sheet(`${cat.name} 카드`);
     const all = found.length === CATS.length;
     const head = document.createElement('p'); head.className = 'cover-card-head';
-    head.textContent = isNew ? (all ? '다섯 마리 모두 찾았어요!' : `${found.length}번째 고양이 발견!`) : '도감에 있는 고양이예요';
+    head.textContent = isNew ? (all ? '고양이를 모두 찾았어요!' : `${found.length}번째 고양이 발견!`) : '도감에 있는 고양이예요';
     const img = new Image(864, 1080); img.className = 'cover-card-img'; img.src = CAT_IMG(cat.id);
     img.alt = `${cat.name}, ${cat.subtitle}. ${cat.line} (${cat.alt})`;
     const text = document.createElement('p'); text.className = 'cover-card-text';
@@ -156,7 +159,7 @@
       link.className = 'cover-postcard'; link.href = `img/campus-3d/postcards/${card.id}.jpg?v=20261126`;
       link.download = `gunsan-gch-cat-postcard-${card.id}.jpg`;
       const img = new Image(1080, 1350); img.src = `img/campus-3d/postcards/${card.id}.webp?v=20261126`;
-      img.alt = `교정의 다섯 친구 완주 포토카드, ${card.label}`;
+      img.alt = `교정 고양이 친구들 완주 포토카드, ${card.label}`;
       const label = document.createElement('span'); label.textContent = `${card.name} 버전 저장`;
       link.append(img, label);
       link.addEventListener('click', () => { if (window.tourTrack) window.tourTrack('tour_cover_postcard', { card: card.id }, ['TourCover', 'Postcard']); });
@@ -184,7 +187,7 @@
     if (viewer.querySelector(`[slot="hotspot-${i}"]`)) return;
     const tag = document.createElement('div');
     tag.slot = `hotspot-${i}`; tag.className = 'cover-label cover-label-cat';
-    tag.dataset.position = `${cat.at[0]}m ${cat.at[1]}m ${cat.at[2]}m`; tag.dataset.normal = '0m 1m 0m';
+    tag.dataset.position = `${cat.at[0]}m ${cat.at[1] + (cat.sprite ? 1.4 : 0)}m ${cat.at[2]}m`; tag.dataset.normal = '0m 1m 0m';
     tag.textContent = cat.name;
     viewer.append(tag);
   }
@@ -196,6 +199,7 @@
     if (!hit) return null;
     let best = null, bestD = Infinity;
     for (const cat of CATS) {
+      if (cat.sprite) continue;
       const d = Math.hypot(hit.position.x - cat.at[0], hit.position.z - cat.at[2]);
       if (d < bestD) { best = cat; bestD = d; }
     }
@@ -222,6 +226,17 @@
     }
     viewer.setAttribute('alt', `AI로 지은 우리 학교 3D 모형. ${LABELS.map(l => l.name).join('·')} 이름표가 있고, 끌어서 돌려 볼 수 있어요.`);
     for (const cat of CATS) if (found.includes(cat.id)) addCatTag(viewer, cat);
+    for (const cat of CATS.filter(c => c.sprite)) {   // 3D 위에 얹은 그림 고양이: 누르면 카드
+      const nap = document.createElement('button');
+      nap.type = 'button'; nap.slot = `hotspot-nap-${cat.id}`; nap.className = 'cover-nap';
+      nap.dataset.position = `${cat.at[0]}m ${cat.at[1]}m ${cat.at[2]}m`; nap.dataset.normal = '0m 1m 0m';
+      nap.setAttribute('aria-label', '잠든 고양이');
+      const img = new Image(96, 69); img.src = CAT_IMG(cat.id + '-sprite'); img.alt = '';
+      nap.append(img);
+      nap.addEventListener('pointerdown', e => e.stopPropagation());
+      nap.addEventListener('click', e => { e.stopPropagation(); markFound(viewer, cat); });
+      viewer.append(nap);
+    }
     viewer.addEventListener('load', () => { stage.classList.add('is-3d'); counter.hidden = false; }, { once: true });
     viewer.addEventListener('error', () => viewer.remove(), { once: true });
     // 두 번 누르면(더블클릭·더블탭) 그 자리를 가운데로 당겨 확대. 두 손가락·오른쪽 버튼 끌기로 옮기기도 됨

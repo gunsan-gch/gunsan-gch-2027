@@ -55,7 +55,7 @@ async function checkOldSave(page, key, read) {
   }, key);
   await page.reload();
   assert.deepEqual((await read()).equip, {head:'ribbon',back:'bag',face:null,trail:null});
-  assert.equal((await read()).wardrobe.unlocked.length, 62);
+  assert.equal((await read()).wardrobe.unlocked.length, 63);
 }
 async function checkFilters(page) {
   await page.locator('#wardrobe-open').click();
@@ -143,9 +143,9 @@ async function checkBrowser() {
   const empty = createCanvas(sprite.width, sprite.height);
   const headIds = [null, ...art.items.filter(x => x.slot === 'head').map(x => x.id)];
   const backIds = [null, ...art.items.filter(x => x.slot === 'back').map(x => x.id)];
-  assert.equal(art.items.length, 63);
-  assert.equal(new Set(art.items.map(x => x.id)).size, 63);
-  assert.deepEqual(Array.from(rules.slots, slot => art.collection.filter(i => i.slot === slot).length), [7,7,6,6]);
+  assert.equal(art.items.length, 64);
+  assert.equal(new Set(art.items.map(x => x.id)).size, 64);
+  assert.deepEqual(Array.from(rules.slots, slot => art.collection.filter(i => i.slot === slot).length), [7,8,6,6]);
   for (const [id, at] of [['planepin',6], ['mailcat',12], ['postmarks',18]]) {
     assert.equal(art.items.find(item => item.id === id).at, at);
   }
@@ -160,7 +160,7 @@ async function checkBrowser() {
     {head:'witch',back:'bag',face:null,trail:null});
   for (const stars of [65, 66]) {
     const wardrobe = rules.wardrobe(old, {stars, count:22}, art.items);
-    assert.equal(wardrobe.unlocked.length, stars === 66 ? 63 : 62);
+    assert.equal(wardrobe.unlocked.length, stars === 66 ? 64 : 63);
     assert.equal(wardrobe.unlocked.includes('bouquet'), stars === 66);
   }
   for (const set of art.sets) {
@@ -369,6 +369,6 @@ async function checkBrowser() {
     for(let y=0;y<52;y++)for(let x=0;x<48;x++)for(let k=0;k<4;k++)
       assert.equal(left[(y*48+x)*4+k],right[(y*48+47-x)*4+k],`cape: symmetric side placement ${frame}`);
   }
-  console.log(JSON.stringify({ singleRenders, renders, hairChecks, faceChecks, capeChecks, bobChecks, crownLeaks: 0, edgeClipping: 0, sideProfiles: '22개 × 3프레임', unlocks: '66별 · 63종' }));
+  console.log(JSON.stringify({ singleRenders, renders, hairChecks, faceChecks, capeChecks, bobChecks, crownLeaks: 0, edgeClipping: 0, sideProfiles: '22개 × 3프레임', unlocks: '66별 · 64종' }));
   if (process.argv.includes('--browser')) await checkBrowser();
 })().catch(error => { console.error(error); process.exitCode = 1; });
