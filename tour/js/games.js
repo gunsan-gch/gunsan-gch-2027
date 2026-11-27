@@ -167,9 +167,10 @@ window.tourGame = (() => {
   // 게임은 세션마다 처음 열 때 그림 한 장(커버)과 「시작하기」로 시작한다. 게임 타이머는 '시작하기'를 누른 뒤에야 돈다.
   // 커버 그림: img/games/covers/<id>.webp (1200×750, 글자 없는 그림). 새 그림을 넣으면 COVER_ART에 id를 더하고 COVER_V를 올리세요.
   // STAMP_COVERS를 true로 바꾸면 그림이 없는 게임도 도장 그림을 크게 보여 주는 커버로 시작합니다 (커버 그림이 다 모이면 켤 예정).
-  const COVER_ART = new Set(['phishing', 'press', 'target', 'bakery']);
-  const STAMP_COVERS = false;
-  const COVER_V = '20261127';
+  const COVER_ART = new Set(['phishing', 'press', 'target', 'bakery', 'art', 'stairs', 'interview', 'curling', 'badminton', 'melody', 'paperplane', 'tea',
+    'cafe', 'ai', 'typing', 'rain', 'cashier', 'bookshop', 'logistics', 'reconcile', 'booths', 'goods', 'career']);
+  const STAMP_COVERS = true;   // 그림 없는 새 게임도 도장 그림 커버로 시작
+  const COVER_V = '20261127-all';
   const coverSeen = new Set();
   const wantsCover = id => !GAMES[id]?.isHub && !coverSeen.has(id) && (STAMP_COVERS || COVER_ART.has(id));
   function showCover(session, go) {
