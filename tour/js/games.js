@@ -165,7 +165,7 @@ window.tourGame = (() => {
   }
 
   // 처음 여는 게임 몇 개는 그림 한 장으로 시작한다. 게임 타이머는 '시작'을 누른 뒤에야 돈다.
-  const COVERS = { phishing: 'phishing', press: 'press', target: 'target' };
+  const COVERS = { phishing: 'phishing', press: 'press', target: 'target', bakery: 'bakery' };
   const coverSeen = new Set();
   function showCover(session, go) {
     const wrap = document.createElement('div');
