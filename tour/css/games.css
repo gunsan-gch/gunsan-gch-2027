@@ -933,3 +933,43 @@ span.interview-robot { display: grid; place-items: center; font-size: 64px; }
 .game-cover { display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .game-cover img { display: block; width: 100%; max-width: 640px; height: auto; aspect-ratio: 8 / 5; object-fit: cover; border-radius: 12px; }
 .game-cover .game-cover-start { min-width: 160px; min-height: 48px; font-size: 16px; }
+
+/* ---------- 게임 커버 (모든 게임, js/games.js showCover) ---------- */
+.game-cover-art { position: relative; width: 100%; max-width: 640px; aspect-ratio: 8 / 5; border-radius: 12px; overflow: hidden; background: #f2efe6; }
+.game-cover-art img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.game-cover .game-cover-art img { max-width: none; aspect-ratio: auto; border-radius: 0; }
+.game-cover-art.is-stamp { display: grid; place-items: center; background: radial-gradient(circle at 50% 45%, #fffaf0 0, #f1e9d8 70%); }
+.game-cover-art .game-cover-seal { display: grid; place-items: center; width: 40%; aspect-ratio: 1; font-size: 64px; color: var(--orange); }
+.game-cover-art .game-cover-seal img { width: 100%; height: 100%; image-rendering: pixelated; }
+.game-cover-daily {
+  position: absolute; left: 12px; top: 12px; margin: 0; padding: 5px 12px; border-radius: 999px;
+  background: rgba(32, 44, 71, .88); color: #ffe6a2; font-size: 13px; font-weight: 800;
+}
+.game-cover-daily.is-done { background: rgba(46, 107, 79, .9); color: #fff; }
+
+/* ---------- 오늘의 도전 ---------- */
+.tour-position .daily-open { font-weight: 700; border-color: var(--orange); color: var(--ink); background: #fff7ec; }
+.tour-position .daily-open .daily-name { color: var(--orange); }
+.tour-position .daily-open.is-done { border-color: var(--green); background: #eef7f1; }
+.tour-position .daily-open.is-done .daily-name { color: var(--green); }
+.game-daily-result { margin: 0; padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 800; color: var(--orange); background: #fff1e0; }
+.game-daily-result.is-done { color: #fff; background: var(--green); }
+.stamp-daily, .stamp-title { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 10px 12px; margin-bottom: 10px; border-radius: 10px; background: #fff7ec; }
+.stamp-title { background: #f3f1fa; }
+.stamp-daily.is-done { background: #eef7f1; }
+.stamp-daily h3, .stamp-title h3 { flex: 1 0 100%; margin: 0; font-size: 12px; color: var(--muted); }
+.stamp-daily-text { flex: 1 1 220px; display: flex; flex-direction: column; gap: 2px; margin: 0; font-size: 15px; color: var(--ink); }
+.stamp-daily-text strong { font-size: 15px; }
+.stamp-daily-text small { font-size: 12px; color: var(--muted); }
+.stamp-daily .btn, .stamp-title .btn { flex: none; }
+
+/* ---------- 칭호 포토카드 창 (js/title-card.js) ---------- */
+.title-card-dialog { width: min(100% - 24px, 720px); max-height: calc(100dvh - 24px); padding: 0; border: 2px solid var(--navy, #14285a); background: #f7f4ea; overflow: auto; }
+.title-card-dialog::backdrop { background: rgba(15, 29, 51, .72); }
+.title-card-inner { display: grid; gap: 12px; padding: 16px; text-align: center; }
+.title-card-head { margin: 0; font-size: 16px; font-weight: 800; color: #c0661c; }
+.title-card-note { margin: 0; font-size: 12px; color: #3a4250; }
+.title-card-actions { display: flex; justify-content: center; }
+.title-card-dialog .cover-postcards { max-height: none; }
+.title-card-dialog .cover-postcard img { height: auto; width: 100%; max-height: 60dvh; max-width: 100%; }
+.title-card-dialog .cover-postcard { flex: 1 1 0; }
