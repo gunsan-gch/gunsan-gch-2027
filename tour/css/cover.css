@@ -25,7 +25,7 @@
   .cover-inner { padding: 14px 12px 12px; gap: 8px; }
   .cover-start { width: 100%; }
 }
-@media (max-width: 480px) { .cover-stage { aspect-ratio: 4 / 5; max-height: calc(100dvh - 300px); } }
+@media (max-width: 480px) { .cover-stage { aspect-ratio: 4 / 5; max-height: calc(100dvh - 300px); justify-self: center; width: min(100%, calc((100dvh - 300px) * 4 / 5)); } }
 /* 건물 이름표 (본관·후관·체육관): 반투명 알약 + 아래 작은 점 */
 .cover-label {
   position: relative; padding: 4px 10px; border-radius: 999px;

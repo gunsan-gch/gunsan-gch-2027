@@ -189,7 +189,7 @@
 
   window.TOUR_GAMES.art = {
     title: '물감 섞기 미션', button: '🎨 물감 섞기 미션', room: '5층 미술실',
-    naver: 'Art', maxStars: 3, stamp: '미술실 도장 획득!',
+    naver: 'Art', maxStars: 3, maxPoints: 3000, stamp: '미술실 도장 획득!',
     message: '색을 섞어 원하는 느낌을 만드는 감각은 광고·상품 디자인에도 쓰여요. AI마케팅과에서 배우는 광고 만들기도 만나 보세요.',
     cta: { href: '../index.html#marketing', label: 'AI마케팅과 알아보기 →' },
     start

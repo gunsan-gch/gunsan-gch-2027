@@ -222,7 +222,7 @@
   if (typeof module !== 'undefined' && module.exports) module.exports = { levels, makeMap, grade, reward };
   if (typeof window !== 'undefined') window.TOUR_GAMES.booths = {
     title: '부스 자리, 기억나?', button: '부스 지도 기억하기', room: '학생회 회의실',
-    naver: 'Booths', maxStars: 3, stamp: '예술제 부스 지도 도장!',
+    naver: 'Booths', maxStars: 3, maxPoints: total, stamp: '예술제 부스 지도 도장!',
     message: '정원 선배와 녹원예술제 부스 지도를 완성했어요.', start
   };
 })();

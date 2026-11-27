@@ -3,6 +3,7 @@
    날마다 게임 하나와 목표를 정해 줍니다. 서버 없이 날짜로만 고르므로, 같은 날 들어온 사람은 모두 같은 게임을 만납니다.
    - 게임 고르기: 2026-01-01부터 지난 날 수 × 7을 게임 수로 나눈 나머지 (게임 수와 7이 서로소면 모든 게임을 한 번씩 돈 뒤 반복).
    - 목표: 그 게임 별이 3개 미만이면 「★3 받기」, 이미 ★3이면 「내 최고 기록 넘기기」. 그날 처음 본 순간의 목표로 고정합니다.
+     게임 등록에 maxPoints(만점)가 있고 이미 만점이면 넘을 수 없으므로 「★3 받기」로 정합니다.
    - 기록은 이 기기의 localStorage 'gch-tour-daily'에만 { day, id, kind, target, done, streak, lastDone } 꼴로 남깁니다 (개인정보 없음).
    - 화면: 지도 위 「오늘의 도전」 버튼, 도장판 맨 위, 게임 커버, 결과 화면 한 줄.
    ========================================================================= */
@@ -36,20 +37,25 @@ window.TourDaily = (() => {
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* 저장 막혀도 오늘 화면은 그대로 */ }
   }
 
+  /** 만점이 정해진 게임에서 만점보다 높은 점수를 목표로 잡아 둔 기록 (예전 버전이 저장한 것) */
+  const unreachable = state => state.kind === 'score' && GAMES[state.id].maxPoints && state.target > GAMES[state.id].maxPoints;
+
   /** 오늘의 도전 (없으면 만들어서 저장). 게임이 하나도 없으면 null */
   function current() {
     const state = read();
     const day = today();
-    if (state.day === day && GAMES[state.id]) return state;
+    if (state.day === day && GAMES[state.id] && !unreachable(state)) return state;
     const ids = pool();
     if (!ids.length) return null;
     const id = ids[(((dayNumber() * 7) % ids.length) + ids.length) % ids.length];
     const record = window.tourGame?.stamps()?.[id];
     const best = window.TourStarProgress.pointsOrNull(record?.bestScore);
-    const goal = record && record.stars >= 3 && best !== null
+    const cap = GAMES[id].maxPoints;   // 만점이 있는 게임은 만점을 찍었으면 더 넘을 수 없으니 ★3 목표로
+    const goal = record && record.stars >= 3 && best !== null && !(cap && best >= cap)
       ? { kind: 'score', target: best + 1 }
       : { kind: 'stars', target: 3 };
-    const next = { day, id, ...goal, done: false, streak: state.streak || 0, lastDone: state.lastDone || null };
+    const keep = state.day === day ? { done: !!state.done } : { done: false };
+    const next = { day, id, ...goal, ...keep, streak: state.streak || 0, lastDone: state.lastDone || null };
     write(next);
     return next;
   }
