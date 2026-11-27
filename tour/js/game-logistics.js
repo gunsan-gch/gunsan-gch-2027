@@ -158,5 +158,5 @@
     container.addEventListener('keydown',key);
     return () => { finished = true; container.removeEventListener('click',click); container.removeEventListener('keydown',key); };
   }
-  window.TOUR_GAMES.logistics = {title:'딱 맞게 보내줘! 예술제 물류반',icon: 'box', button: '예술제 물류반',room:'4층 전산회계2실',nextGame:'reconcile',cta:{href:'../index.html#erp',label:'ERP비즈니스과 알아보기 →'},naver:'Logistics',maxStars:3,stamp:'물류반 도장 획득!',message:'다영 선배와 부스별 주문, 창고 재고, 배달 경로를 함께 관리했어요.',start};
+  window.TOUR_GAMES.logistics = {title:'딱 맞게 보내줘! 예술제 물류반',icon: 'box', button: '예술제 물류반',room:'4층 전산회계2실',nextGame:'reconcile',cta:{href:'../index.html#erp',label:'ERP비즈니스과 알아보기 →'},naver:'Logistics',maxStars:3,maxPoints:1000,stamp:'물류반 도장 획득!',message:'다영 선배와 부스별 주문, 창고 재고, 배달 경로를 함께 관리했어요.',start};
 })();

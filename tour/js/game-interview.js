@@ -266,7 +266,7 @@
 
   window.TOUR_GAMES = window.TOUR_GAMES || {};
   window.TOUR_GAMES.interview = {
-    title: 'AI 면접 도전', button: '🤖 AI 면접 도전', room: 'AI 면접실', naver: 'Interview', maxStars: 3,
+    title: 'AI 면접 도전', button: '🤖 AI 면접 도전', room: 'AI 면접실', naver: 'Interview', maxStars: 3, maxPoints: 1250,
     stamp: STAMP_TEXT,
     message: RESULT_TEXT,
     cta: LINK,

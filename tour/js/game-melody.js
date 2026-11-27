@@ -224,7 +224,7 @@
     };
   }
   window.TOUR_GAMES.melody = {
-    title: '멜로디 따라잡기', button: '♫ 멜로디 따라잡기', room: '음악실', naver: 'Melody', maxStars: 3,
+    title: '멜로디 따라잡기', button: '♫ 멜로디 따라잡기', room: '음악실', naver: 'Melody', maxStars: 3, maxPoints: 1300,
     stamp: '음악실 도장 획득!', message: '서로의 소리를 듣고 맞추면 멋진 합주가 돼요.', start
   };
 })();
