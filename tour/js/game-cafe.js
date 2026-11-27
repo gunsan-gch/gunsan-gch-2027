@@ -39,11 +39,11 @@
       recipe: ['cup-ice', 'vanilla', 'ice', 'milk', 'shot'] },
     { drink: '따뜻한 아메리카노', image: 'drink-hot-americano.png', customer: 2, who: '선생님', say: '따뜻한 아메리카노 한 잔이요. 우유는 빼 주세요.',
       recipe: ['cup-mug', 'water', 'shot'] },
-    { drink: '아이스 카페라떼', image: 'drink-vanilla-latte.png', customer: 1, who: '학생', say: '아이스 카페라떼요! 시럽은 안 넣어도 돼요.',
+    { drink: '아이스 카페라떼', image: 'drink-iced-latte.png', customer: 1, who: '학생', say: '아이스 카페라떼요! 시럽은 안 넣어도 돼요.',
       recipe: ['cup-ice', 'ice', 'milk', 'shot'] },
     { drink: '딸기라떼', image: 'drink-strawberry-latte.png', customer: 1, who: '학생', say: '커피 말고… 시원한 딸기라떼 주세요!',
       recipe: ['cup-ice', 'ice', 'strawberry', 'milk'] },
-    { drink: '따뜻한 바닐라라떼', image: 'drink-hot-latte.png', customer: 3, who: '학부모', say: '따뜻한 바닐라라떼 한 잔 부탁드려요.',
+    { drink: '따뜻한 바닐라라떼', image: 'drink-hot-vanilla-latte.png', customer: 3, who: '학부모', say: '따뜻한 바닐라라떼 한 잔 부탁드려요.',
       recipe: ['cup-mug', 'vanilla', 'shot', 'steamed-milk'] }
   ];
   const ORDERS_PER_GAME = 3;

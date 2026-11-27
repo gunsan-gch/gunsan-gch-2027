@@ -466,6 +466,18 @@
       "description": "완성 딸기라떼 — GPT 제작, 카페 게임 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-27)",
       "sha256": "c42134cee4827133ed8eff9b7f71751514a5152718dbc6dadfc8e6f94aefc1cf"
     },
+    "games/cafe/drink-hot-vanilla-latte.png": {
+      "output": "games/cafe/drink-hot-vanilla-latte.png",
+      "kind": "game",
+      "description": "완성 따뜻한 바닐라라떼 — GPT 제작, 카페 게임 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-27)",
+      "sha256": "4cb0b09dc7425a5817c525e357493d839499e37e0e69835f04a14abc090f3040"
+    },
+    "games/cafe/drink-iced-latte.png": {
+      "output": "games/cafe/drink-iced-latte.png",
+      "kind": "game",
+      "description": "완성 아이스 카페라떼 — GPT 제작, 카페 게임 공통 팔레트의 48×48 투명 픽셀아트 (2026-11-27)",
+      "sha256": "9fe418388bb146bd70bb69ca20a1d92f9722a59919172400cf552e9bfb4f5e7f"
+    },
     "games/interview/robot-neutral.png": {
       "output": "games/interview/robot-neutral.png",
       "kind": "game",
