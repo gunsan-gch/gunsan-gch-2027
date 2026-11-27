@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 144" role="img" aria-labelledby="title desc">
+<title id="title">별빛 학교 탐험가</title><desc id="desc">미니게임 별 27개로 획득하는 칭호에 붙일 수 있는 남색과 금색 배지 시안</desc>
+<defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#364367"/><stop offset="1" stop-color="#202c47"/></linearGradient><linearGradient id="metal" x2="0" y2="1"><stop stop-color="#fff0be"/><stop offset="1" stop-color="#dba25d"/></linearGradient></defs>
+<path d="m41 92-12 35 23-7 14 15 9-33m28-10 12 35-23-7-14 15-9-33" fill="#99596b" stroke="#3b3049" stroke-width="4" stroke-linejoin="round"/>
+<path d="M72 7c14 11 31 15 52 18v37c0 34-21 51-52 63-31-12-52-29-52-63V25c21-3 38-7 52-18z" fill="url(#metal)" stroke="#302d43" stroke-width="4" stroke-linejoin="round"/>
+<path d="M72 18c12 8 27 13 42 16v28c0 26-14 41-42 53-28-12-42-27-42-53V34c15-3 30-8 42-16z" fill="url(#sky)" stroke="#fff0c1" stroke-width="3" stroke-linejoin="round"/>
+<path d="m72 36 6 15 16 1-12 10 4 16-14-9-14 9 4-16-12-10 16-1z" fill="#ffe6a2" stroke="#d29b57" stroke-width="2" stroke-linejoin="round"/>
+<path d="M46 44v10m-5-5h10m47-5v10m-5-5h10" stroke="#d6d9f2" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M43 92V80l10-7 9 7v-2l10-8 10 8v2l9-7 10 7v12H43z" fill="#96b4ad" stroke="#1f314b" stroke-width="2" stroke-linejoin="round"/>
+<path d="M47 93h50m-40 6h30" stroke="#d6e1c8" stroke-width="2" stroke-linecap="round"/>
+</svg>

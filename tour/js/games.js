@@ -155,7 +155,7 @@ window.tourGame = (() => {
     dialog.showModal();
     document.body.classList.add('game-open');
     const session = current;
-    if (COVERS[id] && !coverSeen.has(id)) {
+    if (wantsCover(id)) {
       coverSeen.add(id);
       showCover(session, () => launch(session));
     } else {
@@ -164,26 +164,48 @@ window.tourGame = (() => {
     return true;
   }
 
-  // 처음 여는 게임 몇 개는 그림 한 장으로 시작한다. 게임 타이머는 '시작'을 누른 뒤에야 돈다.
-  const COVERS = { phishing: 'phishing', press: 'press', target: 'target', bakery: 'bakery' };
+  // 게임은 세션마다 처음 열 때 그림 한 장(커버)과 「시작하기」로 시작한다. 게임 타이머는 '시작하기'를 누른 뒤에야 돈다.
+  // 커버 그림: img/games/covers/<id>.webp (1200×750, 글자 없는 그림). 새 그림을 넣으면 COVER_ART에 id를 더하고 COVER_V를 올리세요.
+  // STAMP_COVERS를 true로 바꾸면 그림이 없는 게임도 도장 그림을 크게 보여 주는 커버로 시작합니다 (커버 그림이 다 모이면 켤 예정).
+  const COVER_ART = new Set(['phishing', 'press', 'target', 'bakery']);
+  const STAMP_COVERS = false;
+  const COVER_V = '20261127';
   const coverSeen = new Set();
+  const wantsCover = id => !GAMES[id]?.isHub && !coverSeen.has(id) && (STAMP_COVERS || COVER_ART.has(id));
   function showCover(session, go) {
+    const { id, game } = session;
     const wrap = document.createElement('div');
     wrap.className = 'game-cover';
-    const img = new Image();
-    img.src = `img/games/covers/${COVERS[session.id]}.webp?v=20261127`;
-    img.alt = '';
-    img.width = 1200; img.height = 750;
+    const frame = document.createElement('div');
+    frame.className = 'game-cover-art';
+    if (COVER_ART.has(id)) {
+      const img = new Image(1200, 750);
+      img.src = `img/games/covers/${id}.webp?v=${COVER_V}`;
+      img.alt = '';
+      frame.append(img);
+    } else {
+      frame.classList.add('is-stamp');
+      frame.append(stampArt(id, 'game-cover-seal'));
+    }
+    // 오늘의 도전 게임이면 커버 위에 목표 한 줄 (js/daily.js)
+    const goal = window.TourDaily?.goalFor(id);
+    if (goal) {
+      const tag = document.createElement('p');
+      tag.className = 'game-cover-daily' + (goal.done ? ' is-done' : '');
+      tag.textContent = goal.done ? `오늘의 도전 성공 · ${goal.label}` : `오늘의 도전 · ${goal.label}`;
+      frame.append(tag);
+    }
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'btn btn-primary game-cover-start';
     button.textContent = '시작하기';
+    button.setAttribute('aria-label', `${game.title} 시작하기`);
     button.addEventListener('click', () => {
       if (session !== current) return;
       body.replaceChildren();
       go();
     }, { once: true });
-    wrap.append(img, button);
+    wrap.append(frame, button);
     body.replaceChildren(wrap);
     button.focus({ preventScroll: true });
   }
@@ -229,7 +251,7 @@ window.tourGame = (() => {
     tourTrack('tour_game_complete', { game_id: id, stars, hints }, ['TourGame', game.naver + 'Done']);
     const { best, previousScore } = saveStamp(id, stars, max, points);
     renderResult(session, stars, max, best, extra, window.TourStarProgress.pointsOrNull(points), previousScore);
-    document.dispatchEvent(new CustomEvent('tour:game-result', { detail: { id } }));
+    document.dispatchEvent(new CustomEvent('tour:game-result', { detail: { id, stars, points: window.TourStarProgress.pointsOrNull(points) } }));
   }
 
   function renderResult(session, stars, max, best, extra, points, previousScore) {
@@ -477,6 +499,11 @@ window.tourGame = (() => {
     board.close();
   }
 
+  function playFromBoardById(id) {
+    const item = stampRooms().find(entry => entry.room.game === id);
+    if (item) playFromBoard(item);
+  }
+
   /* ---------- 「녹원예술제 D-1」 현황판 (js/festival-story.js가 있을 때) ---------- */
 
   /** 「내 취향 찾기」에서 추천받은 학과 (erp·marketing·fintech·cafe 중 하나, 없으면 null) */
@@ -673,6 +700,10 @@ window.tourGame = (() => {
     list.replaceChildren();
     const story = festivalProgress(stamps);
     const floors = new Map();
+    // 맨 위: 오늘의 도전(js/daily.js) · 내 칭호(js/title-card.js)
+    for (const extra of [window.TourDaily?.boardItem(playFromBoardById), window.TourTitleCard?.boardItem(() => board.close())]) {
+      if (extra) list.append(extra);
+    }
     if (story) renderFestivalBoard(list, rooms, stamps, story);
     else for (const item of rooms) {
       if (!floors.has(item.floor)) {

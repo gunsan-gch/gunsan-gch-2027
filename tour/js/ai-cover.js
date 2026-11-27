@@ -27,6 +27,7 @@
     // 여섯째(보너스): 모델에 없는 고양이라 3D 위에 작은 그림(cats/hodu-sprite.webp)으로 숨겨 둠
     { id: 'hodu', name: '호두', subtitle: '책더미 위 낮잠쟁이', line: '책 위에 엎드리면 금세 꿈나라로 가요.', alt: '책 세 권 위에 엎드려 잠든 살구빛 고양이', at: SLEEPER_AT, sprite: true }
   ];
+  window.TOUR_CAT_IDS = CATS.map(cat => cat.id);   // 칭호 계산(js/title-card.js)에서 씀
   const CAT_IMG = id => `img/campus-3d/cats/${id}.webp?v=20261126-dex`;
   // 모두 찾으면 받는 완주 포토카드 (1080×1350). 보기용 webp, 저장용 jpg
   const POSTCARDS = [
@@ -154,7 +155,12 @@
     const head = document.createElement('p'); head.className = 'cover-card-head';
     head.textContent = '완주 포토카드 · 마음에 드는 한 장을 저장하세요';
     const row = document.createElement('div'); row.className = 'cover-postcards';
-    for (const card of POSTCARDS) {
+    // 칭호(도장·별·도감 기록)를 찍은 카드는 js/title-card.js가 만듦
+    if (window.TourTitleCard) {
+      const title = window.TourTitleCard.info().title;
+      if (title) head.textContent = `완주 포토카드 · 내 칭호 「${title.name}」`;
+      window.TourTitleCard.fill(row);
+    } else for (const card of POSTCARDS) {
       const link = document.createElement('a');
       link.className = 'cover-postcard'; link.href = `img/campus-3d/postcards/${card.id}.jpg?v=20261126`;
       link.download = `gunsan-gch-cat-postcard-${card.id}.jpg`;
